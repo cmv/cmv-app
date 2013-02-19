@@ -2,7 +2,7 @@
 
 This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers.
 
-## Intallation:
+## Installation:
 * Clone or download the repo
 * Move to your web server
 * configure the proper proxy page. Should work out of the box if using IIS.
