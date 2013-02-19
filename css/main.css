@@ -1,0 +1,68 @@
+body, html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background: url("../images/linen.jpg") repeat-x scroll left top transparent;
+    height: 70px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.header .headerLogo {
+    float: left;
+    left: 30px;
+    position: relative;
+    top: 8px;
+}
+
+.header .headerTitle {
+    color: #FFFFFF;
+    float: left;
+    font-size: 16pt;
+    font-weight: bold;
+    padding-left: 70px;
+    padding-top: 15px;
+    position: relative;
+}
+
+.header .subHeaderTitle {
+    color: #CFCFCF;
+    font-size: small;
+    padding-left: 20px;
+}
+
+#borderContainer {
+    position: absolute;
+    top: 70px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #FFFFFF
+}
+
+#leftPane {
+    width: 300px;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+    overflow-x: hidden;
+    border-right: 1px solid #B5BCC7;
+}
+
+#map {
+    padding: 0;
+}
+
+.titlePaneBottomFix {
+    margin-bottom: -1px;
+}
+
+.titlePaneRightFix {
+    margin-right: -1px;
+}
+

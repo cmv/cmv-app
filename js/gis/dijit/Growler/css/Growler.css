@@ -1,0 +1,40 @@
+.gis-dijit-Growl {
+    background-color: #333333;
+    border: 1px solid #7A7A7A;
+    border-radius: 10px 10px 10px 10px;
+    color: black;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-right: 1px;
+    margin-bottom: 10px;
+    opacity: 0.85;
+    width: 300px;
+}
+
+.gis-dijit-Growl:hover {
+    border: 1px solid #ffffff;
+}
+
+.gis-dijit-Growl h3 {
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
+    padding: 10px 10px 0;
+}
+
+.gis-dijit-Growl p {
+    color: #FFFFFF;
+    font-size: 12px;
+    margin: 0;
+    padding: 5px 15px 15px;
+}
+
+.gis-dijit-Growl pre {
+    color: #FFFFFF;
+    background-color: #333333;
+    padding: 1em;
+    border: none;
+}
+
+
