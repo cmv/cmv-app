@@ -20,6 +20,15 @@
                     catchy sub title
                 </div>
             </div>
+            <div class="search">
+                <div id='geocodeDijit'>
+                </div>
+            </div>
+            <div class="headerLinks">
+                <div style="text-align:right;">
+                    <a id="helpA" href="#">Help</a>
+                </div>
+            </div>
         </div>
         <script type="text/javascript">
             var dojoConfig = {
@@ -38,6 +47,7 @@
         <script type="text/javascript">
             require(["viewer/Controller"], function(Controller){
                 Controller.startup();
+                $ = Controller;
             });
         </script>
     </body>

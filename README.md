@@ -1,6 +1,6 @@
-# Configurable Viewer ESRI JS API
+# Configurable ESRI JS API Viewer
 
-This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers.
+This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for OO and classes in JS.
 
 ## Installation:
 * Clone or download the repo
@@ -10,7 +10,7 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Enjoy!
 
 ## Customize:
-* Use the ConfigurableViewerJSAPI\js\viewer\config.js file to customize your own layers and tasks.
+* Use the ConfigurableViewerJSAPI\js\viewer\config.js file to customize your own map layers and task url's.
 
 ## Notes:
 * This is the begining of viewer, it in no way represents a complete solution and is intended for well verses JS developers as a starting point.
@@ -21,3 +21,10 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Draw
 * Geolocation
 * Advanced Print
+* Help
+
+## Change log:
+* 2/20/2013:
+>> 1. Moved search to the header.
+>> 2. Added the help dijit.
+>> 3. Improved the legend rendering and added support for title from the config.

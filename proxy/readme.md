@@ -1,4 +1,4 @@
-AGS Proxy page help
+# AGS Proxy page help
 
 For full info please read here:
 http://help.arcgis.com/en/webapi/javascript/arcgis/jshelp/#ags_proxy

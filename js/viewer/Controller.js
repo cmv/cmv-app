@@ -20,13 +20,15 @@ define([
     'gis/dijit/Growler',
     'gis/dijit/GeoLocation',
     'gis/dijit/Draw',
+    'gis/dijit/Help',
     "dojo/text!./templates/leftContent.html",
     "dojo/text!./templates/mapOverlay.html",
     "viewer/config",
     'dojo/domReady!'
-    ], function(Map, Popup, Geocoder, Attribution, FeatureLayer, Legend, dom, domConstruct, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Deferred, Print, Growler, GeoLocation, Draw, leftContent, mapOverlay, config) {
+    ], function(Map, Popup, Geocoder, Attribution, FeatureLayer, Legend, dom, domConstruct, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Deferred, Print, Growler, GeoLocation, Draw, Help, leftContent, mapOverlay, config) {
     return {
         config: config,
+        layerInfos: [],
         startup: function() {
             this.initConfig();
             this.initView();
@@ -36,13 +38,13 @@ define([
             esriConfig.defaults.io.alwaysUseProxy = config.proxy.alwaysUseProxy;
         },
         initView: function() {
-            outer = new BorderContainer({
+            var outer = new BorderContainer({
                 id: 'borderContainer',
                 design: 'headline',
                 gutters: false
             }).placeAt(win.body());
 
-            left = new ContentPane({
+            new ContentPane({
                 id: 'leftPane',
                 region: 'left',
                 content: leftContent
@@ -56,6 +58,8 @@ define([
 
             outer.startup();
             this.initMap();
+
+            on(dom.byId('helpA'), 'click', lang.hitch(this, 'showHelp'));
         },
         initMap: function() {
             var popup = new esri.dijit.Popup(null, domConstruct.create("div"));
@@ -69,6 +73,7 @@ define([
             this.map.on('load', lang.hitch(this, 'initWidgets'));
 
             array.forEach(config.operationalLayers, function(layer) {
+                var l;
                 if(layer.type == 'dynamic') {
                     l = new esri.layers.ArcGISDynamicMapServiceLayer(layer.url, layer.options);
                     this.map.addLayer(l);
@@ -81,6 +86,10 @@ define([
                 } else {
                     console.log('Layer type not supported: ', layer.type);
                 }
+                this.layerInfos.push({
+                    layer: l,
+                    title: layer.options.title || null
+                });
             }, this);
         },
         initWidgets: function(evt) {
@@ -96,7 +105,7 @@ define([
             this.geocoder = new esri.dijit.Geocoder({
                 map: this.map,
                 autoComplete: true
-            }, "search");
+            }, "geocodeDijit");
             this.geocoder.startup();
 
             this.printWidget = new Print({
@@ -113,9 +122,18 @@ define([
             this.drawWidget.startup();
 
             this.legend = new esri.dijit.Legend({
-                map: this.map
+                map: this.map,
+                layerInfos: this.layerInfos
             }, "legendDijit");
             this.legend.startup();
+        },
+        showHelp: function() {
+            if(this.help) {
+                this.help.show();
+            } else {
+                this.help = new Help();
+                this.help.show();
+            }
         }
     };
 });

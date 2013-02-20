@@ -20,10 +20,11 @@ define(function() {
 			url: "http://psstldemo3.esri.com/arcgis/rest/services/demo/MeetUpHomeTowns/MapServer/0",
 			options: {
 				id: "meetupHometowns",
-				title: "Hometowns",
+				title: "STLJS Meetup Home Towns",
 				opacity: 1.0,
 				visible: true,
-				infoTemplate: new esri.InfoTemplate("Hometown", "${*}")
+				infoTemplate: new esri.InfoTemplate("Hometown", "${*}"),
+				mode: esri.layers.FeatureLayer.MODE_SNAPSHOT
 			}
 		}
 		],

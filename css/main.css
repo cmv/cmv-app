@@ -25,8 +25,8 @@ body, html {
     float: left;
     font-size: 16pt;
     font-weight: bold;
-    padding-left: 70px;
-    padding-top: 15px;
+    left: 60px;
+    top: 15px;
     position: relative;
 }
 
@@ -34,6 +34,25 @@ body, html {
     color: #CFCFCF;
     font-size: small;
     padding-left: 20px;
+}
+
+.header .search {
+    float: left;
+    left: 80px;
+    position: relative;
+    top: 18px;
+}
+
+.header .headerLinks {
+    float: right;
+    color: #FFFFFF;
+    position: relative;
+    top: 27px;
+    right: 10px;
+}
+
+.header .headerLinks a {
+    color: #FFFFFF;
 }
 
 #borderContainer {
@@ -65,4 +84,7 @@ body, html {
 .titlePaneRightFix {
     margin-right: -1px;
 }
+
+
+
 
