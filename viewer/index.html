@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>JS Viewer</title>
+        <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dojo/resources/dojo.css">
+        <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
+        <link rel="stylesheet" type='text/css' href='//serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/dijit/css/Popup.css'>
+        <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+    </head>
+    <body class="claro">
+        <div class="header">
+            <div class="headerLogo">
+                <img src="images/esri-logo.png"/>
+            </div>
+            <div class="headerTitle">
+                Some Cool Title
+                <div class="subHeaderTitle">
+                    catchy sub title
+                </div>
+            </div>
+            <div class="search">
+                <div id='geocodeDijit'>
+                </div>
+            </div>
+            <div class="headerLinks">
+                <div style="text-align:right;">
+                    <a id="helpA" href="#">Help</a>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var dojoConfig = {
+                async: true,
+                packages: [{
+                    name: "viewer",
+                    location: location.pathname.replace(/[^\/]+$/, '') + "js/viewer"
+                },{
+                    name: "gis",
+                    location: location.pathname.replace(/[^\/]+$/, '') + "js/gis"
+                }]
+            };
+        </script>
+        <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3">
+        </script>
+        <script type="text/javascript">
+            require(["viewer/Controller"], function(Controller){
+                Controller.startup();
+            });
+        </script>
+    </body>
+</html>
