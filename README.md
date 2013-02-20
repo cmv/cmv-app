@@ -25,6 +25,6 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 
 ## Change log:
 * 2/20/2013:
->> * Moved search to the header.
->> * Added the help dijit.
->> * Improved the legend rendering and added support for title from the config.
+    1. Moved search to the header.
+    2. Added the help dijit.
+    3. Improved the legend rendering and added support for title from the config.
