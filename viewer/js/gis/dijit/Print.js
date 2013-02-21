@@ -14,7 +14,6 @@ define([
     "dijit/TooltipDialog",
     "dijit/form/RadioButton",
     "esri/tasks/PrintTask",
-    "dojo/data/ObjectStore",
     "dojo/store/Memory",
     'dojo/_base/lang',
     "dojo/_base/array",
@@ -23,7 +22,7 @@ define([
     "dojo/dom-class",
     "dojo/text!./Print/templates/Print.html",
     "dojo/text!./Print/templates/PrintResult.html"
-    ], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, ObjectStore, Memory, lang, array, Style, domConstruct, domClass, printTemplate, printResultTemplate) {
+    ], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, Style, domConstruct, domClass, printTemplate, printResultTemplate) {
 
     //anonymous function to load CSS files required for this module
     (function() {
@@ -46,6 +45,11 @@ define([
         map: null,
         count: 1,
         results: [],
+        authorText: null,
+        copyrightText: null,
+        defaultTitle: null,
+        defaultFormat: null,
+        defaultLayout: null,
         baseClass: "gis_PrintDijit",
         pdfIcon: require.toUrl("gis/dijit/Print/images/pdf.png"),
         imageIcon: require.toUrl("gis/dijit/Print/images/image.png"),
@@ -89,17 +93,11 @@ define([
             layoutItems.sort(function(a, b) {
                 return(a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
             });
-            var layout = new ObjectStore({
-                objectStore: new Memory({
-                    data: {
-                        identifier: 'id',
-                        label: 'name',
-                        items: layoutItems
-                    }
-                })
+            var layout = new Memory({
+                data: layoutItems
             });
             this.layoutDijit.set('store', layout);
-
+            this.layoutDijit.set('value', this.defaultLayout);
 
             var Format = array.filter(data.parameters, function(param, idx) {
                 return param.name === "Format";
@@ -117,16 +115,12 @@ define([
             formatItems.sort(function(a, b) {
                 return(a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
             });
-            var format = new ObjectStore({
-                objectStore: new Memory({
-                    data: {
-                        identifier: 'id',
-                        label: 'name',
-                        items: formatItems
-                    }
-                })
+            var format = new Memory({
+                data: formatItems
             });
             this.formatDijit.set('store', format);
+            this.formatDijit.set('value', this.defaultFormat);
+
         },
         print: function() {
             if(this.printSettingsFormDijit.isValid()) {
