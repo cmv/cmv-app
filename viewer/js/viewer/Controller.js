@@ -112,7 +112,10 @@ define([
                 map: this.map,
                 printTaskURL: config.printTask.url,
                 authorText: config.printTask.authorText,
-                copyrightText: config.printTask.copyrightText
+                copyrightText: config.printTask.copyrightText,
+                defaultTitle: config.printTask.defaultTitle,
+                defaultFormat: config.printTask.defaultFormat,
+                defaultLayout: config.printTask.defaultLayout
             }, 'printDijit');
             this.printWidget.startup();
 
