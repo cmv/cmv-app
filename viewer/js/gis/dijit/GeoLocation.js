@@ -5,9 +5,10 @@ define([
     "dijit/_WidgetsInTemplateMixin",
     "dijit/form/Button",
     "dojo/_base/lang",
-    "dojo/json",
-    "dojo/text!./GeoLocation/templates/GeoLocation.html"
-    ], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, json, geoLocationTemplate) {
+    "dojo/string",
+    "dojo/text!./GeoLocation/templates/GeoLocation.html",
+    "dojo/text!./GeoLocation/templates/stats.html"
+    ], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, string, geoLocationTemplate, statsTemplate) {
 
     //anonymous function to load CSS files required for this module
     (function() {
@@ -60,19 +61,20 @@ define([
             var wmPoint = esri.geometry.geographicToWebMercator(point);
             this.map.centerAndZoom(wmPoint, 14);
             this.addGraphic(wmPoint);
+            console.log(event.coords);
             if(this.growler) {
                 var stats = {
-                    accuracy: event.coords.accuracy,
-                    altitude: event.coords.altitude,
-                    altitudeAccuracy: event.coords.altitudeAccuracy,
-                    heading: event.coords.heading,
-                    latitude: event.coords.latitude,
-                    longitude: event.coords.longitude,
-                    speed: event.coords.speed
+                    accuracy: (event.coords.accuracy) ? event.coords.accuracy : '',
+                    altitude: (event.coords.altitude) ? event.coords.altitude : '',
+                    altitudeAccuracy: (event.coords.altitudeAccuracy) ? event.coords.altitudeAccuracy : '',
+                    heading: (event.coords.heading) ? event.coords.heading : '',
+                    latitude: (event.coords.latitude) ? event.coords.latitude : '',
+                    longitude: (event.coords.longitude) ? event.coords.longitude : '',
+                    speed: (event.coords.speed) ? event.coords.speed : ''
                 };
                 this.growler.growl({
                     title: "Position Information",
-                    message: "<pre>" + json.stringify(stats, null, '\t') + "</pre>"
+                    message: string.substitute(statsTemplate, stats)
                 });
             }
         },

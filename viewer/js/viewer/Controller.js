@@ -5,6 +5,7 @@ define([
     'esri/dijit/Attribution',
     'esri/layers/FeatureLayer',
     "esri/dijit/Legend",
+    "esri/layers/osm",
     'dojo/dom',
     "dojo/dom-construct",
     'dojo/on',
@@ -13,19 +14,20 @@ define([
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane',
     "dijit/TitlePane",
-    'dojo/_base/window',
-    'dojo/_base/lang',
+    "dojo/_base/window",
+    "dojo/_base/lang",
     "dojo/_base/Deferred",
-    'gis/dijit/Print',
-    'gis/dijit/Growler',
-    'gis/dijit/GeoLocation',
-    'gis/dijit/Draw',
-    'gis/dijit/Help',
+    "gis/dijit/Print",
+    "gis/dijit/Growler",
+    "gis/dijit/GeoLocation",
+    "gis/dijit/Draw",
+    "gis/dijit/Help",
+    "gis/dijit/Basemaps",
     "dojo/text!./templates/leftContent.html",
     "dojo/text!./templates/mapOverlay.html",
     "viewer/config",
-    'dojo/domReady!'
-    ], function(Map, Popup, Geocoder, Attribution, FeatureLayer, Legend, dom, domConstruct, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Deferred, Print, Growler, GeoLocation, Draw, Help, leftContent, mapOverlay, config) {
+    "dojo/domReady!"
+    ], function(Map, Popup, Geocoder, Attribution, FeatureLayer, Legend, osm, dom, domConstruct, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Deferred, Print, Growler, GeoLocation, Draw, Help, Basemaps, leftContent, mapOverlay, config) {
     return {
         config: config,
         layerInfos: [],
@@ -65,7 +67,7 @@ define([
             var popup = new esri.dijit.Popup(null, domConstruct.create("div"));
 
             this.map = new esri.Map("map", {
-                basemap: config.basemap,
+                basemap: config.defaultBasemap,
                 extent: new esri.geometry.Extent(config.initialExtent),
                 infoWindow: popup
             });
@@ -107,6 +109,14 @@ define([
                 autoComplete: true
             }, "geocodeDijit");
             this.geocoder.startup();
+
+            this.basemaps = new Basemaps({
+                map: this.map,
+                title:"Basemaps",
+                mapStartBasemap: config.defaultBasemap,
+                basemaps: config.basemaps
+            }, "basemapsDijit");
+            this.basemaps.startup();
 
             this.printWidget = new Print({
                 map: this.map,
