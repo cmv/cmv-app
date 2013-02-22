@@ -6,7 +6,9 @@ define(function() {
 			alwaysUseProxy: false
 		},
 		// basemap: valid options: "streets", "satellite", "hybrid", "topo", "gray", "oceans", "national-geographic", "osm"
-		basemap: "streets",
+		defaultBasemap: "streets",
+		//basemaps to show in menu
+		basemaps: ["streets", "satellite", "hybrid", "topo", "gray", "oceans", "national-geographic", "osm"],
 		// initialExtent: extent the the map starts at. Helper tool: http://www.arcgis.com/home/item.html?id=dd1091f33a3e4ecb8cd77adf3e585c8a
 		initialExtent: {
 			xmin: -15489130.48708616,
