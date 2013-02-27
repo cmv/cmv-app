@@ -64,7 +64,7 @@ body, html {
     background-color: #FFFFFF
 }
 
-#leftPane {
+#sidebar {
     width: 300px;
     padding: 0;
     margin: 0;
@@ -85,6 +85,31 @@ body, html {
     margin-right: -1px;
 }
 
+.sidebarCollapseButton {
+    width: 20px;
+    height: 25px;
+    position: absolute;
+    top: 220px;
+    border-top: 1px solid #B5BCC7;
+    border-right: 1px solid #B5BCC7;
+    border-bottom: 1px solid #B5BCC7;
+    z-index: 40;
+    background-color: white;
+    border-radius: 0 5px 5px 0;
+    background-position: 2px 4px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.sidebarCollapseButton.close {
+    left: 300px;
+    background-image: url("../images/close.png");
+}
+
+.sidebarCollapseButton.open {
+    background-image: url("../images/open.png");
+    left: 0;
+}
 
 
 

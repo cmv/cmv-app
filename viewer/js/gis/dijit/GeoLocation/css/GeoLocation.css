@@ -8,7 +8,7 @@
 }
 
 .gis_GeoLocation_Dijit .geoLocationIcon {
-    background-image: url(../images/location.png);
+    background-image: url("../images/location.png");
     width: 16px;
     height: 16px;
 }
