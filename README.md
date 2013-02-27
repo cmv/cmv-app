@@ -22,13 +22,17 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Geolocation
 * Advanced Print
 * Help
+* Measure
 
 ## Change log:
+* 2/26/2013
+	1. Added sidebar closing feature.
+	2. Added measure dijit.
 * 2/22/2013
 	1. Added basemap dijit.
 	2. Restyled the geolocation stats growl content.
 * 2/21/2013
-	1. Added default settings for print widget.
+	1. Added default settings for print dijit.
 	2. Better documented the config.js.
 * 2/20/2013:
     1. Moved search to the header.

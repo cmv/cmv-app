@@ -21,8 +21,7 @@ define(function() {
 		},
 		// operationalLayers: Layers to load on top of the basemap: valid 'type' options: "dynamic", "tiled", "feature".
 		// 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
-		operationalLayers: [
-			{
+		operationalLayers: [{
 			type: "feature",
 			url: "http://psstldemo3.esri.com/arcgis/rest/services/demo/MeetUpHomeTowns/MapServer/0",
 			options: {
@@ -33,8 +32,7 @@ define(function() {
 				infoTemplate: new esri.InfoTemplate("Hometown", "${*}"),
 				mode: esri.layers.FeatureLayer.MODE_SNAPSHOT
 			}
-		}
-		],
+		}],
 		// printTask: Url and default options for your print task. Make sure default layout and format options are supported by your print service.
 		printTask: {
 			url: "http://psstldemo3.esri.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
@@ -43,6 +41,11 @@ define(function() {
 			defaultTitle: 'Meetup Hometowns',
 			defaultFormat: 'PDF',
 			defaultLayout: 'Letter ANSI A Landscape'
+		},
+		//measurement widget:
+		measurement: {
+			defaultAreaUnit: esri.Units.SQUARE_MILES,
+			defaultLengthUnit: esri.Units.MILES
 		}
 	};
 });

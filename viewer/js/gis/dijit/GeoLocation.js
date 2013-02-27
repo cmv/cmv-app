@@ -61,7 +61,6 @@ define([
             var wmPoint = esri.geometry.geographicToWebMercator(point);
             this.map.centerAndZoom(wmPoint, 14);
             this.addGraphic(wmPoint);
-            console.log(event.coords);
             if(this.growler) {
                 var stats = {
                     accuracy: (event.coords.accuracy) ? event.coords.accuracy : '',
