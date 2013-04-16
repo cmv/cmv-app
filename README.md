@@ -23,6 +23,7 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Advanced Print
 * Help
 * Measure
+* Directions
 
 ## Change log:
 * 4/16/2013
