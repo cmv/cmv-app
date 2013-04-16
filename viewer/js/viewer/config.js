@@ -5,6 +5,10 @@ define(function() {
 			url: "proxy/proxy.ashx",
 			alwaysUseProxy: false
 		},
+		// url to your geometry server.
+		geometryService: {
+			url: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer"
+		},
 		// basemap: valid options: "streets", "satellite", "hybrid", "topo", "gray", "oceans", "national-geographic", "osm"
 		defaultBasemap: "streets",
 		//basemaps to show in menu
@@ -29,23 +33,58 @@ define(function() {
 				title: "STLJS Meetup Home Towns",
 				opacity: 1.0,
 				visible: true,
+				outFields: ["*"],
 				infoTemplate: new esri.InfoTemplate("Hometown", "${*}"),
 				mode: esri.layers.FeatureLayer.MODE_SNAPSHOT
 			}
 		}],
-		// printTask: Url and default options for your print task. Make sure default layout and format options are supported by your print service.
-		printTask: {
-			url: "http://psstldemo3.esri.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
-			copyrightText: "Copyright ESRI 2012",
-			authorText: "ESRI",
-			defaultTitle: 'Meetup Hometowns',
-			defaultFormat: 'PDF',
-			defaultLayout: 'Letter ANSI A Landscape'
-		},
-		//measurement widget:
-		measurement: {
-			defaultAreaUnit: esri.Units.SQUARE_MILES,
-			defaultLengthUnit: esri.Units.MILES
+		//widgets: set include to true or false to load or not load the widget. set position to the desired order, starts at 0 on the top.
+		widgets: {
+			legend: {
+				include: true,
+				title: "Legend",
+				open: false,
+				position: 0
+			},
+			draw: {
+				include: true,
+				title: "Draw",
+				open: false,
+				position: 1
+			},
+			measure: {
+				include: true,
+				title: "Measurement",
+				open: false,
+				position: 2,
+				defaultAreaUnit: esri.Units.SQUARE_MILES,
+				defaultLengthUnit: esri.Units.MILES
+			},
+			print: {
+				include: true,
+				title: "Print",
+				open: false,
+				position: 3,
+				serviceURL: "http://sampleserver6.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
+				copyrightText: "Copyright ESRI 2013",
+				authorText: "ESRI",
+				defaultTitle: 'STLJS.org Meetup Hometowns',
+				defaultFormat: 'PDF',
+				defaultLayout: 'Letter ANSI A Landscape'
+			},
+			directions: {
+				include: true,
+				title: "Directions",
+				open: false,
+				position: 5,
+				options: {
+					routeTaskUrl: "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Network/USA/NAServer/Route",
+					routeParams: {
+						directionsLanguage: "en-US",
+						directionsLengthUnits: "esriMiles"
+					}
+				}
+			}
 		}
 	};
 });

@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>STLJS Meetup Hometowns</title>
-        <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dojo/resources/dojo.css">
-        <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
-        <link rel="stylesheet" type='text/css' href='//serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/dijit/css/Popup.css'>
-        <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
+        <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.4/js/dojo/dojo/resources/dojo.css">
+        <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.4/js/dojo/dijit/themes/claro/claro.css">
+        <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.4/js/esri/css/esri.css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
     </head>
     <body class="claro">
@@ -15,7 +14,7 @@
                 <img src="images/esri-logo.png"/>
             </div>
             <div class="headerTitle">
-                STLJS Meetup Hometowns
+                STLJS.org Meetup Hometowns
                 <div class="subHeaderTitle">
                     where we call home
                 </div>
@@ -44,11 +43,11 @@
                 }]
             };
         </script>
-        <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3">
-        </script>
+        <script src="//serverapi.arcgisonline.com/jsapi/arcgis/3.4/"></script>
         <script type="text/javascript">
             require(["viewer/Controller"], function(Controller){
                 Controller.startup();
+                app = Controller; //dev only, remove for production
             });
         </script>
     </body>

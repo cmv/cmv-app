@@ -25,6 +25,12 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Measure
 
 ## Change log:
+* 4/16/2013
+	1. Added directions widget with map right-click menu.
+	2. Added ability to configure included widgets (include, exclude, order, and settings).
+	3. Optimized loading of classes (only load what is needed).
+	4. Included identity manager.
+	5. Updated to 3.4.
 * 2/26/2013
 	1. Added sidebar closing feature.
 	2. Added measure dijit.
