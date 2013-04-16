@@ -1,34 +1,29 @@
 define([
     'esri/map',
-    'esri/dijit/Popup',
     'esri/dijit/Geocoder',
-    'esri/dijit/Attribution',
     'esri/layers/FeatureLayer',
-    "esri/dijit/Legend",
-    "esri/layers/osm",
-    "esri/dijit/Measurement",
+    'esri/layers/osm',
     'dojo/dom',
-    "dojo/dom-construct",
-    "dojo/dom-style",
-    "dojo/dom-class",
+    'dojo/dom-construct',
+    'dojo/dom-style',
+    'dojo/dom-class',
     'dojo/on',
     'dojo/parser',
-    "dojo/_base/array",
+    'dojo/_base/array',
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane',
-    "dijit/TitlePane",
-    "dojo/_base/window",
-    "dojo/_base/lang",
-    "gis/dijit/Print",
-    "gis/dijit/Growler",
-    "gis/dijit/GeoLocation",
-    "gis/dijit/Draw",
-    "gis/dijit/Help",
-    "gis/dijit/Basemaps",
-    "dojo/text!./templates/leftContent.html",
-    "dojo/text!./templates/mapOverlay.html",
-    "viewer/config",
-    "dojo/domReady!"], function(Map, Popup, Geocoder, Attribution, FeatureLayer, Legend, osm, Measurement, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Print, Growler, GeoLocation, Draw, Help, Basemaps, leftContent, mapOverlay, config) {
+    'dijit/TitlePane',
+    'dojo/_base/window',
+    'dojo/_base/lang',
+    'gis/dijit/Growler',
+    'gis/dijit/GeoLocation',
+    'gis/dijit/Help',
+    'gis/dijit/Basemaps',
+    'dojo/text!./templates/mapOverlay.html',
+    'viewer/config',
+    'dojo/domReady!',
+    'esri/IdentityManager',
+    'esri/tasks/GeometryService'], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, ready, IdentityManager, GeometryService) {
     return {
         config: config,
         layerInfos: [],
@@ -37,8 +32,9 @@ define([
             this.initView();
         },
         initConfig: function() {
-            esriConfig.defaults.io.proxyUrl = config.proxy.url;
-            esriConfig.defaults.io.alwaysUseProxy = config.proxy.alwaysUseProxy;
+            esri.config.defaults.io.proxyUrl = config.proxy.url;
+            esri.config.defaults.io.alwaysUseProxy = config.proxy.alwaysUseProxy;
+            esri.config.defaults.geometryService = new GeometryService(config.geometryService.url);
         },
         initView: function() {
             this.outer = new BorderContainer({
@@ -49,8 +45,7 @@ define([
 
             this.sidebar = new ContentPane({
                 id: 'sidebar',
-                region: 'left',
-                content: leftContent
+                region: 'left'
             }).placeAt(this.outer);
 
             new ContentPane({
@@ -68,12 +63,9 @@ define([
             Style.set(this.sideBarToggle, 'display', 'block');
         },
         initMap: function() {
-            var popup = new esri.dijit.Popup(null, domConstruct.create("div"));
-
             this.map = new esri.Map("map", {
                 basemap: config.defaultBasemap,
-                extent: new esri.geometry.Extent(config.initialExtent),
-                infoWindow: popup
+                extent: new esri.geometry.Extent(config.initialExtent)
             });
 
             this.map.on('load', lang.hitch(this, 'initWidgets'));
@@ -122,34 +114,61 @@ define([
             }, "basemapsDijit");
             this.basemaps.startup();
 
-            this.printWidget = new Print({
-                map: this.map,
-                printTaskURL: config.printTask.url,
-                authorText: config.printTask.authorText,
-                copyrightText: config.printTask.copyrightText,
-                defaultTitle: config.printTask.defaultTitle,
-                defaultFormat: config.printTask.defaultFormat,
-                defaultLayout: config.printTask.defaultLayout
-            }, 'printDijit');
-            this.printWidget.startup();
+            if (config.widgets.draw && config.widgets.draw.include) {
+                var drawTP = this._createTitlePane(config.widgets.draw.title, config.widgets.draw.position, config.widgets.draw.open);
+                require(['gis/dijit/Draw'], lang.hitch(this, function(Draw) {
+                    this.drawWidget = new Draw({
+                        map: this.map
+                    }, domConstruct.create("div")).placeAt(drawTP.containerNode);
+                }));
+            }
 
-            this.drawWidget = new Draw({
-                map: this.map
-            }, 'drawDijit');
-            this.drawWidget.startup();
+            if (config.widgets.measure && config.widgets.measure.include) {
+                var measureTP = this._createTitlePane(config.widgets.measure.title, config.widgets.measure.position, config.widgets.measure.open);
+                require(['esri/dijit/Measurement'], lang.hitch(this, function(Measurement) {
+                    this.measure = new esri.dijit.Measurement({
+                        map: this.map,
+                        defaultAreaUnit: config.widgets.measure.defaultAreaUnit,
+                        defaultLengthUnit: config.widgets.measure.defaultLengthUnit
+                    }, domConstruct.create("div")).placeAt(measureTP.containerNode);
+                }));
+            }
 
-            this.legend = new esri.dijit.Legend({
-                map: this.map,
-                layerInfos: this.layerInfos
-            }, "legendDijit");
-            this.legend.startup();
+            if (config.widgets.print && config.widgets.print.include) {
+                var printTP = this._createTitlePane(config.widgets.print.title, config.widgets.print.position, config.widgets.print.open);
+                require(['gis/dijit/Print'], lang.hitch(this, function(Print) {
+                    this.printWidget = new Print({
+                        map: this.map,
+                        printTaskURL: config.widgets.print.serviceURL,
+                        authorText: config.widgets.print.authorText,
+                        copyrightText: config.widgets.print.copyrightText,
+                        defaultTitle: config.widgets.print.defaultTitle,
+                        defaultFormat: config.widgets.print.defaultFormat,
+                        defaultLayout: config.widgets.print.defaultLayout
+                    }, domConstruct.create("div")).placeAt(printTP.containerNode);
+                }));
+            }
 
-            this.measure = new esri.dijit.Measurement({
-                map: this.map,
-                defaultAreaUnit: config.measurement.defaultAreaUnit,
-                defaultLengthUnit: config.measurement.defaultLengthUnit
-            }, "measuremnetDijit");
-            this.measure.startup();
+            if (config.widgets.directions && config.widgets.directions.include) {
+                var directionsTP = this._createTitlePane(config.widgets.directions.title, config.widgets.directions.position, config.widgets.directions.open);
+                require(['gis/dijit/Directions'], lang.hitch(this, function(Directions) {
+                    this.directionsWidget = new Directions({
+                        map: this.map,
+                        options: config.widgets.directions.options,
+                        titlePane: directionsTP
+                    }, domConstruct.create("div")).placeAt(directionsTP.containerNode);
+                }));
+            }
+
+            if (config.widgets.legend && config.widgets.legend.include) {
+                var legendTP = this._createTitlePane(config.widgets.legend.title, config.widgets.legend.position, config.widgets.legend.open);
+                require(['esri/dijit/Legend'], lang.hitch(this, function(Legend) {
+                    this.legend = new esri.dijit.Legend({
+                        map: this.map,
+                        layerInfos: this.layerInfos
+                    }, domConstruct.create("div")).placeAt(legendTP.containerNode);
+                }));
+            }
         },
         toggleSidebar: function() {
             if (this.outer.getIndexOfChild(this.sidebar) !== -1) {
@@ -161,6 +180,14 @@ define([
                 domClass.remove(this.sideBarToggle, 'open');
                 domClass.add(this.sideBarToggle, 'close');
             }
+        },
+        _createTitlePane: function(title, position, open) {
+            var tp = new TitlePane({
+                title: title,
+                open: open
+            }).placeAt(this.sidebar, position);
+            domClass.add(tp.domNode, 'titlePaneBottomFix titlePaneRightFix');
+            return tp;
         },
         showHelp: function() {
             if (this.help) {
