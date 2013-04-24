@@ -13,7 +13,7 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Use the ConfigurableViewerJSAPI\js\viewer\config.js file to customize your own map layers and task url's.
 
 ## Notes:
-* This is the begining of viewer, it in no way represents a complete solution and is intended for well verses JS developers as a starting point.
+* This is the begining of viewer, it in no way represents a complete solution and is intended for well versed JS developers as a starting point.
 * This app demonstrates best practices of OO programing in dojo and JS, using modular design and classes.
 
 ## Widgets Included:
