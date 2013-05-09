@@ -26,6 +26,11 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Directions
 
 ## Change log:
+* 5/8/2013
+	1. Fixed GPS position to show up on prints/exports.
+	2. Added support for custom basemaps in the basemaps widget.
+	3. Added scalebar as optional and configurable.
+	4. Added editor widget.
 * 4/16/2013
 	1. Added directions widget with map right-click menu.
 	2. Added ability to configure included widgets (include, exclude, order, and settings).
