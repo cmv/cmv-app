@@ -26,7 +26,8 @@ define([
     'esri/tasks/GeometryService'], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, ready, IdentityManager, GeometryService) {
     return {
         config: config,
-        layerInfos: [],
+        legendLayerInfos: [],
+        editorLayerInfos: [],
         startup: function() {
             this.initConfig();
             this.initView();
@@ -64,33 +65,46 @@ define([
         },
         initMap: function() {
             this.map = new esri.Map("map", {
-                basemap: config.defaultBasemap,
                 extent: new esri.geometry.Extent(config.initialExtent)
             });
 
             this.map.on('load', lang.hitch(this, 'initWidgets'));
 
+            this.basemaps = new Basemaps({
+                map: this.map,
+                mode: config.basemapMode,
+                title: "Basemaps",
+                mapStartBasemap: config.mapStartBasemap,
+                basemapsToShow: config.basemapsToShow
+            }, "basemapsDijit");
+            this.basemaps.startup();
+        },
+        initWidgets: function(evt) {
             array.forEach(config.operationalLayers, function(layer) {
                 var l;
                 if (layer.type == 'dynamic') {
                     l = new esri.layers.ArcGISDynamicMapServiceLayer(layer.url, layer.options);
-                    this.map.addLayer(l);
                 } else if (layer.type == 'tiled') {
                     l = new esri.layers.ArcGISTiledMapServiceLayer(layer.url, layer.options);
-                    this.map.addLayer(l);
                 } else if (layer.type == 'feature') {
                     l = new esri.layers.FeatureLayer(layer.url, layer.options);
-                    this.map.addLayer(l);
+                    var options = {
+                        featureLayer: l
+                    };
+                    if (layer.editorLayerInfos) {
+                        lang.mixin(options, layer.editorLayerInfos);
+                    }
+                    this.editorLayerInfos.push(options);
                 } else {
                     console.log('Layer type not supported: ', layer.type);
                 }
-                this.layerInfos.push({
+                this.map.addLayer(l);
+                this.legendLayerInfos.push({
                     layer: l,
-                    title: layer.options.title || null
+                    title: layer.title || null
                 });
             }, this);
-        },
-        initWidgets: function(evt) {
+
             this.growler = new Growler({}, "growlerDijit");
             this.growler.startup();
 
@@ -106,14 +120,6 @@ define([
             }, "geocodeDijit");
             this.geocoder.startup();
 
-            this.basemaps = new Basemaps({
-                map: this.map,
-                title: "Basemaps",
-                mapStartBasemap: config.defaultBasemap,
-                basemaps: config.basemaps
-            }, "basemapsDijit");
-            this.basemaps.startup();
-
             if (config.widgets.draw && config.widgets.draw.include) {
                 var drawTP = this._createTitlePane(config.widgets.draw.title, config.widgets.draw.position, config.widgets.draw.open);
                 require(['gis/dijit/Draw'], lang.hitch(this, function(Draw) {
@@ -126,7 +132,7 @@ define([
             if (config.widgets.measure && config.widgets.measure.include) {
                 var measureTP = this._createTitlePane(config.widgets.measure.title, config.widgets.measure.position, config.widgets.measure.open);
                 require(['esri/dijit/Measurement'], lang.hitch(this, function(Measurement) {
-                    this.measure = new esri.dijit.Measurement({
+                    this.measure = new Measurement({
                         map: this.map,
                         defaultAreaUnit: config.widgets.measure.defaultAreaUnit,
                         defaultLengthUnit: config.widgets.measure.defaultLengthUnit
@@ -163,10 +169,33 @@ define([
             if (config.widgets.legend && config.widgets.legend.include) {
                 var legendTP = this._createTitlePane(config.widgets.legend.title, config.widgets.legend.position, config.widgets.legend.open);
                 require(['esri/dijit/Legend'], lang.hitch(this, function(Legend) {
-                    this.legend = new esri.dijit.Legend({
+                    this.legend = new Legend({
                         map: this.map,
-                        layerInfos: this.layerInfos
+                        layerInfos: this.legendLayerInfos
                     }, domConstruct.create("div")).placeAt(legendTP.containerNode);
+                }));
+            }
+
+            if (config.widgets.scalebar && config.widgets.scalebar.include) {
+                require(['esri/dijit/Scalebar'], lang.hitch(this, function(Scalebar) {
+                    new Scalebar({
+                        map: this.map,
+                        attachTo: config.widgets.scalebar.options.attachTo,
+                        scalebarStyle: config.widgets.scalebar.options.scalebarStyle,
+                        scalebarUnit: config.widgets.scalebar.options.scalebarUnit
+                    });
+                }));
+            }
+
+            if (config.widgets.editor && config.widgets.editor.include) {
+                var editorTP = this._createTitlePane(config.widgets.editor.title, config.widgets.editor.position, config.widgets.editor.open);
+                require(['gis/dijit/Editor'], lang.hitch(this, function(Editor) {
+                    this.editor = new Editor({
+                        map: this.map,
+                        layerInfos: this.editorLayerInfos,
+                        settings: config.widgets.editor.settings,
+                        titlePane: editorTP
+                    }, domConstruct.create("div")).placeAt(editorTP.containerNode);
                 }));
             }
         },
@@ -187,6 +216,7 @@ define([
                 open: open
             }).placeAt(this.sidebar, position);
             domClass.add(tp.domNode, 'titlePaneBottomFix titlePaneRightFix');
+            tp.startup();
             return tp;
         },
         showHelp: function() {

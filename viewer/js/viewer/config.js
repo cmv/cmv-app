@@ -1,4 +1,5 @@
-define(function() {
+define([
+	'esri/InfoTemplate'], function(InfoTemplate) {
 	return {
 		// url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
 		proxy: {
@@ -9,10 +10,15 @@ define(function() {
 		geometryService: {
 			url: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer"
 		},
-		// basemap: valid options: "streets", "satellite", "hybrid", "topo", "gray", "oceans", "national-geographic", "osm"
-		defaultBasemap: "streets",
-		//basemaps to show in menu
-		basemaps: ["streets", "satellite", "hybrid", "topo", "gray", "oceans", "national-geographic", "osm"],
+		// basemapMode: must be either "agol" or "custom"
+		//basemapMode: "custom",
+		basemapMode: "agol",
+		// defaultBasemap: valid options for "agol" mode: "streets", "satellite", "hybrid", "topo", "gray", "oceans", "national-geographic", "osm"
+		//mapStartBasemap: "lightGray",
+		mapStartBasemap: "streets",
+		//basemapsToShow: basemaps to show in menu. If "agol" mode use valid values from above, if "custom" mode then define in basmaps dijit and refrenc by name here
+		//basemapsToShow: ["street", "satellite", "hybrid", "satTrans", "lightGray"],
+		basemapsToShow: ["streets", "satellite", "hybrid", "topo", "gray", "oceans", "national-geographic", "osm"],
 		// initialExtent: extent the the map starts at. Helper tool: http://www.arcgis.com/home/item.html?id=dd1091f33a3e4ecb8cd77adf3e585c8a
 		initialExtent: {
 			xmin: -15489130.48708616,
@@ -25,17 +31,21 @@ define(function() {
 		},
 		// operationalLayers: Layers to load on top of the basemap: valid 'type' options: "dynamic", "tiled", "feature".
 		// 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
+		// 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
 		operationalLayers: [{
 			type: "feature",
-			url: "http://psstldemo3.esri.com/arcgis/rest/services/demo/MeetUpHomeTowns/MapServer/0",
+			url: "http://psstldemo3.esri.com/arcgis/rest/services/demo/MeetUpHomeTowns/FeatureServer/0",
+			title: "STLJS Meetup Home Towns",
 			options: {
 				id: "meetupHometowns",
-				title: "STLJS Meetup Home Towns",
 				opacity: 1.0,
 				visible: true,
 				outFields: ["*"],
-				infoTemplate: new esri.InfoTemplate("Hometown", "${*}"),
-				mode: esri.layers.FeatureLayer.MODE_SNAPSHOT
+				infoTemplate: new InfoTemplate("Hometown", "${*}"),
+				mode: 0
+			},
+			editorLayerInfos: {
+				disableGeometryUpdate: false
 			}
 		}],
 		//widgets: set include to true or false to load or not load the widget. set position to the desired order, starts at 0 on the top.
@@ -76,12 +86,39 @@ define(function() {
 				include: true,
 				title: "Directions",
 				open: false,
-				position: 5,
+				position: 4,
 				options: {
 					routeTaskUrl: "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Network/USA/NAServer/Route",
 					routeParams: {
 						directionsLanguage: "en-US",
 						directionsLengthUnits: "esriMiles"
+					}
+				}
+			},
+			scalebar: {
+				include: true,
+				options: {
+					attachTo: "bottom-left",
+					scalebarStyle: "line",
+					scalebarUnit: "dual"
+				}
+			},
+			editor: {
+				include: true,
+				title: "Editor",
+				open: false,
+				position: 5,
+				settings: {
+					toolbarVisible: true,
+					showAttributesOnClick: true,
+					enableUndoRedo: true,
+					createOptions: {
+						polygonDrawTools: ["freehandpolygon", "autocomplete"]
+					},
+					toolbarOptions: {
+						reshapeVisible: true,
+						cutVisible: true,
+						mergeVisible: true
 					}
 				}
 			}

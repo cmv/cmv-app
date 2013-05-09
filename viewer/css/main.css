@@ -65,7 +65,7 @@ body, html {
 }
 
 #sidebar {
-    width: 300px;
+    width: 330px;
     padding: 0;
     margin: 0;
     overflow: auto;
@@ -102,7 +102,7 @@ body, html {
 }
 
 .sidebarCollapseButton.close {
-    left: 300px;
+    left: 330px;
     background-image: url("../images/close.png");
 }
 
