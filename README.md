@@ -24,6 +24,8 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Help
 * Measure
 * Directions
+* Editor
+* Scalebar
 
 ## Change log:
 * 5/8/2013
