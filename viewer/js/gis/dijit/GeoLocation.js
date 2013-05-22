@@ -1,18 +1,21 @@
 define([
-    'dojo/_base/declare',
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',
-    'dijit/form/Button',
-    'dojo/_base/lang',
-    'dojo/string',
-    'dojo/text!./GeoLocation/templates/GeoLocation.html',
-    'dojo/text!./GeoLocation/templates/stats.html',
-    'esri/renderers/SimpleRenderer',
-    'esri/symbols/PictureMarkerSymbol',
-    'esri/layers/GraphicsLayer',
-    'esri/graphic',
-    'esri/SpatialReference'], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, string, geoLocationTemplate, statsTemplate, SimpleRenderer, PictureMarkerSymbol, GraphicsLayer, Graphic, SpatialReference) {
+        'dojo/_base/declare',
+        'dijit/_WidgetBase',
+        'dijit/_TemplatedMixin',
+        'dijit/_WidgetsInTemplateMixin',
+        'dijit/form/Button',
+        'dojo/_base/lang',
+        'dojo/string',
+        'dojo/text!./GeoLocation/templates/GeoLocation.html',
+        'dojo/text!./GeoLocation/templates/stats.html',
+        'esri/renderers/SimpleRenderer',
+        'esri/symbols/PictureMarkerSymbol',
+        'esri/layers/GraphicsLayer',
+        'esri/graphic',
+        'esri/SpatialReference',
+        'esri/geometry/webMercatorUtils',
+        'esri/tasks/ProjectParameters'
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, string, geoLocationTemplate, statsTemplate, SimpleRenderer, PictureMarkerSymbol, GraphicsLayer, Graphic, SpatialReference, webMercatorUtils, ProjectParameters) {
 
     //anonymous function to load CSS files required for this module
     (function() {
@@ -63,12 +66,37 @@ define([
         },
         locationSuccess: function(event) {
             this.graphics.clear();
-            var point = esri.geometry.Point(event.coords.longitude, event.coords.latitude, new SpatialReference({
+            var geoPoint = esri.geometry.Point(event.coords.longitude, event.coords.latitude, new SpatialReference({
                 wkid: 4326
             }));
-            var wmPoint = esri.geometry.geographicToWebMercator(point);
-            this.map.centerAndZoom(wmPoint, 14);
-            this.addGraphic(wmPoint);
+            if (this.map.spatialReference.wkid === 102100) {
+                var wmPoint = webMercatorUtils.geographicToWebMercator(geoPoint);
+                this.setMap(wmPoint, event);
+            } else {
+                var p = new ProjectParameters();
+                p.geometries = [geoPoint];
+                p.outSR = this.map.spatialReference;
+                esri.config.defaults.geometryService.project(p, lang.hitch(this, function(geoms) {
+                    this.onProjectComplete(geoms, event);
+                }));
+            }
+        },
+        onProjectComplete: function(geoms, event) {
+            console.log(geoms);
+            if (geoms.length > 0) {
+                this.setMap(geoms[0], event);
+            } else {
+                if (this.growler) {
+                    this.growler.growl({
+                        title: "Position Information",
+                        message: "Projecting your position failed. Try again."
+                    });
+                }
+            }
+        },
+        setMap: function(geom, event) {
+            this.map.centerAndZoom(geom, 14);
+            this.addGraphic(geom);
             if (this.growler) {
                 var stats = {
                     accuracy: (event.coords.accuracy) ? event.coords.accuracy : '',
