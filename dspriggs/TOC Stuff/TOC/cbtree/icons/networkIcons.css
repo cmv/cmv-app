@@ -1,0 +1,55 @@
+/*
+ *  Sample cbtree custom node icon CSS
+ *
+ *  Usage:  See https://github.com/pjekel/cbtree/wiki/Tree-Styling
+ *
+ */
+
+.networkIcon {
+	background-image: url('images/networkIcons.gif'); /* Node icons sprite image */
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+}
+
+.networkIcon.networkIconTerminal {
+	background-position: -0px;
+}
+
+.networkIcon.networkIconCollapsed {
+	background-position: -16px;
+}
+
+.networkIcon.networkIconExpanded {
+	background-position: -32px;
+}
+
+.networkIcon.networkIconCollapsed_0,
+.networkIcon.networkIconExpanded_0 {
+	background-position: -48px;
+}
+
+.networkIcon.networkIconCollapsed_1 {
+	background-position: -64px;
+}
+.networkIcon.networkIconExpanded_1 {
+	background-position: -80px;
+}
+
+.networkIcon.networkIconCollapsed_2 {
+	background-position: -96px;
+}
+
+.networkIcon.networkIconExpanded_2 {
+	background-position: -112px;
+}
+
+.networkIcon.networkIconCollapsed_3 {
+	background-position: -16px;
+}
+
+.networkIcon.networkIconExpanded_3 {
+	background-position: -32px;
+}

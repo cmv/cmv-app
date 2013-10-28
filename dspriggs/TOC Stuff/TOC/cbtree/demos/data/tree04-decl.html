@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>The CheckBox Tree with third party widget </title>
+<!--
+  This demo uses a third party widget 'TriStateCheckbox' instead of the default
+  cbtree multi-state checkbox.  Note: for this demo checked state normalization
+  is turned off allowing ALL checkboxes to cycle thru all possible states.
+-->
+     <style type="text/css">
+      @import "../../../dijit/themes/claro/claro.css";
+      @import "../../../dijit/themes/claro/document.css";
+      @import "../../../dijit/tests/css/dijitTests.css";
+      @import "../../../dojox/form/resources/TriStateCheckBox.css";
+      @import "../../themes/claro/claro.css";
+    </style>
+
+    <script type="text/javascript">
+      var dojoConfig = {
+            async: true,
+            parseOnLoad: true,
+            isDebug: false,
+            baseUrl: "../../../",
+            packages: [
+              { name: "dojo",  location: "dojo" },
+              { name: "dojox",  location: "dojox" },
+              { name: "dijit", location: "dijit" },
+              { name: "cbtree",location: "cbtree" }
+            ]
+      };
+    </script>
+    <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+    <script type="text/javascript">
+      require([
+        "dojo/data/ItemFileWriteStore",
+        "dojo/parser",
+        "dojox/form/TriStateCheckbox",
+        "cbtree/Tree",                      // CheckBox Tree
+        "cbtree/models/ForestStoreModel"    // Tree Forest Store Model
+        ]);
+    </script>
+  </head>
+
+  <body class="claro">
+    <h1>The CheckBox Tree - Mixin Widget: &lt;TriStateCheckBox&gt;</h1>
+    <p>
+			Mixin a thrid party widget instead of the default checkbox. This demo requires dojox installed on your platform.
+    </p>
+		<div id="content">
+			<div data-dojo-id="store" data-dojo-type="dojo/data/ItemFileWriteStore" data-dojo-props='url:"../../data/json/Simpsons.json"'></div>
+			<div data-dojo-id="model" data-dojo-type="cbtree/models/ForestStoreModel" data-dojo-props='store:store, query:{type:"parent"}, rootLabel:"The Family", normalize: false'></div>
+			<div data-dojo-id="tree", data-dojo-type="cbtree/Tree" data-dojo-props='model:model, id:"tree", widget:{type:"dojox/form/TriStateCheckbox", args: { states:["mixed", true, false] }}'>
+		</div>
+  </body>
+</html>

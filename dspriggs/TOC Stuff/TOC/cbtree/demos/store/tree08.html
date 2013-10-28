@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CheckBox Tree with Dijit ToogleButton </title>
+<!--
+  This demo uses the dijit ToggleButton instead of the default cbtree multi-state
+  checkbox.
+-->
+     <style type="text/css">
+      @import "../../../dijit/themes/claro/claro.css";
+      @import "../../../dijit/themes/claro/document.css";
+      @import "../../../dijit/tests/css/dijitTests.css";
+      @import "../../themes/claro/claro.css";
+    </style>
+
+    <script type="text/javascript">
+      var dojoConfig = {
+            async: true,
+            parseOnLoad: true,
+            isDebug: false,
+            baseUrl: "../../../",
+            packages: [
+              { name: "dojo",  location: "dojo" },
+              { name: "dijit", location: "dijit" },
+              { name: "cbtree",location: "cbtree" }
+            ]
+      };
+    </script>
+    <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+    <script type="text/javascript">
+      require([
+        "dojo/ready",
+        "cbtree/Tree",                      // CheckBox Tree
+        "cbtree/extensions/TreeStyling",    // CheckBox Tree Styling
+        "cbtree/model/TreeStoreModel",      // Tree Store Model
+				"cbtree/store/ObjectStore"          // Evented Object Store with Hierarchy
+        ], function( ready, Tree, TreeStyling, TreeStoreModel, ObjectStore ) {
+
+          var store = new ObjectStore( { url: "../../store/json/Simpsons.json", idProperty:"name" });
+          var model = new TreeStoreModel( {
+                              store: store,
+                              query: {name: "Root"},
+                              rootLabel: "The Simpsons",
+                              checkedRoot: true
+                              });
+
+          ready( function() {
+            var tree = new Tree( {  model: model,
+                                    id: "tree08",
+                                    widget: { type: "dijit/form/ToggleButton",
+                                              args:{iconClass:'dijitCheckBoxIcon'},
+                                              mixin: function(args) {
+                                                        args['label'] = this.label;
+                                                      }
+                                            }
+                                    }, "CheckboxTree" );
+            // Hide Labels and Icons for the entire tree.
+						tree.set("labelStyle", {display:'none'});
+						tree.set("iconStyle", {display:'none'});
+            tree.startup();
+          });
+        }
+      );
+    </script>
+  </head>
+
+  <body class="claro">
+    <h1>The CheckBox Tree - Mixin Widget: &lt;ToggleButton&gt;</h1>
+    <p>
+			Mixin and use the dijit Toggle button widget instead of the default cbtree checkbox.
+    </p>
+    <div id="CheckboxTree">
+    </div>
+  </body>
+</html>

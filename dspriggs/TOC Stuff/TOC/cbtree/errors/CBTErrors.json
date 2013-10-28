@@ -1,0 +1,25 @@
+[
+	{"AbstractOnlyError":		{"text":"method is abstract only and requires implementation"} },
+	{"AccessError":				{"text":"requested or required access is not allowed"} },
+	{"ItemExistError":			{"text":"object with specified ID already exist"} },
+	{"InvalidAccessError":		{"text":"operation or parameter is not allowed"} },
+	{"InvalidDataError":		{"text":"store data must be an array of objects"} },
+	{"InvalidParameterError":	{"text":"Invalid parameter specified"} },
+	{"InvalidPropertyError":	{"text":"invalid property or type specified"} },
+	{"InvalidObjectError":		{"text":"item is not an a valid store object"} },
+	{"InvalidPathError":		{"text":"invalid path"} },
+	{"InvalidResponseError":	{"text":"function returned an invalid or unexpected response"} },
+	{"InvalidTypeError":		{"text":"parameter or property type is invalid"} },
+	{"InvalidVersionError":		{"text":"invalid dojo or dijit version"} },
+	{"InvalidWidgetError":		{"text":"invalid widget"} },
+	{"MethodMissingError":		{"text":"a required function is missing"} },
+	{"NotFoundError": 			{"text":"the object can not be found here."} },
+	{"ParameterMissingError":	{"text":"required parameter is missing"} },
+	{"PropertyMissingError":	{"text":"required property is missing"} },
+	{"ReadOnlyError": 			{"text":"property is READ-ONLY"} },
+	{"RequestCancelError": 		{"text":"request was canceled"} },
+	{"RequestError": 			{"text":"XHR request failed"} },
+	{"RequestPendingError": 	{"text":"another request is still pending"} },
+	{"UnknownVersionError":		{"text":"unknown dojo and/or dijit version"} }
+]
+

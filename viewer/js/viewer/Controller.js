@@ -23,7 +23,8 @@ define([
     'viewer/config',
     'dojo/domReady!',
     'esri/IdentityManager',
-    'esri/tasks/GeometryService'], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, ready, IdentityManager, GeometryService) {
+    'esri/tasks/GeometryService'
+], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, ready, IdentityManager, GeometryService) {
     return {
         config: config,
         legendLayerInfos: [],
@@ -31,6 +32,7 @@ define([
         startup: function() {
             this.initConfig();
             this.initView();
+            //app = this; //dev only
         },
         initConfig: function() {
             esri.config.defaults.io.proxyUrl = config.proxy.url;
@@ -120,6 +122,37 @@ define([
             }, "geocodeDijit");
             this.geocoder.startup();
 
+            if (config.widgets.scalebar && config.widgets.scalebar.include) {
+                require(['esri/dijit/Scalebar'], lang.hitch(this, function(Scalebar) {
+                    new Scalebar({
+                        map: this.map,
+                        attachTo: config.widgets.scalebar.options.attachTo,
+                        scalebarStyle: config.widgets.scalebar.options.scalebarStyle,
+                        scalebarUnit: config.widgets.scalebar.options.scalebarUnit
+                    });
+                }));
+            }
+
+            if (config.widgets.legend && config.widgets.legend.include) {
+                var legendTP = this._createTitlePane(config.widgets.legend.title, config.widgets.legend.position, config.widgets.legend.open);
+                require(['esri/dijit/Legend'], lang.hitch(this, function(Legend) {
+                    this.legend = new Legend({
+                        map: this.map,
+                        layerInfos: this.legendLayerInfos
+                    }, domConstruct.create("div")).placeAt(legendTP.containerNode);
+                }));
+            }
+
+            if (config.widgets.bookmarks && config.widgets.bookmarks.include) {
+                var bookmarksTP = this._createTitlePane(config.widgets.bookmarks.title, config.widgets.bookmarks.position, config.widgets.bookmarks.open);
+                require(['gis/dijit/Bookmarks'], lang.hitch(this, function(Bookmarks) {
+                    this.bookmarks = new Bookmarks({
+                        map: this.map,
+                        editable: true
+                    }, domConstruct.create("div")).placeAt(bookmarksTP.containerNode);
+                }));
+            }
+
             if (config.widgets.draw && config.widgets.draw.include) {
                 var drawTP = this._createTitlePane(config.widgets.draw.title, config.widgets.draw.position, config.widgets.draw.open);
                 require(['gis/dijit/Draw'], lang.hitch(this, function(Draw) {
@@ -166,27 +199,6 @@ define([
                 }));
             }
 
-            if (config.widgets.legend && config.widgets.legend.include) {
-                var legendTP = this._createTitlePane(config.widgets.legend.title, config.widgets.legend.position, config.widgets.legend.open);
-                require(['esri/dijit/Legend'], lang.hitch(this, function(Legend) {
-                    this.legend = new Legend({
-                        map: this.map,
-                        layerInfos: this.legendLayerInfos
-                    }, domConstruct.create("div")).placeAt(legendTP.containerNode);
-                }));
-            }
-
-            if (config.widgets.scalebar && config.widgets.scalebar.include) {
-                require(['esri/dijit/Scalebar'], lang.hitch(this, function(Scalebar) {
-                    new Scalebar({
-                        map: this.map,
-                        attachTo: config.widgets.scalebar.options.attachTo,
-                        scalebarStyle: config.widgets.scalebar.options.scalebarStyle,
-                        scalebarUnit: config.widgets.scalebar.options.scalebarUnit
-                    });
-                }));
-            }
-
             if (config.widgets.editor && config.widgets.editor.include) {
                 var editorTP = this._createTitlePane(config.widgets.editor.title, config.widgets.editor.position, config.widgets.editor.open);
                 require(['gis/dijit/Editor'], lang.hitch(this, function(Editor) {
@@ -215,7 +227,7 @@ define([
                 title: title,
                 open: open
             }).placeAt(this.sidebar, position);
-            domClass.add(tp.domNode, 'titlePaneBottomFix titlePaneRightFix');
+            //domClass.add(tp.domNode, 'titlePaneBottomFix titlePaneRightFix');
             tp.startup();
             return tp;
         },

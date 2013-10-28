@@ -1,4 +1,4 @@
-.gis_Basemaps_Dijit  .gis_Basemaps_Button {
+/*.gis_Basemaps_Dijit  .gis_Basemaps_Button {
     background-color: #FFFFFF;
     border: 2px solid #666666;
     border-radius: 5px 5px 5px 5px;
@@ -36,7 +36,16 @@
 
 .gis_Basemaps_Dijit .gis_Basemaps_Button .dijitButtonNode {
     border: none;
+}*/
+
+.selectedIcon:before {
+    content: "\f046";
 }
 
+.emptyIcon:before {
+    content: "\f096";
+}
 
-
+.basemapsIcon:before {
+    content: "\f009";
+}

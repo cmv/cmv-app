@@ -7,7 +7,7 @@ define([
 	'dojo/dom-construct'], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, domConstruct) {
 
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
-		templateString: '<div class="gis_GeoLocation_Dijit"><div style="text-align:center;"><button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:toggleEditing" data-dojo-props="label:\'Start Editing\',baseClass:\'geoLocationButton\'" style="background-color:#ECECEC;" data-dojo-attach-point="toggleBTN"></button></div><div style="margin-top:5px;" data-dojo-attach-point="containerNode"></div></div>',
+		templateString: '<div><div style="text-align:center;"><button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:toggleEditing" data-dojo-props="label:\'Start Editing\',class:\'success\'" data-dojo-attach-point="toggleBTN"></button></div><div class="editDijit" style="margin-top:5px;" data-dojo-attach-point="containerNode"></div></div>',
 		widgetsInTemplate: true,
 		editor: null,
 		isEdit: false,
@@ -30,10 +30,12 @@ define([
 				}));
 
 				this.toggleBTN.set('label', 'Stop Editing');
+				this.toggleBTN.set('class', 'danger');
 				this.isEdit = true;
 			} else {
 				this.editor.destroyRecursive();
 				this.toggleBTN.set('label', 'Start Editing');
+				this.toggleBTN.set('class', 'success');
 				this.isEdit = false;
 				this.editor = null;
 			}

@@ -1,0 +1,27 @@
+/*
+ *  Sample cbtree custom node icon CSS
+ *
+ *  Usage:  See https://github.com/pjekel/cbtree/wiki/Tree-Styling
+ *
+ */
+
+.indentIcon {
+	background-image: url('images/indentIcons.gif'); /* Node icons sprite image */
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+}
+
+.indentIcon.indentIconTerminal {
+	background-position: -0px;
+}
+
+.indentIcon.indentIconCollapsed {
+	background-position: -16px;
+}
+
+.indentIcon.indentIconExpanded {
+	background-position: -32px;
+}

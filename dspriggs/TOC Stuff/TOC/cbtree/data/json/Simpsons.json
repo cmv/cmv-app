@@ -1,0 +1,34 @@
+{ "identifier": "name",
+  "label": "name",
+  "items": [
+    { "name":"Lisa", "type":"child", "hair":"blond", "checked":true },
+    { "name":"Bart", "type":"child", "hair":"blond", "checked":true },
+    { "name":"Meggie", "type":"child", "hair":"blond", "checked":true },
+
+    { "name":"Patty", "type":"child", "hair":"blond", "checked":true },
+    { "name":"Selma", "type":"child", "hair":"blond", "checked":true },
+
+    { "name":"Rod", "type":"child", "hair":"blond", "checked":true },
+    { "name":"Todd", "type":"child", "hair":"blond", "checked":true },
+
+    { "name":"Abe", "type":"parent", "hair":"none", "checked":true,
+        "children":[{"_reference": {"name":"Homer"}}]
+    },
+    { "name":"Mona", "type":"parent", "hair":"none", "checked":true,
+        "children":[{"_reference":"Homer"}]
+    },
+    { "name":"Jacqueline", "type":"parent", "hair":"none", "checked":true,
+        "children":[{"_reference":"Selma"}, {"_reference":"Patty"}, {"_reference":"Marge"}]
+    },
+    { "name":"Homer", "type":"parent", "hair":"none", "checked":true,
+        "children":[{"_reference":"Lisa"}, {"_reference":"Bart"}, {"_reference":"Meggie"}]
+    },
+    { "name":"Marge", "type":"parent", "hair":"none", "checked":true,
+        "children":[{"_reference":"Lisa"}, {"_reference":"Bart"}, {"_reference":"Meggie"}]
+    },
+    { "name":"Flanders", "type":"parent", "hair":"none", "checked":true,
+        "children":[{"_reference":"Rod"}, {"_reference":"Todd"}]
+    }
+	]
+}
+

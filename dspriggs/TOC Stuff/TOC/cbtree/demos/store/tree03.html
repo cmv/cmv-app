@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>The CheckBox Tree with multi-parented Observable Store</title>
+    <style type="text/css">
+      @import "../../../dijit/themes/claro/claro.css";
+      @import "../../../dijit/themes/claro/document.css";
+      @import "../../../dijit/tests/css/dijitTests.css";
+      @import "../../themes/claro/claro.css";
+
+    </style>
+
+    <script type="text/javascript">
+      var dojoConfig = {
+            async: true,
+            parseOnLoad: true,
+            isDebug: false,
+            baseUrl: "../../../",
+            packages: [
+              { name: "dojo",  location: "dojo" },
+              { name: "dijit", location: "dijit" },
+              { name: "cbtree",location: "cbtree" }
+            ]
+      };
+    </script>
+
+    <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+    <script type="text/javascript">
+      require([
+        "dojo/ready",
+        "dojo/store/Observable",
+        "cbtree/Tree",                       // Checkbox tree
+        "cbtree/model/TreeStoreModel",       // ObjectStoreModel
+        "cbtree/store/Hierarchy"             // Object Store with hierarchy
+        ], function( ready, Observable, Tree, ObjectStoreModel, ObjectStore) {
+
+					// Declare our multi-parented store objects. Notice: the parent property
+					// of each store item is an array...
+					var data = [
+						{ name:"Root", parent:[] },
+
+						{ name:"Lisa", parent:["Homer","Marge"], hair:"blond", checked:true, icon:"simpsonsIcons lisa" },
+						{ name:"Bart", parent:["Homer","Marge"], hair:"blond", checked:"what", icon:"simpsonsIcons bart" },
+						{ name:"Maggie", parent:["Homer","Marge"], hair:"blond", checked:true },
+
+						{ name:"Patty", parent:["Jacqueline"], hair:"blond", checked:true },
+						{ name:"Selma", parent:["Jacqueline"], hair:"blond", checked:false },
+
+						{ name:"Rod", parent:["Ned"], hair:"blond", checked:true },
+						{ name:"Todd", parent:["Ned"], hair:"blond", checked:true },
+
+						{ name:"Abe", parent:["Root"], hair:"none", checked:true },
+						{ name:"Mona", parent:["Root"], hair:"none", checked:false },
+						{ name:"Jacqueline", parent:["Root"], hair:"none", checked:true },
+						{ name:"Homer", parent:["Abe","Mona"], hair:"none", checked:false, icon:"simpsonsIcons homer", "enabled": false },
+						{ name:"Marge", parent:["Jacqueline"], hair:"none", checked:true, icon:"simpsonsIcons marge" },
+						{ name:"Ned", parent:["Root"], hair:"none", checked:true },
+
+						{ name:"Apu", parent:["Root"], hair:"black", checked:true },
+						{ name:"Manjula", parent:"[Apu]", hair:"black", checked:false}
+					]
+
+          var store = Observable( new ObjectStore( { data: data, idProperty:"name" }) );
+          var model = new ObjectStoreModel( { store: store,
+                                               query: {name: "Root"},
+                                               rootLabel: "The Family",
+                                               checkedRoot: true
+                                             });
+          ready(function(){
+            var tree = new Tree( { model: model, id: "tree03" }, "CheckboxTree" );
+            tree.startup();
+          });
+        });
+      </script>
+
+  </head>
+
+  <body class="claro">
+    <h1 class="DemoTitle">The CheckBox Tree with Multi State CheckBoxes</h1>
+    <p>
+			A CheckBox Tree using an observable, multi-parented cbtree/store Hierarchy Store.<br/>
+		</p>
+    <div id="CheckboxTree">
+    </div>
+  </body>
+</html>

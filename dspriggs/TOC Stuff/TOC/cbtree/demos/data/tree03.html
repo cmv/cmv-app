@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dijit CheckBox Tree using the cbtree API</title>
+
+     <style type="text/css">
+      @import "../../../dijit/themes/claro/claro.css";
+      @import "../../../dijit/themes/claro/document.css";
+      @import "../../../dijit/tests/css/dijitTests.css";
+      @import "../../../cbtree/icons/cbtreeIcons.css";
+      @import "../../themes/claro/claro.css";
+    </style>
+
+    <style>
+      html,body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        padding: 0;
+      }
+      #appLayout {
+        height: 100%;
+      }
+      #textBox {
+        height: 500px;
+      }
+      #code {
+        background-color: #d0e9fc;
+        padding: 5px;
+      }
+      .claro .demoLayout .edgeTop {
+        background-color: #d0e9fc;
+      }
+      .claro .textBox {
+        border-style:solid;
+        border-color:#d0e9fc;
+        overflow-y:scroll;
+      }
+    </style>
+
+    <script type="text/javascript">
+      var dojoConfig = {
+            async: true,
+            parseOnLoad: true,
+            isDebug: true,
+            baseUrl: "../../../",
+            packages: [
+              { name: "dojo",  location: "dojo" },
+              { name: "dijit", location: "dijit" },
+              { name: "cbtree",location: "cbtree" }
+            ]
+      };
+    </script>
+
+    <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+    <script>
+      require([ "dijit/layout/BorderContainer",
+                "dijit/layout/TabContainer",
+                "dijit/layout/ContentPane",
+                "dojo/parser"
+              ]);
+    </script>
+
+    <script type="text/javascript">
+      var TAB = "&nbsp;&nbsp;&nbsp;&nbsp;";
+      var html = [
+        // Text for 'createChildren()'
+        "<p>Add the first parent as a root item. Any item created with newItem() without " +
+        "parent reference automatically becomes a top level entry in the store.</p>" +
+        "<div id=\"code\"><pre>" +
+        "function <strong>createChildren()</strong>{<br/>" +
+        TAB + "parent = model.newItem( { name: 'Homer', type: 'parent', hair: 'none', checked: true } );<br/>" +
+        TAB + "model.newItem( { name: 'Marge', type: 'parent', female: true, hair: 'blond', checked: true } );<br/>" +
+        TAB + "model.newItem( { name: 'Lisa', type: 'child', female: true, hair:'blond', checked: false }, parent );<br/>" +
+        TAB + "model.newItem( { name: 'Meggie', type: 'child', female: true, hair:'brown', checked: true });<br/>" +
+        TAB + "model.newItem( { name: 'Bart', hair:'black', type: 'child' } );<br/>" +
+        TAB + "model.newItem( { name: 'Nelson', hair:'black', type: 'child' } );<br/>" +
+        "}</pre></div>",
+
+        // Text for 'addChildren()'
+        "<p>Fetch all children with a 'checked' state attribute and add a reference to the parent item for each child. " +
+        "Note, the model was created with the property 'checkedAll' set therefore every child has a checkbox by now.</p>" +
+        "<div id=\"code\"><pre>" +
+        "function <strong>addChildren()</strong>{<br/>" +
+        TAB + "model.fetchItemsWithChecked( { type:'child' }, function(children) {<br/>" +
+        TAB + TAB + "array.forEach( children, function(child){<br/>" +
+        TAB + TAB + TAB + "this.addReference( child, parent );<br/>" +
+        TAB + TAB + "}, this )<br/>" +
+        TAB + "},<br/>" +
+        TAB + "model );<br/>" +
+        "}</pre></div>",
+
+        // Text for 'removeLisa()'
+        "<p>The parent Homer now has 2 references to child Lisa. The first because she was " +
+        "explicitly created with Homer as a parent reference. Second, she was added in " +
+        "addChildren() because she had a 'checked' state attribute. Remove one reference " +
+        "from Homer and add a new reference to Marge.</p>" +
+        "<div id=\"code\"><pre>" +
+        "function <strong>removeLisa()</strong> {<br/>" +
+        TAB + "child = model.fetchItem('Lisa');<br/>" +
+        TAB + "if( child ) {<br/>" +
+        TAB + TAB + "model.removeReference( child, parent );<br/>" +
+        TAB + TAB + "model.addReference( child, model.fetchItem('Marge'));<br/>" +
+        TAB + "}<br/>" +
+        "}</pre></div>",
+
+        // Text for 'addChildrenLisa()'
+        "<p>Child 'Lisa' was created with a parent reference therefore she is not a top level (root) item in the store. " +
+        "Lets add some children to Lisa and give her some custom styling.</p>" +
+        "<div id=\"code\"><pre>" +
+        "function <strong>addChildrenLisa</strong>() {<br/>" +
+        TAB + "var newParent = model.fetchItem( 'Lisa' );<br/>" +
+        TAB + "if( newParent ) {<br/>" +
+        TAB + TAB + "model.newItem( {name:'Carl', hair:'red', type: 'child' }, newParent );<br/>" +
+        TAB + TAB + "model.newItem( {name:'Ralph', hair:'blond', type: 'child', female: true }, newParent );<br/>" +
+        TAB + TAB + "model.newItem( {name:'Todd', hair:'red', type: 'child' }, newParent );<br/><br/>" +
+        TAB + TAB + "tree.set( 'icon', {iconClass:'simpsonsIcons', fixed:'lisa'}, newParent );<br/>" +
+        TAB + TAB + "tree.set( 'labelStyle', {color:'green'}, newParent );<br/>" +
+        TAB + "}<br/>" +
+        "}</pre></div>",
+
+        // Text for 'makeLisaTop()'
+        "<p>Because child Lisa now has children of her own we need to move here to the root of our tree and make " +
+        "here a parent so she will match our tree root query.</p>" +
+        "<div id=\"code\"><pre>" +
+        "function <strong>makeLisaTop</strong>(){<br/>" +
+        TAB + "var child = model.fetchItem( 'Lisa' );<br/>" +
+        TAB + "if( child ){<br/>" +
+        TAB + TAB + "if( !model.isRootItem( child ) ) {<br/>" +
+        TAB + TAB + TAB + "model.attachToRoot( child );<br/>" +
+        TAB + TAB + "}<br/>" +
+        TAB + TAB + "model.setItemAttr( child,'type','parent' );<br/>" +
+        TAB + "}<br/>" +
+        "}</pre></div>",
+
+        // Text for 'parentBart()'
+        "<p>Lets make Bart a parent too, he was already created without a parent reference " +
+        "therefore he is already a top level entry in the store but lets check anyway. " +
+        "Let fetch him using an object instead of just a name. But because the object " +
+        "does not have the store identity 'name' we tell which attribute to use instead.</p>" +
+        "<div id=\"code\"><pre>" +
+        "function <strong>parentBart</strong>() {<br/>" +
+        TAB + "var newParent = model.fetchItem( {firstName:'Bart', LastName:'Simpson', age:'15'}, 'firstName' );<br/>" +
+        TAB + "if( newParent ) {<br/>" +
+        TAB + TAB + "model.addReference( model.fetchItem( 'Nelson' ), newParent );<br/>" +
+        TAB + TAB + "model.addReference( model.fetchItem( 'Nelson' ), model.fetchItem( 'Lisa' ));<br/>" +
+        TAB + TAB + "if( !model.isRootItem(newParent)) {<br/>" +
+        TAB + TAB + TAB + "model.attachToRoot( newParent );<br/>" +
+        TAB + TAB + "}<br/>" +
+        TAB + TAB + "model.setItemAttr( newParent,'type','parent' );<br/>" +
+        TAB + "}<br/>" +
+        "}</pre></div>",
+
+        // Text for 'blonsOnly()'
+        "<p>Lets uncheck all checkboxes, remember strict checkbox relationship is still OFF. " +
+        "In additon check only the people with blond hair....</p>" +
+        "<div id=\"code\"><pre>" +
+        "function <strong>blondsOnly</strong>() {<br/>" +
+        TAB + "model.uncheck( {name:'*'} );<br/>" +
+        TAB + "model.check( {hair:'blond'} );<br/>" +
+        "}</pre></div>",
+
+        // Text for 'setStrict()'
+        "Enable strict parent child relationship.<br/><br/>" +
+        "<div id=\"code\"><pre>" +
+        "function <strong>setStrict</strong>() {<br/>" +
+        TAB + "model.set( 'checkedStrict', true );<br/>" +
+        "}</pre></div>",
+
+        // Text for orphanLisa()'
+        "<p>Remove all of Lisa children and detach her from the root.</p>" +
+        "<div id=\"code\"><pre>" +
+        "function <strong>orphanLisa</strong>() {<br/>" +
+        TAB + "parent = model.fetchItem( 'Lisa' );<br/>" +
+        TAB + "if( parent ) {<br/>" +
+        TAB + TAB + "model.getChildren( parent, function(children){<br/>" +
+        TAB + TAB + TAB + "array.forEach(children, function(child){<br/>" +
+        TAB + TAB + TAB + TAB + "model.removeReference( child, parent );<br/>" +
+        TAB + TAB + TAB + TAB + "}, this<br/>" +
+        TAB + TAB + TAB + ");<br/>" +
+        TAB + TAB + TAB + "model.detachFromRoot( parent );<br/>" +
+        TAB + TAB + TAB + "});<br/>" +
+        TAB + "}<br/>" +
+        "}</pre></div>",
+
+        // Text for 'removeBart()'
+        "<p>Bart left the family so lets delete him.</p>" +
+        "<div id=\"code\"><pre>" +
+        "function <strong>removeBart</strong>() {<br/>" +
+        TAB + "model.deleteItem( model.fetchItem('Bart'));<br/>" +
+        "}</pre></div>",
+
+        // Text for 'changeQuery()'
+        "<p>Query all people that have blue hair AND are still store root items, that should only be Marge.</p>" +
+        "<div id=\"code\"><pre>" +
+        "function <strong>changeQuery</strong>() {<br/>" +
+        TAB + "model.set( 'query', { hair:'blue' });<br/>" +
+        "}</pre></div>"
+
+      ];
+    </script>
+
+    <script type="text/javascript">
+      require([ "dojo/_base/array",
+                "dojo/_base/connect",
+                "dojo/_base/lang",
+                "dojo/dom",
+                "dojo/data/ItemFileWriteStore",
+                "dojo/ready",
+                "cbtree/Tree",                      // Checkbox Tree
+                "cbtree/extensions/TreeStyling",    // Tree Styling extensions
+                "cbtree/models/ForestStoreModel",   // Forest Store Model
+                "cbtree/models/StoreModel-API"      // Store Model API extensions
+              ], function( array, connect, lang, dom, ItemFileWriteStore, ready, Tree, TreeStyling,
+                            ForestStoreModel ) {
+
+        // Declare an empty JSON data object (an empty store).
+        var EmptyData = { identifier: 'name', label:'name', items:[] };
+        var store, model, tree;
+        var parent, child;
+
+        createChildren = function() {
+          // Add the first parent as a root item. Any item created with newItem() without a
+          // parent reference automatically becomes a top level entry in the store.
+          parent = model.newItem( { name: 'Homer', type: 'parent', hair: 'none', checked: true } );
+          model.newItem( { name: 'Marge', type: 'parent', female: true, hair: 'blue', checked: true } );
+          // Add some children, only the first will be visible yet (she has a parent refence) and
+          // only two of them have a checked attribute defined.
+          model.newItem( { name: 'Lisa', type: 'child', female: true, hair:'blond', checked: false }, parent );
+          model.newItem( { name: 'Meggie', type: 'child', female: true, hair:'brown', checked: true });
+          model.newItem( { name: 'Bart', hair:'black', type: 'child' } );
+          model.newItem( { name: 'Nelson', hair:'black', type: 'child' } );
+        }
+
+          addChildren = function(){
+            // Fetch all children with a 'checked' state attribute
+            model.fetchItemsWithChecked( { type:'child' }, function(children) {
+                // Add a reference to the parent item for each child..
+                array.forEach( children, function(child){
+                  this.addReference( child, parent );
+                }, this )
+              },
+              model );
+          };
+
+          removeLisa = function() {
+            // The parent Homer now has 2 references to child Lisa. The first because she was
+            // explicitly created with Homer as a parent reference. Second, she was added in
+            // addChildren() because she had a 'checked' state attribute. Remove the reference
+            // from Homer and add a new reference to Marge.
+            child = model.fetchItem('Lisa');
+            if( child ) {
+              model.removeReference( child, parent );
+              model.addReference( child, model.fetchItem('Marge'));
+            } else {
+              throw new Error( "removeLisa(): Unable to fetch 'Lisa'");
+            }
+          }
+
+          addChildrenLisa = function() {
+            // Child 'Lisa' was created with a parent reference therefore she is not a
+            // top level (root) item in the store.
+            var newParent = model.fetchItem( 'Lisa' );
+            if( newParent ) {
+              // Add some grandchildren
+              model.newItem( {name:'Carl', hair:'red', type: 'child' }, newParent );
+              model.newItem( {name:'Ralph', hair:'blond', type: 'child', female: true }, newParent );
+              model.newItem( {name:'Todd', hair:'red', type: 'child' }, newParent );
+              tree.set( 'icon', {iconClass:'simpsonsIcons', fixed:'lisa'}, newParent );
+              tree.set( 'labelStyle', {color:'green'}, newParent );
+            } else {
+              throw new Error( "addChildrenLisa(): Unable to fetch 'Lisa'");
+            }
+          }
+
+          makeLisaTop = function(){
+            // Because child Lisa now has children of her own we need to move here to
+            // the root of our tree and make here a parent so she will match our tree root
+            // query
+            var child = model.fetchItem( 'Lisa' );
+            if( child ){
+              if( !model.isRootItem( child ) ) {
+                model.attachToRoot( child );
+              }
+              model.setItemAttr( child,'type','parent' );
+            } else {
+              throw new Error( "makeLisaTop(): Unable to fetch 'Lisa'");
+            }
+          }
+
+          parentBart = function() {
+            // Lets make Bart a parent too, he was already created without a parent reference
+            // therefore he is already a top level entry in the store but lets check anyway.
+            // Let fetch him using an object instead of just a name. But because the object
+            // does not have the store identity 'name' we tell which attribute to use instead.
+            var newParent = model.fetchItem( {firstName:'Bart', LastName:'Simpson', age:'15'}, "firstName" );
+            if( newParent ) {
+              // Add Nelson as his son.
+              model.addReference( model.fetchItem( 'Nelson' ), newParent );
+              model.addReference( model.fetchItem( 'Nelson' ), model.fetchItem( 'Lisa' ));
+              if( !model.isRootItem(newParent)) {
+                model.attachToRoot( newParent );
+              }
+              model.setItemAttr( newParent,'type','parent' );
+            } else {
+              throw new Error( "parentBart(): Unable to fetch 'Bart'");
+            }
+          }
+
+          blondsOnly = function() {
+            // Lets uncheck all checkboxes, remember strict checkbox relationship is still OFF....
+            // and check only the people with blond hair....
+            model.uncheck( {name:'*'} );
+            model.check( {hair:'blond'} );
+          }
+
+          setStrict = function() {
+            // Enable strict parent child relationship
+            model.set( "checkedStrict", true );
+          }
+
+          orphanLisa = function() {
+            // Remove all of Lisa children and detach her from the root.
+            parent = model.fetchItem( 'Lisa' );
+            if( parent ) {
+              model.getChildren( parent, function(children){
+                  array.forEach(children, function(child){
+                    model.removeReference( child, parent );
+                    }, this
+                  );
+                  model.detachFromRoot( parent );
+                }
+              );
+            } else {
+              throw new Error( "orphanLisa(): Unable to fetch 'Lisa'");
+            }
+          }
+
+          removeBart = function() {
+            // Bart left the family so lets delete him
+            model.deleteItem( model.fetchItem('Bart'));
+          }
+
+          changeQuery = function() {
+            // Query all people that have blue hair AND are still store root items,
+            // that should only be Marge.
+            model.set( "query", { hair:'blue' });
+          }
+
+          // Define the order in which the functions will be executed.
+          var funcSet = [createChildren, addChildren, removeLisa, addChildrenLisa,
+                         makeLisaTop, parentBart,blondsOnly, setStrict, orphanLisa,
+                         removeBart, changeQuery ];
+
+          buttonClicked = function(value){
+            // Cycle thru the set of functions
+            var domElem = dijit.byId("but");
+            var idx = Number(domElem.get("value"));
+            if( idx < funcSet.length ) {
+              if(lang.isFunction(funcSet[idx])) {
+                funcSet[idx]();
+                idx = idx + 1;
+                domElem.set("value", idx );
+                if( idx >= funcSet.length ) {
+                  domElem.set("label", "Done" );
+                  dom.byId("codeSegm").innerHTML = "<strong>-- The End --</strong>"
+                } else {
+                  dom.byId("codeSegm").innerHTML = html[idx] + dom.byId("codeSegm").innerHTML;
+                }
+              } else {
+                throw new Error( "Function at index: "+idx+" is not a function");
+              }
+            }
+          }
+
+          // Create the cbtree store model... NOTE: we startof with strict parent-child
+          // relationship disabled....
+          model = new ForestStoreModel( {
+                  store: new ItemFileWriteStore( { data: EmptyData }),
+                  query: {type: 'parent'},
+                  rootLabel: 'The Simpsons Tree',
+                  checkedAll: true,
+                  checkedRoot: true,
+                  checkedStrict: false
+                  });
+
+          ready(function() {
+            // Create the tree (which will be empty). Make sure 'autoExpand' is enabled otherwise
+            // you will miss alot of the action...
+            tree = new Tree( { model: model, id: "MenuTree",  autoExpand: true }, "CheckboxTree" );
+            tree.startup();
+
+            dom.byId("codeSegm").innerHTML = html[0];
+          });
+      });
+    </script>
+  </head>
+
+  <body class="claro">
+    <div id="appLayout" class="demoLayout" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design: 'headline'">
+      <div class="edgePanel edgeTop" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'top'">
+        Building the CheckBox Tree using the StoreModel API extensions
+      </div>
+      <div class="edgePanel" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'left', splitter: true"
+           style="width:25%;">
+        <div id="CheckboxTree">
+        </div>
+      </div>
+
+      <div class="centerPanel" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">
+        <p><h2>The next step</h2></p>
+        <div id="textBox" class="textBox" >
+          <div id="codeSegm" style="margin-left:5px;">
+          </div>
+        </div>
+        <div style="margin:5px;">
+          <p>Demonstrate the use of Store Model and Tree Styling API's.</p>
+          <button id="but" data-dojo-type="dijit/form/Button" type="button" value="0" onClick="buttonClicked()">Continue</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

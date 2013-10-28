@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>The CheckBox Tree with Custom Icons</title>
+     <style type="text/css">
+      @import "../../../dijit/themes/claro/claro.css";
+      @import "../../../dijit/themes/claro/document.css";
+      @import "../../../dijit/tests/css/dijitTests.css";
+      @import "../../themes/claro/claro.css";
+      @import "../../icons/networkIcons.css";
+    </style>
+
+    <script type="text/javascript">
+      var dojoConfig = {
+            async: true,
+            parseOnLoad: true,
+            isDebug: true,
+            baseUrl: "../../../",
+            locale: 'en-us',
+            packages: [
+              { name: "dojo",  location: "dojo" },
+              { name: "dijit", location: "dijit" },
+              { name: "cbtree",location: "cbtree" }
+            ]
+      };
+    </script>
+
+    <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+    <script type="text/javascript">
+      require([
+        "dojo/data/ItemFileWriteStore",
+        "dojo/parser",
+        "cbtree/Tree",                    // Checkbox Tree
+        "cbtree/extensions/TreeStyling",  // Tree styling extensions
+        "cbtree/models/ForestStoreModel"  // Forest Store Model
+        ]);
+    </script>
+  </head>
+
+  <body class="claro">
+    <h1 class="DemoTitle">The CheckBox Tree with Custom Icons</h1>
+    <p>
+      Demonstrate the tree styling API with custom icons.
+    </p>
+    <div id="content">
+      <div data-dojo-id="store" data-dojo-type="dojo/data/ItemFileWriteStore" data-dojo-props='url:"../../data/json/Network.json"'></div>
+      <div data-dojo-id="model" data-dojo-type="cbtree/models/ForestStoreModel" data-dojo-props='store:store, query:{type:"computer"}, rootLabel:"The Network"'></div>
+      <div data-dojo-id="myTree", data-dojo-type="cbtree/Tree" data-dojo-props='model:model, id:"myTree", icon:{iconClass: "networkIcon", indent: true }'>
+    </div>
+  </body>
+</html>

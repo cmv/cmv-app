@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>The CheckBox Tree with multi-parented Evented Store</title>
+    <style type="text/css">
+      @import "../../../dijit/themes/claro/claro.css";
+      @import "../../../dijit/themes/claro/document.css";
+      @import "../../../dijit/tests/css/dijitTests.css";
+      @import "../../themes/claro/claro.css";
+    </style>
+
+    <script type="text/javascript">
+      var dojoConfig = {
+            async: true,
+            parseOnLoad: true,
+            isDebug: false,
+            baseUrl: "../../../",
+            packages: [
+              { name: "dojo",  location: "dojo" },
+              { name: "dijit", location: "dijit" },
+              { name: "cbtree",location: "cbtree" }
+            ]
+      };
+    </script>
+
+    <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+    <script type="text/javascript">
+      require([
+        "dojo/ready",
+        "cbtree/Tree",                     // Checkbox tree
+        "cbtree/model/TreeStoreModel",     // Object Store Tree Model
+        "cbtree/store/ObjectStore"         // Evented Object Store with Hierarchy
+        ], function( ready, Tree, ObjectStoreModel, ObjectStore) {
+
+          var store = new ObjectStore( { url:"../../store/json/Simpsons.json", idProperty:"name"});
+          var model = new ObjectStoreModel( { store: store,
+                                               query: {name: "Root"},
+                                               rootLabel: "The Family",
+                                               checkedRoot: true
+                                             });
+
+					function checkBoxClicked( item, nodeWidget, event ) {
+						// Do something when a checkbox is clicked...
+					}
+
+          ready(function(){
+            var tree = new Tree( { model: model, id: "tree04" }, "CheckboxTree" );
+						tree.on( "checkBoxClick", checkBoxClicked);
+						tree.startup();
+          });
+        });
+      </script>
+
+  </head>
+
+  <body class="claro">
+    <h1 class="DemoTitle">The CheckBox Tree with Multi State CheckBoxes</h1>
+		<p>
+			A CheckBox Tree using an Evented cbtree/store Object Store. The store is loading the data using a URL<br/>
+		</p>
+    <div id="CheckboxTree">
+    </div>
+  </body>
+</html>

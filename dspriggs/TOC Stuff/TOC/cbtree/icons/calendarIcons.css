@@ -1,0 +1,27 @@
+/*
+ *  Sample cbtree custom node icon CSS
+ *
+ *  Usage:  See https://github.com/pjekel/cbtree/wiki/Tree-Styling
+ *
+ */
+
+.calendarIcon {
+	background-image: url('images/calendarIcons.gif'); /* Node icons sprite image */
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+}
+
+.calendarIcon.calendarIconTerminal {
+	background-position: -0px;
+}
+
+.calendarIcon.calendarIconCollapsed {
+	background-position: -16px;
+}
+
+.calendarIcon.calendarIconExpanded {
+	background-position: -32px;
+}

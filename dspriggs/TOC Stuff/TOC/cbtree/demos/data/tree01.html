@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>The CheckBox Tree</title>
+    <style type="text/css">
+      @import "../../../dijit/themes/claro/claro.css";
+      @import "../../../dijit/themes/claro/document.css";
+      @import "../../../dijit/tests/css/dijitTests.css";
+      @import "../../themes/claro/claro.css";
+    </style>
+
+    <script type="text/javascript">
+      var dojoConfig = {
+            async: true,
+            parseOnLoad: true,
+            isDebug: true,
+            baseUrl: "../../../",
+            packages: [
+              { name: "dojo",  location: "dojo" },
+              { name: "dijit", location: "dijit" },
+              { name: "cbtree",location: "cbtree" }
+            ]
+      };
+    </script>
+
+    <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+    <script type="text/javascript">
+      require([
+        "dojo/_base/lang",
+        "dojo/data/ItemFileWriteStore",
+        "dojo/ready",
+        "cbtree/Tree",                    // Checkbox tree
+        "cbtree/extensions/TreeStyling",  // Tree styling extensions
+        "cbtree/models/ForestStoreModel"  // ForestStoreModel
+        ], function( lang, ItemFileWriteStore, ready, Tree, TreeStyling, ForestStoreModel) {
+
+          var store, model, tree;
+
+          function checkBoxClicked( item, nodeWidget, evt ) {
+            var newState = nodeWidget.get("checked" );
+            var label    = this.getLabel(item);
+
+            if( newState ) {
+              tree.set("iconStyle", {border:"solid"}, item );
+              tree.set("labelStyle",{color:"red"}, item );
+            } else {
+              tree.set("iconStyle", {border:"none"}, item );
+              tree.set("labelStyle",{color:"black"}, item );
+            }
+            alert( "The new state for " + label + " is: " + newState );
+          }
+
+          store = new ItemFileWriteStore( { url: "../../data/json/Family.json" });
+          model = new ForestStoreModel( {
+                  store: store,
+                  query: {type: 'parent'},
+                  rootLabel: 'The Family',
+                  checkedAll:  true,
+                  checkedRoot: true
+                  });
+
+          ready(function() {
+            tree = new Tree( {
+                    model: model,
+                    id: "MenuTree",
+                    branchReadOnly: false,
+                    branchIcons: true,
+                    nodeIcons: true
+                    }, "CheckboxTree" );
+            tree.startup();
+
+            tree.on("checkBoxClick", lang.hitch(model, checkBoxClicked));
+          });
+        });
+    </script>
+
+  </head>
+
+  <body class="claro">
+    <h1 class="DemoTitle">The CheckBox Tree with Multi State CheckBoxes</h1>
+    <p>
+      A basic CheckBox Tree using demonstrating some of the tree styling API capabilities.<br/>
+    </p>
+    <div id="CheckboxTree">
+    </div>
+    <h2>Click a checkbox</h2>
+  </body>
+</html>

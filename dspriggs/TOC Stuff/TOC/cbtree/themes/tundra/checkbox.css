@@ -1,0 +1,82 @@
+/*
+ *  cbtree CheckBox Widgets CSS
+ *
+ *	Order of images in the sprite (from L to R):
+ *		checkbox	normal 	 - checked
+ *							 - unchecked
+ *							 - mixed
+ *					disabled - checked
+ *							 - unchecked
+ *							 - mixed
+ *					hover 	 - checked
+ *							 - unchecked
+ *							 - mixed
+*/
+.tundra .cbtreeCheckBox {
+	background-image: url('images/spriteCheckbox.gif'); /* checkbox sprite image */
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+}
+
+.tundra .cbtreeCheckBox {
+	/* unchecked */
+	background-position: -16px;
+}
+
+.tundra .cbtreeCheckBoxChecked {
+	/* checked */
+	background-position: 0px;
+}
+
+.tundra .cbtreeCheckBoxMixed {
+	/* checked & mixed */
+	background-position: -32px;
+}
+
+.tundra .cbtreeCheckBoxDisabled {
+	/* disabled */
+	background-position: -64px;
+}
+
+.tundra .cbtreeCheckBoxCheckedDisabled {
+	/* disabled but checked */
+	background-position: -48px;
+}
+
+.tundra .cbtreeCheckBoxMixedDisabled {
+	/* checked & mixed */
+	background-position: -80px;
+}
+
+.tundra .cbtreeCheckBoxReadOnly {
+	/* ReadOnly */
+	background-position: -64px;
+}
+
+.tundra .cbtreeCheckBoxCheckedReadOnly {
+	/* readOnly but checked */
+	background-position: -48px;
+}
+
+.tundra .cbtreeCheckBoxMixedReadOnly {
+	/* ReadOnly & mixed */
+	background-position: -80px;
+}
+
+.tundra .cbtreeCheckBoxHover {
+	/* hovering over an unchecked enabled checkbox */
+	background-position: -112px;
+}
+
+.tundra .cbtreeCheckBoxCheckedHover {
+	/* hovering over a checked enabled checkbox */
+	background-position: -96px;
+}
+
+.tundra .cbtreeCheckBoxMixedHover {
+	/* checked & mixed */
+	background-position: -128px;
+}

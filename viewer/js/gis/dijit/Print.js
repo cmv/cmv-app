@@ -1,35 +1,36 @@
 define([
-    "dojo/_base/declare",
-    "dijit/_WidgetBase",
-    "dijit/_TemplatedMixin",
-    "dijit/_WidgetsInTemplateMixin",
-    "dijit/form/Form",
-    "dijit/form/FilteringSelect",
-    "dijit/form/ValidationTextBox",
-    "dijit/form/NumberTextBox",
-    "dijit/form/Button",
-    "dijit/form/CheckBox",
-    "dijit/ProgressBar",
-    "dijit/form/DropDownButton",
-    "dijit/TooltipDialog",
-    "dijit/form/RadioButton",
-    "esri/tasks/PrintTask",
-    "dojo/store/Memory",
+    'dojo/_base/declare',
+    'dijit/_WidgetBase',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetsInTemplateMixin',
+    'dijit/form/Form',
+    'dijit/form/FilteringSelect',
+    'dijit/form/ValidationTextBox',
+    'dijit/form/NumberTextBox',
+    'dijit/form/Button',
+    'dijit/form/CheckBox',
+    'dijit/ProgressBar',
+    'dijit/form/DropDownButton',
+    'dijit/TooltipDialog',
+    'dijit/form/RadioButton',
+    'esri/tasks/PrintTask',
+    'dojo/store/Memory',
     'dojo/_base/lang',
-    "dojo/_base/array",
-    "dojo/dom-style",
-    "dojo/dom-construct",
-    "dojo/dom-class",
-    "dojo/text!./Print/templates/Print.html",
-    "dojo/text!./Print/templates/PrintResult.html"
-    ], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, Style, domConstruct, domClass, printTemplate, printResultTemplate) {
+    'dojo/_base/array',
+    'dojo/dom-style',
+    'dojo/dom-construct',
+    'dojo/dom-class',
+    'dojo/text!./Print/templates/Print.html',
+    'dojo/text!./Print/templates/PrintResult.html',
+    'dojo/aspect'
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, Style, domConstruct, domClass, printTemplate, printResultTemplate, aspect) {
 
     //anonymous function to load CSS files required for this module
     (function() {
         var css = [require.toUrl("gis/dijit/Print/css/Print.css")];
         var head = document.getElementsByTagName("head").item(0),
             link;
-        for(var i = 0, il = css.length; i < il; i++) {
+        for (var i = 0, il = css.length; i < il; i++) {
             link = document.createElement("link");
             link.type = "text/css";
             link.rel = "stylesheet";
@@ -72,6 +73,23 @@ define([
                 load: lang.hitch(this, '_handlePrintInfo'),
                 error: lang.hitch(this, '_handleError')
             });
+            aspect.after(this.printTask, '_createOperationalLayers', this.operationalLayersInspector, false);
+        },
+        operationalLayersInspector: function(opLayers) {
+            console.log(opLayers);
+            array.forEach(opLayers, function(layer) {
+                if (layer.id == "Measurement_graphicslayer") {
+                    array.forEach(layer.featureCollection.layers, function(fcLayer) {
+                        array.forEach(fcLayer.featureSet.features, function(feature) {
+                            delete feature.attributes;
+                            feature.symbol.font.family = "Courier";
+                            //feature.symbol.font.variant = esri.symbol.Font.VARIANT_NORMAL;
+                            //feature.symbol.font.size = "32pt";
+                        });
+                    });
+                }
+            });
+            return opLayers;
         },
         _handleError: function(err) {
             console.log(1, err);
@@ -80,7 +98,7 @@ define([
             var Layout_Template = array.filter(data.parameters, function(param, idx) {
                 return param.name === "Layout_Template";
             });
-            if(Layout_Template.length === 0) {
+            if (Layout_Template.length === 0) {
                 console.log("print service parameters name for templates must be \"Layout_Template\"");
                 return;
             }
@@ -91,7 +109,7 @@ define([
                 };
             });
             layoutItems.sort(function(a, b) {
-                return(a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+                return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
             });
             var layout = new Memory({
                 data: layoutItems
@@ -102,7 +120,7 @@ define([
             var Format = array.filter(data.parameters, function(param, idx) {
                 return param.name === "Format";
             });
-            if(Format.length === 0) {
+            if (Format.length === 0) {
                 console.log("print service parameters name for format must be \"Format\"");
                 return;
             }
@@ -113,7 +131,7 @@ define([
                 };
             });
             formatItems.sort(function(a, b) {
-                return(a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+                return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
             });
             var format = new Memory({
                 data: formatItems
@@ -123,7 +141,7 @@ define([
 
         },
         print: function() {
-            if(this.printSettingsFormDijit.isValid()) {
+            if (this.printSettingsFormDijit.isValid()) {
                 var form = this.printSettingsFormDijit.get('value');
                 var preserve = this.preserveFormDijit.get('value');
                 lang.mixin(form, preserve);
@@ -179,7 +197,7 @@ define([
             this.fileHandle.then(lang.hitch(this, '_onPrintComplete'), lang.hitch(this, '_onPrintError'));
         },
         _onPrintComplete: function(data) {
-            if(data.url) {
+            if (data.url) {
                 this.url = data.url;
                 this.nameNode.innerHTML = '<span class="bold">' + this.docName + '</span>';
                 domClass.add(this.resultNode, "printResultHover");
@@ -193,7 +211,7 @@ define([
             domClass.add(this.resultNode, "printResultError");
         },
         _openPrint: function() {
-            if(this.url !== null) {
+            if (this.url !== null) {
                 window.open(this.url);
             }
         }

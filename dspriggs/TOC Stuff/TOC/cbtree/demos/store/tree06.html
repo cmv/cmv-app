@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>The CheckBox Tree Drag-n-Drop</title>
+    <style type="text/css">
+      @import "../../../dijit/themes/claro/claro.css";
+      @import "../../../dijit/themes/claro/document.css";
+      @import "../../../dijit/tests/css/dijitTests.css";
+      @import "../../themes/claro/claro.css";
+    </style>
+
+    <script type="text/javascript">
+      var dojoConfig = {
+            async: true,
+            parseOnLoad: true,
+            isDebug: false,
+            baseUrl: "../../../",
+            packages: [
+              { name: "dojo",  location: "dojo" },
+              { name: "dijit", location: "dijit" },
+              { name: "cbtree",location: "cbtree" }
+            ]
+      };
+    </script>
+
+    <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require(["dojo/_base/lang",
+							 "dojo/store/Memory",
+							 "dojo/store/Observable",
+							 "dojo/ready",
+							 "dijit/tree/dndSource",
+							 "dijit/registry",
+							 "cbtree/Tree",
+							 "cbtree/model/TreeStoreModel",
+							 "cbtree/store/Hierarchy"
+								], function (lang, Memory, Observable, ready, dndSource, registry, Tree, ObjectStoreModel,
+															ObjectStore) {
+
+				var earth = [	{ id: "earth", name:"The earth", type:"planet", population: "6 billion"}];
+				var data = [
+						{ id: "continents", name:"The Continents", type:"root", population: "6 billion"},
+						{ id: "AF", name:"Africa", type:"continent", population:"900 million", area: "30,221,532 sq km",
+								timezone: "-1 UTC to +4 UTC", parent: "continents"},
+							{ id: "EG", name:"Egypt", type:"country", parent: "AF" },
+							{ id: "KE", name:"Kenya", type:"country", parent: "AF" },
+								{ id: "Nairobi", name:"Nairobi", type:"city", parent: "KE" },
+								{ id: "Mombasa", name:"Mombasa", type:"city", parent: "KE" },
+							{ id: "SD", name:"Sudan", type:"country", parent: "AF" },
+								{ id: "Khartoum", name:"Khartoum", type:"city", parent: "SD" },
+						{ id: "AS", name:"Asia", type:"continent", parent: "continents" },
+							{ id: "CN", name:"China", type:"country", parent: "AS" },
+							{ id: "IN", name:"India", type:"country", parent: "AS" },
+							{ id: "RU", name:"Russia", type:"country", parent: "AS" },
+							{ id: "MN", name:"Mongolia", type:"country", parent: "AS" },
+						{ id: "OC", name:"Oceania", type:"continent", population:"21 million", parent: "continents"},
+							{ id: "AU", name:"Australia", type:"country", population:"21 million", parent: "OC"},
+						{ id: "EU", name:"Europe", type:"continent", parent: "continents" },
+							{ id: "DE", name:"Germany", type:"country", parent: "EU" },
+							{ id: "FR", name:"France", type:"country", parent: "EU" },
+							{ id: "ES", name:"Spain", type:"country", parent: "EU" },
+							{ id: "IT", name:"Italy", type:"country", parent: "EU" }
+						];
+
+				// Use two different store types to demonstrate inter-operability.
+				var childrenStore = new Memory({data: data});
+				var parentStore   = new ObjectStore({data: earth});
+
+				var parentMod = new ObjectStoreModel({ store: parentStore, query: {id:"earth"},
+																								checkedRoot: true });
+				var childMod  = new ObjectStoreModel({ store: childrenStore, query: {id:"continents"}});
+				var contTree, earthTree;
+
+				acceptItem = function (target, source, position) {
+					var targetWidget = registry.getEnclosingWidget(target);
+					return (targetWidget.tree == earthTree);
+				}
+
+				domNodeToItem = function (nodes, target, source ) {
+					// Convert DOM nodes dropped on a tree to data items. Because we know the
+					// source is a tree associated with a very simple store we don't have to
+					// go fancy here, just create a shallow copy of the item....
+
+					return nodes.map( function (node) {
+						var nodeWidget  = dijit.byId(node.id);
+						return lang.mixin( {}, nodeWidget.item );
+					});
+				}
+
+				ready(function() {
+					// Allow items to be dropped on the earth tree but only if the source is another tree.
+					earthTree = new Tree({id:"tree06_0", model: parentMod, checkItemAcceptance: acceptItem,
+																itemCreator: domNodeToItem,
+																dndController: dndSource,
+																betweenThreshold:5,
+																checkAcceptance: function (source, nodes) {
+																	return !!source.tree;
+																} });
+					earthTree.placeAt("divEarth");
+					// No items can be dropped on the 'continents' tree.
+					contTree  = new Tree({id:"tree06_1", model: childMod, dndController: dndSource,
+																checkAcceptance: function() { return false; }
+															 });
+					contTree.placeAt("divContinents");
+					earthTree.startup();
+					contTree.startup();
+				});
+			});
+		</script>
+  </head>
+
+  <body class="claro">
+    <h1 class="DemoTitle">The CheckBox Tree Drag-n-Drop</h1>
+    <p>
+			A basic CheckBox Tree and cbtree/store Hierarchy store demonstrating Drag-n-Drop features.
+		</p>
+		<div id="content">
+			<div id="divEarth" style="width:250px; float:left;">
+			</div>
+			<div id="divContinents">
+			</div>
+		</div>
+		<div id="second">
+		</div>
+  </body>
+</html>

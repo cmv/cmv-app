@@ -3,9 +3,9 @@
 }
 
 .gis_PrintDijit .printResult {
-    border: 1px solid #CCCCCC;
+    /*border: 1px solid #CCCCCC;*/
     height: 28px;
-    margin-bottom: -1px;
+    margin-bottom: 3px;
     width: 100%;
 }
 
@@ -28,15 +28,15 @@
 }
 
 .gis_PrintDijit .buttonActionBar {
-    background-color: #F2F2F2;
-    border: 1px solid #CDCDCD;
+    /*background-color: #F2F2F2;
+    border: 1px solid #CDCDCD;*/
     padding: 3px 0px 2px 0px;
     text-align: right;
     width: 100%;
 }
 
 .gis_PrintDijit .formContainer {
-    border: 1px solid #bbb;
+    /*border: 1px solid #bbb;*/
     margin-bottom: -1px;
     width: 100%;
 }
@@ -44,6 +44,7 @@
 .gis_PrintDijit .resultsContainer {
     width: 100%;
     margin-top: 10px;
+    margin-bottom: 5px;
 }
 
 .gis_PrintDijit .printIcon {

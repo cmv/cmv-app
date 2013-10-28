@@ -1,0 +1,31 @@
+/*
+	Custome expando icon.
+
+*/
+
+.claro .dijitTreeExpando {
+	background-image: url('images/spriteExpandoArrow.png'); /* checkbox sprite image */
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+}
+
+.claro .dijitTreeExpando {
+    background-position: -0px 0;
+}
+
+.claro .dijitTreeExpandoOpened {
+    background-position: -16px 0;
+}
+
+.claro .dijitTreeRowHover .dijitTreeExpandoOpened {
+    background-position: -64px 0;
+}
+
+.claro .dijitTreeRowHover .dijitTreeExpandoClosed {
+    background-position: -48px 0;
+}
+
+.claro .dijitTreeExpandoLeaf {
+    background-position: -32px 0;
+}

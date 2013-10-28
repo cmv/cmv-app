@@ -4,7 +4,7 @@
             <table cellspacing="5" style="width:100%;">
                 <tr>
                     <td style="width:50px;">
-                        Map title:
+                        Title:
                     </td>
                     <td>
                         <input type="text" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="name:'title',trim:true,required:true,style:'width:100%;',value:'${defaultTitle}'"
@@ -33,13 +33,13 @@
         </div>
     </div>
     <div class="buttonActionBar">
-        <div data-dojo-type="dijit.form.DropDownButton" data-dojo-props="iconClass:'settingsIcon',showLabel:false"
+        <div data-dojo-type="dijit.form.DropDownButton" data-dojo-props="iconClass:'settingsIcon',showLabel:true"
         data-dojo-attach-point="layoutDropDownDijit">
             <span>
-                Print Settings
+                Settings
             </span>
             <div data-dojo-type="dijit.TooltipDialog">
-                <div style="width:240px;">
+                <div style="width:260px;">
                     <div style="font-weight:bold;">
                         Map scale/extent:
                     </div>
@@ -143,9 +143,10 @@
         </div>
         <div data-dojo-type="dijit.form.Button" data-dojo-props="busyLabel:'printing',iconClass:'printIcon'"
         data-dojo-attach-event="onClick:print" data-dojo-attach-point="printButtonDijit">
-            print
+            Print
         </div>
     </div>
+    <!-- <hr calss="spacer"> -->
     <div data-dojo-attach-point="printResultsNode" class="resultsContainer">
     </div>
     <div data-dojo-attach-point="clearActionBarNode" class="buttonActionBar"

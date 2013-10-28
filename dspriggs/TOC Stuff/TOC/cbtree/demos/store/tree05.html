@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>The CheckBox Tree with multi-parented Observable Store</title>
+    <style type="text/css">
+      @import "../../../dijit/themes/claro/claro.css";
+      @import "../../../dijit/themes/claro/document.css";
+      @import "../../../dijit/tests/css/dijitTests.css";
+      @import "../../themes/claro/claro.css";
+
+    </style>
+
+    <script type="text/javascript">
+      var dojoConfig = {
+            async: true,
+            parseOnLoad: true,
+            isDebug: false,
+            baseUrl: "../../../",
+            packages: [
+              { name: "dojo",  location: "dojo" },
+              { name: "dijit", location: "dijit" },
+              { name: "cbtree",location: "cbtree" }
+            ]
+      };
+    </script>
+
+    <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+    <script type="text/javascript">
+      require([
+        "dojo/ready",
+        "cbtree/Tree",                   // Checkbox tree
+        "cbtree/model/TreeStoreModel",   // Object Store Tree Model
+        "cbtree/store/ObjectStore"       // Evented Object Store with Hierarchy
+        ], function( ready, Tree, ObjectStoreModel, ObjectStore) {
+
+					// Declare our multi-parented store objects. Notice: the parent property
+					// of each store item is an array...
+					var data = [
+						{ name:"Root", parent:[] },
+
+						{ name:"Lisa", parent:["Homer","Marge"], hair:"blond", checked:true, icon:"simpsonsIcons lisa" },
+						{ name:"Bart", parent:["Homer","Marge"], hair:"blond", checked:"what", icon:"simpsonsIcons bart" },
+						{ name:"Maggie", parent:["Homer","Marge"], hair:"blond", checked:true },
+
+						{ name:"Patty", parent:["Jacqueline"], hair:"blond", checked:true },
+						{ name:"Selma", parent:["Jacqueline"], hair:"blond", checked:false },
+
+						{ name:"Rod", parent:["Ned"], hair:"blond", checked:true },
+						{ name:"Todd", parent:["Ned"], hair:"blond", checked:true },
+
+						{ name:"Abe", parent:["Root"], hair:"none", checked:true },
+						{ name:"Mona", parent:["Root"], hair:"none", checked:false },
+						{ name:"Jacqueline", parent:["Root"], hair:"none", checked:true },
+						{ name:"Homer", parent:["Abe","Mona"], hair:"none", checked:false },
+						{ name:"Marge", parent:["Jacqueline"], hair:"none", checked:true},
+						{ name:"Ned", parent:["Root"], hair:"none", checked:true },
+
+						{ name:"Apu", parent:["Root"], hair:"black", checked:true },
+						{ name:"Manjula", parent:"[Apu]", hair:"black", checked:false}
+					]
+
+					// Two models operating on the same store...
+          var store  = new ObjectStore( { data: data, idProperty:"name" });
+          var model0 = new ObjectStoreModel( { store: store,
+                                               query: {name: "Root"},
+                                               iconAttr:"icon",
+                                               rootLabel: "The Family Tree",
+                                               checkedRoot: true
+                                             });
+          var model1 = new ObjectStoreModel( { store: store,
+                                               query: {name: "Root"},
+                                               rootLabel: "Other Family Tree",
+                                               checkedRoot: true
+                                             });
+          ready(function(){
+            var tree0 = new Tree( { model: model0, id: "tree05_0" }, "CheckboxTree0" );
+            var tree1 = new Tree( { model: model1, id: "tree05_1" }, "CheckboxTree1" );
+
+            tree0.startup();
+            tree1.startup();
+          });
+        });
+      </script>
+
+  </head>
+
+  <body class="claro">
+    <h1 class="DemoTitle">The CheckBox Tree with Multi State CheckBoxes</h1>
+    <p>
+			Two CheckBox Trees each with their own model but both using the same cbtree/store ObjectStore.<br/>
+		</p>
+    <div id="CheckboxTree0">
+    </div>
+		<p></p>
+    <div id="CheckboxTree1">
+    </div>
+    <p>
+			Notice how both tree are updated.
+    </p>
+  </body>
+</html>

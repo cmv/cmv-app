@@ -1,0 +1,24 @@
+{ "identifier": "name",
+  "label": "name",
+  "items": [
+     { "name":"John", "type":"parent",
+         "children":[{"_reference":"Chuck"}, {"_reference":"Melissa"}, {"_reference":"Nancy"}, {"_reference":"Peter"}] },
+     { "name":"Mary", "type":"parent", "checked": true,
+         "children":[{"_reference":"Chuck"}, {"_reference":"Melissa"}, {"_reference":"Nancy"}, {"_reference":"Joan"}] },
+     { "name":"Chuck", "type":"child", "checked": true },
+     { "name":"Melissa", "type":"child", "checked": false },
+     { "name":"Nancy", "type":"child", "checked": true },
+     { "name":"Peter", "type":"parent", "checked": false,
+         "children":[{"_reference":"Chantal"}, {"_reference":"Pascal"}, {"_reference":"Rutger"}, {"_reference":"Charlotte"}] },
+     { "name":"Joan", "type":"parent", "checked": true,
+         "children":[{"_reference":"Chantal"}, {"_reference":"Pascal"}, {"_reference":"Rutger"}, {"_reference":"Charlotte"}] },
+     { "name":"Chantal", "type":"child", "checked": false,
+         "children":[{"_reference":"Paul"}, {"_reference":"Donna"}, {"_reference":"Eric"}] },
+     { "name":"Rutger", "type":"child", "checked": false },
+     { "name":"Pascal", "type":"child", "checked": true },
+     { "name":"Charlotte", "type":"child", "checked": false },
+     { "name":"Paul", "type":"child", "checked": true },
+     { "name":"Donna", "type":"child", "checked": false },
+     { "name":"Eric", "type":"child", "checked": true }
+]}
+
