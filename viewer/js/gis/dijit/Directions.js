@@ -7,7 +7,9 @@ define([
 	'dojo/_base/lang',
 	'dijit/Menu',
 	'dijit/MenuItem',
-	'dijit/MenuSeparator'], function(declare, _WidgetBase, _TemplatedMixin, Directions, template, lang, Menu, MenuItem, MenuSeparator) {
+	'dijit/MenuSeparator',
+	'gis/dijit/3.7DirectionsPatch'
+], function(declare, _WidgetBase, _TemplatedMixin, Directions, template, lang, Menu, MenuItem, MenuSeparator, patch) {
 
 	return declare([_WidgetBase, _TemplatedMixin], {
 		templateString: template,
@@ -42,9 +44,9 @@ define([
 			}));
 			this.menu.startup();
 		},
-		clearMap: function() {
-			this.directions.clearDirections();
-		},
+		// clearMap: function() {
+		// 	this.directions.clearDirections();
+		// },
 		clearStops: function() {
 			this.directions.reset();
 		},

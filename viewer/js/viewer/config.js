@@ -1,5 +1,6 @@
 define([
-	'esri/InfoTemplate'], function(InfoTemplate) {
+	'esri/InfoTemplate'
+], function(InfoTemplate) {
 	return {
 		// url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
 		proxy: {
@@ -29,8 +30,8 @@ define([
 				wkid: 102100
 			}
 		},
-		// operationalLayers: Layers to load on top of the basemap: valid 'type' options: "dynamic", "tiled", "feature".
-		// 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
+		// operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: "dynamic", "tiled", "feature".
+		// The 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
 		// 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
 		operationalLayers: [{
 			type: "feature",
@@ -56,17 +57,23 @@ define([
 				open: false,
 				position: 0
 			},
+			bookmarks: {
+				include: true,
+				title: "Bookmarks",
+				open: false,
+				position: 1
+			},
 			draw: {
 				include: true,
 				title: "Draw",
 				open: false,
-				position: 1
+				position: 2
 			},
 			measure: {
 				include: true,
 				title: "Measurement",
 				open: false,
-				position: 2,
+				position: 3,
 				defaultAreaUnit: esri.Units.SQUARE_MILES,
 				defaultLengthUnit: esri.Units.MILES
 			},
@@ -74,7 +81,7 @@ define([
 				include: true,
 				title: "Print",
 				open: false,
-				position: 3,
+				position: 4,
 				serviceURL: "http://sampleserver6.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
 				copyrightText: "Copyright ESRI 2013",
 				authorText: "ESRI",
@@ -86,7 +93,7 @@ define([
 				include: true,
 				title: "Directions",
 				open: false,
-				position: 4,
+				position: 5,
 				options: {
 					routeTaskUrl: "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Network/USA/NAServer/Route",
 					routeParams: {
@@ -95,19 +102,11 @@ define([
 					}
 				}
 			},
-			scalebar: {
-				include: true,
-				options: {
-					attachTo: "bottom-left",
-					scalebarStyle: "line",
-					scalebarUnit: "dual"
-				}
-			},
 			editor: {
 				include: true,
 				title: "Editor",
 				open: false,
-				position: 5,
+				position: 6,
 				settings: {
 					toolbarVisible: true,
 					showAttributesOnClick: true,
@@ -120,6 +119,14 @@ define([
 						cutVisible: true,
 						mergeVisible: true
 					}
+				}
+			},
+			scalebar: {
+				include: true,
+				options: {
+					attachTo: "bottom-left",
+					scalebarStyle: "line",
+					scalebarUnit: "dual"
 				}
 			}
 		}

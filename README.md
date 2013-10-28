@@ -26,8 +26,13 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Directions
 * Editor
 * Scalebar
+* Bookmarks
 
 ## Change log:
+* 10/28/2013
+	1. Added [dbootstrap](https://github.com/thesociable/dbootstrap) theme.
+	2. Added bookmarks widget.
+	3. Updated to esri 3.7 js api.
 * 5/8/2013
 	1. Fixed GPS position to show up on prints/exports.
 	2. Added support for custom basemaps in the basemaps widget.

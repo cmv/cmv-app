@@ -113,9 +113,9 @@ define([
         widgetsInTemplate: true,
         mode: "agol",
         title: "Basemaps",
-        baseClass: 'gis_Basemaps_Dijit',
-        buttonClass: 'gis_Basemaps_Button',
-        menuClass: "gis_Basemaps_Menu",
+        //baseClass: 'gis_Basemaps_Dijit',
+        //buttonClass: 'gis_Basemaps_Button',
+        //menuClass: "gis_Basemaps_Menu",
         mapStartBasemap: "streets",
         basemapsToShow: ["streets", "satellite", "hybrid", "topo", "gray", "oceans", "national-geographic", "osm"],
         validBasemaps: [],
@@ -136,8 +136,8 @@ define([
             }
 
             this.menu = new DropDownMenu({
-                style: "display: none;",
-                baseClass: this.menuClass
+                style: "display: none;"//,
+                //baseClass: this.menuClass
             });
 
             if (this.mode === "custom") {
@@ -151,7 +151,7 @@ define([
                     var menuItem = new MenuItem({
                         id: basemap,
                         label: (this.mode === "custom") ? customBasemaps[basemap].title : agolBasemaps[basemap].title,
-                        iconClass: (basemap == this.mapStartBasemap) ? 'selectedIcon' : 'clearIcon',
+                        iconClass: (basemap == this.mapStartBasemap) ? 'selectedIcon' : 'emptyIcon',
                         onClick: lang.hitch(this, function() {
                             if (basemap !== this.currentBasemap) {
                                 this.currentBasemap = basemap;
@@ -165,7 +165,7 @@ define([
                                     if (c.id == basemap) {
                                         c.set('iconClass', 'selectedIcon');
                                     } else {
-                                        c.set('iconClass', 'clearIcon');
+                                        c.set('iconClass', 'emptyIcon');
                                     }
                                 });
                             }
