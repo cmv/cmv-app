@@ -1,6 +1,6 @@
 # Configurable ESRI JS API Viewer
 
-This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for OO and classes in JS.
+This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for OO and classes in JS. [demo](http://davidspriggs.github.io/ConfigurableViewerJSAPI/viewer/)
 
 ## Installation:
 * Clone or download the repo
