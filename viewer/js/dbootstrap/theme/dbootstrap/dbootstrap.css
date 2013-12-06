@@ -3740,7 +3740,7 @@ a:hover {
 }
 
 .dbootstrap .dijitButton .dijitButtonNode,.dbootstrap .dijitDropDownButton .dijitButtonNode,.dbootstrap .dijitComboButton .dijitButtonNode,.dbootstrap .dijitToggleButton .dijitButtonNode,.dbootstrap .dijitComboBox .dijitButtonNode,.dbootstrap .dijitSpinnerButtonContainer.dijitButtonNode,.dbootstrap .dijitSelect .dijitButtonNode {
-    display: block;
+    /*display: block;*/
     padding: 6px 14px;
     margin-bottom: 0;
     font-size: 14px;
@@ -4699,7 +4699,7 @@ a:hover {
 }
 
 .dbootstrap .dijitTitlePane {
-    border: 1px solid #eee;
+    border: 1px solid #DDDDDD;
     margin-bottom: 2px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
@@ -4709,6 +4709,7 @@ a:hover {
     color: #666666;
     border-bottom: none;
     padding: 8px 15px;
+    background-color: #F5F5F5;
 }
 
 .dbootstrap .dijitTitlePaneTitleHover {

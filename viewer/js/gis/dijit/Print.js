@@ -73,7 +73,7 @@ define([
                 load: lang.hitch(this, '_handlePrintInfo'),
                 error: lang.hitch(this, '_handleError')
             });
-            aspect.after(this.printTask, '_createOperationalLayers', this.operationalLayersInspector, false);
+            //aspect.after(this.printTask, '_createOperationalLayers', this.operationalLayersInspector, false);
         },
         operationalLayersInspector: function(opLayers) {
             console.log(opLayers);
@@ -115,7 +115,11 @@ define([
                 data: layoutItems
             });
             this.layoutDijit.set('store', layout);
-            this.layoutDijit.set('value', this.defaultLayout);
+            if (this.defaultLayout) {
+                this.layoutDijit.set('value', this.defaultLayout);
+            } else {
+                this.layoutDijit.set('value', Layout_Template[0].defaultValue);
+            }
 
             var Format = array.filter(data.parameters, function(param, idx) {
                 return param.name === "Format";
@@ -137,7 +141,11 @@ define([
                 data: formatItems
             });
             this.formatDijit.set('store', format);
-            this.formatDijit.set('value', this.defaultFormat);
+            if (this.defaultFormat) {
+                this.formatDijit.set('value', this.defaultFormat);
+            } else {
+                this.formatDijit.set('value', Format[0].defaultValue);
+            }
 
         },
         print: function() {

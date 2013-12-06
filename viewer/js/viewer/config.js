@@ -35,7 +35,7 @@ define([
 		// 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
 		operationalLayers: [{
 			type: "feature",
-			url: "http://psstldemo3.esri.com/arcgis/rest/services/demo/MeetUpHomeTowns/FeatureServer/0",
+			url: "http://services1.arcgis.com/g2TonOxuRkIqSOFx/arcgis/rest/services/MeetUpHomeTowns/FeatureServer/0",
 			title: "STLJS Meetup Home Towns",
 			options: {
 				id: "meetupHometowns",
@@ -48,6 +48,15 @@ define([
 			editorLayerInfos: {
 				disableGeometryUpdate: false
 			}
+		}, {
+			type: "dynamic",
+			url: "http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer",
+			title: "Louisville Public Safety",
+			options: {
+				id: "tapestry",
+				opacity: 1.0,
+				visible: true,
+			}
 		}],
 		//widgets: set include to true or false to load or not load the widget. set position to the desired order, starts at 0 on the top.
 		widgets: {
@@ -57,23 +66,29 @@ define([
 				open: false,
 				position: 0
 			},
+			TOC: {
+				include: true,
+				title: "Layers",
+				open: false,
+				position: 1
+			},
 			bookmarks: {
 				include: true,
 				title: "Bookmarks",
 				open: false,
-				position: 1
+				position: 2
 			},
 			draw: {
 				include: true,
 				title: "Draw",
 				open: false,
-				position: 2
+				position: 3
 			},
 			measure: {
 				include: true,
 				title: "Measurement",
 				open: false,
-				position: 3,
+				position: 4,
 				defaultAreaUnit: esri.Units.SQUARE_MILES,
 				defaultLengthUnit: esri.Units.MILES
 			},
@@ -81,7 +96,7 @@ define([
 				include: true,
 				title: "Print",
 				open: false,
-				position: 4,
+				position: 5,
 				serviceURL: "http://sampleserver6.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
 				copyrightText: "Copyright ESRI 2013",
 				authorText: "ESRI",
@@ -93,7 +108,7 @@ define([
 				include: true,
 				title: "Directions",
 				open: false,
-				position: 5,
+				position: 6,
 				options: {
 					routeTaskUrl: "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Network/USA/NAServer/Route",
 					routeParams: {
@@ -106,7 +121,7 @@ define([
 				include: true,
 				title: "Editor",
 				open: false,
-				position: 6,
+				position: 7,
 				settings: {
 					toolbarVisible: true,
 					showAttributesOnClick: true,
