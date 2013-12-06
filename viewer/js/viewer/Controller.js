@@ -21,10 +21,9 @@ define([
     'gis/dijit/Basemaps',
     'dojo/text!./templates/mapOverlay.html',
     'viewer/config',
-    'dojo/domReady!',
     'esri/IdentityManager',
     'esri/tasks/GeometryService'
-], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, ready, IdentityManager, GeometryService) {
+], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService) {
     return {
         config: config,
         legendLayerInfos: [],
@@ -32,7 +31,7 @@ define([
         startup: function() {
             this.initConfig();
             this.initView();
-            //app = this; //dev only
+            app = this; //dev only
         },
         initConfig: function() {
             esri.config.defaults.io.proxyUrl = config.proxy.url;
@@ -70,7 +69,8 @@ define([
                 extent: new esri.geometry.Extent(config.initialExtent)
             });
 
-            this.map.on('load', lang.hitch(this, 'initWidgets'));
+            this.map.on('load', lang.hitch(this, 'initLayers'));
+            this.map.on('layers-add-result', lang.hitch(this, 'initWidgets'));
 
             this.basemaps = new Basemaps({
                 map: this.map,
@@ -81,7 +81,8 @@ define([
             }, "basemapsDijit");
             this.basemaps.startup();
         },
-        initWidgets: function(evt) {
+        initLayers: function(evt) {
+            this.layers = [];
             array.forEach(config.operationalLayers, function(layer) {
                 var l;
                 if (layer.type == 'dynamic') {
@@ -100,12 +101,16 @@ define([
                 } else {
                     console.log('Layer type not supported: ', layer.type);
                 }
-                this.map.addLayer(l);
+                this.layers.push(l);
                 this.legendLayerInfos.push({
                     layer: l,
-                    title: layer.title || null
+                    title: layer.title || null,
+                    slider: true,
+                    noLegend: false,
+                    collapsed: false
                 });
             }, this);
+            this.map.addLayers(this.layers);
 
             this.growler = new Growler({}, "growlerDijit");
             this.growler.startup();
@@ -121,10 +126,12 @@ define([
                 autoComplete: true
             }, "geocodeDijit");
             this.geocoder.startup();
+        },
+        initWidgets: function(evt) {
 
             if (config.widgets.scalebar && config.widgets.scalebar.include) {
                 require(['esri/dijit/Scalebar'], lang.hitch(this, function(Scalebar) {
-                    new Scalebar({
+                    this.scalebar = new Scalebar({
                         map: this.map,
                         attachTo: config.widgets.scalebar.options.attachTo,
                         scalebarStyle: config.widgets.scalebar.options.scalebarStyle,
@@ -143,6 +150,17 @@ define([
                 }));
             }
 
+            if (config.widgets.TOC && config.widgets.TOC.include) {
+                var TOCTP = this._createTitlePane(config.widgets.TOC.title, config.widgets.TOC.position, config.widgets.TOC.open);
+                require(['gis/dijit/TOC'], lang.hitch(this, function(TOC) {
+                    this.toc = new TOC({
+                        map: this.map,
+                        layerInfos: this.legendLayerInfos
+                    }, domConstruct.create("div")).placeAt(TOCTP.containerNode);
+                    this.toc.startup();
+                }));
+            }
+
             if (config.widgets.bookmarks && config.widgets.bookmarks.include) {
                 var bookmarksTP = this._createTitlePane(config.widgets.bookmarks.title, config.widgets.bookmarks.position, config.widgets.bookmarks.open);
                 require(['gis/dijit/Bookmarks'], lang.hitch(this, function(Bookmarks) {
@@ -150,6 +168,7 @@ define([
                         map: this.map,
                         editable: true
                     }, domConstruct.create("div")).placeAt(bookmarksTP.containerNode);
+                    this.bookmarks.startup();
                 }));
             }
 
@@ -159,6 +178,7 @@ define([
                     this.drawWidget = new Draw({
                         map: this.map
                     }, domConstruct.create("div")).placeAt(drawTP.containerNode);
+                    this.drawWidget.startup();
                 }));
             }
 
@@ -170,6 +190,7 @@ define([
                         defaultAreaUnit: config.widgets.measure.defaultAreaUnit,
                         defaultLengthUnit: config.widgets.measure.defaultLengthUnit
                     }, domConstruct.create("div")).placeAt(measureTP.containerNode);
+                    this.measure.startup();
                 }));
             }
 
@@ -185,6 +206,7 @@ define([
                         defaultFormat: config.widgets.print.defaultFormat,
                         defaultLayout: config.widgets.print.defaultLayout
                     }, domConstruct.create("div")).placeAt(printTP.containerNode);
+                    this.printWidget.startup();
                 }));
             }
 
@@ -196,6 +218,7 @@ define([
                         options: config.widgets.directions.options,
                         titlePane: directionsTP
                     }, domConstruct.create("div")).placeAt(directionsTP.containerNode);
+                    this.directionsWidget.startup();
                 }));
             }
 
@@ -208,6 +231,7 @@ define([
                         settings: config.widgets.editor.settings,
                         titlePane: editorTP
                     }, domConstruct.create("div")).placeAt(editorTP.containerNode);
+                    this.editor.startup();
                 }));
             }
         },

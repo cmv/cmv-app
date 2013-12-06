@@ -3740,7 +3740,7 @@ a:hover {
 }
 
 .dbootstrap .dijitButton .dijitButtonNode,.dbootstrap .dijitDropDownButton .dijitButtonNode,.dbootstrap .dijitComboButton .dijitButtonNode,.dbootstrap .dijitToggleButton .dijitButtonNode,.dbootstrap .dijitComboBox .dijitButtonNode,.dbootstrap .dijitSpinnerButtonContainer.dijitButtonNode,.dbootstrap .dijitSelect .dijitButtonNode {
-    display: block;
+    /*display: block;*/
     padding: 6px 14px;
     margin-bottom: 0;
     font-size: 14px;

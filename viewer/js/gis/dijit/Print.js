@@ -73,7 +73,7 @@ define([
                 load: lang.hitch(this, '_handlePrintInfo'),
                 error: lang.hitch(this, '_handleError')
             });
-            aspect.after(this.printTask, '_createOperationalLayers', this.operationalLayersInspector, false);
+            //aspect.after(this.printTask, '_createOperationalLayers', this.operationalLayersInspector, false);
         },
         operationalLayersInspector: function(opLayers) {
             console.log(opLayers);
