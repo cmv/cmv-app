@@ -35,7 +35,7 @@ define([
 		// 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
 		operationalLayers: [{
 			type: "feature",
-			url: "http://psstldemo3.esri.com/arcgis/rest/services/demo/MeetUpHomeTowns/FeatureServer/0",
+			url: "https://services1.arcgis.com/g2TonOxuRkIqSOFx/arcgis/rest/services/MeetUpHomeTowns/FeatureServer/0",
 			title: "STLJS Meetup Home Towns",
 			options: {
 				id: "meetupHometowns",
