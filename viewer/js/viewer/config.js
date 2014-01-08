@@ -1,6 +1,7 @@
 define([
-	'esri/InfoTemplate'
-], function(InfoTemplate) {
+	//lcs - MapTips - added SimpleFillSymbol, SimpleLineSymbol, SimpleMarkerSymbol, and Color
+	'esri/InfoTemplate', 'esri/symbols/SimpleFillSymbol', 'esri/symbols/SimpleLineSymbol', 'esri/symbols/SimpleMarkerSymbol', 'dojo/_base/Color'
+], function(InfoTemplate, SimpleFillSymbol, SimpleLineSymbol, SimpleMarkerSymbol, Color) {
 	return {
 		// url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
 		proxy: {
@@ -37,6 +38,11 @@ define([
 			type: "feature",
 			url: "http://services1.arcgis.com/g2TonOxuRkIqSOFx/arcgis/rest/services/MeetUpHomeTowns/FeatureServer/0",
 			title: "STLJS Meetup Home Towns",
+			//lcs - MapTips BEGIN
+			highlightSymbol: new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 14, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255,255,0]), 3), new Color([255,255,0,0])),
+			mapTip: "Location: <b>${Location}</b>",
+			mapTipNoValue: "[No Value]",
+			//lcs - MapTips END
 			options: {
 				id: "meetupHometowns",
 				opacity: 1.0,
