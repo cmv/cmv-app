@@ -1,6 +1,8 @@
 define([
     'esri/map',
     'esri/dijit/Geocoder',
+    'esri/graphic',  //lcs - MapTips
+    'esri/lang',  //lcs - MapTips
     'esri/layers/FeatureLayer',
     'esri/layers/osm',
     'dojo/dom',
@@ -13,6 +15,8 @@ define([
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane',
     'dijit/TitlePane',
+    'dijit/popup',  //lcs - MapTips
+    'dijit/TooltipDialog',  //lcs - MapTips
     'dojo/_base/window',
     'dojo/_base/lang',
     'gis/dijit/Growler',
@@ -23,10 +27,11 @@ define([
     'viewer/config',
     'esri/IdentityManager',
     'esri/tasks/GeometryService'
-], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService) {
+], function(Map, Geocoder, Graphic, esriLang, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, dijitPopup, TooltipDialog, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService) {
     return {
         config: config,
         legendLayerInfos: [],
+        tocLayerInfos: [],  //lcs - to make the legend agree with the TOC
         editorLayerInfos: [],
         startup: function() {
             this.initConfig();
@@ -82,6 +87,13 @@ define([
             this.basemaps.startup();
         },
         initLayers: function(evt) {
+            //lcs - MapTips BEGIN
+            var dialog = new TooltipDialog({
+                id: "tooltipDialog",
+                style: "position: absolute; max-width: 300px; font: normal normal normal 10pt 'Comic Sans MS'; z-index: 100"
+            });
+            dialog.startup();
+            //lcs - MapTips END
             this.layers = [];
             array.forEach(config.operationalLayers, function(layer) {
                 var l;
@@ -98,11 +110,45 @@ define([
                         lang.mixin(options, layer.editorLayerInfos);
                     }
                     this.editorLayerInfos.push(options);
+                    //lcs - MapTips BEGIN
+                    gl = new esri.layers.GraphicsLayer({ id: layer.options.id + '-graphics' });
+                    this.layers.unshift(gl);  //lcs - Put the graphic layer below the feature layer
+                    gl.on("mouse-out", function (mouseOutEvent){
+                        gl.clear();
+                        dijitPopup.close(dialog);
+                    });
+                    l.on("mouse-over", function(mouseOverEvent){
+                        var showMapTips = dom.byId('chkMapTips').checked;
+                        if (showMapTips) {
+                            var content = esriLang.substitute(mouseOverEvent.graphic.attributes, layer.mapTip);
+                            content = content.replace(/\<b\>\<\/b\>/g,"<b>" + layer.mapTipNoValue + "<\/b>"); 
+                            var highlightGraphic = new Graphic(mouseOverEvent.graphic.geometry, layer.highlightSymbol);
+                            gl.add(highlightGraphic);
+
+                            dialog.setContent(content);
+
+                            Style.set(dialog.domNode, "opacity", 0.85);
+                            dijitPopup.open({
+                                popup: dialog, 
+                                x: mouseOverEvent.pageX + 10,
+                                y: mouseOverEvent.pageY + 10
+                            });
+                        }
+                    });
+                    //lcs - MapTips END
                 } else {
                     console.log('Layer type not supported: ', layer.type);
                 }
-                this.layers.push(l);
-                this.legendLayerInfos.push({
+                //lcs this.layers.push(l);
+                this.layers.unshift(l);  //lcs - Changed from push() to unshift() so the layers can be listed from top to bottom in config.js
+                this.legendLayerInfos.unshift({  //lcs - Changed from push() to unshift() so the Legend and TOC agree
+                    layer: l,
+                    title: layer.title || null,
+                    slider: true,
+                    noLegend: false,
+                    collapsed: false
+                });
+                this.tocLayerInfos.push({  //lcs - Added this because Legend and TOC need the layers in the opposite order
                     layer: l,
                     title: layer.title || null,
                     slider: true,
@@ -155,7 +201,7 @@ define([
                 require(['gis/dijit/TOC'], lang.hitch(this, function(TOC) {
                     this.toc = new TOC({
                         map: this.map,
-                        layerInfos: this.legendLayerInfos
+                        layerInfos: this.tocLayerInfos  //lcs - to make the legend agree with the TOC
                     }, domConstruct.create("div")).placeAt(TOCTP.containerNode);
                     this.toc.startup();
                 }));

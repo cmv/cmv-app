@@ -45,16 +45,26 @@ body, html {
     top: 18px;
 }
 
+/*lcs - Map Tips - changed top from 27 to 10, position from relative to absolute*/
 .header .headerLinks {
     float: right;
     color: #FFFFFF;
-    position: relative;
-    top: 27px;
+    position: absolute;
+    top: 10px;
     right: 10px;
 }
 
 .header .headerLinks a {
     color: #FFFFFF;
+}
+
+/*lcs - Map Tips*/
+.header .mapTips  {
+    color: #FFFFFF;
+    float: right;
+    right: 10px;
+    position: absolute;
+    top:40px;
 }
 
 #borderContainer {
