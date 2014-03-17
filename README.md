@@ -62,3 +62,7 @@ This JS web app can be easily configured or used as a boilerplate/starting point
     1. Moved search to the header.
     2. Added the help dijit.
     3. Improved the legend rendering and added support for title from the config.
+
+## License
+
+MIT
