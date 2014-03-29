@@ -53,7 +53,7 @@ define([
 			url: "http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer",
 			title: "Louisville Public Safety",
 			options: {
-				id: "tapestry",
+				id: "louisvillePubSaftey",
 				opacity: 1.0,
 				visible: true,
 			}
