@@ -28,8 +28,12 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Scalebar
 * Bookmarks
 * Table of contents
+* Identify (for dynamic layers)
 
 ## Change log:
+* 3/29/2014
+	1. Updated to 3.8 js api.
+	2. Added identify functionality for dynamic layers with separate identify config [`js/gis/dijit/Identify/config.js`](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/blob/master/viewer/js/gis/dijit/Identify/config.js).
 * 12/6/2014
 	1. Updated UX a bit.
 	2. Added TOC widget from [agsjs](http://gmaps-utility-gis.googlecode.com/svn/tags/agsjs/latest/docs/toc/reference.html).

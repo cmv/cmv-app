@@ -36,7 +36,7 @@ define([
             this.map.infoWindow.show(evt.mapPoint);
 
             var identifyParams = new IdentifyParameters();
-            identifyParams.tolerance = 5;
+            identifyParams.tolerance = this.identifyTolerance;
             identifyParams.returnGeometry = true;
             identifyParams.layerOption = IdentifyParameters.LAYER_OPTION_VISIBLE;
             identifyParams.geometry = evt.mapPoint;

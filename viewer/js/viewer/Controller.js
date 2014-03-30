@@ -132,6 +132,7 @@ define([
         initWidgets: function(evt) {
 
             this.identify = new Identify({
+                identifyTolerance: config.identifyTolerance,
                 map: this.map
             });
 
