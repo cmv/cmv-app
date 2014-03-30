@@ -7,9 +7,8 @@ define([
 	'dojo/_base/lang',
 	'dijit/Menu',
 	'dijit/MenuItem',
-	'dijit/MenuSeparator',
-	'gis/dijit/3.7DirectionsPatch'
-], function(declare, _WidgetBase, _TemplatedMixin, Directions, template, lang, Menu, MenuItem, MenuSeparator, patch) {
+	'dijit/MenuSeparator'
+], function(declare, _WidgetBase, _TemplatedMixin, Directions, template, lang, Menu, MenuItem, MenuSeparator) {
 
 	return declare([_WidgetBase, _TemplatedMixin], {
 		templateString: template,

@@ -1,1 +1,0 @@
-### WARNING ###The binary image(s) included in this directory are for the use with the Microsoft WindowsOperating System only.

@@ -22,8 +22,9 @@ define([
     'dojo/text!./templates/mapOverlay.html',
     'viewer/config',
     'esri/IdentityManager',
-    'esri/tasks/GeometryService'
-], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService) {
+    'esri/tasks/GeometryService',
+    'gis/dijit/Identify'
+], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService, Identify) {
     return {
         config: config,
         legendLayerInfos: [],
@@ -126,8 +127,14 @@ define([
                 autoComplete: true
             }, "geocodeDijit");
             this.geocoder.startup();
+
         },
         initWidgets: function(evt) {
+
+            this.identify = new Identify({
+                identifyTolerance: config.identifyTolerance,
+                map: this.map
+            });
 
             if (config.widgets.scalebar && config.widgets.scalebar.include) {
                 require(['esri/dijit/Scalebar'], lang.hitch(this, function(Scalebar) {
