@@ -67,7 +67,8 @@ define([
         },
         initMap: function() {
             this.map = new esri.Map("map", {
-                extent: new esri.geometry.Extent(config.initialExtent)
+                extent: new esri.geometry.Extent(config.initialExtent),
+	    	logo: config.logo
             });
 
             this.map.on('load', lang.hitch(this, 'initLayers'));
