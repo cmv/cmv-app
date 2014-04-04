@@ -112,7 +112,7 @@ define([
                     collapsed: false
                 });
             }, this);
-            this.map.addLayers(this.layers);
+            this.map.addLayers(this.layers.reverse());
 
             this.growler = new Growler({}, "growlerDijit");
             this.growler.startup();
