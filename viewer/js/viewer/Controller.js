@@ -67,7 +67,8 @@ define([
         },
         initMap: function() {
             this.map = new esri.Map("map", {
-                extent: new esri.geometry.Extent(config.initialExtent)
+                extent: new esri.geometry.Extent(config.initialExtent),
+	    	logo: config.logo
             });
 
             this.map.on('load', lang.hitch(this, 'initLayers'));
@@ -111,7 +112,7 @@ define([
                     collapsed: false
                 });
             }, this);
-            this.map.addLayers(this.layers);
+            this.map.addLayers(this.layers.reverse());
 
             this.growler = new Growler({}, "growlerDijit");
             this.growler.startup();

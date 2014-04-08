@@ -30,6 +30,8 @@ define([
 				wkid: 102100
 			}
 		},
+		//logo: hide esri logo by setting logo false
+		logo: false,
 		// tolerance for identify map click.
 		identifyTolerance: 5,
 		// operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: "dynamic", "tiled", "feature".
