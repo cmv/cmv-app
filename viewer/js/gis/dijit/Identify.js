@@ -47,10 +47,10 @@ define([
             var identifies = [];
 
             array.forEach(this.layers, function(layer) {
-                if (layer.ref.visibleLayers.length !== 0 || layer.ref.visibleLayers[0] === -1) {
+                if (layer.ref.visibleLayers.length !== 0 && layer.ref.visibleLayers[0] !== -1) {
                     var params = lang.clone(identifyParams);
                     params.layerIds = layer.ref.visibleLayers;
-                    identifies.push(layer.identifyTask.execute(params))
+                    identifies.push(layer.identifyTask.execute(params));
                 }
             });
 
