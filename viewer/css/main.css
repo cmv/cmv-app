@@ -118,3 +118,17 @@ body, html {
 .dbootstrap .dijitToolbar .dijitButtonContents {
     padding: 1px !important;
 }
+
+.dbootstrap .dijitTitlePane {
+    border: 1px solid #DDDDDD;
+    margin-bottom: 2px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.dbootstrap .dijitTitlePaneTitle {
+    color: #666666 !important;
+    border-bottom: none;
+    padding: 8px 15px;
+    background-color: #F5F5F5;
+}

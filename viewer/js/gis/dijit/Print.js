@@ -22,22 +22,9 @@ define([
     'dojo/dom-class',
     'dojo/text!./Print/templates/Print.html',
     'dojo/text!./Print/templates/PrintResult.html',
-    'dojo/aspect'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, Style, domConstruct, domClass, printTemplate, printResultTemplate, aspect) {
-
-    //anonymous function to load CSS files required for this module
-    (function() {
-        var css = [require.toUrl("gis/dijit/Print/css/Print.css")];
-        var head = document.getElementsByTagName("head").item(0),
-            link;
-        for (var i = 0, il = css.length; i < il; i++) {
-            link = document.createElement("link");
-            link.type = "text/css";
-            link.rel = "stylesheet";
-            link.href = css[i].toString();
-            head.appendChild(link);
-        }
-    }());
+    'dojo/aspect',
+    'xstyle/css!./Print/css/Print.css'
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, Style, domConstruct, domClass, printTemplate, printResultTemplate, aspect, css) {
 
     // Main print dijit
     var PrintDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {

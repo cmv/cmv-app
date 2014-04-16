@@ -26,7 +26,8 @@ define([
 
 			// create right-click menu
 			this.menu = new Menu({
-				targetNodeIds: [this.map.root]
+				targetNodeIds: [this.map.root],
+				selector: '.layersDiv' // restrict to map only
 			});
 			this.menu.addChild(new MenuItem({
 				label: "Directions from here",

@@ -1,35 +1,22 @@
 define([
-        'dojo/_base/declare',
-        'dijit/_WidgetBase',
-        'dijit/_TemplatedMixin',
-        'dijit/_WidgetsInTemplateMixin',
-        'dijit/form/Button',
-        'dojo/_base/lang',
-        'dojo/string',
-        'dojo/text!./GeoLocation/templates/GeoLocation.html',
-        'dojo/text!./GeoLocation/templates/stats.html',
-        'esri/renderers/SimpleRenderer',
-        'esri/symbols/PictureMarkerSymbol',
-        'esri/layers/GraphicsLayer',
-        'esri/graphic',
-        'esri/SpatialReference',
-        'esri/geometry/webMercatorUtils',
-        'esri/tasks/ProjectParameters'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, string, geoLocationTemplate, statsTemplate, SimpleRenderer, PictureMarkerSymbol, GraphicsLayer, Graphic, SpatialReference, webMercatorUtils, ProjectParameters) {
-
-    //anonymous function to load CSS files required for this module
-    (function() {
-        var css = [require.toUrl("gis/dijit/GeoLocation/css/GeoLocation.css")];
-        var head = document.getElementsByTagName("head").item(0),
-            link;
-        for (var i = 0, il = css.length; i < il; i++) {
-            link = document.createElement("link");
-            link.type = "text/css";
-            link.rel = "stylesheet";
-            link.href = css[i].toString();
-            head.appendChild(link);
-        }
-    }());
+    'dojo/_base/declare',
+    'dijit/_WidgetBase',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetsInTemplateMixin',
+    'dijit/form/Button',
+    'dojo/_base/lang',
+    'dojo/string',
+    'dojo/text!./GeoLocation/templates/GeoLocation.html',
+    'dojo/text!./GeoLocation/templates/stats.html',
+    'esri/renderers/SimpleRenderer',
+    'esri/symbols/PictureMarkerSymbol',
+    'esri/layers/GraphicsLayer',
+    'esri/graphic',
+    'esri/SpatialReference',
+    'esri/geometry/webMercatorUtils',
+    'esri/tasks/ProjectParameters',
+    'xstyle/css!./GeoLocation/css/GeoLocation.css'
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, string, geoLocationTemplate, statsTemplate, SimpleRenderer, PictureMarkerSymbol, GraphicsLayer, Graphic, SpatialReference, webMercatorUtils, ProjectParameters, css) {
 
     // main geolocation widget
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {

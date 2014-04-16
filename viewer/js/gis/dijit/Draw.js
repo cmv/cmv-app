@@ -15,22 +15,10 @@ define([
     'esri/symbols/SimpleMarkerSymbol',
     'esri/symbols/SimpleLineSymbol',
     'esri/symbols/SimpleFillSymbol',
-    'esri/layers/FeatureLayer'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer) {
-
-    //anonymous function to load CSS files required for this module
-    (function() {
-        var css = [require.toUrl("gis/dijit/Draw/css/Draw.css")];
-        var head = document.getElementsByTagName("head").item(0),
-            link;
-        for (var i = 0, il = css.length; i < il; i++) {
-            link = document.createElement("link");
-            link.type = "text/css";
-            link.rel = "stylesheet";
-            link.href = css[i].toString();
-            head.appendChild(link);
-        }
-    }());
+    'esri/layers/FeatureLayer',
+    'dojo/on',
+    'xstyle/css!./Draw/css/Draw.css'
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, on, css) {
 
     // main draw dijit
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -126,57 +114,58 @@ define([
             this.polygonGraphics.setRenderer(this.polygonRenderer);
             this.map.addLayer(this.polygonGraphics);
 
-            dojo.connect(this.drawToolbar, "onDrawEnd", this, 'onDrawToolbarDrawEnd');
+            this.drawToolbar.on('draw-end', lang.hitch(this, 'onDrawToolbarDrawEnd'));
         },
         drawPoint: function() {
-            //this.disconnectMapClick();
+            this.disconnectMapClick();
             this.drawToolbar.activate(Draw.POINT);
         },
         drawCircle: function() {
-            //this.disconnectMapClick();
+            this.disconnectMapClick();
             this.drawToolbar.activate(Draw.CIRCLE);
         },
         drawLine: function() {
-            //this.disconnectMapClick();
+            this.disconnectMapClick();
             this.drawToolbar.activate(Draw.POLYLINE);
         },
         drawFreehandLine: function() {
-            //this.disconnectMapClick();
+            this.disconnectMapClick();
             this.drawToolbar.activate(Draw.FREEHAND_POLYLINE);
         },
         drawPolygon: function() {
-            //this.disconnectMapClick();
+            this.disconnectMapClick();
             this.drawToolbar.activate(Draw.POLYGON);
         },
         drawFreehandPolygon: function() {
-            //this.disconnectMapClick();
+            this.disconnectMapClick();
             this.drawToolbar.activate(Draw.FREEHAND_POLYGON);
         },
         disconnectMapClick: function() {
-            dojo.disconnect(this.mapClickEventHandle);
-            this.mapClickEventHandle = null;
+            this.mapClickMode.current = "draw";
+            // dojo.disconnect(this.mapClickEventHandle);
+            // this.mapClickEventHandle = null;
         },
         connectMapClick: function() {
-            if (this.mapClickEventHandle === null) {
-                this.mapClickEventHandle = dojo.connect(this.map, "onClick", this.mapClickEventListener);
-            }
+            this.mapClickMode.current = this.mapClickMode.default;
+            // if (this.mapClickEventHandle === null) {
+            //     this.mapClickEventHandle = dojo.connect(this.map, "onClick", this.mapClickEventListener);
+            // }
         },
-        onDrawToolbarDrawEnd: function(geometry) {
-            console.log(geometry.type);
+        onDrawToolbarDrawEnd: function(evt) {
             this.drawToolbar.deactivate();
-            //this.connectMapClick();
+            this.connectMapClick();
             var graphic;
-            switch (geometry.type) {
+            switch (evt.geometry.type) {
                 case "point":
-                    graphic = new Graphic(geometry);
+                    graphic = new Graphic(evt.geometry);
                     this.pointGraphics.add(graphic);
                     break;
                 case "polyline":
-                    graphic = new Graphic(geometry);
+                    graphic = new Graphic(evt.geometry);
                     this.polylineGraphics.add(graphic);
                     break;
                 case "polygon":
-                    graphic = new Graphic(geometry, null, {
+                    graphic = new Graphic(evt.geometry, null, {
                         ren: 1
                     });
                     this.polygonGraphics.add(graphic);
@@ -189,7 +178,7 @@ define([
             this.polylineGraphics.clear();
             this.polygonGraphics.clear();
             this.drawToolbar.deactivate();
-            //this.connectMapClick();
+            this.connectMapClick();
         }
     });
 });
