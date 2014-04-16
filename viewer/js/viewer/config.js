@@ -41,9 +41,6 @@ define([
 			type: "feature",
 			url: "http://services1.arcgis.com/g2TonOxuRkIqSOFx/arcgis/rest/services/MeetUpHomeTowns/FeatureServer/0",
 			title: "STLJS Meetup Home Towns",
-			slider: true,
-			noLegend: false,
-			collapsed: false,
 			options: {
 				id: "meetupHometowns",
 				opacity: 1.0,
@@ -59,8 +56,23 @@ define([
 			type: "dynamic",
 			url: "http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer",
 			title: "Louisville Public Safety",
+			slider: true,
+			noLegend: false,
+			collapsed: false,
 			options: {
 				id: "louisvillePubSaftey",
+				opacity: 1.0,
+				visible: true,
+			}
+		}, {
+			type: "dynamic",
+			url: "http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer",
+			title: "Damage Assessment",
+			slider: true,
+			noLegend: false,
+			collapsed: false,
+			options: {
+				id: "DamageAssessment",
 				opacity: 1.0,
 				visible: true,
 			}
