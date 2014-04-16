@@ -264,11 +264,14 @@ define([
             this.mapClickMode.current = mode;
         },
         toggleSidebar: function() {
+            var domStore = dom.byId('sidebarStorage');
             if (this.outer.getIndexOfChild(this.sidebar) !== -1) {
                 this.outer.removeChild(this.sidebar);
+                domStore.appendChild(this.sidebar.domNode);
                 domClass.remove(this.sideBarToggle, 'close');
                 domClass.add(this.sideBarToggle, 'open');
             } else {
+                domStore.removeChild(this.sidebar.domNode);
                 this.outer.addChild(this.sidebar);
                 domClass.remove(this.sideBarToggle, 'open');
                 domClass.add(this.sideBarToggle, 'close');
@@ -279,7 +282,6 @@ define([
                 title: title,
                 open: open
             }).placeAt(this.sidebar, position);
-            //domClass.add(tp.domNode, 'titlePaneBottomFix titlePaneRightFix');
             tp.startup();
             return tp;
         },
