@@ -4,22 +4,9 @@ define([
 	'esri/dijit/Bookmarks',
 	'dojo/json',
 	'dojo/cookie',
-	'dojo/_base/lang'
-], function(declare, _WidgetBase, Bookmarks, json, cookie, lang) {
-
-	//anonymous function to load CSS files required for this module
-	(function() {
-		var css = [require.toUrl("gis/dijit/Bookmarks/css/Bookmarks.css")];
-		var head = document.getElementsByTagName("head").item(0),
-			link;
-		for (var i = 0, il = css.length; i < il; i++) {
-			link = document.createElement("link");
-			link.type = "text/css";
-			link.rel = "stylesheet";
-			link.href = css[i].toString();
-			head.appendChild(link);
-		}
-	}());
+	'dojo/_base/lang',
+	'xstyle/css!./Bookmarks/css/Bookmarks.css'
+], function(declare, _WidgetBase, Bookmarks, json, cookie, lang, css) {
 
 	var bookmarks = [{
 		extent: {

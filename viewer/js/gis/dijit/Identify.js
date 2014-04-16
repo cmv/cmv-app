@@ -26,7 +26,11 @@ define([
                     });
                 }
             }, this);
-            this.map.on('click', lang.hitch(this, 'executeIdentifyTask'));
+            this.map.on('click', lang.hitch(this, function(evt) {
+                if (this.mapClickMode.current === 'identify') {
+                    this.executeIdentifyTask(evt);
+                }
+            }));
         },
         executeIdentifyTask: function(evt) {
             this.map.infoWindow.hide();
@@ -47,7 +51,7 @@ define([
             var identifies = [];
 
             array.forEach(this.layers, function(layer) {
-                if (layer.ref.visibleLayers.length !== 0 && layer.ref.visibleLayers[0] !== -1) {
+                if (layer.ref.visible && layer.ref.visibleLayers.length !== 0 && layer.ref.visibleLayers[0] !== -1) {
                     var params = lang.clone(identifyParams);
                     params.layerIds = layer.ref.visibleLayers;
                     identifies.push(layer.identifyTask.execute(params));

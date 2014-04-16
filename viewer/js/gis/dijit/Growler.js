@@ -7,22 +7,9 @@ define([
     "dojo/dom-construct",
     'dojo/_base/fx',
     "dojo/dom-class",
-    "dojo/text!./Growler/templates/Growl.html"
-    ], function(declare, _WidgetBase, _TemplatedMixin, lang, Style, domConstruct, fx, domClass, growlTemplate) {
-
-    //anonymous function to load CSS files required for this module
-    (function() {
-        var css = [require.toUrl("gis/dijit/Growler/css/Growler.css")];
-        var head = document.getElementsByTagName("head").item(0),
-            link;
-        for(var i = 0, il = css.length; i < il; i++) {
-            link = document.createElement("link");
-            link.type = "text/css";
-            link.rel = "stylesheet";
-            link.href = css[i].toString();
-            head.appendChild(link);
-        }
-    }());
+    "dojo/text!./Growler/templates/Growl.html",
+    'xstyle/css!./Growler/css/Growler.css'
+    ], function(declare, _WidgetBase, _TemplatedMixin, lang, Style, domConstruct, fx, domClass, growlTemplate, css) {
 
     // main growler dijit
     var Growler = declare([_WidgetBase, _TemplatedMixin], {

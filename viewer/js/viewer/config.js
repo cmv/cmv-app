@@ -11,6 +11,8 @@ define([
 		geometryService: {
 			url: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer"
 		},
+		//default mapClick mode, mapClick.mode lets widgets know what mode the map is in to avoid multipult map click actions from taking place (ie identify while drawing).
+		defaultMapClickMode: 'identify',
 		// basemapMode: must be either "agol" or "custom"
 		//basemapMode: "custom",
 		basemapMode: "agol",
@@ -39,6 +41,9 @@ define([
 			type: "feature",
 			url: "http://services1.arcgis.com/g2TonOxuRkIqSOFx/arcgis/rest/services/MeetUpHomeTowns/FeatureServer/0",
 			title: "STLJS Meetup Home Towns",
+			slider: true,
+			noLegend: false,
+			collapsed: false,
 			options: {
 				id: "meetupHometowns",
 				opacity: 1.0,

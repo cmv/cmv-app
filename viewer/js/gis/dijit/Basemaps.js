@@ -12,21 +12,9 @@ define([
     'dojo/text!./Basemaps/templates/Basemaps.html',
     'esri/dijit/BasemapGallery',
     'esri/dijit/BasemapLayer',
-    'esri/dijit/Basemap'], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownButton, DropDownMenu, MenuItem, array, functional, template, BasemapGallery, BasemapLayer, Basemap) {
-
-    //anonymous function to load CSS files required for this module
-    (function() {
-        var css = [require.toUrl("gis/dijit/Basemaps/css/Basemaps.css")];
-        var head = document.getElementsByTagName("head").item(0),
-            link;
-        for (var i = 0, il = css.length; i < il; i++) {
-            link = document.createElement("link");
-            link.type = "text/css";
-            link.rel = "stylesheet";
-            link.href = css[i].toString();
-            head.appendChild(link);
-        }
-    }());
+    'esri/dijit/Basemap',
+    'xstyle/css!./Basemaps/css/Basemaps.css'
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownButton, DropDownMenu, MenuItem, array, functional, template, BasemapGallery, BasemapLayer, Basemap, css) {
 
     // define all valid custom basemaps here. Object of Basemap objects. Key name and basemap id must match. (pass desired basmaps in constructor in custom mode)
     var customBasemaps = {
@@ -136,7 +124,7 @@ define([
             }
 
             this.menu = new DropDownMenu({
-                style: "display: none;"//,
+                style: "display: none;" //,
                 //baseClass: this.menuClass
             });
 

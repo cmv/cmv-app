@@ -23,12 +23,18 @@ define([
     'viewer/config',
     'esri/IdentityManager',
     'esri/tasks/GeometryService',
-    'gis/dijit/Identify'
-], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService, Identify) {
+    'gis/dijit/Identify',
+    'dojo/aspect'
+], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, GeoLocation, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService, Identify, aspect) {
     return {
         config: config,
         legendLayerInfos: [],
         editorLayerInfos: [],
+        tocLayerInfos: [],
+        mapClickMode: {
+            current: config.defaultMapClickMode,
+            default: config.defaultMapClickMode
+        },
         startup: function() {
             this.initConfig();
             this.initView();
@@ -102,13 +108,17 @@ define([
                 } else {
                     console.log('Layer type not supported: ', layer.type);
                 }
-                this.layers.push(l);
-                this.legendLayerInfos.push({
+                this.layers.unshift(l); // unshift instead to keep layer ordering on map intact
+                this.legendLayerInfos.unshift({
+                    layer: l,
+                    title: layer.title || null
+                });
+                this.tocLayerInfos.push({ //push because Legend and TOC need the layers in the opposite order
                     layer: l,
                     title: layer.title || null,
-                    slider: true,
-                    noLegend: false,
-                    collapsed: false
+                    slider: layer.slider || true,
+                    noLegend: layer.noLegend || false,
+                    collapsed: layer.collapsed || false
                 });
             }, this);
             this.map.addLayers(this.layers);
@@ -133,7 +143,8 @@ define([
 
             this.identify = new Identify({
                 identifyTolerance: config.identifyTolerance,
-                map: this.map
+                map: this.map,
+                mapClickMode: this.mapClickMode
             });
 
             if (config.widgets.scalebar && config.widgets.scalebar.include) {
@@ -162,7 +173,7 @@ define([
                 require(['gis/dijit/TOC'], lang.hitch(this, function(TOC) {
                     this.toc = new TOC({
                         map: this.map,
-                        layerInfos: this.legendLayerInfos
+                        layerInfos: this.tocLayerInfos
                     }, domConstruct.create("div")).placeAt(TOCTP.containerNode);
                     this.toc.startup();
                 }));
@@ -183,7 +194,8 @@ define([
                 var drawTP = this._createTitlePane(config.widgets.draw.title, config.widgets.draw.position, config.widgets.draw.open);
                 require(['gis/dijit/Draw'], lang.hitch(this, function(Draw) {
                     this.drawWidget = new Draw({
-                        map: this.map
+                        map: this.map,
+                        mapClickMode: this.mapClickMode
                     }, domConstruct.create("div")).placeAt(drawTP.containerNode);
                     this.drawWidget.startup();
                 }));
@@ -194,10 +206,15 @@ define([
                 require(['esri/dijit/Measurement'], lang.hitch(this, function(Measurement) {
                     this.measure = new Measurement({
                         map: this.map,
+                        mapClickMode: this.mapClickMode,
                         defaultAreaUnit: config.widgets.measure.defaultAreaUnit,
                         defaultLengthUnit: config.widgets.measure.defaultLengthUnit
                     }, domConstruct.create("div")).placeAt(measureTP.containerNode);
                     this.measure.startup();
+                    aspect.before(this.measure, 'measureArea', lang.hitch(this, 'setMapClickMode', 'measure'));
+                    aspect.before(this.measure, 'measureDistance', lang.hitch(this, 'setMapClickMode', 'measure'));
+                    aspect.before(this.measure, 'measureLocation', lang.hitch(this, 'setMapClickMode', 'measure'));
+                    aspect.after(this.measure, 'closeTool', lang.hitch(this, 'setMapClickMode', this.config.defaultMapClickMode));
                 }));
             }
 
@@ -234,6 +251,7 @@ define([
                 require(['gis/dijit/Editor'], lang.hitch(this, function(Editor) {
                     this.editor = new Editor({
                         map: this.map,
+                        mapClickMode: this.mapClickMode,
                         layerInfos: this.editorLayerInfos,
                         settings: config.widgets.editor.settings,
                         titlePane: editorTP
@@ -241,6 +259,9 @@ define([
                     this.editor.startup();
                 }));
             }
+        },
+        setMapClickMode: function(mode) {
+            this.mapClickMode.current = mode;
         },
         toggleSidebar: function() {
             if (this.outer.getIndexOfChild(this.sidebar) !== -1) {

@@ -47,22 +47,9 @@ define([
   'esri/layers/ArcGISDynamicMapServiceLayer',
   'esri/layers/ArcGISTiledMapServiceLayer',
   'dojo/_base/sniff',
-  'dojo/text!./TOC/templates/tocNode.html'
-], function(declare, has, aspect, lang, array, domConstruct, domClass, domStyle, domAttr, _Widget, _Templated, Evented, gfx, coreFx, Toggler, jsonUtils, scaleUtils, esriConfig, ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer, sniff, template) {
-
-  //anonymous function to load CSS files required for this module
-  (function() {
-    var css = [require.toUrl("gis/dijit/TOC/css/TOC.css")];
-    var head = document.getElementsByTagName("head").item(0),
-      link;
-    for (var i = 0, il = css.length; i < il; i++) {
-      link = document.createElement("link");
-      link.type = "text/css";
-      link.rel = "stylesheet";
-      link.href = css[i].toString();
-      head.appendChild(link);
-    }
-  }());
+  'dojo/text!./TOC/templates/tocNode.html',
+  'xstyle/css!./TOC/css/TOC.css'
+], function(declare, has, aspect, lang, array, domConstruct, domClass, domStyle, domAttr, _Widget, _Templated, Evented, gfx, coreFx, Toggler, jsonUtils, scaleUtils, esriConfig, ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer, sniff, template, css) {
 
   /**
    * _TOCNode is a node, with 3 possible types: root layer|serviceLayer|legend

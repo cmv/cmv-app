@@ -31,6 +31,13 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Identify (for dynamic layers)
 
 ## Change log:
+* 4/15/2014
+	1. Fixed layer ordering bug.
+	2. Fixed Map click bug with identify and other widgets.
+	3. Fixed identifing on only visible layers and sub layers.
+	4. Updated to esrijs 3.9.
+	5. Updated dbootstrap to latest (includes dgrid styling).
+	6. Switched all widget css to xstyle/css plugin loader.
 * 3/29/2014
 	1. Updated to 3.8 js api.
 	2. Added identify functionality for dynamic layers with separate identify config [`js/gis/dijit/Identify/config.js`](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/blob/master/viewer/js/gis/dijit/Identify/config.js).
