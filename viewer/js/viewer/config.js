@@ -11,7 +11,7 @@ define([
 		geometryService: {
 			url: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer"
 		},
-		//default mapClick mode, mapClick.mode lets widgets know what mode the map is in to avoid multipult map click actions from taking place (ie identify while drawing).
+		//default mapClick mode, mapClickMode lets widgets know what mode the map is in to avoid multipult map click actions from taking place (ie identify while drawing).
 		defaultMapClickMode: 'identify',
 		// basemapMode: must be either "agol" or "custom"
 		//basemapMode: "custom",
@@ -77,8 +77,31 @@ define([
 				visible: true,
 			}
 		}],
-		//widgets: set include to true or false to load or not load the widget. set position to the desired order, starts at 0 on the top.
-		widgets: {
+		// widgets for the map area. set include to true or false to load or leave out the widget.
+		mapWidgets: {
+			scalebar: {
+				include: true,
+				options: {
+					attachTo: "bottom-left",
+					scalebarStyle: "line",
+					scalebarUnit: "dual"
+				}
+			},
+			locateButton: {
+				include: true,
+				options: {
+					highlightLocation: true,
+					useTracking: true,
+					geolocationOptions: {
+						maximumAge: 0,
+						timeout: 15000,
+						enableHighAccuracy: true
+					}
+				}
+			}
+		},
+		// widgets for the sidebar. Set include to true or false to load or leave out the widget. Set position to the desired order, starts at 0 on the top.
+		sidebarWidgets: {
 			legend: {
 				include: true,
 				title: "Legend",
@@ -117,9 +140,9 @@ define([
 				open: false,
 				position: 5,
 				serviceURL: "http://sampleserver6.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
-				copyrightText: "Copyright ESRI 2013",
-				authorText: "ESRI",
-				defaultTitle: 'STLJS.org Meetup Hometowns',
+				copyrightText: "Copyright 2014",
+				authorText: "Me",
+				defaultTitle: 'Viewer Map',
 				defaultFormat: 'PDF',
 				defaultLayout: 'Letter ANSI A Landscape'
 			},
@@ -153,14 +176,6 @@ define([
 						cutVisible: true,
 						mergeVisible: true
 					}
-				}
-			},
-			scalebar: {
-				include: true,
-				options: {
-					attachTo: "bottom-left",
-					scalebarStyle: "line",
-					scalebarUnit: "dual"
 				}
 			}
 		}
