@@ -24,13 +24,10 @@ define([
 			this.options.map.addLayer(this.graphics);
 			this.options.graphicsLayer = this.graphics;
 			this.options.infoTemplate = new InfoTemplate('GPS Position', '${*}');
+			this.options.symbol = null;
 
 			this.locateButton = new LocateButton(this.options, this.parentNode);
 			this.locateButton.startup();
-			this.locateButton.on('locate', lang.hitch(this, 'fixGraphicForRender'));
-		},
-		fixGraphicForRender: function() {
-			this.graphics.graphics[0].setSymbol(null);
 		}
 	});
 });
