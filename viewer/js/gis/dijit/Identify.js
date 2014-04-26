@@ -49,23 +49,24 @@ define([
             identifyParams.height = this.map.height;
 
             var identifies = [];
-
+            var identifiedlayers = [];
             array.forEach(this.layers, function(layer) {
                 if (layer.ref.visible && layer.ref.visibleLayers.length !== 0 && layer.ref.visibleLayers[0] !== -1) {
                     var params = lang.clone(identifyParams);
                     params.layerIds = layer.ref.visibleLayers;
                     identifies.push(layer.identifyTask.execute(params));
+                    identifiedlayers.push(layer);
                 }
             });
 
-            all(identifies).then(lang.hitch(this, 'identifyCallback'), function(err) {
+            all(identifies).then(lang.hitch(this, 'identifyCallback', identifiedlayers), function(err) {
                 console.log('identify tasks error: ', err);
             });
         },
-        identifyCallback: function(responseArray) {
+        identifyCallback: function(identifiedlayers, responseArray) {
             var fSet = [];
             array.forEach(responseArray, function(response, i) {
-                var layerId = this.layers[i].ref.id;
+                var layerId = identifiedlayers[i].ref.id;
                 array.forEach(response, function(result) {
                     // see if we have a Popup config defined for this layer
                     if (config.hasOwnProperty(layerId)) {

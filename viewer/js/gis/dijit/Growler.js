@@ -1,23 +1,27 @@
 define([
-    "dojo/_base/declare",
-    "dijit/_WidgetBase",
-    "dijit/_TemplatedMixin",
+    'dojo/_base/declare',
+    'dijit/_WidgetBase',
+    'dijit/_TemplatedMixin',
     'dojo/_base/lang',
-    "dojo/dom-style",
-    "dojo/dom-construct",
+    'dojo/dom-style',
+    'dojo/dom-construct',
     'dojo/_base/fx',
-    "dojo/dom-class",
-    "dojo/text!./Growler/templates/Growl.html",
+    'dojo/dom-class',
+    'dojo/topic',
     'xstyle/css!./Growler/css/Growler.css'
-    ], function(declare, _WidgetBase, _TemplatedMixin, lang, Style, domConstruct, fx, domClass, growlTemplate, css) {
+], function(declare, _WidgetBase, _TemplatedMixin, lang, Style, domConstruct, fx, domClass, topic, css) {
 
-    // main growler dijit
+    // main growler dijit container
     var Growler = declare([_WidgetBase, _TemplatedMixin], {
-        templateString: '<div data-dojo-attach-point="containerNode"></div>',
+        templateString: '<div class="gis-dijit-Growl" data-dojo-attach-point="containerNode"></div>',
+        postCreate: function() {
+            this.inherited(arguments);
+            this.own(topic.subscribe('growler/growl', lang.hitch(this, 'growl')));
+        },
         growl: function(props) {
             props = props || {};
             lang.mixin(props, {
-                container: this.containerNode
+                _container: this.containerNode
             });
             new Growl(props);
         }
@@ -25,18 +29,19 @@ define([
 
     // the growl itself
     var Growl = declare([_WidgetBase, _TemplatedMixin], {
-        templateString: growlTemplate,
+        templateString: '<div class="growl ${level}" data-dojo-attach-event="onmouseover:hoverOver,onmouseout:hoverOut,onclick:close"><h3>${title}</h3>${message}</div>',
         title: "Title",
         message: "Message",
-        timeout: 3000,
-        opacity: 0.85,
-        container: null,
-        timer: null,
+        level: "default",
+        timeout: 10000,
+        opacity: 1.0,
+        _container: null,
+        _timer: null,
         postCreate: function() {
             this.inherited(arguments);
-            if(this.container) {
+            if (this._container) {
                 Style.set(this.domNode, 'opacity', 0);
-                domConstruct.place(this.domNode, this.container);
+                domConstruct.place(this.domNode, this._container);
                 fx.anim(this.domNode, {
                     opacity: this.opacity
                 }, 250);
@@ -46,14 +51,18 @@ define([
             }
         },
         setTimeout: function() {
-            this.timer = setTimeout(lang.hitch(this, 'close'), this.timeout);
+            if (this.timeout > 0) {
+                this._timer = setTimeout(lang.hitch(this, 'close'), this.timeout);
+            }
         },
         hoverOver: function() {
-            clearInterval(this.timer);
+            clearInterval(this._timer);
             domClass.add(this.domNode, 'hover');
         },
         hoverOut: function() {
-            this.setTimeout();
+            if (this.timeout > 0) {
+                this.setTimeout();
+            }
             domClass.remove(this.domNode, 'hover');
         },
         close: function() {

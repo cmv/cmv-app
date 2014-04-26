@@ -1,40 +1,49 @@
-.gis-dijit-Growl {
-    background-color: #333333;
-    border: 1px solid #7A7A7A;
-    border-radius: 10px 10px 10px 10px;
-    color: black;
+.gis-dijit-Growl .growl {
     cursor: pointer;
     font-size: 0.9em;
     margin-right: 1px;
     margin-bottom: 10px;
-    opacity: 0.85;
-    width: 300px;
+    padding: 8px 14px 8px 14px;
+    margin-bottom: 10px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    background-color: #fcf8e3;
+    border: 1px solid #fbefd6;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    color: #c09853;
 }
 
-.gis-dijit-Growl:hover {
-    border: 1px solid #ffffff;
-}
-
-.gis-dijit-Growl h3 {
-    color: #FFFFFF;
-    font-size: 12px;
-    font-weight: bold;
+.gis-dijit-Growl .growl h1,.gis-dijit-Growl .growl h2,.gis-dijit-Growl .growl h3,.gis-dijit-Growl .growl h4 {
     margin: 0;
-    padding: 10px 10px 0;
 }
 
-.gis-dijit-Growl p {
-    color: #FFFFFF;
-    font-size: 12px;
-    margin: 0;
-    padding: 5px 15px 15px;
+.gis-dijit-Growl .growl.warning {
+    background-color: #fcf8e3;
+    border-color: #fbefd6;
+    color: #c09853;
 }
 
-.gis-dijit-Growl pre {
-    color: #FFFFFF;
+.gis-dijit-Growl .growl.success {
+    background-color: #dff0d8;
+    border-color: #d7eac8;
+    color: #468847;
+}
+
+.gis-dijit-Growl .growl.error {
+    background-color: #f2dede;
+    border-color: #eed4d8;
+    color: #b94a48;
+}
+
+.gis-dijit-Growl .growl.info {
+    background-color: #d9edf7;
+    border-color: #bee9f1;
+    color: #3a87ad;
+}
+
+.gis-dijit-Growl .growl.default {
     background-color: #333333;
-    padding: 1em;
-    border: none;
+    border-color: #7A7A7A;
+    color: white;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
-
-
