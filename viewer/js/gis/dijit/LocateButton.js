@@ -5,9 +5,11 @@ define([
 	'esri/renderers/SimpleRenderer',
 	'esri/symbols/PictureMarkerSymbol',
 	'esri/layers/GraphicsLayer',
-	'esri/InfoTemplate'
-], function(declare, lang, LocateButton, SimpleRenderer, PictureMarkerSymbol, GraphicsLayer, InfoTemplate) {
+	'esri/InfoTemplate',
+	'dojo/topic'
+], function(declare, lang, LocateButton, SimpleRenderer, PictureMarkerSymbol, GraphicsLayer, InfoTemplate, topic) {
 	return declare(null, {
+		growlTemplate: 'latitude: {latitude}<br/>longitude: {longitude}<br/>accuracy: {accuracy}<br/>altitude: {altitude}<br/>altitudeAccuracy: {altitudeAccuracy}<br/>heading: {heading}<br/>speed: {speed}',
 		constructor: function(options, node) {
 			this.options = options;
 			this.parentNode = node;
@@ -28,6 +30,30 @@ define([
 
 			this.locateButton = new LocateButton(this.options, this.parentNode);
 			this.locateButton.startup();
+			this.locateButton.on('locate', lang.hitch(this, '_growlLocation'));
+		},
+		_growlLocation: function(evt) {
+			var stats = {
+				accuracy: (evt.position.coords.accuracy) ? evt.position.coords.accuracy : '',
+				altitude: (evt.position.coords.altitude) ? evt.position.coords.altitude : '',
+				altitudeAccuracy: (evt.position.coords.altitudeAccuracy) ? evt.position.coords.altitudeAccuracy : '',
+				heading: (evt.position.coords.heading) ? evt.position.coords.heading : '',
+				latitude: (evt.position.coords.latitude) ? evt.position.coords.latitude : '',
+				longitude: (evt.position.coords.longitude) ? evt.position.coords.longitude : '',
+				speed: (evt.position.coords.speed) ? evt.position.coords.speed : ''
+			};
+
+			if (this.graphics.graphics.length > 0) {
+				this.graphics.graphics[0].attributes = stats;
+			}
+
+			topic.publish('growler/growl', {
+				title: "GPS Position",
+				message: lang.replace(this.growlTemplate, stats),
+				level: "default", //can be: 'default', 'warning', 'info', 'error', 'success'.
+				timeout: 10000, //set to 0 for no timeout
+				opacity: 1.0,
+			});
 		}
 	});
 });
