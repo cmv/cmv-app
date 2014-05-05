@@ -4,7 +4,8 @@ define([
 	'dijit/_TemplatedMixin',
 	'dijit/_WidgetsInTemplateMixin',
 	'dojo/_base/lang',
-	'dojo/dom-construct'], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, domConstruct) {
+	'dojo/dom-construct'
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, domConstruct) {
 
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		templateString: '<div><div style="text-align:center;"><button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:toggleEditing" data-dojo-props="label:\'Start Editing\',class:\'success\'" data-dojo-attach-point="toggleBTN"></button></div><div class="editDijit" style="margin-top:5px;" data-dojo-attach-point="containerNode"></div></div>',
@@ -32,12 +33,14 @@ define([
 				this.toggleBTN.set('label', 'Stop Editing');
 				this.toggleBTN.set('class', 'danger');
 				this.isEdit = true;
+				this.mapClickMode.current = "editor";
 			} else {
 				this.editor.destroyRecursive();
 				this.toggleBTN.set('label', 'Start Editing');
 				this.toggleBTN.set('class', 'success');
 				this.isEdit = false;
 				this.editor = null;
+				this.mapClickMode.current = this.mapClickMode.default;
 			}
 		}
 	});
