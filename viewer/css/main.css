@@ -114,7 +114,7 @@ body, html {
     left: 0;
 }
 
-/*dbootstrap overrides*/
+/* dbootstrap overrides*/
 .dbootstrap .dijitToolbar .dijitButtonContents {
     padding: 1px !important;
 }
@@ -132,3 +132,8 @@ body, html {
     padding: 8px 15px;
     background-color: #F5F5F5;
 }
+
+.dijitSliderBarContainerH{
+    z-index: 0!important;
+}
+/* end dbootstrap overrides*/
