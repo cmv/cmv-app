@@ -98,6 +98,31 @@ define([
 						enableHighAccuracy: true
 					}
 				}
+			},
+			overviewMap: {
+				include: true,
+				options: {
+					attachTo: "bottom-right",
+					color: '#0000CC',
+					height: 100,
+					width: 125,
+					opacity: 0.30,
+					visible:true
+				}
+			},
+			homeButton: {
+				include: true,
+				options: {
+					extent: {
+						xmin: -180,
+						ymin: -85,
+						xmax: 180,
+						ymax: 85,
+						spatialReference: {
+							wkid: 4326
+						}
+					}
+				}
 			}
 		},
 		// widgets for the sidebar. Set include to true or false to load or leave out the widget. Set position to the desired order, starts at 0 on the top.
