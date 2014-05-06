@@ -309,6 +309,25 @@ define([
                 this.locateButton = new LocateButton(options, 'locateButton');
                 this.locateButton.startup();
             }));
+        },
+        overviewMap: function(widgetConfig) {
+            require(['esri/dijit/OverviewMap'], lang.hitch(this, function(OverviewMap) {
+                var options = widgetConfig.options;
+                options.map = this.map;
+                this.overview = new OverviewMap(options);
+                this.overview.startup();
+            }));
+        },
+        homeButton: function(widgetConfig) {
+            require(['esri/dijit/HomeButton'], lang.hitch(this, function(HomeButton) {
+                var options = widgetConfig.options;
+                options.map = this.map;
+                if (options.extent) {
+                    options.extent = new esri.geometry.Extent(options.extent);
+                }
+                this.homeButton = new HomeButton(options, 'homeButton');
+                this.homeButton.startup();
+            }));
         }
     };
 

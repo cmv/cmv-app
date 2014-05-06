@@ -80,6 +80,10 @@ body, html {
     overflow: hidden;
 }
 
+.HomeButton, .LocateButton {
+    margin-bottom: 10px;
+}
+
 .titlePaneBottomFix {
     margin-bottom: -1px;
 }
@@ -89,7 +93,7 @@ body, html {
 }
 
 .sidebarCollapseButton {
-    width: 20px;
+    width: 16px;
     height: 25px;
     position: absolute;
     top: 220px;
@@ -99,7 +103,7 @@ body, html {
     z-index: 40;
     background-color: white;
     border-radius: 0 5px 5px 0;
-    background-position: 2px 4px;
+    background-position: -1px 4px;
     background-repeat: no-repeat;
     cursor: pointer;
 }
