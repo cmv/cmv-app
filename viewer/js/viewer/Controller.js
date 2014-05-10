@@ -138,7 +138,8 @@ define([
             this.identify = new Identify({
                 identifyTolerance: config.identifyTolerance,
                 map: this.map,
-                mapClickMode: this.mapClickMode
+                mapClickMode: this.mapClickMode,
+                controller: this
             });
 
             var widgets = [];

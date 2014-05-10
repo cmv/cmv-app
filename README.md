@@ -28,9 +28,16 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Scalebar
 * Bookmarks
 * Table of contents
-* Identify (for dynamic layers)
+* Home Button
+* Overview Map
+* Identify (for dynamic layers and features layers from a Map Service)
 
 ## Change log:
+* 5/10/2014
+	1. Enhanced the identify functionality to include Feature Layers from a Map Service. Feature Layers from Feature Services are not supported.
+* 5/5/2014
+	1. Added new Overview Map widget.
+	2. Added new Home Button widget.
 * 4/15/2014
 	1. Fixed layer ordering bug.
 	2. Fixed Map click bug with identify and other widgets.
