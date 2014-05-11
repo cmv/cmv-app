@@ -73,8 +73,20 @@ define([
             this.domStore = dom.byId('sidebarStorage');
         },
         initMap: function() {
+            var center, extent;
+            if (config.center) {
+                center = new esri.geometry.Point(config.center);
+            } else if (config.initialExtent) {
+                extent = new esri.geometry.Extent(config.initialExtent);
+            }
             this.map = new esri.Map("map", {
-                extent: new esri.geometry.Extent(config.initialExtent)
+                center: center,
+                extent: extent,
+                minZoom: config.minZoom,
+                maxZoom: config.maxZoom,
+                nav: config.nav || false,
+                sliderStyle: config.sliderStyle || "small",
+                zoom: config.zoom
             });
 
             this.map.on('load', lang.hitch(this, 'initLayers'));
