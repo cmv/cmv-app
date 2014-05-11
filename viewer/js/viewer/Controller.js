@@ -104,20 +104,39 @@ define([
         initLayers: function(evt) {
             this.layers = [];
             array.forEach(config.operationalLayers, function(layer) {
-                var l;
+                var l, options;
                 if (layer.type == 'dynamic') {
-                    l = new esri.layers.ArcGISDynamicMapServiceLayer(layer.url, layer.options);
+                    // control which layers are visible by default (and other image parameters)
+                    options = layer.options;
+                    if (options.imageParameters) {
+                        var im = new esri.layers.ImageParameters();
+                        for (var key in options.imageParameters) {
+                            im[key] = options.imageParameters[key];
+                        }
+                        options.imageParameters = im;
+                    }
+                    l = new esri.layers.ArcGISDynamicMapServiceLayer(layer.url, options);
                 } else if (layer.type == 'tiled') {
                     l = new esri.layers.ArcGISTiledMapServiceLayer(layer.url, layer.options);
                 } else if (layer.type == 'feature') {
                     l = new esri.layers.FeatureLayer(layer.url, layer.options);
-                    var options = {
+                    options = {
                         featureLayer: l
                     };
                     if (layer.editorLayerInfos) {
                         lang.mixin(options, layer.editorLayerInfos);
                     }
                     this.editorLayerInfos.push(options);
+                } else if (layer.type == 'georss') {
+                    l = new esri.layers.GeoRSSLayer(layer.url, layer.options);
+                } else if (layer.type == 'kml') {
+                    l = new esri.layers.KMLLayer(layer.url, layer.options);
+                } else if (layer.type == 'webtiled') {
+                    l = new esri.layers.WebTiledLayer(layer.url, layer.options);
+                } else if (layer.type == 'wms') {
+                    l = new esri.layers.WMSLayer(layer.url, layer.options);
+                } else if (layer.type == 'wmts') {
+                    l = new esri.layers.WMTSLayer(layer.url, layer.options);
                 } else {
                     console.log('Layer type not supported: ', layer.type);
                 }
