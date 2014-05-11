@@ -2,6 +2,10 @@ define([
     'esri/map',
     'esri/dijit/Geocoder',
     'esri/layers/FeatureLayer',
+    'esri/layers/GeoRSSLayer',
+    'esri/layers/KMLLayer',
+    'esri/layers/WMSLayer',
+    'esri/layers/WMTSLayer',
     'esri/layers/osm',
     'dojo/dom',
     'dojo/dom-construct',
@@ -24,7 +28,7 @@ define([
     'esri/tasks/GeometryService',
     'gis/dijit/Identify',
     'dojo/aspect'
-], function(Map, Geocoder, FeatureLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService, Identify, aspect) {
+], function(Map, Geocoder, FeatureLayer, GeoRSS, KML, WMS, WMTS, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService, Identify, aspect) {
 
     var controller = {
         config: config,
