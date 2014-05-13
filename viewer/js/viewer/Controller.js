@@ -2,6 +2,7 @@ define([
     'esri/map',
     'esri/dijit/Geocoder',
     'esri/layers/FeatureLayer',
+    'esri/layers/ArcGISImageServiceLayer',
     'esri/layers/GeoRSSLayer',
     'esri/layers/KMLLayer',
     'esri/layers/WMSLayer',
@@ -28,7 +29,7 @@ define([
     'esri/tasks/GeometryService',
     'gis/dijit/Identify',
     'dojo/aspect'
-], function(Map, Geocoder, FeatureLayer, GeoRSS, KML, WMS, WMTS, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService, Identify, aspect) {
+], function(Map, Geocoder, FeatureLayer, ImageLayer, GeoRSSLayer, KMLLayer, WMSLayer, WMTSLayer, osmLayer, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService, Identify, aspect) {
 
     var controller = {
         config: config,
@@ -131,6 +132,8 @@ define([
                         lang.mixin(options, layer.editorLayerInfos);
                     }
                     this.editorLayerInfos.push(options);
+                } else if (layer.type == 'image') {
+                    l = new esri.layers.ArcGISImageServiceLayer(layer.url, layer.options);
                 } else if (layer.type == 'georss') {
                     l = new esri.layers.GeoRSSLayer(layer.url, layer.options);
                 } else if (layer.type == 'kml') {
