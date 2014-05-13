@@ -107,7 +107,7 @@ define([
 					height: 100,
 					width: 125,
 					opacity: 0.30,
-					visible:true
+					visible: false
 				}
 			},
 			homeButton: {
