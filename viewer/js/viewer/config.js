@@ -65,8 +65,8 @@ define([
 				visible: true,
 			}
 		}, {
-			type: "dynamic",
-			url: "http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer",
+			type: "feature",
+			url: "http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer/0",
 			title: "Damage Assessment",
 			slider: true,
 			noLegend: false,

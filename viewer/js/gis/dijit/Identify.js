@@ -17,12 +17,30 @@ define([
         postCreate: function() {
             this.inherited(arguments);
             this.layers = [];
-            array.forEach(this.map.layerIds, function(layerId) {
-                var layer = this.map.getLayer(layerId);
-                if (layer.declaredClass === 'esri.layers.ArcGISDynamicMapServiceLayer') {
+            array.forEach(this.controller.layers, function(lyr) {
+                var lyrId = lyr.id;
+                var layer = this.map.getLayer(lyrId);
+                if ((layer.declaredClass === 'esri.layers.ArcGISDynamicMapServiceLayer') || (layer.declaredClass === 'esri.layers.FeatureLayer')) {
+                    var url = layer.url;
+
+                    // If a Feature Layer from a Map Service
+                    // we get the base url for the map service by removing the layer ID.
+                    // Feature Layers from Feature Services are ignored
+                    if (layer.declaredClass === 'esri.layers.FeatureLayer') {
+                        // Skip if layer is from a Feature Service
+                        if (layer.capabilities.toLowerCase().indexOf('data') < 0) {
+                            return;
+                        }
+                        layerId = layer.layerId;
+                        var lastSL = url.lastIndexOf('/' + layerId);
+                        if (lastSL > 0) {
+                            url = url.substring(0, lastSL);
+                        }
+                    }
+
                     this.layers.push({
                         ref: layer,
-                        identifyTask: new IdentifyTask(layer.url)
+                        identifyTask: new IdentifyTask(url)
                     });
                 }
             }, this);
@@ -51,11 +69,17 @@ define([
             var identifies = [];
             var identifiedlayers = [];
             array.forEach(this.layers, function(layer) {
-                if (layer.ref.visible && layer.ref.visibleLayers.length !== 0 && layer.ref.visibleLayers[0] !== -1) {
+                if (layer.ref.visible && (!isNaN(layer.ref.layerId) || (layer.ref.visibleLayers && layer.ref.visibleLayers.length !== 0 && layer.ref.visibleLayers[0] !== -1))) {
                     var params = lang.clone(identifyParams);
-                    params.layerIds = layer.ref.visibleLayers;
-                    identifies.push(layer.identifyTask.execute(params));
-                    identifiedlayers.push(layer);
+                    if (!isNaN(layer.ref.layerId)) {
+                        params.layerIds = [layer.ref.layerId];
+                    } else {
+                        params.layerIds = layer.ref.visibleLayers;
+                    }
+                    if (params.layerIds && params.layerIds.length > 0) {
+                        identifies.push(layer.identifyTask.execute(params));
+                        identifiedlayers.push(layer);
+                    }
                 }
             });
 
