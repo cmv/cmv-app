@@ -2,12 +2,12 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     tag: {
-      banner: "/*  <%= pkg.name %>\n" +
-        " *  @version <%= pkg.version %>\n" +
-        " *  @author <%= pkg.author %>\n" +
-        " *  Project: <%= pkg.homepage %>\n" +
-        " *  Copyright <%= pkg.year %>. <%= pkg.license %> licensed.\n" +
-        " */\n"
+      banner: '/*  <%= pkg.name %>\n' +
+        ' *  @version <%= pkg.version %>\n' +
+        ' *  @author <%= pkg.author %>\n' +
+        ' *  Project: <%= pkg.homepage %>\n' +
+        ' *  Copyright <%= pkg.year %>. <%= pkg.license %> licensed.\n' +
+        ' */\n'
     },
     copy: {
       build: {
@@ -15,7 +15,7 @@ module.exports = function(grunt) {
         src: ['**'],
         dest: 'dist',
         expand: true
-      },
+      }
     },
     clean: {
       build: {
@@ -38,6 +38,15 @@ module.exports = function(grunt) {
         dest: 'dist'
       }
     },
+    jshint: {
+      build: {
+        src: ['viewer/**/*.js', '!**/dbootstrap/**', '!**/TOC.js'],
+        options: {
+          jshintrc: '.jshintrc',
+          reporter: require('jshint-stylish')
+        }
+      }
+    },
     uglify: {
       build: {
         files: [{
@@ -48,14 +57,14 @@ module.exports = function(grunt) {
           ext: '.js'
         }],
         options: {
-          banner: "<%= tag.banner %>"
+          banner: '<%= tag.banner %>'
         }
       }
     },
     watch: {
-      copy: {
+      dev: {
         files: ['viewer/**'],
-        tasks: ['build']
+        tasks: ['jshint']
       }
     },
     connect: {
@@ -75,13 +84,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-newer');
 
   // define the tasks
-  grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a server.', ['build', 'connect', 'watch']);
+  grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a server.', ['build']);
   grunt.registerTask('build', 'Compiles all of the assets and copies the files to the build directory.', ['clean', 'copy', 'stylesheets', 'scripts']);
-  grunt.registerTask('scripts', 'Compiles the JavaScript files.', ['uglify']);
+  grunt.registerTask('scripts', 'Compiles the JavaScript files.', ['jshint', 'uglify']);
   grunt.registerTask('stylesheets', 'Compiles the stylesheets.', ['autoprefixer', 'cssmin']);
 };

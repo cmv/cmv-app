@@ -20,7 +20,7 @@ define([
 			this.directions.startup();
 
 			// capture map right click position
-			this.map.on("MouseDown", lang.hitch(this, function(evt) {
+			this.map.on('MouseDown', lang.hitch(this, function(evt) {
 				this.mapRightClickPoint = evt.mapPoint;
 			}));
 
@@ -30,23 +30,20 @@ define([
 				selector: '.layersDiv' // restrict to map only
 			});
 			this.menu.addChild(new MenuItem({
-				label: "Directions from here",
+				label: 'Directions from here',
 				onClick: lang.hitch(this, 'directionsFrom')
 			}));
 			this.menu.addChild(new MenuItem({
-				label: "Directions to here",
+				label: 'Directions to here',
 				onClick: lang.hitch(this, 'directionsTo')
 			}));
 			this.menu.addChild(new MenuSeparator());
 			this.menu.addChild(new MenuItem({
-				label: "Add stop",
+				label: 'Add stop',
 				onClick: lang.hitch(this, 'addStop')
 			}));
 			this.menu.startup();
 		},
-		// clearMap: function() {
-		// 	this.directions.clearDirections();
-		// },
 		clearStops: function() {
 			this.directions.reset();
 		},

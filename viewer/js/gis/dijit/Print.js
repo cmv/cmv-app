@@ -23,8 +23,11 @@ define([
     'dojo/text!./Print/templates/Print.html',
     'dojo/text!./Print/templates/PrintResult.html',
     'dojo/aspect',
+    'esri/tasks/PrintTemplate',
+    'esri/tasks/PrintParameters',
+    'esri/request',
     'xstyle/css!./Print/css/Print.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, Style, domConstruct, domClass, printTemplate, printResultTemplate, aspect, css) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, Style, domConstruct, domClass, printTemplate, printResultTemplate, aspect, PrintTemplate, PrintParameters, esriRequest, css) {
 
     // Main print dijit
     var PrintDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -38,24 +41,24 @@ define([
         defaultTitle: null,
         defaultFormat: null,
         defaultLayout: null,
-        baseClass: "gis_PrintDijit",
-        pdfIcon: require.toUrl("gis/dijit/Print/images/pdf.png"),
-        imageIcon: require.toUrl("gis/dijit/Print/images/image.png"),
+        baseClass: 'gis_PrintDijit',
+        pdfIcon: require.toUrl('gis/dijit/Print/images/pdf.png'),
+        imageIcon: require.toUrl('gis/dijit/Print/images/image.png'),
         printTaskURL: null,
         printTask: null,
         postCreate: function() {
             this.inherited(arguments);
-            this.printTask = new esri.tasks.PrintTask(this.printTaskURL);
-            this.printparams = new esri.tasks.PrintParameters();
+            this.printTask = new PrintTask(this.printTaskURL);
+            this.printparams = new PrintParameters();
             this.printparams.map = this.map;
             this.printparams.outSpatialReference = this.map.spatialReference;
 
-            esri.request({
+            esriRequest({
                 url: this.printTaskURL,
                 content: {
-                    f: "json"
+                    f: 'json'
                 },
-                handleAs: "json",
+                handleAs: 'json',
                 callbackParamName: 'callback',
                 load: lang.hitch(this, '_handlePrintInfo'),
                 error: lang.hitch(this, '_handleError')
@@ -65,13 +68,13 @@ define([
         operationalLayersInspector: function(opLayers) {
             console.log(opLayers);
             array.forEach(opLayers, function(layer) {
-                if (layer.id == "Measurement_graphicslayer") {
+                if (layer.id == 'Measurement_graphicslayer') {
                     array.forEach(layer.featureCollection.layers, function(fcLayer) {
                         array.forEach(fcLayer.featureSet.features, function(feature) {
                             delete feature.attributes;
-                            feature.symbol.font.family = "Courier";
+                            feature.symbol.font.family = 'Courier';
                             //feature.symbol.font.variant = esri.symbol.Font.VARIANT_NORMAL;
-                            //feature.symbol.font.size = "32pt";
+                            //feature.symbol.font.size = '32pt';
                         });
                     });
                 }
@@ -83,10 +86,10 @@ define([
         },
         _handlePrintInfo: function(data) {
             var Layout_Template = array.filter(data.parameters, function(param, idx) {
-                return param.name === "Layout_Template";
+                return param.name === 'Layout_Template';
             });
             if (Layout_Template.length === 0) {
-                console.log("print service parameters name for templates must be \"Layout_Template\"");
+                console.log('print service parameters name for templates must be \'Layout_Template\'');
                 return;
             }
             var layoutItems = array.map(Layout_Template[0].choiceList, function(item, i) {
@@ -109,10 +112,10 @@ define([
             }
 
             var Format = array.filter(data.parameters, function(param, idx) {
-                return param.name === "Format";
+                return param.name === 'Format';
             });
             if (Format.length === 0) {
-                console.log("print service parameters name for format must be \"Format\"");
+                console.log('print service parameters name for format must be \'Format\'');
                 return;
             }
             var formatItems = array.map(Format[0].choiceList, function(item, i) {
@@ -145,10 +148,12 @@ define([
                 var mapOnlyForm = this.mapOnlyFormDijit.get('value');
                 lang.mixin(mapOnlyForm, mapQualityForm);
 
-                var template = new esri.tasks.PrintTemplate();
+                var template = new PrintTemplate();
                 template.format = form.format;
                 template.layout = form.layout;
-                template.preserveScale = eval(form.preserveScale);
+                /*jslint evil: true */
+                template.preserveScale = eval(form.preserveScale); //turns a string 'true' into true
+                /*jslint evil: false */
                 template.label = form.title;
                 template.exportOptions = mapOnlyForm;
                 template.layoutOptions = {
@@ -161,9 +166,9 @@ define([
                 this.printparams.template = template;
                 var fileHandel = this.printTask.execute(this.printparams);
 
-                var result = new printResultDijit({
+                var result = new PrintResultDijit({
                     count: this.count.toString(),
-                    icon: (form.format === "PDF") ? this.pdfIcon : this.imageIcon,
+                    icon: (form.format === 'PDF') ? this.pdfIcon : this.imageIcon,
                     docName: form.title,
                     title: form.format + ', ' + form.layout,
                     fileHandle: fileHandel
@@ -183,7 +188,7 @@ define([
     });
 
     // Print result dijit
-    var printResultDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    var PrintResultDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
         templateString: printResultTemplate,
         url: null,
@@ -195,7 +200,7 @@ define([
             if (data.url) {
                 this.url = data.url;
                 this.nameNode.innerHTML = '<span class="bold">' + this.docName + '</span>';
-                domClass.add(this.resultNode, "printResultHover");
+                domClass.add(this.resultNode, 'printResultHover');
             } else {
                 this._onPrintError('Error, try again');
             }
@@ -203,7 +208,7 @@ define([
         _onPrintError: function(err) {
             console.log(err);
             this.nameNode.innerHTML = '<span class="bold">Error, try again</span>';
-            domClass.add(this.resultNode, "printResultError");
+            domClass.add(this.resultNode, 'printResultError');
         },
         _openPrint: function() {
             if (this.url !== null) {

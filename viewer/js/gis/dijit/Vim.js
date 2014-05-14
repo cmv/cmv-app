@@ -27,7 +27,7 @@ define([
 			} else {
 				idJson = cookie(this.idStateName);
 			}
-			if (idJson && idJson != "null" && idJson.length > 4) {
+			if (idJson && idJson != 'null' && idJson.length > 4) {
 				idObject = JSON.parse(idJson);
 				kernel.id.initialize(idObject);
 			}
@@ -47,7 +47,7 @@ define([
 		},
 		_supportsLocalStorage: function() {
 			try {
-				return "localStorage" in window && window["localStorage"] !== null;
+				return 'localStorage' in window && window.localStorage !== null;
 			} catch (e) {
 				return false;
 			}

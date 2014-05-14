@@ -18,19 +18,19 @@ define({
 		2: {
 			title: 'Police Station',
 			fieldInfos: [{
-				fieldName: "Name",
+				fieldName: 'Name',
 				visible: true
 			}, {
-				fieldName: "Address",
+				fieldName: 'Address',
 				visible: true
 			}, {
-				fieldName: "Type",
+				fieldName: 'Type',
 				visible: true
 			}, {
-				fieldName: "Police Function",
+				fieldName: 'Police Function',
 				visible: true
 			}, {
-				fieldName: "Last Update Date",
+				fieldName: 'Last Update Date',
 				visible: true
 			}]
 		},
@@ -38,12 +38,12 @@ define({
 			title: 'Traffic Camera',
 			description: '{Description} lasted updated: {Last Update Date}',
 			mediaInfos: [{
-				title: "",
-				caption: "",
-				type: "image",
+				title: '',
+				caption: '',
+				type: 'image',
 				value: {
-					sourceURL: "{Location URL}",
-					linkURL: "{Location URL}"
+					sourceURL: '{Location URL}',
+					linkURL: '{Location URL}'
 				}
 			}]
 		}

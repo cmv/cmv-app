@@ -48,8 +48,10 @@
         </script>
         <script src="//js.arcgis.com/3.9"></script>
         <script type="text/javascript">
+            var app; //dev only
             require(['dbootstrap','viewer/Controller'], function(dbootstrap, Controller){
                 Controller.startup();
+                app = Controller; //dev only
             });
         </script>
     </body>

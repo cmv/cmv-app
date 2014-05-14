@@ -14,6 +14,7 @@
     "grunt-contrib-copy": "0.4.x",
     "grunt-contrib-cssmin": "0.6.x",
     "grunt-contrib-jshint": "0.6.x",
+    "jshint-stylish": "0.2.x",
     "grunt-contrib-uglify": "0.2.x",
     "grunt-contrib-watch": "0.5.x",
     "grunt-newer": "^0.7.0"

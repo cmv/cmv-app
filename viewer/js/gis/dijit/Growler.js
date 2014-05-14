@@ -23,16 +23,17 @@ define([
             lang.mixin(props, {
                 _container: this.containerNode
             });
-            new Growl(props);
+            var g =new Growl(props);
+            g.startup();
         }
     });
 
     // the growl itself
     var Growl = declare([_WidgetBase, _TemplatedMixin], {
         templateString: '<div class="growl ${level}" data-dojo-attach-event="onmouseover:hoverOver,onmouseout:hoverOut,onclick:close"><h3>${title}</h3>${message}</div>',
-        title: "Title",
-        message: "Message",
-        level: "default",
+        title: 'Title',
+        message: 'Message',
+        level: 'default',
         timeout: 10000,
         opacity: 1.0,
         _container: null,
@@ -47,7 +48,7 @@ define([
                 }, 250);
                 this.setTimeout();
             } else {
-                console.log("Growl container not found/specified.");
+                console.log('Growl container not found/specified.');
             }
         },
         setTimeout: function() {

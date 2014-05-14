@@ -18,14 +18,14 @@ define([
 				wkid: 102100
 			}
 		},
-		name: "USA"
+		name: 'USA'
 	}];
 
 	return declare([_WidgetBase], {
 		postCreate: function() {
 			this.inherited(arguments);
 
-			this.bookmarkItems = cookie("bookmarkItems");
+			this.bookmarkItems = cookie('bookmarkItems');
 			if (this.bookmarkItems === undefined) {
 				this.bookmarkItems = [];
 			} else {
@@ -38,8 +38,8 @@ define([
 				bookmarks: lang.mixin(this.bookmarkItems, bookmarks)
 			}, this.domNode);
 
-			this.connect(this.bookmarks, "onEdit", "setBookmarks");
-			this.connect(this.bookmarks, "onRemove", "setBookmarks");
+			this.connect(this.bookmarks, 'onEdit', 'setBookmarks');
+			this.connect(this.bookmarks, 'onRemove', 'setBookmarks');
 		},
 		setBookmarks: function() {
 			cookie('bookmarkItems', json.stringify(this.bookmarks.toJson()), {
