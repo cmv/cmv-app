@@ -10,7 +10,7 @@
     <body class="dbootstrap">
         <div class="appHeader">
             <div class="headerLogo">
-                <img src="images/esri-logo.png"/>
+                <img alt="logo" src="images/esri-logo.png"/>
             </div>
             <div class="headerTitle">
                 Configurable Map Viewer
@@ -35,18 +35,18 @@
             var dojoConfig = {
                 async: true,
                 packages: [{
-                    name: "viewer",
-                    location: location.pathname.replace(/[^\/]+$/, '') + "js/viewer"
+                    name: 'viewer',
+                    location: location.pathname.replace(/[^\/]+$/, '') + 'js/viewer'
                 },{
-                    name: "gis",
-                    location: location.pathname.replace(/[^\/]+$/, '') + "js/gis"
+                    name: 'gis',
+                    location: location.pathname.replace(/[^\/]+$/, '') + 'js/gis'
                 },{
-                    name: "dbootstrap",
-                    location: location.pathname.replace(/[^\/]+$/, '') + "js/dbootstrap"
+                    name: 'dbootstrap',
+                    location: location.pathname.replace(/[^\/]+$/, '') + 'js/dbootstrap'
                 }]
             };
         </script>
-        <script src="//js.arcgis.com/3.9"></script>
+        <script type="text/javascript" src="//js.arcgis.com/3.9"></script>
         <script type="text/javascript">
             var app; //dev only
             require(['dbootstrap','viewer/Controller'], function(dbootstrap, Controller){
