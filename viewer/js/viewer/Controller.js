@@ -1,10 +1,6 @@
 define([
     'esri/map',
     'esri/dijit/Geocoder',
-    'esri/layers/FeatureLayer',
-    'esri/layers/ArcGISDynamicMapServiceLayer',
-    'esri/layers/ArcGISTiledMapServiceLayer',
-    'esri/layers/osm',
     'dojo/dom',
     'dojo/dom-construct',
     'dojo/dom-style',
@@ -28,7 +24,7 @@ define([
     'dojo/aspect',
     'esri/config',
     'esri/geometry/Extent'
-], function(Map, Geocoder, FeatureLayer, ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer, osm, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService, Identify, aspect, esriConfig, Extent) {
+], function(Map, Geocoder, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService, Identify, aspect, esriConfig, Extent) {
 
     var controller = {
         config: config,
@@ -94,48 +90,63 @@ define([
         },
         initLayers: function(evt) {
             this.layers = [];
+            var layerTypes = {
+                'csv': 'CSV', // untested
+                'dynamic': 'ArcGISDynamicMapService',
+                'feature': 'Feature',
+                'georss': 'GeoRSS',
+                'image': 'ArcGISImageService',
+                'kml': 'KML',
+                'label': 'Label', //untested
+                'mapimage': 'MapImage', //untested
+                'osm': 'OpenStreetMap',
+                'tiled': 'ArcGISTiledMapService',
+                'wms': 'WMS',
+                'wmts': 'WMTS' //untested
+            };
+            // loading all the required modules first ensures the layer order is maintained
+            var modules = [];
             array.forEach(config.operationalLayers, function(layer) {
-                var l;
-                if (layer.type == 'dynamic') {
-                    l = new ArcGISDynamicMapServiceLayer(layer.url, layer.options);
-                } else if (layer.type == 'tiled') {
-                    l = new ArcGISTiledMapServiceLayer(layer.url, layer.options);
-                } else if (layer.type == 'feature') {
-                    l = new FeatureLayer(layer.url, layer.options);
-                    var options = {
-                        featureLayer: l
-                    };
-                    if (layer.editorLayerInfos) {
-                        lang.mixin(options, layer.editorLayerInfos);
-                    }
-                    this.editorLayerInfos.push(options);
+                var type = layerTypes[layer.type];
+                if (type) {
+                    modules.push('esri/layers/' + type + 'Layer');
                 } else {
                     console.log('Layer type not supported: ', layer.type);
                 }
-                this.layers.unshift(l); // unshift instead to keep layer ordering on map intact
-                this.legendLayerInfos.unshift({
-                    layer: l,
-                    title: layer.title || null
-                });
-                this.tocLayerInfos.push({ //push because Legend and TOC need the layers in the opposite order
-                    layer: l,
-                    title: layer.title || null,
-                    slider: layer.slider || true,
-                    noLegend: layer.noLegend || false,
-                    collapsed: layer.collapsed || false
-                });
             }, this);
-            this.map.addLayers(this.layers);
-
-            this.growler = new Growler({}, 'growlerDijit');
-            this.growler.startup();
-
-            this.geocoder = new Geocoder({
-                map: this.map,
-                autoComplete: true
-            }, 'geocodeDijit');
-            this.geocoder.startup();
-
+            require(modules, lang.hitch(this, function() {
+                array.forEach(config.operationalLayers, function(layer) {
+                    var type = layerTypes[layer.type];
+                    if (type) {
+                        require(['esri/layers/' + type + 'Layer'], lang.hitch(this, 'initLayer', layer));
+                    }
+                }, this);
+                this.map.addLayers(this.layers);
+            }));
+        },
+        initLayer: function (layer, Layer) {
+            var l = new Layer(layer.url, layer.options);
+            this.layers.unshift(l); // unshift instead to keep layer ordering on map intact
+            this.legendLayerInfos.unshift({
+                layer: l,
+                title: layer.title || null
+            });
+            this.tocLayerInfos.push({ //push because Legend and TOC need the layers in the opposite order
+                layer: l,
+                title: layer.title || null,
+                slider: layer.slider || true,
+                noLegend: layer.noLegend || false,
+                collapsed: layer.collapsed || false
+            });
+            if (layer.type === 'feature') {
+                var options = {
+                    featureLayer: l
+                };
+                if (layer.editorLayerInfos) {
+                    lang.mixin(options, layer.editorLayerInfos);
+                }
+                this.editorLayerInfos.push(options);
+            }
         },
         initWidgets: function(evt) {
             this.identify = new Identify({
