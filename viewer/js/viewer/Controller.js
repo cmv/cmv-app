@@ -91,18 +91,18 @@ define([
         initLayers: function(evt) {
             this.layers = [];
             var layerTypes = {
-                'csv': 'CSV', // untested
-                'dynamic': 'ArcGISDynamicMapService',
-                'feature': 'Feature',
-                'georss': 'GeoRSS',
-                'image': 'ArcGISImageService',
-                'kml': 'KML',
-                'label': 'Label', //untested
-                'mapimage': 'MapImage', //untested
-                'osm': 'OpenStreetMap',
-                'tiled': 'ArcGISTiledMapService',
-                'wms': 'WMS',
-                'wmts': 'WMTS' //untested
+                csv: 'CSV', // untested
+                dynamic: 'ArcGISDynamicMapService',
+                feature: 'Feature',
+                georss: 'GeoRSS',
+                image: 'ArcGISImageService',
+                kml: 'KML',
+                label: 'Label', //untested
+                mapimage: 'MapImage', //untested
+                osm: 'OpenStreetMap',
+                tiled: 'ArcGISTiledMapService',
+                wms: 'WMS',
+                wmts: 'WMTS' //untested
             };
             // loading all the required modules first ensures the layer order is maintained
             var modules = [];
@@ -124,9 +124,9 @@ define([
                 this.map.addLayers(this.layers);
             }));
         },
-        initLayer: function (layer, Layer) {
+        initLayer: function(layer, Layer) {
             var l = new Layer(layer.url, layer.options);
-            this.layers.unshift(l); // unshift instead to keep layer ordering on map intact
+            this.layers.unshift(l); // unshift instead of oush to keep layer ordering on map intact
             this.legendLayerInfos.unshift({
                 layer: l,
                 title: layer.title || null
