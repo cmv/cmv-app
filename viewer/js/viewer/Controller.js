@@ -23,8 +23,9 @@ define([
     'gis/dijit/Identify',
     'dojo/aspect',
     'esri/config',
-    'esri/geometry/Extent'
-], function(Map, Geocoder, dom, domConstruct, Style, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService, Identify, aspect, esriConfig, Extent) {
+    'esri/geometry/Extent',
+    'gis/dijit/FloatingWidget'
+], function(Map, Geocoder, dom, domConstruct, domStyle, domClass, on, parser, array, BorderContainer, ContentPane, TitlePane, win, lang, Growler, Help, Basemaps, mapOverlay, config, IdentityManager, GeometryService, Identify, aspect, esriConfig, Extent, FloatingWidget) {
 
     var controller = {
         config: config,
@@ -68,7 +69,7 @@ define([
             on(dom.byId('helpA'), 'click', lang.hitch(this, 'showHelp'));
             this.sideBarToggle = dom.byId('sidebarCollapseButton');
             on(this.sideBarToggle, 'click', lang.hitch(this, 'toggleSidebar'));
-            Style.set(this.sideBarToggle, 'display', 'block');
+            domStyle.set(this.sideBarToggle, 'display', 'block');
             this.domStore = dom.byId('sidebarStorage');
         },
         initMap: function() {
@@ -195,13 +196,20 @@ define([
                 domClass.add(this.sideBarToggle, 'close');
             }
         },
-        _createTitlePane: function(title, position, open) {
+        _createTitlePaneWidget: function(title, position, open) {
             var tp = new TitlePane({
                 title: title,
                 open: open
             }).placeAt(this.sidebar, position);
             tp.startup();
             return tp;
+        },
+        _createFloatingWidget: function(title) {
+            var fw = new FloatingWidget({
+                title: title
+            });
+            fw.startup();
+            return fw;
         },
         showHelp: function() {
             if (this.help) {
@@ -225,7 +233,7 @@ define([
             }));
         },
         legend: function(widgetConfig, position) {
-            var legendTP = this._createTitlePane(widgetConfig.title, position, widgetConfig.open);
+            var legendTP = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open);
             require(['esri/dijit/Legend'], lang.hitch(this, function(Legend) {
                 this.legend = new Legend({
                     map: this.map,
@@ -234,7 +242,7 @@ define([
             }));
         },
         TOC: function(widgetConfig, position) {
-            var TOCTP = this._createTitlePane(widgetConfig.title, position, widgetConfig.open);
+            var TOCTP = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open);
             require(['gis/dijit/TOC'], lang.hitch(this, function(TOC) {
                 this.toc = new TOC({
                     map: this.map,
@@ -244,7 +252,7 @@ define([
             }));
         },
         bookmarks: function(widgetConfig, position) {
-            var bookmarksTP = this._createTitlePane(widgetConfig.title, position, widgetConfig.open);
+            var bookmarksTP = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open);
             require(['gis/dijit/Bookmarks'], lang.hitch(this, function(Bookmarks) {
                 this.bookmarks = new Bookmarks({
                     map: this.map,
@@ -254,7 +262,7 @@ define([
             }));
         },
         draw: function(widgetConfig, position) {
-            var drawTP = this._createTitlePane(widgetConfig.title, position, widgetConfig.open);
+            var drawTP = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open);
             require(['gis/dijit/Draw'], lang.hitch(this, function(Draw) {
                 this.drawWidget = new Draw({
                     map: this.map,
@@ -264,7 +272,7 @@ define([
             }));
         },
         measure: function(widgetConfig, position) {
-            var measureTP = this._createTitlePane(widgetConfig.title, position, widgetConfig.open);
+            var measureTP = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open);
             require(['esri/dijit/Measurement'], lang.hitch(this, function(Measurement) {
                 this.measure = new Measurement({
                     map: this.map,
@@ -280,7 +288,7 @@ define([
             }));
         },
         print: function(widgetConfig, position) {
-            var printTP = this._createTitlePane(widgetConfig.title, position, widgetConfig.open);
+            var printTP = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open);
             require(['gis/dijit/Print'], lang.hitch(this, function(Print) {
                 this.printWidget = new Print({
                     map: this.map,
@@ -295,7 +303,7 @@ define([
             }));
         },
         directions: function(widgetConfig, position) {
-            var directionsTP = this._createTitlePane(widgetConfig.title, position, widgetConfig.open);
+            var directionsTP = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open);
             require(['gis/dijit/Directions'], lang.hitch(this, function(Directions) {
                 this.directionsWidget = new Directions({
                     map: this.map,
@@ -306,7 +314,7 @@ define([
             }));
         },
         editor: function(widgetConfig, position) {
-            var editorTP = this._createTitlePane(widgetConfig.title, position, widgetConfig.open);
+            var editorTP = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open);
             require(['gis/dijit/Editor'], lang.hitch(this, function(Editor) {
                 this.editor = new Editor({
                     map: this.map,
@@ -343,6 +351,17 @@ define([
                 }
                 this.homeButton = new HomeButton(options, 'homeButton');
                 this.homeButton.startup();
+            }));
+        },
+        streetview: function(widgetConfig, position) {
+            this.streetviewFW = this._createFloatingWidget(widgetConfig.title, widgetConfig.open);
+            require(['gis/dijit/StreetView'], lang.hitch(this, function(StreetView) {
+                this.streetview = new StreetView({
+                    map: this.map,
+                    mapClickMode: this.mapClickMode,
+                    openOnStartup: widgetConfig.openOnStartup
+                }, domConstruct.create('div')).placeAt(this.streetviewFW.containerNode);
+                this.streetview.startup();
             }));
         }
     };

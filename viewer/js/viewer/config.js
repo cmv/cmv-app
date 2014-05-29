@@ -203,6 +203,12 @@ define([
 						mergeVisible: true
 					}
 				}
+			},
+			streetview: {
+				include: true,
+				title: 'Google Street View',
+				openOnStartup: true,
+				options: {}
 			}
 		}
 	};

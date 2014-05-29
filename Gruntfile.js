@@ -57,7 +57,11 @@ module.exports = function(grunt) {
           ext: '.js'
         }],
         options: {
-          banner: '<%= tag.banner %>'
+          banner: '<%= tag.banner %>',
+          sourceMap: true,
+          sourceMapName: function(filePath) {
+            return filePath + '.map';
+          }
         }
       }
     },

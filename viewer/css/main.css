@@ -118,6 +118,10 @@ body, html {
     left: 0;
 }
 
+.floatingWidget_underlay {
+    display:none
+}
+
 /* dbootstrap overrides*/
 .dbootstrap .dijitToolbar .dijitButtonContents {
     padding: 1px !important;
