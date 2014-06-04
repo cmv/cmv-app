@@ -82,10 +82,12 @@ define([
 
             this.basemaps = new Basemaps({
                 map: this.map,
-                mode: config.basemapMode,
+                mode: config.baseMap.basemapMode,
                 title: 'Basemaps',
-                mapStartBasemap: config.mapStartBasemap,
-                basemapsToShow: config.basemapsToShow
+                mapStartBasemap: config.baseMap.mapStartBasemap,
+                basemapsToShow: config.baseMap.basemapsToShow,
+                customBasemaps: config.baseMap.customBasemaps,
+                agolBasemaps: config.baseMap.agolBasemaps
             }, 'basemapsDijit');
             this.basemaps.startup();
         },
