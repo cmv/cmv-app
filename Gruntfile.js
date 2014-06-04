@@ -94,7 +94,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-newer');
 
   // define the tasks
-  grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a server.', ['build']);
+  grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a server.', ['build', 'connect', 'watch']);
   grunt.registerTask('build', 'Compiles all of the assets and copies the files to the build directory.', ['clean', 'copy', 'stylesheets', 'scripts']);
   grunt.registerTask('scripts', 'Compiles the JavaScript files.', ['jshint', 'uglify']);
   grunt.registerTask('stylesheets', 'Compiles the stylesheets.', ['autoprefixer', 'cssmin']);

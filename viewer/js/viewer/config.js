@@ -1,7 +1,9 @@
 define([
+	'esri/dijit/Basemap',
+	'esri/dijit/BasemapLayer',
 	'esri/InfoTemplate',
 	'esri/units'
-], function(InfoTemplate, units) {
+], function(Basemap, BasemapLayer, InfoTemplate, units) {
 	return {
 		// url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
 		proxy: {
@@ -14,16 +16,95 @@ define([
 		},
 		//default mapClick mode, mapClickMode lets widgets know what mode the map is in to avoid multipult map click actions from taking place (ie identify while drawing).
 		defaultMapClickMode: 'identify',
-		// basemapMode: must be either 'agol' or 'custom'
-		//basemapMode: 'custom',
-		basemapMode: 'agol',
-		// defaultBasemap: valid options for 'agol' mode: 'streets', 'satellite', 'hybrid', 'topo', 'gray', 'oceans', 'national-geographic', 'osm'
-		//mapStartBasemap: 'lightGray',
-		mapStartBasemap: 'streets',
-		//basemapsToShow: basemaps to show in menu. If 'agol' mode use valid values from above, if 'custom' mode then define in basmaps dijit and refrenc by name here
-		//basemapsToShow: ['street', 'satellite', 'hybrid', 'satTrans', 'lightGray'],
-		basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'gray', 'oceans', 'national-geographic', 'osm'],
-		// initialExtent: extent the the map starts at. Helper tool: http://www.arcgis.com/home/item.html?id=dd1091f33a3e4ecb8cd77adf3e585c8a
+		baseMap: {
+			// basemapMode: must be either 'agol' or 'custom'
+			//basemapMode: 'custom',
+			basemapMode: 'agol',
+			// defaultBasemap: valid options for 'agol' mode: 'streets', 'satellite', 'hybrid', 'topo', 'gray', 'oceans', 'national-geographic', 'osm'
+			//mapStartBasemap: 'lightGray',
+			mapStartBasemap: 'streets',
+			//basemapsToShow: basemaps to show in menu. If 'agol' mode use valid values from above, if 'custom' mode then define in basmaps dijit and refrenc by name here
+			//basemapsToShow: ['street', 'satellite', 'hybrid', 'satTrans', 'lightGray'],
+			basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'gray', 'oceans', 'national-geographic', 'osm'],
+			// initialExtent: extent the the map starts at. Helper tool: http://www.arcgis.com/home/item.html?id=dd1091f33a3e4ecb8cd77adf3e585c8a
+			// define all valid custom basemaps here. Object of Basemap objects. Key name and basemap id must match. (pass desired basmaps in constructor in custom mode)
+			customBasemaps: {
+				street: {
+					title: 'Streets',
+					basemap: new Basemap({
+						id: 'street',
+						layers: [new BasemapLayer({
+							url: 'http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
+						})]
+					})
+				},
+				satellite: {
+					title: 'Satellite',
+					basemap: new Basemap({
+						id: 'satellite',
+						layers: [new BasemapLayer({
+							url: 'http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+						})]
+					})
+				},
+				hybrid: {
+					title: 'Hybrid',
+					basemap: new Basemap({
+						id: 'hybrid',
+						layers: [new BasemapLayer({
+							url: 'http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+						}), new BasemapLayer({
+							url: 'http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer',
+							isReference: true,
+							displayLevels: [0, 1, 2, 3, 4, 5, 6, 7]
+						}), new BasemapLayer({
+							url: 'http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer',
+							isReference: true,
+							displayLevels: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+						})]
+					})
+				},
+				lightGray: {
+					title: 'Light Gray Canvas',
+					basemap: new Basemap({
+						id: 'lightGray',
+						layers: [new BasemapLayer({
+							url: 'http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer'
+						}), new BasemapLayer({
+							url: 'http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer',
+							isReference: true
+						})]
+					})
+				}
+			},
+			// all valid arcgisonline basemaps that the map excepts, only change title if desired. (pass desired basmaps in constructor in agol mode)
+			agolBasemaps: {
+				streets: {
+					title: 'Streets'
+				},
+				satellite: {
+					title: 'Satellite'
+				},
+				hybrid: {
+					title: 'Hybrid'
+				},
+				topo: {
+					title: 'Topo'
+				},
+				gray: {
+					title: 'Gray'
+				},
+				oceans: {
+					title: 'Oceans'
+				},
+				'national-geographic': {
+					title: 'Nat Geo'
+				},
+				osm: {
+					title: 'Open Street Map'
+				}
+			}
+		},
 		initialExtent: {
 			xmin: -15489130.48708616,
 			ymin: 398794.4860580916,
