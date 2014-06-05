@@ -130,30 +130,35 @@ define([
 		sidebarWidgets: {
 			legend: {
 				include: true,
+				id: 'sidebar_Legend',
 				title: 'Legend',
 				open: false,
 				position: 0
 			},
 			TOC: {
 				include: true,
+				id: 'sidebar_TOC',
 				title: 'Layers',
 				open: false,
 				position: 1
 			},
 			bookmarks: {
 				include: true,
+				id: 'sidebar_Bookmarks',
 				title: 'Bookmarks',
 				open: false,
 				position: 2
 			},
 			draw: {
 				include: true,
+				id: 'sidebar_Draw',
 				title: 'Draw',
 				open: false,
 				position: 3
 			},
 			measure: {
 				include: true,
+				id: 'sidebar_Measure',
 				title: 'Measurement',
 				open: false,
 				position: 4,
@@ -162,6 +167,7 @@ define([
 			},
 			print: {
 				include: true,
+				id: 'sidebar_Print',
 				title: 'Print',
 				open: false,
 				position: 5,
@@ -174,6 +180,7 @@ define([
 			},
 			directions: {
 				include: true,
+				id: 'sidebar_Directions',
 				title: 'Directions',
 				open: false,
 				position: 6,
@@ -187,6 +194,7 @@ define([
 			},
 			editor: {
 				include: true,
+				id: 'sidebar_Editor',
 				title: 'Editor',
 				open: false,
 				position: 7,
@@ -206,6 +214,7 @@ define([
 			},
 			streetview: {
 				include: true,
+				id: 'floating_StreetView',
 				title: 'Google Street View',
 				openOnStartup: true,
 				options: {}
