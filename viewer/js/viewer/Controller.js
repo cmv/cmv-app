@@ -150,6 +150,15 @@ define([
             }
         },
         initWidgets: function(evt) {
+            this.growler = new Growler({}, 'growlerDijit');
+            this.growler.startup();
+
+            this.geocoder = new Geocoder({
+                map: this.map,
+                autoComplete: true
+            }, 'geocodeDijit');
+            this.geocoder.startup();
+
             this.identify = new Identify({
                 identifyTolerance: config.identifyTolerance,
                 map: this.map,
