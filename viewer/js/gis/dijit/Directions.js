@@ -57,8 +57,8 @@ define([
 			this.directions.addStop(this.mapRightClickPoint, this.directions.stops.length - 1).then(lang.hitch(this, 'doRoute'));
 		},
 		doRoute: function() {
-			if (this.titlePane && !this.titlePane.open) {
-				this.titlePane.toggle();
+			if (this.parentWidget && !this.parentWidget.open) {
+				this.parentWidget.toggle();
 			}
 			if (this.directions.stops[0] && this.directions.stops[1]) {
 				this.directions.getDirections();

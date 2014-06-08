@@ -104,7 +104,7 @@ define([
         //baseClass: 'gis_Basemaps_Dijit',
         //buttonClass: 'gis_Basemaps_Button',
         //menuClass: 'gis_Basemaps_Menu',
-        mapStartBasemap: 'streets',
+        mapStartBasemap: null,
         basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'gray', 'oceans', 'national-geographic', 'osm'],
         validBasemaps: [],
         postCreate: function() {

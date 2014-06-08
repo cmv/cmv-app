@@ -34,7 +34,7 @@ module.exports = function(grunt) {
       build: {
         expand: true,
         cwd: 'dist',
-        src: ['**/*.css'],
+        src: ['**/*.css', '!**/dbootstrap/**'],
         dest: 'dist'
       }
     },
@@ -68,16 +68,31 @@ module.exports = function(grunt) {
     watch: {
       dev: {
         files: ['viewer/**'],
-        tasks: ['jshint']
+        tasks: ['newer:jshint']
       }
     },
     connect: {
-      server: {
+      dev: {
         options: {
           port: 3000,
+          base: 'viewer',
+          hostname: '*'
+        }
+      },
+      build: {
+        options: {
+          port: 3001,
           base: 'dist',
           hostname: '*'
         }
+      }
+    },
+    open: {
+      dev_browser: {
+        path: 'http://localhost:3000/index.html'
+      },
+      build_browser: {
+        path: 'http://localhost:3001/index.html'
       }
     }
   });
@@ -92,10 +107,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-newer');
+  grunt.loadNpmTasks('grunt-open');
 
   // define the tasks
-  grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a server.', ['build']);
-  grunt.registerTask('build', 'Compiles all of the assets and copies the files to the build directory.', ['clean', 'copy', 'stylesheets', 'scripts']);
-  grunt.registerTask('scripts', 'Compiles the JavaScript files.', ['jshint', 'uglify']);
-  grunt.registerTask('stylesheets', 'Compiles the stylesheets.', ['autoprefixer', 'cssmin']);
+  grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a server.', ['connect:dev', 'open:dev_browser', 'watch']);
+  grunt.registerTask('build', 'Compiles all of the assets and copies the files to the build directory.', ['clean', 'copy', 'stylesheets', 'scripts', 'connect:build', 'open:build_browser', 'watch']);
+  grunt.registerTask('scripts', 'Compiles the JavaScript files.', ['newer:jshint', 'newer:uglify']);
+  grunt.registerTask('stylesheets', 'Compiles the stylesheets.', ['newer:autoprefixer', 'newer:cssmin']);
 };

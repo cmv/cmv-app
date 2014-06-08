@@ -7,17 +7,18 @@
   "homepage": "https://github.com/DavidSpriggs/ConfigurableViewerJSAPI",
   "repository": "https://github.com/DavidSpriggs/ConfigurableViewerJSAPI",
   "dependencies": {
-    "grunt": "0.x.x",
-    "grunt-autoprefixer": "0.2.x",
+    "grunt": "0.4.x",
+    "grunt-autoprefixer": "0.7.x",
     "grunt-contrib-clean": "0.5.x",
-    "grunt-contrib-connect": "0.4.x",
-    "grunt-contrib-copy": "0.4.x",
-    "grunt-contrib-cssmin": "0.6.x",
-    "grunt-contrib-jshint": "0.6.x",
+    "grunt-contrib-connect": "0.7.x",
+    "grunt-contrib-copy": "0.5.x",
+    "grunt-contrib-cssmin": "0.9.x",
+    "grunt-contrib-jshint": "0.10.x",
     "jshint-stylish": "0.2.x",
-    "grunt-contrib-uglify": "0.2.x",
-    "grunt-contrib-watch": "0.5.x",
-    "grunt-newer": "^0.7.0"
+    "grunt-contrib-uglify": "0.4.x",
+    "grunt-contrib-watch": "0.6.x",
+    "grunt-newer": "0.7.x",
+    "grunt-open": "0.2.x"
   },
   "engine": "node >= 0.10"
 }
