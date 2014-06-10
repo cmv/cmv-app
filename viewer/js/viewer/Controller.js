@@ -168,18 +168,26 @@ define([
                 domClass.add(this.sideBarToggle, 'close');
             }
         },
-        _createTitlePaneWidget: function(title, position, open) {
-            var tp = new TitlePane({
+        _createTitlePaneWidget: function(title, position, open, parentId) {
+            var options = {
                 title: title,
                 open: open
-            }).placeAt(this.sidebar, position);
+            };
+            if (parentId) {
+                options.id = parentId;
+            }
+            var tp = new TitlePane(options).placeAt(this.sidebar, position);
             tp.startup();
             return tp;
         },
-        _createFloatingWidget: function(title) {
-            var fw = new FloatingWidget({
+        _createFloatingWidget: function(title, parentId) {
+            var options = {
                 title: title
-            });
+            };
+            if (parentId) {
+                options.id = parentId;
+            }
+            var fw = new FloatingWidget(options);
             fw.startup();
             return fw;
         },
@@ -192,6 +200,7 @@ define([
             }
         },
         widgetLoader: function(widgetConfig, position) {
+            var parentId;
             if (widgetConfig.options.map) {
                 widgetConfig.options.map = this.map;
             }
@@ -207,32 +216,36 @@ define([
             if (widgetConfig.options.editorLayerInfos) {
                 widgetConfig.options.layerInfos = this.editorLayerInfos;
             }
-            if (widgetConfig.widgetType === 'titlePane') {
-                var tp = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open);
+            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
+                widgetConfig.options.id = widgetConfig.id + '_widget';
+                parentId = widgetConfig.id + '_parent';
+            }
+            if (widgetConfig.type === 'titlePane') {
+                var tp = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open, parentId);
                 widgetConfig.options.parentWidget = tp;
-                require([widgetConfig.widgetClass], lang.hitch(this, function(WidgetClass) {
+                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
                     this[widgetConfig.id] = new WidgetClass(widgetConfig.options, domConstruct.create('div')).placeAt(tp.containerNode);
                     this[widgetConfig.id].startup();
                 }));
-            } else if (widgetConfig.widgetType === 'floating') {
-                var fw = this._createFloatingWidget(widgetConfig.title);
+            } else if (widgetConfig.type === 'floating') {
+                var fw = this._createFloatingWidget(widgetConfig.title, parentId);
                 widgetConfig.options.parentWidget = fw;
-                require([widgetConfig.widgetClass], lang.hitch(this, function(WidgetClass) {
+                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
                     this[widgetConfig.id] = new WidgetClass(widgetConfig.options, domConstruct.create('div')).placeAt(fw.containerNode);
                     this[widgetConfig.id].startup();
                 }));
-            } else if (widgetConfig.widgetType === 'domNode') {
-                require([widgetConfig.widgetClass], lang.hitch(this, function(WidgetClass) {
+            } else if (widgetConfig.type === 'domNode') {
+                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
                     this[widgetConfig.id] = new WidgetClass(widgetConfig.options, widgetConfig.srcNodeRef);
                     this[widgetConfig.id].startup();
                 }));
-            } else if (widgetConfig.widgetType === 'invisible') {
-                require([widgetConfig.widgetClass], lang.hitch(this, function(WidgetClass) {
+            } else if (widgetConfig.type === 'invisible') {
+                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
                     this[widgetConfig.id] = new WidgetClass(widgetConfig.options);
                     this[widgetConfig.id].startup();
                 }));
-            } else if (widgetConfig.widgetType === 'map') {
-                require([widgetConfig.widgetClass], lang.hitch(this, function(WidgetClass) {
+            } else if (widgetConfig.type === 'map') {
+                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
                     this[widgetConfig.id] = new WidgetClass(widgetConfig.options);
                     if (this[widgetConfig.id].startup) {
                         this[widgetConfig.id].startup();

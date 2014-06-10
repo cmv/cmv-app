@@ -70,16 +70,16 @@ define([
 			growler: {
 				include: true,
 				id: 'growler',
-				widgetType: 'domNode',
-				widgetClass: 'gis/dijit/Growler',
+				type: 'domNode',
+				path: 'gis/dijit/Growler',
 				srcNodeRef: 'growlerDijit',
 				options: {}
 			},
 			geocoder: {
 				include: true,
 				id: 'geocoder',
-				widgetType: 'domNode',
-				widgetClass: 'esri/dijit/Geocoder',
+				type: 'domNode',
+				path: 'esri/dijit/Geocoder',
 				srcNodeRef: 'geocodeDijit',
 				options: {
 					map: true,
@@ -89,8 +89,8 @@ define([
 			identify: {
 				include: true,
 				id: 'identify',
-				widgetType: 'invisible',
-				widgetClass: 'gis/dijit/identify',
+				type: 'invisible',
+				path: 'gis/dijit/identify',
 				options: {
 					map: true,
 					mapClickMode: true,
@@ -100,8 +100,8 @@ define([
 			basemaps: {
 				include: true,
 				id: 'basemaps',
-				widgetType: 'domNode',
-				widgetClass: 'gis/dijit/Basemaps',
+				type: 'domNode',
+				path: 'gis/dijit/Basemaps',
 				srcNodeRef: 'basemapsDijit',
 				options: {
 					map: true,
@@ -114,8 +114,8 @@ define([
 			scalebar: {
 				include: true,
 				id: 'scalebar',
-				widgetType: 'map',
-				widgetClass: 'esri/dijit/Scalebar',
+				type: 'map',
+				path: 'esri/dijit/Scalebar',
 				options: {
 					map: true,
 					attachTo: 'bottom-left',
@@ -126,8 +126,8 @@ define([
 			locateButton: {
 				include: true,
 				id: 'locateButton',
-				widgetType: 'domNode',
-				widgetClass: 'gis/dijit/LocateButton',
+				type: 'domNode',
+				path: 'gis/dijit/LocateButton',
 				srcNodeRef: 'locateButton',
 				options: {
 					map: true,
@@ -143,8 +143,8 @@ define([
 			overviewMap: {
 				include: true,
 				id: 'overviewMap',
-				widgetType: 'map',
-				widgetClass: 'esri/dijit/OverviewMap',
+				type: 'map',
+				path: 'esri/dijit/OverviewMap',
 				options: {
 					map: true,
 					attachTo: 'bottom-right',
@@ -158,8 +158,8 @@ define([
 			homeButton: {
 				include: true,
 				id: 'homeButton',
-				widgetType: 'domNode',
-				widgetClass: 'esri/dijit/HomeButton',
+				type: 'domNode',
+				path: 'esri/dijit/HomeButton',
 				srcNodeRef: 'homeButton',
 				options: {
 					map: true,
@@ -177,8 +177,8 @@ define([
 			legend: {
 				include: true,
 				id: 'legend',
-				widgetType: 'titlePane',
-				widgetClass: 'esri/dijit/Legend',
+				type: 'titlePane',
+				path: 'esri/dijit/Legend',
 				title: 'Legend',
 				open: false,
 				position: 0,
@@ -190,8 +190,8 @@ define([
 			TOC: {
 				include: true,
 				id: 'toc',
-				widgetType: 'titlePane',
-				widgetClass: 'gis/dijit/TOC',
+				type: 'titlePane',
+				path: 'gis/dijit/TOC',
 				title: 'Layers',
 				open: false,
 				position: 1,
@@ -203,8 +203,8 @@ define([
 			bookmarks: {
 				include: true,
 				id: 'bookmarks',
-				widgetType: 'titlePane',
-				widgetClass: 'gis/dijit/Bookmarks',
+				type: 'titlePane',
+				path: 'gis/dijit/Bookmarks',
 				title: 'Bookmarks',
 				open: false,
 				position: 2,
@@ -216,8 +216,8 @@ define([
 			draw: {
 				include: true,
 				id: 'draw',
-				widgetType: 'titlePane',
-				widgetClass: 'gis/dijit/Draw',
+				type: 'titlePane',
+				path: 'gis/dijit/Draw',
 				title: 'Draw',
 				open: false,
 				position: 3,
@@ -229,8 +229,8 @@ define([
 			measure: {
 				include: true,
 				id: 'measurement',
-				widgetType: 'titlePane',
-				widgetClass: 'gis/dijit/Measurement',
+				type: 'titlePane',
+				path: 'gis/dijit/Measurement',
 				title: 'Measurement',
 				open: false,
 				position: 4,
@@ -244,8 +244,8 @@ define([
 			print: {
 				include: true,
 				id: 'print',
-				widgetType: 'titlePane',
-				widgetClass: 'gis/dijit/Print',
+				type: 'titlePane',
+				path: 'gis/dijit/Print',
 				title: 'Print',
 				open: false,
 				position: 5,
@@ -262,8 +262,8 @@ define([
 			directions: {
 				include: true,
 				id: 'directions',
-				widgetType: 'titlePane',
-				widgetClass: 'gis/dijit/Directions',
+				type: 'titlePane',
+				path: 'gis/dijit/Directions',
 				title: 'Directions',
 				open: false,
 				position: 6,
@@ -281,8 +281,8 @@ define([
 			editor: {
 				include: true,
 				id: 'editor',
-				widgetType: 'titlePane',
-				widgetClass: 'gis/dijit/Editor',
+				type: 'titlePane',
+				path: 'gis/dijit/Editor',
 				title: 'Editor',
 				open: false,
 				position: 7,
@@ -308,8 +308,8 @@ define([
 			streetview: {
 				include: true,
 				id: 'streetview',
-				widgetType: 'floating',
-				widgetClass: 'gis/dijit/StreetView',
+				type: 'floating',
+				path: 'gis/dijit/StreetView',
 				title: 'Google Street View',
 				options: {
 					map: true,

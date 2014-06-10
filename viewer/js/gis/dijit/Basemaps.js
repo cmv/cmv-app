@@ -104,7 +104,7 @@ define([
         //baseClass: 'gis_Basemaps_Dijit',
         //buttonClass: 'gis_Basemaps_Button',
         //menuClass: 'gis_Basemaps_Menu',
-        mapStartBasemap: null,
+        mapStartBasemap: 'streets',
         basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'gray', 'oceans', 'national-geographic', 'osm'],
         validBasemaps: [],
         postCreate: function() {
@@ -174,7 +174,9 @@ define([
             if (this.mode === 'custom') {
                 this.gallery.select(this.mapStartBasemap);
             } else {
-                this.map.setBasemap(this.mapStartBasemap);
+                if (this.mapStartBasemap) {
+                    this.map.setBasemap(this.mapStartBasemap);
+                }
             }
         }
     });
