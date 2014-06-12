@@ -47,6 +47,7 @@ define([
             identifyParams.mapExtent = this.map.extent;
             identifyParams.width = this.map.width;
             identifyParams.height = this.map.height;
+            identifyParams.spatialReference = this.map.spatialReference;
 
             var identifies = [];
             var identifiedlayers = [];
