@@ -75,6 +75,13 @@ define([
             // this.basemaps.startup();
         },
         initLayers: function(evt) {
+            this.map.on('resize', function(evt) {
+                var pnt = evt.target.extent.getCenter();
+                setTimeout(function() {
+                    evt.target.centerAt(pnt);
+                }, 100);
+            });
+            
             this.layers = [];
             var layerTypes = {
                 csv: 'CSV', // untested
