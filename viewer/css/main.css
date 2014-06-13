@@ -145,4 +145,7 @@ body, html {
 .dijitSliderBarContainerH{
     z-index: 0!important;
 }
+.dbootstrap .dijitTitlePaneContentInner {
+    background-color: #FFFFFF;
+}
 /* end dbootstrap overrides*/
