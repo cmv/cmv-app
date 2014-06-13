@@ -78,6 +78,7 @@ body, html {
 #map {
     padding: 0;
     overflow: hidden;
+    background: url("../images/noisy_grid.png") #fff;
 }
 
 .HomeButton, .LocateButton {
