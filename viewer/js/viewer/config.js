@@ -65,7 +65,7 @@ define([
 				visible: true
 			}
 		}],
-		// set include:true to load. For titlePane type set position the the desired order in the sidebar
+		// set include:true to load. For titlePane type set position to the desired order in the sidebar
 		widgets: {
 			growler: {
 				include: true,
@@ -75,13 +75,19 @@ define([
 				srcNodeRef: 'growlerDijit',
 				options: {}
 			},
-			geocoder: {
+			geocoder: {// https://developers.arcgis.com/javascript/jsapi/geocoder-amd.html
 				include: true,
 				id: 'geocoder',
 				type: 'domNode',
 				path: 'esri/dijit/Geocoder',
 				srcNodeRef: 'geocodeDijit',
-				options: {
+				options: {//see geocoder API Reference link above for constructor details
+					// uncomment lines below then modify url: and name: to use your own geocoder service. 
+					/* arcgisGeocoder: false,
+					geocoders: [{
+						url: "http://ServerName/ArcGIS/rest/services/GeocoderServiceName/GeocodeServer",
+						name: "GeocoderServiceName",
+						}], */
 					map: true,
 					autoComplete: true
 				}
@@ -111,25 +117,25 @@ define([
 					basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'gray', 'oceans', 'national-geographic', 'osm'] //basemaps to show in menu. If 'agol' mode use valid values from above, if 'custom' mode then define in basmaps dijit and refrenc by name here
 				}
 			},
-			scalebar: {
+			scalebar: {// https://developers.arcgis.com/javascript/jsapi/scalebar-amd.html
 				include: true,
 				id: 'scalebar',
 				type: 'map',
 				path: 'esri/dijit/Scalebar',
-				options: {
+				options: {//see scalebar API Reference link above for constructor details
 					map: true,
 					attachTo: 'bottom-left',
 					scalebarStyle: 'line',
 					scalebarUnit: 'dual'
 				}
 			},
-			locateButton: {
+			locateButton: {// https://developers.arcgis.com/javascript/jsapi/locatebutton-amd.html
 				include: true,
 				id: 'locateButton',
 				type: 'domNode',
 				path: 'gis/dijit/LocateButton',
 				srcNodeRef: 'locateButton',
-				options: {
+				options: {//see locatebutton API Reference link above for constructor details
 					map: true,
 					highlightLocation: true,
 					useTracking: true,
@@ -140,12 +146,12 @@ define([
 					}
 				}
 			},
-			overviewMap: {
+			overviewMap: {// https://developers.arcgis.com/javascript/jsapi/overviewmap-amd.html
 				include: true,
 				id: 'overviewMap',
 				type: 'map',
 				path: 'esri/dijit/OverviewMap',
-				options: {
+				options: {//see overviewmap API Reference link above for constructor details
 					map: true,
 					attachTo: 'bottom-right',
 					color: '#0000CC',
@@ -155,15 +161,17 @@ define([
 					visible: false
 				}
 			},
-			homeButton: {
+			homeButton: {// https://developers.arcgis.com/javascript/jsapi/homebutton-amd.html
 				include: true,
 				id: 'homeButton',
 				type: 'domNode',
 				path: 'esri/dijit/HomeButton',
 				srcNodeRef: 'homeButton',
-				options: {
+				options: {//see homebutton API Reference link above for constructor details
 					map: true,
 					extent: new Extent({
+						// to modify homebutton extent for your map 
+						// use this helper Tool http://www.arcgis.com/home/item.html?id=dd1091f33a3e4ecb8cd77adf3e585c8a
 						xmin: -180,
 						ymin: -85,
 						xmax: 180,
@@ -200,7 +208,7 @@ define([
 					tocLayerInfos: true
 				}
 			},
-			bookmarks: {
+			bookmarks: {// https://developers.arcgis.com/javascript/jsapi/bookmarks-amd.html
 				include: true,
 				id: 'bookmarks',
 				type: 'titlePane',
@@ -208,7 +216,7 @@ define([
 				title: 'Bookmarks',
 				open: false,
 				position: 2,
-				options: {
+				options: {//see bookmarks API Reference link above for constructor details
 					map: true,
 					editable: true
 				}
@@ -226,7 +234,7 @@ define([
 					mapClickMode: true
 				}
 			},
-			measure: {
+			measure: {// https://developers.arcgis.com/javascript/jsapi/measurement-amd.html
 				include: true,
 				id: 'measurement',
 				type: 'titlePane',
@@ -234,14 +242,14 @@ define([
 				title: 'Measurement',
 				open: false,
 				position: 4,
-				options: {
+				options: {//see measurment API Reference link above for constructor details
 					map: true,
 					mapClickMode: true,
 					defaultAreaUnit: units.SQUARE_MILES,
 					defaultLengthUnit: units.MILES
 				}
 			},
-			print: {
+			print: {// https://developers.arcgis.com/javascript/jsapi/print-amd.html
 				include: true,
 				id: 'print',
 				type: 'titlePane',
@@ -249,8 +257,9 @@ define([
 				title: 'Print',
 				open: false,
 				position: 5,
-				options: {
+				options: {//see print (not printTask) API Reference link above for constructor details
 					map: true,
+					// modify url for your own Export Web Map Task service
 					printTaskURL: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task',
 					copyrightText: 'Copyright 2014',
 					authorText: 'Me',
@@ -259,7 +268,7 @@ define([
 					defaultLayout: 'Letter ANSI A Landscape'
 				}
 			},
-			directions: {
+			directions: {// https://developers.arcgis.com/javascript/jsapi/directions-amd.html
 				include: true,
 				id: 'directions',
 				type: 'titlePane',
@@ -269,7 +278,8 @@ define([
 				position: 6,
 				options: {
 					map: true,
-					options: {
+					options: {//see directions API Reference link above for constructor details. optimalRoute parameter is set by user
+					// modify routeTaskUrl: to use your own NAServer service
 						routeTaskUrl: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Network/USA/NAServer/Route',
 						routeParams: {
 							directionsLanguage: 'en-US',
@@ -278,7 +288,7 @@ define([
 					}
 				}
 			},
-			editor: {
+			editor: {// https://developers.arcgis.com/javascript/jsapi/editor-amd.html
 				include: true,
 				id: 'editor',
 				type: 'titlePane',
@@ -290,7 +300,7 @@ define([
 					map: true,
 					mapClickMode: true,
 					editorLayerInfos: true,
-					settings: {
+					settings: {//see editor API Reference link above for constructor details
 						toolbarVisible: true,
 						showAttributesOnClick: true,
 						enableUndoRedo: true,
