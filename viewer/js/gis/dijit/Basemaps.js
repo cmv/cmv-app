@@ -174,7 +174,9 @@ define([
             if (this.mode === 'custom') {
                 this.gallery.select(this.mapStartBasemap);
             } else {
-                this.map.setBasemap(this.mapStartBasemap);
+                if (this.mapStartBasemap) {
+                    this.map.setBasemap(this.mapStartBasemap);
+                }
             }
         }
     });

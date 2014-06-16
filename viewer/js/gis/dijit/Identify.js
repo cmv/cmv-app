@@ -47,13 +47,22 @@ define([
             identifyParams.mapExtent = this.map.extent;
             identifyParams.width = this.map.width;
             identifyParams.height = this.map.height;
+            identifyParams.spatialReference = this.map.spatialReference;
 
             var identifies = [];
             var identifiedlayers = [];
             array.forEach(this.layers, function(layer) {
                 if (layer.ref.visible && layer.ref.visibleLayers.length !== 0 && layer.ref.visibleLayers[0] !== -1) {
                     var params = lang.clone(identifyParams);
-                    params.layerIds = layer.ref.visibleLayers;
+                    var nonGroupLayers = array.filter(layer.ref.layerInfos, function(x) {
+                        return x.subLayerIds === null;
+                    });
+                    params.layerIds = [];
+                    array.forEach(nonGroupLayers, function(subLayer) {
+                        if (array.indexOf(layer.ref.visibleLayers, subLayer.id) !== -1) {
+                            params.layerIds.push(subLayer.id);
+                        }
+                    });
                     identifies.push(layer.identifyTask.execute(params));
                     identifiedlayers.push(layer);
                 }
@@ -68,6 +77,9 @@ define([
             array.forEach(responseArray, function(response, i) {
                 var layerId = identifiedlayers[i].ref.id;
                 array.forEach(response, function(result) {
+                    if (!result.feature.geometry.spatialReference) {
+                        result.feature.geometry.spatialReference = this.map.spatialReference;
+                    }
                     // see if we have a Popup config defined for this layer
                     if (config.hasOwnProperty(layerId)) {
                         if (config[layerId].hasOwnProperty(result.layerId)) {

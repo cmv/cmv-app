@@ -78,6 +78,7 @@ body, html {
 #map {
     padding: 0;
     overflow: hidden;
+    background: url("../images/noisy_grid.png") #fff;
 }
 
 .HomeButton, .LocateButton {
@@ -96,7 +97,7 @@ body, html {
     width: 16px;
     height: 25px;
     position: absolute;
-    top: 220px;
+    top: 250px;
     border-top: 1px solid #B5BCC7;
     border-right: 1px solid #B5BCC7;
     border-bottom: 1px solid #B5BCC7;
@@ -116,6 +117,10 @@ body, html {
 .sidebarCollapseButton.open {
     background-image: url("../images/open.png");
     left: 0;
+}
+
+.floatingWidget_underlay {
+    display:none
 }
 
 /* dbootstrap overrides*/
@@ -139,5 +144,8 @@ body, html {
 
 .dijitSliderBarContainerH{
     z-index: 0!important;
+}
+.dbootstrap .dijitTitlePaneContentInner {
+    background-color: #FFFFFF;
 }
 /* end dbootstrap overrides*/

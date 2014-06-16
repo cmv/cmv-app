@@ -22,6 +22,7 @@ define([
 	}];
 
 	return declare([_WidgetBase], {
+		declaredClass: 'gis.digit.Bookmarks',
 		postCreate: function() {
 			this.inherited(arguments);
 
