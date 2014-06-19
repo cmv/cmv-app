@@ -259,7 +259,7 @@ define([
                     }
                 }));
             } else {
-                console.log('Widget type: ' + widgetConfig.widgetType + ' not supported');
+                console.log('Widget type: ' + widgetConfig.widgetType + ' at position ' + position + ' not supported');
             }
         }
     };
