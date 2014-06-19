@@ -58,8 +58,8 @@
 	cursor: pointer;
 }
 
-.gis_FindDijit .dgrid .field-layerName {
-	width: 75px;
+.gis_FindDijit .dgrid .field-value {
+	width: 70%;
 }
 
 .gis_FindDijit .dgrid .field-foundFieldName {
