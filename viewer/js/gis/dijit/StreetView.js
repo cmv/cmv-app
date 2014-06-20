@@ -6,6 +6,7 @@ define([
     'dijit/_WidgetsInTemplateMixin',
     'dijit/form/Button',
     'dojo/_base/lang',
+    'dojo/_base/connect',
     'esri/layers/GraphicsLayer',
     'esri/graphic',
     'esri/renderers/SimpleRenderer',
@@ -20,11 +21,24 @@ define([
     'gis/dijit/_FloatingWidgetMixin',
     'xstyle/css!./StreetView/css/StreetView.css',
     'gis/plugins/async!//maps.google.com/maps/api/js?v=3&sensor=false'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, GraphicsLayer, Graphic, SimpleRenderer, template, UniqueValueRenderer, PictureMarkerSymbol, on, domStyle, webMercatorUtils, Point, SpatialReference, _FloatingWidgetMixin, css, gmaps) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, connect, GraphicsLayer, Graphic, SimpleRenderer, template, UniqueValueRenderer, PictureMarkerSymbol, on, domStyle, webMercatorUtils, Point, SpatialReference, _FloatingWidgetMixin, css, gmaps) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin], {
         widgetsInTemplate: true,
         templateString: template,
+
+        panoOptions: {
+            addressControlOptions: {
+              position: google.maps.ControlPosition.TOP_RIGHT
+            },
+            linksControl: false,
+            panControl: false,
+            zoomControlOptions: {
+              style: google.maps.ZoomControlStyle.SMALL
+            },
+            enableCloseButton: false
+        },
+
         postCreate: function() {
             this.inherited(arguments);
             this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/Streetview/images/blueArrow.png'), 30, 30);
@@ -38,20 +52,41 @@ define([
             this.pointGraphics.setRenderer(this.pointRenderer);
             this.map.addLayer(this.pointGraphics);
             this.map.on('click', lang.hitch(this, 'getStreetView'));
+
+            if (this.parentWidget.toggleable) {
+                domStyle.set(this.buttonActionBar, 'display', 'none');
+                connect.connect(this.parentWidget, 'toggle', lang.hitch(this, function() {
+                    this.onLayoutChange(this.parentWidget.open);
+                }));
+            }
+
         },
         onOpen: function() {
             this.pointGraphics.show();
             if (!this.panorama || !this.panoramaService) {
-                this.panorama = new google.maps.StreetViewPanorama(this.panoNode, {});
+                this.panorama = new google.maps.StreetViewPanorama(this.panoNode, this.panoOptions);
                 this.panoramaService = new google.maps.StreetViewService();
+            }
+            if (this.parentWidget.toggleable) {
+                this.disconnectMapClick();
             }
         },
         onClose:function(){
             this.pointGraphics.hide();
+            if (this.parentWidget.toggleable) {
+                this.connectMapClick();
+            }
+        },
+        onLayoutChange: function (open) {
+            if (open) {
+                this.onOpen();
+            } else {
+                this.onClose();
+            }
         },
         placePoint: function() {
             this.disconnectMapClick();
-            //get map click, set up listner in post create
+            //get map click, set up listener in post create
         },
         disconnectMapClick: function() {
             this.map.setMapCursor('crosshair');
@@ -64,7 +99,9 @@ define([
         clearGraphics: function() {
             this.pointGraphics.clear();
             domStyle.set(this.noStreetViewResults, 'display', 'block');
-            this.disableStreetViewClick();
+            if (!this.parentWidget.toggleable) {
+                this.disableStreetViewClick();
+            }
         },
         enableStreetViewClick: function() {
             this.disconnectMapClick();
@@ -74,7 +111,9 @@ define([
         },
         getStreetView: function(evt) {
             if (this.mapClickMode.current === 'streetview') {
-                this.disableStreetViewClick();
+                if (!this.parentWidget.toggleable) {
+                    this.disableStreetViewClick();
+                }
                 var mapPoint = evt.mapPoint;
                 domStyle.set(this.noStreetViewResults, 'display', 'none');
                 domStyle.set(this.loadingStreetView, 'display', 'inline-block');
