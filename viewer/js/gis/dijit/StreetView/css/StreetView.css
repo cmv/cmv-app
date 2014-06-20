@@ -16,6 +16,17 @@
     margin-right: 10px;
 }
 
+.gis_StreetView .streetViewNode {
+    border: 1px solid #999999;
+    width: 100%;
+    height: 275px;
+}
+
+.floatingWidget .gis_StreetView .streetViewNode {
+    width: 400px;
+    height: 275px;
+}
+
 .gis_StreetView .pegmanIcon {
     background-image: url(../images/googleIcon.png);
     background-size: contain;
