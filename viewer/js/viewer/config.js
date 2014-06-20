@@ -131,6 +131,7 @@ define([
 				srcNodeRef: 'locateButton',
 				options: {
 					map: true,
+					publishGPSPosition: true,
 					highlightLocation: true,
 					useTracking: true,
 					geolocationOptions: {
