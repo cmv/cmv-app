@@ -337,7 +337,8 @@ define([
 			streetview: {
 				include: true,
 				id: 'streetview',
-				type: 'floating',
+				type: 'titlePane',
+				position: 9,
 				path: 'gis/dijit/StreetView',
 				title: 'Google Street View',
 				options: {
