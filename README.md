@@ -17,18 +17,25 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * This app demonstrates best practices of OO programing in dojo and JS, using modular design and classes.
 
 ## Widgets Included:
-* Growler
-* Draw
-* Geolocation
-* Advanced print
-* Help
-* Measure
-* Directions
-* Editor
-* Scalebar
+* Base Maps
 * Bookmarks
-* Table of contents
+* Directions
+* Draw
+* Editor
+* Find
+* Geocoder
+* Growler
+* Help Button
+* Home
 * Identify (for dynamic layers)
+* Legend
+* Locate Button (Geolocation)
+* Measure
+* Overview Map
+* Print (Advanced)
+* Scalebar
+* StreetView
+* Table of contents
 
 ## Change log:
 See [releases](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/releases) for change logs.
