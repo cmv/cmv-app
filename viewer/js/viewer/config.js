@@ -47,6 +47,7 @@ define([
 			slider: true,
 			noLegend: false,
 			collapsed: false,
+			sublayerToggle: false, //true to automatically turn on sublayers
 			options: {
 				id: 'louisvillePubSaftey',
 				opacity: 1.0,
@@ -337,7 +338,8 @@ define([
 			streetview: {
 				include: true,
 				id: 'streetview',
-				type: 'floating',
+				type: 'titlePane',
+				position: 9,
 				path: 'gis/dijit/StreetView',
 				title: 'Google Street View',
 				options: {
