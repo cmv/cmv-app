@@ -346,7 +346,17 @@ define([
 					mapClickMode: true,
 					openOnStartup: true
 				}
+			},
+			help: {
+				include: true,
+				id: 'help',
+				type: 'floating',
+				path: 'gis/dijit/Help',
+				title: 'Help',
+				options: {
+				}
 			}
+
 		}
 	};
 });
