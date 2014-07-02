@@ -41,7 +41,7 @@ define([
 
         postCreate: function() {
             this.inherited(arguments);
-            this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/Streetview/images/blueArrow.png'), 30, 30);
+            this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/StreetView/images/blueArrow.png'), 30, 30);
             this.pointGraphics = new GraphicsLayer({
                 id: 'streetview_graphics',
                 title: 'Street View'
