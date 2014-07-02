@@ -77,9 +77,7 @@ define([
             array.forEach(responseArray, function(response, i) {
                 var layerId = identifiedlayers[i].ref.id;
                 array.forEach(response, function(result) {
-                    if (!result.feature.geometry.spatialReference) {
-                        result.feature.geometry.spatialReference = this.map.spatialReference;
-                    }
+                    result.feature.geometry.spatialReference = this.map.spatialReference; //temp workaround for ags identify bug. remove when fixed.
                     // see if we have a Popup config defined for this layer
                     if (config.hasOwnProperty(layerId)) {
                         if (config[layerId].hasOwnProperty(result.layerId)) {
