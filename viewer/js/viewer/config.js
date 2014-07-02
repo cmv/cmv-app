@@ -90,7 +90,7 @@ define([
 				include: true,
 				id: 'identify',
 				type: 'invisible',
-				path: 'gis/dijit/identify',
+				path: 'gis/dijit/Identify',
 				options: {
 					map: true,
 					mapClickMode: true,
