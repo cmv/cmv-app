@@ -11,12 +11,11 @@ define([
     'dijit/TitlePane',
     'dojo/_base/window',
     'dojo/_base/lang',
-    'gis/dijit/Help',
     'dojo/text!./templates/mapOverlay.html',
     'viewer/config',
     'esri/IdentityManager',
     'gis/dijit/FloatingWidget'
-], function(Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, TitlePane, win, lang, Help, mapOverlay, config, IdentityManager, FloatingWidget) {
+], function(Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, TitlePane, win, lang, mapOverlay, config, IdentityManager, FloatingWidget) {
 
     return {
         config: config,
@@ -51,11 +50,10 @@ define([
             this.outer.startup();
             this.initMap();
 
-            on(dom.byId('helpA'), 'click', lang.hitch(this, 'showHelp'));
             this.sideBarToggle = dom.byId('sidebarCollapseButton');
-            on(this.sideBarToggle, 'click', lang.hitch(this, 'toggleSidebar'));
+            this.positionSideBarToggle();
+            on(this.sideBarToggle, 'click', lang.hitch(this, 'togglePane', 'sidebar'));
             domStyle.set(this.sideBarToggle, 'display', 'block');
-            this.domStore = dom.byId('sidebarStorage');
         },
         initMap: function() {
             this.map = new Map('map', config.mapOptions);
@@ -81,7 +79,7 @@ define([
                     evt.target.centerAt(pnt);
                 }, 100);
             });
-            
+
             this.layers = [];
             var layerTypes = {
                 csv: 'CSV', // untested
@@ -162,18 +160,24 @@ define([
                 this.widgetLoader(widget, i);
             }, this);
         },
-        toggleSidebar: function() {
-            if (this.outer.getIndexOfChild(this.sidebar) !== -1) {
-                this.outer.removeChild(this.sidebar);
-                this.domStore.appendChild(this.sidebar.domNode);
-                domClass.remove(this.sideBarToggle, 'close');
-                domClass.add(this.sideBarToggle, 'open');
-            } else {
-                this.domStore.removeChild(this.sidebar.domNode);
-                this.outer.addChild(this.sidebar);
-                domClass.remove(this.sideBarToggle, 'open');
-                domClass.add(this.sideBarToggle, 'close');
+        togglePane: function(id) {
+            if (!this[id]) {
+                return;
             }
+            var domNode = this[id].domNode;
+            if (domNode) {
+                var disp = (domStyle.get(domNode, 'display') === 'none') ? 'block' : 'none';
+                domStyle.set(domNode, 'display', disp);
+                this.positionSideBarToggle();
+                this.outer.resize();
+            }
+        },
+        positionSideBarToggle: function () {
+            var disp = domStyle.get(this.sidebar.domNode, 'display');
+            var rCls = (disp === 'none') ? 'close' : 'open';
+            var aCls = (disp === 'none') ? 'open' : 'close';
+            domClass.remove(this.sideBarToggle, rCls);
+            domClass.add(this.sideBarToggle, aCls);
         },
         _createTitlePaneWidget: function(title, position, open, parentId) {
             var options = {
@@ -197,14 +201,6 @@ define([
             var fw = new FloatingWidget(options);
             fw.startup();
             return fw;
-        },
-        showHelp: function() {
-            if (this.help) {
-                this.help.show();
-            } else {
-                this.help = new Help();
-                this.help.show();
-            }
         },
         widgetLoader: function(widgetConfig, position) {
             var parentId;

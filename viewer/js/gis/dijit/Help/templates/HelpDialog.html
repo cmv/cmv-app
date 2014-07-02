@@ -1,19 +1,7 @@
-<div class="dijitDialog ${baseClass}" role="dialog" aria-labelledby="${id}_title">
-    <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
-        <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" id="${id}_title"
-        role="heading" level="1">
-        </span>
-        <span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon"
-        data-dojo-attach-event="ondijitclick: onCancel" title="${buttonCancel}"
-        role="button" tabIndex="-1">
-            <span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">
-                x
-            </span>
-        </span>
-    </div>
-    <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
-        <div style="width:500px;height:400px;padding:5px;">
-            <div data-dojo-type="dijit/layout/TabContainer" style="width: 100%; height: 100%;">
+<div class="helpDijit">
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-attach-point="containerNode" class="helpContainer">
+        <div class="helpNode">
+            <div data-dojo-type="dijit/layout/TabContainer" class="helpTabContainer">
                 <div data-dojo-type="dijit/layout/ContentPane" title="Navigation">
                     <table>
                         <tbody>
@@ -59,7 +47,7 @@
                 </div>
                 <div data-dojo-type="dijit/layout/ContentPane" title="Search">
                     A variety of searches can be performed in the search box:
-                    <ul>
+                    <ul class="listdbootstrapFix">
                         <li>
                             Search by Address
                         </li>
@@ -73,7 +61,7 @@
                 </div>
                 <div data-dojo-type="dijit/layout/ContentPane" title="Tools">
                     In addition to Search capabilities, the following tools are provided:
-                    <ul>
+                    <ul class="listdbootstrapFix">
                         <li>
                             Measure
                         </li>
@@ -90,11 +78,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
-        <div class="dijitDialogPaneActionBar">
-            <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:close">
-                Close
-            </button>
         </div>
     </div>
 </div>
