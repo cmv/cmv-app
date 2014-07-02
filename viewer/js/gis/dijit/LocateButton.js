@@ -47,13 +47,15 @@ define([
 				this.graphics.graphics[0].attributes = stats;
 			}
 
-			topic.publish('growler/growl', {
-				title: 'GPS Position',
-				message: lang.replace(this.growlTemplate, stats),
-				level: 'default', //can be: 'default', 'warning', 'info', 'error', 'success'.
-				timeout: 10000, //set to 0 for no timeout
-				opacity: 1.0
-			});
+			if (this.options.publishGPSPosition){
+				topic.publish('growler/growl', {
+					title: 'GPS Position',
+					message: lang.replace(this.growlTemplate, stats),
+					level: 'default', //can be: 'default', 'warning', 'info', 'error', 'success'.
+					timeout: 10000, //set to 0 for no timeout
+					opacity: 1.0
+				});
+			}
 		}
 	});
 });

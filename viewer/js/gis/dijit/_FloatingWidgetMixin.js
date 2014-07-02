@@ -5,15 +5,15 @@ define([
 ], function(declare, on, lang) {
 	return declare(null, {
 		startup: function() {
-			var parentWidget = this.getParent();
-			if (parentWidget && parentWidget.declaredClass === 'gis.dijit.FloatingWidget' && this.onOpen) {
-				on(parentWidget, 'show', lang.hitch(this, 'onOpen'));
+			// var parentWidget = this.getParent();
+			if (this.parentWidget && this.parentWidget.declaredClass === 'gis.dijit.FloatingWidget' && this.onOpen) {
+				on(this.parentWidget, 'show', lang.hitch(this, 'onOpen'));
 			}
-			if (parentWidget && parentWidget.declaredClass === 'gis.dijit.FloatingWidget' && this.onClose) {
-				on(parentWidget, 'hide', lang.hitch(this, 'onClose'));
+			if (this.parentWidget && this.parentWidget.declaredClass === 'gis.dijit.FloatingWidget' && this.onClose) {
+				on(this.parentWidget, 'hide', lang.hitch(this, 'onClose'));
 			}
-			if (parentWidget && parentWidget.declaredClass === 'gis.dijit.FloatingWidget' && this.openOnStartup) {
-				parentWidget.show();
+			if (this.parentWidget && this.parentWidget.declaredClass === 'gis.dijit.FloatingWidget' && this.openOnStartup) {
+				this.parentWidget.show();
 			}
 
 			this.inherited(arguments);
