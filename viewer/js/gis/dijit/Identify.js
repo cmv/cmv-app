@@ -8,9 +8,8 @@ define([
     'esri/tasks/IdentifyParameters',
     'esri/dijit/PopupTemplate',
     'dojo/on',
-    'dojo/promise/all',
-    './Identify/config'
-], function(declare, _WidgetBase, lang, array, esriLang, IdentifyTask, IdentifyParameters, PopupTemplate, on, all, config) {
+    'dojo/promise/all'
+], function(declare, _WidgetBase, lang, array, esriLang, IdentifyTask, IdentifyParameters, PopupTemplate, on, all) {
 
     var Identify = declare([_WidgetBase], {
         declaredClass: 'gis.dijit.Identify',
@@ -79,9 +78,9 @@ define([
                 array.forEach(response, function(result) {
                     result.feature.geometry.spatialReference = this.map.spatialReference; //temp workaround for ags identify bug. remove when fixed.
                     // see if we have a Popup config defined for this layer
-                    if (config.hasOwnProperty(layerId)) {
-                        if (config[layerId].hasOwnProperty(result.layerId)) {
-                            result.feature.setInfoTemplate(new PopupTemplate(config[layerId][result.layerId]));
+                    if (this.identifies.hasOwnProperty(layerId)) {
+                        if (this.identifies[layerId].hasOwnProperty(result.layerId)) {
+                            result.feature.setInfoTemplate(new PopupTemplate(this.identifies[layerId][result.layerId]));
                         }
                     }
                     // if no Popup defined output all attributes
