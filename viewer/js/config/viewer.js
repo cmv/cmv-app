@@ -48,7 +48,7 @@ define([
 			noLegend: false,
 			collapsed: false,
 			options: {
-				id: 'louisvillePubSaftey',
+				id: 'louisvillePubSafety',
 				opacity: 1.0,
 				visible: true
 			}
@@ -91,11 +91,7 @@ define([
 				id: 'identify',
 				type: 'invisible',
 				path: 'gis/dijit/Identify',
-				options: {
-					map: true,
-					mapClickMode: true,
-					identifyTolerance: 5
-				}
+				options: 'config/identify'
 			},
 			basemaps: {
 				include: true,
@@ -103,13 +99,7 @@ define([
 				type: 'domNode',
 				path: 'gis/dijit/Basemaps',
 				srcNodeRef: 'basemapsDijit',
-				options: {
-					map: true,
-					mode: 'agol', //must be either 'agol' or 'custom'
-					title: 'Basemaps',
-					mapStartBasemap: null, //valid options for 'agol' mode: null, 'streets', 'satellite', 'hybrid', 'topo', 'gray', 'oceans', 'national-geographic', 'osm'
-					basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'gray', 'oceans', 'national-geographic', 'osm'] //basemaps to show in menu. If 'agol' mode use valid values from above, if 'custom' mode then define in basmaps dijit and refrenc by name here
-				}
+				options: 'config/basemaps'
 			},
 			scalebar: {
 				include: true,
@@ -209,10 +199,7 @@ define([
 				title: 'Bookmarks',
 				open: false,
 				position: 2,
-				options: {
-					map: true,
-					editable: true
-				}
+				options: 'config/bookmarks'
 			},
 			find: {
                 include: true,
@@ -222,25 +209,7 @@ define([
                 title: 'Find',
                 open: false,
                 position: 3,
-				options: {
-					map: true,
-					queries: [
-						{
-							description: 'Find A Public Safety Location By Name',
-							url: 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
-							layerIds: [1,2,3,4,5,6,7],
-							searchFields: ['FDNAME, PDNAME', 'NAME', 'RESNAME'],
-							minChars: 2
-						},
-						{
-							description: 'Find Incident By Code/Description',
-							url: 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
-							layerIds: [15,17,18],
-							searchFields: ['FCODE','DESCRIPTION'],
-							minChars: 4
-						}
-					]
-                }
+				options: 'config/find'
             },
 			draw: {
 				include: true,

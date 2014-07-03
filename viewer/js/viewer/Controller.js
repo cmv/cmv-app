@@ -12,7 +12,7 @@ define([
     'dojo/_base/window',
     'dojo/_base/lang',
     'dojo/text!./templates/mapOverlay.html',
-    'viewer/config',
+    'config/viewer',
     'esri/IdentityManager',
     'gis/dijit/FloatingWidget'
 ], function(Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, TitlePane, win, lang, mapOverlay, config, IdentityManager, FloatingWidget) {
@@ -203,59 +203,69 @@ define([
             return fw;
         },
         widgetLoader: function(widgetConfig, position) {
-            var parentId;
-            if (widgetConfig.options.map) {
-                widgetConfig.options.map = this.map;
+            var parentId, pnl;
+
+            // only proceed for valid widget types
+            var widgetTypes = ['titlePane','floating','domNode','invisible','map'];
+            if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
+                console.log('Widget type ' + widgetConfig.type  + ' (' + widgetConfig.title + ') at position ' + position + ' is not supported.');
+                return;
             }
-            if (widgetConfig.options.mapClickMode) {
-                widgetConfig.options.mapClickMode = this.mapClickMode;
-            }
-            if (widgetConfig.options.legendLayerInfos) {
-                widgetConfig.options.layerInfos = this.legendLayerInfos;
-            }
-            if (widgetConfig.options.tocLayerInfos) {
-                widgetConfig.options.layerInfos = this.tocLayerInfos;
-            }
-            if (widgetConfig.options.editorLayerInfos) {
-                widgetConfig.options.layerInfos = this.editorLayerInfos;
-            }
+
+            // build a titlePane or floating widget as the parent
             if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
-                widgetConfig.options.id = widgetConfig.id + '_widget';
                 parentId = widgetConfig.id + '_parent';
+                if (widgetConfig.type === 'titlePane') {
+                    pnl = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open, parentId);
+                } else if (widgetConfig.type === 'floating') {
+                    pnl = this._createFloatingWidget(widgetConfig.title, parentId);
+                }
+                widgetConfig.parentWidget = pnl;
             }
-            if (widgetConfig.type === 'titlePane') {
-                var tp = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open, parentId);
-                widgetConfig.options.parentWidget = tp;
-                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
-                    this[widgetConfig.id] = new WidgetClass(widgetConfig.options, domConstruct.create('div')).placeAt(tp.containerNode);
-                    this[widgetConfig.id].startup();
-                }));
-            } else if (widgetConfig.type === 'floating') {
-                var fw = this._createFloatingWidget(widgetConfig.title, parentId);
-                widgetConfig.options.parentWidget = fw;
-                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
-                    this[widgetConfig.id] = new WidgetClass(widgetConfig.options, domConstruct.create('div')).placeAt(fw.containerNode);
-                    this[widgetConfig.id].startup();
-                }));
-            } else if (widgetConfig.type === 'domNode') {
-                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
-                    this[widgetConfig.id] = new WidgetClass(widgetConfig.options, widgetConfig.srcNodeRef);
-                    this[widgetConfig.id].startup();
-                }));
-            } else if (widgetConfig.type === 'invisible') {
-                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
-                    this[widgetConfig.id] = new WidgetClass(widgetConfig.options);
-                    this[widgetConfig.id].startup();
-                }));
-            } else if (widgetConfig.type === 'map') {
-                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
-                    this[widgetConfig.id] = new WidgetClass(widgetConfig.options);
-                    if (this[widgetConfig.id].startup) {
-                        this[widgetConfig.id].startup();
-                    }
-                }));
+
+            // 2 ways to use require to accomodate widgets that may have an optional separate configuration file
+            if (typeof(widgetConfig.options) === 'string') {
+               require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
             } else {
-                console.log('Widget type: ' + widgetConfig.widgetType + ' not supported');
+               require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
+            }
+        },
+        createWidget: function (widgetConfig, options, WidgetClass) {
+            // set any additional options
+            options.id = widgetConfig.id + '_widget';
+            options.parentWidget = widgetConfig.parentWidget;
+
+            if (options.map) {
+                options.map = this.map;
+            }
+            if (options.mapClickMode) {
+                options.mapClickMode = this.mapClickMode;
+            }
+            if (options.legendLayerInfos) {
+                options.layerInfos = this.legendLayerInfos;
+            }
+            if (options.tocLayerInfos) {
+                options.layerInfos = this.tocLayerInfos;
+            }
+            if (options.editorLayerInfos) {
+                options.layerInfos = this.editorLayerInfos;
+            }
+
+            // create the widget
+            var pnl = options.parentWidget;
+            if (widgetConfig.type === 'titlePane') {
+                this[widgetConfig.id] = new WidgetClass(options, domConstruct.create('div')).placeAt(pnl.containerNode);
+            } else if (widgetConfig.type === 'floating') {
+                this[widgetConfig.id] = new WidgetClass(options, domConstruct.create('div')).placeAt(pnl.containerNode);
+            } else if (widgetConfig.type === 'domNode') {
+                this[widgetConfig.id] = new WidgetClass(options, widgetConfig.srcNodeRef);
+            } else {
+                this[widgetConfig.id] = new WidgetClass(options);
+            }
+
+            // start up the widget
+            if (this[widgetConfig.id] && this[widgetConfig.id].startup) {
+                this[widgetConfig.id].startup();
             }
         }
     };
