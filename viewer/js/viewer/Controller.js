@@ -229,63 +229,6 @@ define([
             } else {
                require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
             }
-
-            /*
-            var parentId;
-            if (widgetConfig.options.map) {
-                widgetConfig.options.map = this.map;
-            }
-            if (widgetConfig.options.mapClickMode) {
-                widgetConfig.options.mapClickMode = this.mapClickMode;
-            }
-            if (widgetConfig.options.legendLayerInfos) {
-                widgetConfig.options.layerInfos = this.legendLayerInfos;
-            }
-            if (widgetConfig.options.tocLayerInfos) {
-                widgetConfig.options.layerInfos = this.tocLayerInfos;
-            }
-            if (widgetConfig.options.editorLayerInfos) {
-                widgetConfig.options.layerInfos = this.editorLayerInfos;
-            }
-            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
-                widgetConfig.options.id = widgetConfig.id + '_widget';
-                parentId = widgetConfig.id + '_parent';
-            }
-            if (widgetConfig.type === 'titlePane') {
-                var tp = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open, parentId);
-                widgetConfig.options.parentWidget = tp;
-                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
-                    this[widgetConfig.id] = new WidgetClass(widgetConfig.options, domConstruct.create('div')).placeAt(tp.containerNode);
-                    this[widgetConfig.id].startup();
-                }));
-            } else if (widgetConfig.type === 'floating') {
-                var fw = this._createFloatingWidget(widgetConfig.title, parentId);
-                widgetConfig.options.parentWidget = fw;
-                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
-                    this[widgetConfig.id] = new WidgetClass(widgetConfig.options, domConstruct.create('div')).placeAt(fw.containerNode);
-                    this[widgetConfig.id].startup();
-                }));
-            } else if (widgetConfig.type === 'domNode') {
-                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
-                    this[widgetConfig.id] = new WidgetClass(widgetConfig.options, widgetConfig.srcNodeRef);
-                    this[widgetConfig.id].startup();
-                }));
-            } else if (widgetConfig.type === 'invisible') {
-                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
-                    this[widgetConfig.id] = new WidgetClass(widgetConfig.options);
-                    this[widgetConfig.id].startup();
-                }));
-            } else if (widgetConfig.type === 'map') {
-                require([widgetConfig.path], lang.hitch(this, function(WidgetClass) {
-                    this[widgetConfig.id] = new WidgetClass(widgetConfig.options);
-                    if (this[widgetConfig.id].startup) {
-                        this[widgetConfig.id].startup();
-                    }
-                }));
-            } else {
-                console.log('Widget type: ' + widgetConfig.widgetType + ' not supported');
-            }
-            */
         },
         createWidget: function (widgetConfig, options, WidgetClass) {
             // set any additional options
