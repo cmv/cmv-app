@@ -12,7 +12,7 @@ define([
     'dojo/_base/window',
     'dojo/_base/lang',
     'dojo/text!./templates/mapOverlay.html',
-    'viewer/config',
+    'config/viewer',
     'esri/IdentityManager',
     'gis/dijit/FloatingWidget'
 ], function(Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, TitlePane, win, lang, mapOverlay, config, IdentityManager, FloatingWidget) {
@@ -203,6 +203,34 @@ define([
             return fw;
         },
         widgetLoader: function(widgetConfig, position) {
+            var parentId, pnl;
+
+            // only proceed for valid widget types
+            var widgetTypes = ['titlePane','floating','domNode','invisible','map'];
+            if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
+                console.log('Widget type ' + widgetConfig.type  + ' (' + widgetConfig.title + ') at position ' + position + ' is not supported.');
+                return;
+            }
+
+            // build a titlePane or floating widget as the parent
+            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
+                parentId = widgetConfig.id + '_parent';
+                if (widgetConfig.type === 'titlePane') {
+                    pnl = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open, parentId);
+                } else if (widgetConfig.type === 'floating') {
+                    pnl = this._createFloatingWidget(widgetConfig.title, parentId);
+                }
+                widgetConfig.parentWidget = pnl;
+            }
+
+            // 2 ways to use require to accomodate widgets that may have an optional separate configuration file
+            if (typeof(widgetConfig.options) === 'string') {
+               require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
+            } else {
+               require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
+            }
+
+            /*
             var parentId;
             if (widgetConfig.options.map) {
                 widgetConfig.options.map = this.map;
@@ -256,6 +284,45 @@ define([
                 }));
             } else {
                 console.log('Widget type: ' + widgetConfig.widgetType + ' not supported');
+            }
+            */
+        },
+        createWidget: function (widgetConfig, options, WidgetClass) {
+            // set any additional options
+            options.id = widgetConfig.id + '_widget';
+            options.parentWidget = widgetConfig.parentWidget;
+
+            if (options.map) {
+                options.map = this.map;
+            }
+            if (options.mapClickMode) {
+                options.mapClickMode = this.mapClickMode;
+            }
+            if (options.legendLayerInfos) {
+                options.layerInfos = this.legendLayerInfos;
+            }
+            if (options.tocLayerInfos) {
+                options.layerInfos = this.tocLayerInfos;
+            }
+            if (options.editorLayerInfos) {
+                options.layerInfos = this.editorLayerInfos;
+            }
+
+            // create the widget
+            var pnl = options.parentWidget;
+            if (widgetConfig.type === 'titlePane') {
+                this[widgetConfig.id] = new WidgetClass(options, domConstruct.create('div')).placeAt(pnl.containerNode);
+            } else if (widgetConfig.type === 'floating') {
+                this[widgetConfig.id] = new WidgetClass(options, domConstruct.create('div')).placeAt(pnl.containerNode);
+            } else if (widgetConfig.type === 'domNode') {
+                this[widgetConfig.id] = new WidgetClass(options, widgetConfig.srcNodeRef);
+            } else {
+                this[widgetConfig.id] = new WidgetClass(options);
+            }
+
+            // start up the widget
+            if (this[widgetConfig.id] && this[widgetConfig.id].startup) {
+                this[widgetConfig.id].startup();
             }
         }
     };
