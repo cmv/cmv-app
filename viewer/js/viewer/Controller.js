@@ -58,19 +58,16 @@ define([
         initMap: function() {
             this.map = new Map('map', config.mapOptions);
 
-            this.map.on('load', lang.hitch(this, 'initLayers'));
-            this.map.on('layers-add-result', lang.hitch(this, 'initWidgets'));
-
-            // issue to fix: if using custom basemap, you need to load the basemap widget now or map::load will never fire
-
-            // this.basemaps = new Basemaps({
-            //     map: this.map,
-            //     mode: config.basemapMode,
-            //     title: 'Basemaps',
-            //     mapStartBasemap: config.mapStartBasemap,
-            //     basemapsToShow: config.basemapsToShow
-            // }, 'basemapsDijit');
-            // this.basemaps.startup();
+            if (config.mapOptions.basemap) {
+                this.map.on('load', lang.hitch(this, 'initLayers'));
+            } else {
+                this.initLayers();
+            }
+            if (config.operationalLayers && config.operationalLayers.length > 0) {
+                this.map.on('layers-add-result', lang.hitch(this, 'initWidgets'));
+            } else {
+                this.initWidgets();
+            }
         },
         initLayers: function(evt) {
             this.map.on('resize', function(evt) {
