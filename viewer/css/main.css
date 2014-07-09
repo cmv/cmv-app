@@ -3,6 +3,7 @@ body, html {
     height: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden;
     /*font-family: Tahoma;*/
     font-size: 14px;
 }
@@ -51,6 +52,7 @@ body, html {
     position: relative;
     top: 27px;
     right: 10px;
+    text-align:right;
 }
 
 .appHeader .headerLinks a {
@@ -121,6 +123,10 @@ body, html {
 
 .floatingWidget_underlay {
     display:none
+}
+
+#help_parent_underlay {
+    display:block;
 }
 
 /* dbootstrap overrides*/
