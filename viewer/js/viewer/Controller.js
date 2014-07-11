@@ -124,7 +124,8 @@ define([
                 title: layer.title || null,
                 slider: layer.slider || true,
                 noLegend: layer.noLegend || false,
-                collapsed: layer.collapsed || false
+                collapsed: layer.collapsed || false,
+		sublayerToggle: layer.sublayerToggle || false
             });
             if (layer.type === 'feature') {
                 var options = {
