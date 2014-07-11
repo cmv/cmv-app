@@ -1,4 +1,5 @@
 define([
+    'dojo/_base/declare',
     'esri/map',
     'dojo/dom',
     'dojo/dom-construct',
@@ -8,14 +9,15 @@ define([
     'dojo/_base/array',
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane',
-    'dijit/TitlePane',
+    'gis/dijit/FloatingTitlePane',
+    'dijit/_Contained',
     'dojo/_base/window',
     'dojo/_base/lang',
     'dojo/text!./templates/mapOverlay.html',
     'config/viewer',
     'esri/IdentityManager',
-    'gis/dijit/FloatingWidget'
-], function(Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, TitlePane, win, lang, mapOverlay, config, IdentityManager, FloatingWidget) {
+    'gis/dijit/FloatingWidgetDialog'
+], function(declare, Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, _Contained, win, lang, mapOverlay, config, IdentityManager, FloatingWidgetDialog) {
 
     return {
         config: config,
@@ -169,22 +171,24 @@ define([
                 this.outer.resize();
             }
         },
-        positionSideBarToggle: function () {
+        positionSideBarToggle: function() {
             var disp = domStyle.get(this.sidebar.domNode, 'display');
             var rCls = (disp === 'none') ? 'close' : 'open';
             var aCls = (disp === 'none') ? 'open' : 'close';
             domClass.remove(this.sideBarToggle, rCls);
             domClass.add(this.sideBarToggle, aCls);
         },
-        _createTitlePaneWidget: function(title, position, open, parentId) {
+        _createTitlePaneWidget: function(title, position, open, canFloat, parentId) {
             var options = {
-                title: title,
-                open: open
+                title: title || 'Widget',
+                open: open || false,
+                canFloat: canFloat || false,
+                sidebar: this.sidebar
             };
             if (parentId) {
                 options.id = parentId;
             }
-            var tp = new TitlePane(options).placeAt(this.sidebar, position);
+            var tp = new FloatingTitlePane(options).placeAt(this.sidebar, position);
             tp.startup();
             return tp;
         },
@@ -195,7 +199,7 @@ define([
             if (parentId) {
                 options.id = parentId;
             }
-            var fw = new FloatingWidget(options);
+            var fw = new FloatingWidgetDialog(options);
             fw.startup();
             return fw;
         },
@@ -203,9 +207,9 @@ define([
             var parentId, pnl;
 
             // only proceed for valid widget types
-            var widgetTypes = ['titlePane','floating','domNode','invisible','map'];
+            var widgetTypes = ['titlePane', 'floating', 'domNode', 'invisible', 'map'];
             if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
-                console.log('Widget type ' + widgetConfig.type  + ' (' + widgetConfig.title + ') at position ' + position + ' is not supported.');
+                console.log('Widget type ' + widgetConfig.type + ' (' + widgetConfig.title + ') at position ' + position + ' is not supported.');
                 return;
             }
 
@@ -213,7 +217,7 @@ define([
             if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
                 parentId = widgetConfig.id + '_parent';
                 if (widgetConfig.type === 'titlePane') {
-                    pnl = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open, parentId);
+                    pnl = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open, widgetConfig.canFloat, parentId);
                 } else if (widgetConfig.type === 'floating') {
                     pnl = this._createFloatingWidget(widgetConfig.title, parentId);
                 }
@@ -222,12 +226,12 @@ define([
 
             // 2 ways to use require to accomodate widgets that may have an optional separate configuration file
             if (typeof(widgetConfig.options) === 'string') {
-               require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
+                require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
             } else {
-               require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
+                require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
             }
         },
-        createWidget: function (widgetConfig, options, WidgetClass) {
+        createWidget: function(widgetConfig, options, WidgetClass) {
             // set any additional options
             options.id = widgetConfig.id + '_widget';
             options.parentWidget = widgetConfig.parentWidget;
