@@ -55,7 +55,7 @@ define([
 			}
 		}, {
 			type: 'dynamic',
-			url: 'http://rest.lakecountyil.gov/ArcGIS/rest/services/mapsonline_public/MapServer',
+			url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer',
 			title: 'Damage Assessment',
 			slider: true,
 			noLegend: false,
