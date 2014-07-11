@@ -66,7 +66,7 @@ define([
                 this.initLayers();
             }
             if (config.operationalLayers && config.operationalLayers.length > 0) {
-                this.map.on('layers-add-result', lang.hitch(this, 'initWidgets'));
+                on.once(this.map, 'layers-add-result', lang.hitch(this, 'initWidgets'));
             } else {
                 this.initWidgets();
             }
@@ -127,7 +127,7 @@ define([
                 slider: layer.slider || true,
                 noLegend: layer.noLegend || false,
                 collapsed: layer.collapsed || false,
-		sublayerToggle: layer.sublayerToggle || false
+                sublayerToggle: layer.sublayerToggle || false
             });
             if (layer.type === 'feature') {
                 var options = {
