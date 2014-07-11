@@ -47,6 +47,7 @@ define([
 			slider: true,
 			noLegend: false,
 			collapsed: false,
+			sublayerToggle: false, //true to automatically turn on sublayers
 			options: {
 				id: 'louisvillePubSafety',
 				opacity: 1.0,
