@@ -46,19 +46,24 @@ define([
 		_dockWidget: function() {
 			domAttr.remove(this.domNode, 'style');
 			domStyle.set(this.dockHandleNode, 'display', 'none');
-			this.placeAt(this.sidebar, this.index);
+			var dockedWidgets = this.sidebar.getChildren();
+			this.placeAt(this.sidebar, dockedWidgets.length);
+			this.isFloating = false;
 		},
 		_moveDom: function() {
-			domStyle.set(this.dockHandleNode, 'display', 'inline');
-			var computedStyle = domStyle.getComputedStyle(this.containerNode);
-			var width = parseInt(domStyle.getComputedStyle(this.sidebar.containerNode).width, 10);
-			domGeom.setContentSize(this.containerNode, {
-				w: (width - 32)
-			}, computedStyle);
-			domGeom.setContentSize(this.titleBarNode, {
-				w: (width - 32)
-			}, computedStyle);
-			this.placeAt(win.body());
+			if (!this.isFloating) {
+				domStyle.set(this.dockHandleNode, 'display', 'inline');
+				var computedStyle = domStyle.getComputedStyle(this.containerNode);
+				var width = parseInt(domStyle.getComputedStyle(this.sidebar.containerNode).width, 10);
+				domGeom.setContentSize(this.containerNode, {
+					w: (width - 32)
+				}, computedStyle);
+				domGeom.setContentSize(this.titleBarNode, {
+					w: (width - 32)
+				}, computedStyle);
+				this.isFloating = true;
+				this.placeAt(win.body());
+			}
 		},
 		_endDrag: function() {
 			// summary:
