@@ -1,0 +1,50 @@
+<div class="gis_DrawDijit">
+    <div class="formContainer">
+        <div style="padding:5px;">
+            <table>
+                <tr>
+                    <td>
+                        <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'pointIcon',showLabel:true"
+                        data-dojo-attach-event="onClick:drawPoint">
+                            Point
+                        </button>
+                        <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'circleDrawIcon',showLabel:true,drawType:'CIRCLE'"
+                        data-dojo-attach-event="onClick:drawCircle">
+                            Circle
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'lineIcon',showLabel:true"
+                        data-dojo-attach-event="onClick:drawLine">
+                            Line
+                        </button>
+                        <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'freehandDrawIcon',showLabel:true"
+                        data-dojo-attach-event="onClick:drawFreehandLine">
+                            Freehand Line
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'polyIcon',showLabel:true"
+                        data-dojo-attach-event="onClick:drawPolygon">
+                            Polygon
+                        </button>
+                        <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'freehandDrawIcon',showLabel:true"
+                        data-dojo-attach-event="onClick:drawFreehandPolygon">
+                            Freehand Polygon
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="buttonActionBar">
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'clearIcon',showLabel:true"
+        data-dojo-attach-event="onClick:clearGraphics">
+            Clear Drawing
+        </button>
+    </div>
+</div>

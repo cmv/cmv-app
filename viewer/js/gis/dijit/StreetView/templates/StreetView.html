@@ -1,0 +1,15 @@
+<div class="gis_StreetView">
+    <div data-dojo-attach-point="panoNode" class="streetViewNode">
+    	<span data-dojo-attach-point="noStreetViewResults" class="noStreetViewResults">
+            <div class="noStreetViewResultsText">
+                StreetView not available at this location.
+            </div>
+        </span>
+    </div>
+    <div data-dojo-attach-point="buttonActionBar" class="buttonActionBar">
+    	<img data-dojo-attach-point="loadingStreetView" class="loadingStreetView" src="../images/loading.gif">
+        <button data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'pegmanIcon',showLabel:true" data-dojo-attach-event="onClick:placePoint">
+            Activate with map click
+        </button>
+    </div>
+</div>

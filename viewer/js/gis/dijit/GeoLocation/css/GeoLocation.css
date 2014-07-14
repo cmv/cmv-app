@@ -1,0 +1,19 @@
+.gis_GeoLocation_Dijit  .geoLocationButton {
+    -moz-user-select: none;
+    background-color: #FFFFFF;
+    border: 2px solid #666666;
+    border-radius: 5px 5px 5px 5px;
+    cursor: pointer;
+    padding: 7px;
+}
+
+.gis_GeoLocation_Dijit .geoLocationIcon {
+    background-image: url("../images/location.png");
+    width: 16px;
+    height: 16px;
+}
+
+.gis_GeoLocation_Dijit .geoLocationButton .dijitButtonNode {
+    border: none;
+}
+

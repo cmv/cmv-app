@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Configurable Viewer</title>
+        <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.10/js/dojo/dojo/resources/dojo.css">
+        <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.10/js/esri/css/esri.css">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+    </head>
+    <body class="dbootstrap">
+        <div class="appHeader">
+            <div class="headerLogo">
+                <img alt="logo" src="images/rocket-logo.png" height="54" />
+            </div>
+            <div class="headerTitle">
+                Configurable Map Viewer
+                <div class="subHeaderTitle">
+                    make it your own
+                </div>
+            </div>
+            <div class="search">
+                <div id='geocodeDijit'>
+                </div>
+            </div>
+            <div class="headerLinks">
+                <div id="helpDijit">
+                </div>
+            </div>
+        </div>
+        <div id="sidebarCollapseButton" class="sidebarCollapseButton close" style="display:none;">
+        </div>
+        <script type="text/javascript">
+            var dojoConfig = {
+                async: true,
+                packages: [{
+                    name: 'viewer',
+                    location: location.pathname.replace(/[^\/]+$/, '') + 'js/viewer'
+                },{
+                    name: "config",
+                    location: location.pathname.replace(/[^\/]+$/, '') + "js/config"
+                },{
+                    name: 'gis',
+                    location: location.pathname.replace(/[^\/]+$/, '') + 'js/gis'
+                },{
+                    name: 'dbootstrap',
+                    location: location.pathname.replace(/[^\/]+$/, '') + 'js/dbootstrap'
+                }]
+            };
+        </script>
+        <script type="text/javascript" src="//js.arcgis.com/3.10"></script>
+        <script type="text/javascript">
+            var app; //dev only
+            require(['dbootstrap','viewer/Controller'], function(dbootstrap, Controller){
+                Controller.startup();
+                app = Controller; //dev only
+            });
+        </script>
+    </body>
+</html>
