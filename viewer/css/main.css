@@ -110,17 +110,6 @@ body, html {
 #help_parent_underlay {
     display: block;
 }
-.floatingWidgetMove:before {
-    float: right;
-    margin-left: 10px;
-    content: "\f047";
-    font-family: FontAwesome;
-}
-.floatingWidgetDock:before {
-    float: right;
-    content: "\f112";
-    font-family: FontAwesome;
-}
 
 /* dbootstrap overrides*/
 

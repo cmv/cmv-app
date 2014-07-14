@@ -12,19 +12,27 @@ define([
 	'dojo/dom-style',
 	'dojo/dom-construct',
 	'dojo/dom-attr',
-	'dojo/dom-class'
-], function(declare, TitlePane, _Contained, on, lang, Moveable, aspect, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass) {
+	'dojo/dom-class',
+	'xstyle/css!./FloatingTitlePane/css/FloatingTitlePane.css'
+], function(declare, TitlePane, _Contained, on, lang, Moveable, aspect, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass, css) {
 	return declare([TitlePane, _Contained], {
 		postCreate: function() {
 			if (this.canFloat) {
-				this.dockHandleNode = domConstruct.create('span', null, this.titleNode, 'after');
+				this.dockHandleNode = domConstruct.create('span', {
+					title: 'Dock widget'
+				}, this.titleNode, 'after');
 				domStyle.set(this.dockHandleNode, 'display', 'none');
-				this.moveHandleNode = domConstruct.create('span', null, this.titleNode, 'after');
 				domClass.add(this.dockHandleNode, 'floatingWidgetDock');
-				domClass.add(this.moveHandleNode, 'floatingWidgetMove');
-				on(this.moveHandleNode, 'click', function(evt) {
+
+				this.moveHandleNode = domConstruct.create('span', {
+					title: 'Move widget'
+				}, this.titleNode, 'after');
+				domClass.add(this.moveHandleNode, 'floatingWidgetPopout');
+
+				on(this.moveHandleNode, 'click', lang.hitch(this, function(evt) {
+					this._undockWidget();
 					evt.stopImmediatePropagation();
-				});
+				}));
 				on(this.dockHandleNode, 'click', lang.hitch(this, function(evt) {
 					this._dockWidget();
 					evt.stopImmediatePropagation();
@@ -43,16 +51,27 @@ define([
 			}
 			this.inherited(arguments);
 		},
+		_undockWidget: function() {
+			if (!this.isFloating) {
+				domClass.add(this.moveHandleNode, 'floatingWidgetMove');
+				domClass.remove(this.moveHandleNode, 'floatingWidgetPopout');
+			}
+		},
 		_dockWidget: function() {
 			domAttr.remove(this.domNode, 'style');
 			domStyle.set(this.dockHandleNode, 'display', 'none');
 			var dockedWidgets = this.sidebar.getChildren();
 			this.placeAt(this.sidebar, dockedWidgets.length);
+			domClass.remove(this.moveHandleNode, 'floatingWidgetMove');
+			domClass.add(this.moveHandleNode, 'floatingWidgetPopout');
 			this.isFloating = false;
 		},
 		_moveDom: function() {
 			if (!this.isFloating) {
 				domStyle.set(this.dockHandleNode, 'display', 'inline');
+				domStyle.set(this.domNode, 'z-index', '40');
+				domClass.add(this.moveHandleNode, 'floatingWidgetMove');
+				domClass.remove(this.moveHandleNode, 'floatingWidgetPopout');
 				var computedStyle = domStyle.getComputedStyle(this.containerNode);
 				var width = parseInt(domStyle.getComputedStyle(this.sidebar.containerNode).width, 10);
 				domGeom.setContentSize(this.containerNode, {
