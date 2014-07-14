@@ -10,14 +10,13 @@ define([
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane',
     'gis/dijit/FloatingTitlePane',
-    'dijit/_Contained',
     'dojo/_base/window',
     'dojo/_base/lang',
     'dojo/text!./templates/mapOverlay.html',
     'config/viewer',
     'esri/IdentityManager',
     'gis/dijit/FloatingWidgetDialog'
-], function(declare, Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, _Contained, win, lang, mapOverlay, config, IdentityManager, FloatingWidgetDialog) {
+], function(declare, Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, win, lang, mapOverlay, config, IdentityManager, FloatingWidgetDialog) {
 
     return {
         config: config,
