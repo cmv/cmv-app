@@ -1,4 +1,5 @@
 define([
+    'dojo/_base/declare',
     'esri/map',
     'dojo/dom',
     'dojo/dom-construct',
@@ -8,14 +9,14 @@ define([
     'dojo/_base/array',
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane',
-    'dijit/TitlePane',
+    'gis/dijit/FloatingTitlePane',
     'dojo/_base/window',
     'dojo/_base/lang',
     'dojo/text!./templates/mapOverlay.html',
     'config/viewer',
     'esri/IdentityManager',
-    'gis/dijit/FloatingWidget'
-], function(Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, TitlePane, win, lang, mapOverlay, config, IdentityManager, FloatingWidget) {
+    'gis/dijit/FloatingWidgetDialog'
+], function(declare, Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, win, lang, mapOverlay, config, IdentityManager, FloatingWidgetDialog) {
 
     return {
         config: config,
@@ -177,15 +178,17 @@ define([
             domClass.remove(this.sideBarToggle, rCls);
             domClass.add(this.sideBarToggle, aCls);
         },
-        _createTitlePaneWidget: function(title, position, open, parentId) {
+        _createTitlePaneWidget: function(title, position, open, canFloat, parentId) {
             var options = {
-                title: title,
-                open: open
+                title: title || 'Widget',
+                open: open || false,
+                canFloat: canFloat || false,
+                sidebar: this.sidebar
             };
             if (parentId) {
                 options.id = parentId;
             }
-            var tp = new TitlePane(options).placeAt(this.sidebar, position);
+            var tp = new FloatingTitlePane(options).placeAt(this.sidebar, position);
             tp.startup();
             return tp;
         },
@@ -196,7 +199,7 @@ define([
             if (parentId) {
                 options.id = parentId;
             }
-            var fw = new FloatingWidget(options);
+            var fw = new FloatingWidgetDialog(options);
             fw.startup();
             return fw;
         },
@@ -214,7 +217,7 @@ define([
             if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
                 parentId = widgetConfig.id + '_parent';
                 if (widgetConfig.type === 'titlePane') {
-                    pnl = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open, parentId);
+                    pnl = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open, widgetConfig.canFloat, parentId);
                 } else if (widgetConfig.type === 'floating') {
                     pnl = this._createFloatingWidget(widgetConfig.title, parentId);
                 }
