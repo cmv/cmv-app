@@ -23,7 +23,19 @@ define([
         legendLayerInfos: [],
         editorLayerInfos: [],
         tocLayerInfos: [],
-        panes: {},
+        panes: {
+            'sidebar': {
+                placeAt: 'outer',
+                className: 'sidebar',
+                region: 'left'
+            },
+            'map': {
+                placeAt: 'inner',
+                region: 'center',
+                id: 'map',
+                content: mapOverlay
+            }
+        },
         mapClickMode: {
             current: config.defaultMapClickMode,
             defaultMode: config.defaultMapClickMode
@@ -33,9 +45,8 @@ define([
             this.initMap();
         },
         initPanes: function () {
-            if (!this.panes) {
-                this.panes = {};
-            }
+            var panes = lang.mixin({}, this.panes);
+            lang.mixin(panes, config.panes);
             this.panes.outer = new BorderContainer({
                 id: 'borderContainer',
                 design: 'sidebar',
@@ -47,20 +58,6 @@ define([
                 design: 'headline',
                 gutters: false
             }).placeAt(this.panes.outer);
-            var panes = {
-                'sidebar': {
-                    placeAt: 'outer',
-                    className: 'sidebar',
-                    region: 'left'
-                },
-                'map': {
-                    placeAt: 'inner',
-                    region: 'center',
-                    id: 'map',
-                    content: mapOverlay
-                }
-            };
-            lang.mixin(panes, config.panes);
             var options, placeAt, type;
             for (var key in panes) {
                 if (panes.hasOwnProperty(key)) {
