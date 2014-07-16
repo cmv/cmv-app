@@ -13,40 +13,39 @@ define([
     'dojo/_base/window',
     'dojo/_base/lang',
     'dojo/text!./templates/mapOverlay.html',
-    'config/viewer',
     'esri/IdentityManager',
     'gis/dijit/FloatingWidgetDialog'
-], function(declare, Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, win, lang, mapOverlay, config, IdentityManager, FloatingWidgetDialog) {
+], function(declare, Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, win, lang, mapOverlay, IdentityManager, FloatingWidgetDialog) {
 
     return {
-        config: config,
         legendLayerInfos: [],
         editorLayerInfos: [],
         tocLayerInfos: [],
         panes: {
-            'sidebar': {
+            sidebar: {
                 id: 'sidebar',
                 placeAt: 'outer',
                 className: 'sidebar',
                 region: 'left'
             },
-            'map': {
+            map: {
                 id: 'map',
                 placeAt: 'outer',
                 region: 'center',
                 content: mapOverlay
             }
         },
-        mapClickMode: {
-            current: config.defaultMapClickMode,
-            defaultMode: config.defaultMapClickMode
-        },
-        startup: function() {
+        startup: function(config) {
+            this.config = config;
+            this.mapClickMode = {
+                current: this.config.defaultMapClickMode,
+                defaultMode: this.config.defaultMapClickMode
+            };
             this.initPanes();
             this.initMap();
         },
         initPanes: function() {
-            var panes = lang.mixin({}, this.panes, config.panes);
+            var panes = lang.mixin({}, this.panes, this.config.panes);
             this.panes.outer = new BorderContainer({
                 id: 'borderContainer',
                 design: 'sidebar',
@@ -79,14 +78,14 @@ define([
             }
         },
         initMap: function() {
-            this.map = new Map('map', config.mapOptions);
+            this.map = new Map('map', this.config.mapOptions);
 
-            if (config.mapOptions.basemap) {
+            if (this.config.mapOptions.basemap) {
                 this.map.on('load', lang.hitch(this, 'initLayers'));
             } else {
                 this.initLayers();
             }
-            if (config.operationalLayers && config.operationalLayers.length > 0) {
+            if (this.config.operationalLayers && this.config.operationalLayers.length > 0) {
                 on.once(this.map, 'layers-add-result', lang.hitch(this, 'initWidgets'));
             } else {
                 this.initWidgets();
@@ -117,7 +116,7 @@ define([
             };
             // loading all the required modules first ensures the layer order is maintained
             var modules = [];
-            array.forEach(config.operationalLayers, function(layer) {
+            array.forEach(this.config.operationalLayers, function(layer) {
                 var type = layerTypes[layer.type];
                 if (type) {
                     modules.push('esri/layers/' + type + 'Layer');
@@ -126,7 +125,7 @@ define([
                 }
             }, this);
             require(modules, lang.hitch(this, function() {
-                array.forEach(config.operationalLayers, function(layer) {
+                array.forEach(this.config.operationalLayers, function(layer) {
                     var type = layerTypes[layer.type];
                     if (type) {
                         require(['esri/layers/' + type + 'Layer'], lang.hitch(this, 'initLayer', layer));
@@ -163,9 +162,9 @@ define([
         initWidgets: function(evt) {
             var widgets = [];
 
-            for (var key in config.widgets) {
-                if (config.widgets.hasOwnProperty(key)) {
-                    var widget = lang.clone(config.widgets[key]);
+            for (var key in this.config.widgets) {
+                if (this.config.widgets.hasOwnProperty(key)) {
+                    var widget = lang.clone(this.config.widgets[key]);
                     if (widget.include) {
                         widget.position = ('undefined' !== typeof(widget.position)) ? widget.position : 10000;
                         widgets.push(widget);
@@ -192,12 +191,12 @@ define([
                 if (id === 'sidebar') {
                     this.positionSideBarToggle();
                 }
-                if (this.panes.outer){
+                if (this.panes.outer) {
                     this.panes.outer.resize();
                 }
             }
         },
-        positionSideBarToggle: function () {
+        positionSideBarToggle: function() {
             var disp = domStyle.get(this.panes.sidebar.domNode, 'display');
             var rCls = (disp === 'none') ? 'close' : 'open';
             var aCls = (disp === 'none') ? 'open' : 'close';
@@ -262,9 +261,9 @@ define([
             var parentId, pnl;
 
             // only proceed for valid widget types
-            var widgetTypes = ['titlePane','contentPane','floating','domNode','invisible','map'];
+            var widgetTypes = ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map'];
             if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
-                console.log('Widget type ' + widgetConfig.type  + ' (' + widgetConfig.title + ') at position ' + position + ' is not supported.');
+                console.log('Widget type ' + widgetConfig.type + ' (' + widgetConfig.title + ') at position ' + position + ' is not supported.');
                 return;
             }
 
@@ -288,7 +287,7 @@ define([
                 require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
             }
         },
-        createWidget: function (widgetConfig, options, WidgetClass) {
+        createWidget: function(widgetConfig, options, WidgetClass) {
             // set any additional options
             options.id = widgetConfig.id + '_widget';
             options.parentWidget = widgetConfig.parentWidget;
