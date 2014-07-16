@@ -25,14 +25,15 @@ define([
         tocLayerInfos: [],
         panes: {
             'sidebar': {
+                id: 'sidebar',
                 placeAt: 'outer',
                 className: 'sidebar',
                 region: 'left'
             },
             'map': {
+                id: 'map',
                 placeAt: 'inner',
                 region: 'center',
-                id: 'map',
                 content: mapOverlay
             }
         },
