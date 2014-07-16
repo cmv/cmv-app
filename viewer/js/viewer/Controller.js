@@ -32,7 +32,7 @@ define([
             },
             'map': {
                 id: 'map',
-                placeAt: 'inner',
+                placeAt: 'outer',
                 region: 'center',
                 content: mapOverlay
             }
@@ -52,12 +52,6 @@ define([
                 design: 'sidebar',
                 gutters: false
             }).placeAt(win.body());
-            this.panes.inner = new BorderContainer({
-                id: 'innerContainer',
-                region: 'center',
-                design: 'headline',
-                gutters: false
-            }).placeAt(this.panes.outer);
             var options, placeAt, type;
             for (var key in panes) {
                 if (panes.hasOwnProperty(key)) {
