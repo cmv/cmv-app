@@ -45,8 +45,7 @@ define([
             this.initMap();
         },
         initPanes: function () {
-            var panes = lang.mixin({}, this.panes);
-            lang.mixin(panes, config.panes);
+            var panes = lang.mixin({}, this.panes, config.panes);
             this.panes.outer = new BorderContainer({
                 id: 'borderContainer',
                 design: 'sidebar',
