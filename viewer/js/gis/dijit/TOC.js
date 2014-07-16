@@ -522,7 +522,7 @@ define([
     _setSubLayerVisibilitiesFromGroup: function(lay) {
       if (lay._subLayerInfos && lay._subLayerInfos.length > 0) {
         array.forEach(lay._subLayerInfos, function(info) {
-          info.visible = this.rootLayerTOC.config.sublayerToggle;//lay.visible;
+          info.visible = this.rootLayerTOC.config.sublayerToggle ? lay.visible : false;
           if (info._subLayerInfos && info._subLayerInfos.length > 0) {
             this._setSubLayerVisibilitiesFromGroup(info);
           }
