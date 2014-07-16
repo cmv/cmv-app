@@ -241,7 +241,7 @@ define([
             fw.startup();
             return fw;
         },
-        _createContainerWidget: function(parentId, title, className, region, placeAt) {
+        _createContentPaneWidget: function(parentId, title, className, region, placeAt) {
             var cp, options = {
                 title: title,
                 region: region || 'center'
@@ -279,7 +279,7 @@ define([
                 if (widgetConfig.type === 'titlePane') {
                     pnl = this._createTitlePaneWidget(parentId, widgetConfig.title, position, widgetConfig.open, widgetConfig.canFloat, widgetConfig.placeAt);
                 } else if (widgetConfig.type === 'contentPane') {
-                    pnl = this._createContainerWidget(parentId, widgetConfig.title, widgetConfig.className, widgetConfig.region, widgetConfig.placeAt);
+                    pnl = this._createContentPaneWidget(parentId, widgetConfig.title, widgetConfig.className, widgetConfig.region, widgetConfig.placeAt);
                 } else if (widgetConfig.type === 'floating') {
                     pnl = this._createFloatingWidget(parentId, widgetConfig.title);
                 }
