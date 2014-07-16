@@ -44,7 +44,7 @@ define([
             this.initPanes();
             this.initMap();
         },
-        initPanes: function () {
+        initPanes: function() {
             var panes = lang.mixin({}, this.panes, config.panes);
             this.panes.outer = new BorderContainer({
                 id: 'borderContainer',
@@ -288,9 +288,9 @@ define([
 
             // 2 ways to use require to accommodate widgets that may have an optional separate configuration file
             if (typeof(widgetConfig.options) === 'string') {
-               require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
+                require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
             } else {
-               require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
+                require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
             }
         },
         createWidget: function (widgetConfig, options, WidgetClass) {
