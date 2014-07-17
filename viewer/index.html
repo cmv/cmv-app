@@ -49,29 +49,13 @@
         <script type="text/javascript" src="//js.arcgis.com/3.10"></script>
         <script type="text/javascript">
             // get the config file from the url if present
-            var dec = decodeURIComponent, qp = window.location.search.substring(1).split("&"), q = {}, name, val;
-            for(var i = 0, l = qp.length, item; i < l; ++i){
-                item = qp[i];
-                if(item.length){
-                    var s = item.indexOf("=");
-                    if(s < 0){
-                        name = dec(item);
-                        val = "";
-                    }else{
-                        name = dec(item.slice(0, s));
-                        val  = dec(item.slice(s + 1));
-                    }
-                    if(typeof q[name] == "string"){ // inline'd type check
-                        q[name] = [q[name]];
-                    }
-                    if(Object.prototype.toString.call(q[name]) === '[object Array]'){
-                        q[name].push(val);
-                    }else{
-                        q[name] = val;
-                    }
+            var file = 'config/viewer', s = window.location.search, q = s.match(/config=([^&]*)/i);
+            if (q && q.length > 0) {
+                file = q[1];
+                if(file.indexOf('/') < 0) {
+                    file = 'config/' + file;
                 }
             }
-            var file = q.config || 'viewer';
             var app; //dev only
             require(['dbootstrap','viewer/Controller', 'config/' + file], function(dbootstrap, Controller, config){
                 Controller.startup(config);
