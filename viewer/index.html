@@ -57,7 +57,7 @@
                 }
             }
             var app; //dev only
-            require(['dbootstrap','viewer/Controller', 'config/' + file], function(dbootstrap, Controller, config){
+            require(['dbootstrap','viewer/Controller', file], function(dbootstrap, Controller, config){
                 Controller.startup(config);
                 app = Controller; //dev only
             });
