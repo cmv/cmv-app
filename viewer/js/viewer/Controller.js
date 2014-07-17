@@ -319,7 +319,7 @@ define([
             }
 
             // start up the widget
-            if (this[widgetConfig.id] && this[widgetConfig.id].startup) {
+            if (this[widgetConfig.id] && this[widgetConfig.id].startup && !this[widgetConfig.id]._started) {
                 this[widgetConfig.id].startup();
             }
         }
