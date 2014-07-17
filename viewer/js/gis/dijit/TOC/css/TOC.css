@@ -56,11 +56,12 @@
 
 .agsjsTOCNode .dijitTreeExpando {
     background-image: url('../images/treeExpandImages.png');
-    width: 18px;
-    height: 18px;
-    background-position: -18px 0px;
-    background-size: 36px 18px;
-    margin-top: -4px;
+    width: 15px;
+    height: 15px;
+    background-position: -15px 0px;
+    background-size: 30px 15px;
+    vertical-align: top;
+    margin: 3px 3px 2px 2px;
 }
 
 .agsjsTOCNode .dijitTreeExpandoClosed {
