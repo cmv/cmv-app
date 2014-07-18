@@ -1,5 +1,7 @@
 # Configurable ESRI JS API Viewer
 
+[![Build Status](https://travis-ci.org/DavidSpriggs/ConfigurableViewerJSAPI.svg?branch=master)](https://travis-ci.org/DavidSpriggs/ConfigurableViewerJSAPI)
+
 This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for OO and classes in JS. [demo](http://davidspriggs.github.io/ConfigurableViewerJSAPI/viewer/)
 
 ## Installation:
