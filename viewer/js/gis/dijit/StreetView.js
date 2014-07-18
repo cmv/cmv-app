@@ -141,6 +141,8 @@ define([
             } else if (StreetViewStatus === 'ZERO_RESULTS') {
                 this.setPanoPlace = null;
                 this.clearGraphics();
+                // reset default map click mode
+                this.connectMapClick();
                 domStyle.set(this.noStreetViewResults, 'display', 'block');
             } else {
                 this.setPanoPlace = null;
