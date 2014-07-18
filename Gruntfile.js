@@ -94,6 +94,18 @@ module.exports = function(grunt) {
       build_browser: {
         path: 'http://localhost:3001/index.html'
       }
+    },
+    compress: {
+      build: {
+        options: {
+          archive: 'viewer.zip'
+        },
+        files: [{
+          expand: true,
+          cwd: 'dist',
+          src: ['**']
+        }]
+      }
     }
   });
 
@@ -108,10 +120,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-newer');
   grunt.loadNpmTasks('grunt-open');
+  grunt.loadNpmTasks('grunt-contrib-compress');
 
   // define the tasks
   grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a server.', ['connect:dev', 'open:dev_browser', 'watch']);
-  grunt.registerTask('build', 'Compiles all of the assets and copies the files to the build directory.', ['clean', 'copy', 'stylesheets', 'scripts', 'connect:build', 'open:build_browser', 'watch']);
+  grunt.registerTask('build', 'Compiles all of the assets and copies the files to the build directory.', ['clean', 'copy', 'stylesheets', 'scripts', 'compress:build']);
+  grunt.registerTask('build-view', 'Compiles all of the assets and copies the files to the build directory.', ['clean', 'copy', 'stylesheets', 'scripts', 'connect:build', 'open:build_browser']);
   grunt.registerTask('scripts', 'Compiles the JavaScript files.', ['newer:jshint', 'newer:uglify']);
   grunt.registerTask('stylesheets', 'Compiles the stylesheets.', ['newer:autoprefixer', 'newer:cssmin']);
 };

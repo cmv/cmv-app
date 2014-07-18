@@ -18,7 +18,8 @@
     "grunt-contrib-uglify": "0.4.x",
     "grunt-contrib-watch": "0.6.x",
     "grunt-newer": "0.7.x",
-    "grunt-open": "0.2.x"
+    "grunt-open": "0.2.x",
+    "grunt-contrib-compress": "0.10.x"
   },
   "engine": "node >= 0.10"
 }

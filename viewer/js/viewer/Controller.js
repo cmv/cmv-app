@@ -13,58 +13,79 @@ define([
     'dojo/_base/window',
     'dojo/_base/lang',
     'dojo/text!./templates/mapOverlay.html',
-    'config/viewer',
     'esri/IdentityManager',
     'gis/dijit/FloatingWidgetDialog'
-], function(declare, Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, win, lang, mapOverlay, config, IdentityManager, FloatingWidgetDialog) {
+], function(declare, Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, win, lang, mapOverlay, IdentityManager, FloatingWidgetDialog) {
 
     return {
-        config: config,
         legendLayerInfos: [],
         editorLayerInfos: [],
         tocLayerInfos: [],
-        mapClickMode: {
-            current: config.defaultMapClickMode,
-            defaultMode: config.defaultMapClickMode
+        panes: {
+            sidebar: {
+                id: 'sidebar',
+                placeAt: 'outer',
+                className: 'sidebar',
+                region: 'left'
+            },
+            map: {
+                id: 'map',
+                placeAt: 'outer',
+                region: 'center',
+                content: mapOverlay
+            }
         },
-        startup: function() {
-            this.initView();
+        startup: function(config) {
+            this.config = config;
+            this.mapClickMode = {
+                current: this.config.defaultMapClickMode,
+                defaultMode: this.config.defaultMapClickMode
+            };
+            this.initPanes();
+            this.initMap();
         },
-        initView: function() {
-            this.outer = new BorderContainer({
+        initPanes: function() {
+            var panes = lang.mixin({}, this.panes, this.config.panes);
+            this.panes.outer = new BorderContainer({
                 id: 'borderContainer',
-                design: 'headline',
+                design: 'sidebar',
                 gutters: false
             }).placeAt(win.body());
-
-            this.sidebar = new ContentPane({
-                id: 'sidebar',
-                region: 'left'
-            }).placeAt(this.outer);
-
-            new ContentPane({
-                region: 'center',
-                id: 'map',
-                content: mapOverlay
-            }).placeAt(this.outer);
-
-            this.outer.startup();
-            this.initMap();
-
+            var options, placeAt, type;
+            for (var key in panes) {
+                if (panes.hasOwnProperty(key)) {
+                    options = lang.clone(panes[key]);
+                    placeAt = this.panes[options.placeAt] || this.panes.outer;
+                    options.id = options.id || key;
+                    type = options.type;
+                    delete options.placeAt;
+                    delete options.type;
+                    if (placeAt) {
+                        if (type === 'border') {
+                            this.panes[key] = new BorderContainer(options).placeAt(placeAt);
+                        } else if (options.region) {
+                            this.panes[key] = new ContentPane(options).placeAt(placeAt);
+                        }
+                    }
+                }
+            }
+            this.panes.outer.startup();
             this.sideBarToggle = dom.byId('sidebarCollapseButton');
-            this.positionSideBarToggle();
-            on(this.sideBarToggle, 'click', lang.hitch(this, 'togglePane', 'sidebar'));
-            domStyle.set(this.sideBarToggle, 'display', 'block');
+            if (this.panes.sidebar && !this.panes.sidebar.splitter) {
+                this.positionSideBarToggle();
+                on(this.sideBarToggle, 'click', lang.hitch(this, 'togglePane', 'sidebar'));
+                domStyle.set(this.sideBarToggle, 'display', 'block');
+            }
         },
         initMap: function() {
-            this.map = new Map('map', config.mapOptions);
+            this.map = new Map('map', this.config.mapOptions);
 
-            if (config.mapOptions.basemap) {
+            if (this.config.mapOptions.basemap) {
                 this.map.on('load', lang.hitch(this, 'initLayers'));
             } else {
                 this.initLayers();
             }
-            if (config.operationalLayers && config.operationalLayers.length > 0) {
+            if (this.config.operationalLayers && this.config.operationalLayers.length > 0) {
                 on.once(this.map, 'layers-add-result', lang.hitch(this, 'initWidgets'));
             } else {
                 this.initWidgets();
@@ -80,7 +101,7 @@ define([
 
             this.layers = [];
             var layerTypes = {
-                csv: 'CSV', // untested
+                csv: 'CSV',
                 dynamic: 'ArcGISDynamicMapService',
                 feature: 'Feature',
                 georss: 'GeoRSS',
@@ -95,7 +116,7 @@ define([
             };
             // loading all the required modules first ensures the layer order is maintained
             var modules = [];
-            array.forEach(config.operationalLayers, function(layer) {
+            array.forEach(this.config.operationalLayers, function(layer) {
                 var type = layerTypes[layer.type];
                 if (type) {
                     modules.push('esri/layers/' + type + 'Layer');
@@ -104,7 +125,7 @@ define([
                 }
             }, this);
             require(modules, lang.hitch(this, function() {
-                array.forEach(config.operationalLayers, function(layer) {
+                array.forEach(this.config.operationalLayers, function(layer) {
                     var type = layerTypes[layer.type];
                     if (type) {
                         require(['esri/layers/' + type + 'Layer'], lang.hitch(this, 'initLayer', layer));
@@ -123,7 +144,7 @@ define([
             this.tocLayerInfos.push({ //push because Legend and TOC need the layers in the opposite order
                 layer: l,
                 title: layer.title || null,
-                slider: layer.slider || true,
+                slider: (layer.slider === false) ? false : true,
                 noLegend: layer.noLegend || false,
                 collapsed: layer.collapsed || false,
                 sublayerToggle: layer.sublayerToggle || false
@@ -141,9 +162,9 @@ define([
         initWidgets: function(evt) {
             var widgets = [];
 
-            for (var key in config.widgets) {
-                if (config.widgets.hasOwnProperty(key)) {
-                    var widget = lang.clone(config.widgets[key]);
+            for (var key in this.config.widgets) {
+                if (this.config.widgets.hasOwnProperty(key)) {
+                    var widget = lang.clone(this.config.widgets[key]);
                     if (widget.include) {
                         widget.position = ('undefined' !== typeof(widget.position)) ? widget.position : 10000;
                         widgets.push(widget);
@@ -160,39 +181,50 @@ define([
             }, this);
         },
         togglePane: function(id) {
-            if (!this[id]) {
+            if (!this.panes[id]) {
                 return;
             }
-            var domNode = this[id].domNode;
+            var domNode = this.panes[id].domNode;
             if (domNode) {
                 var disp = (domStyle.get(domNode, 'display') === 'none') ? 'block' : 'none';
                 domStyle.set(domNode, 'display', disp);
-                this.positionSideBarToggle();
-                this.outer.resize();
+                if (id === 'sidebar') {
+                    this.positionSideBarToggle();
+                }
+                if (this.panes.outer) {
+                    this.panes.outer.resize();
+                }
             }
         },
         positionSideBarToggle: function() {
-            var disp = domStyle.get(this.sidebar.domNode, 'display');
+            var disp = domStyle.get(this.panes.sidebar.domNode, 'display');
             var rCls = (disp === 'none') ? 'close' : 'open';
             var aCls = (disp === 'none') ? 'open' : 'close';
             domClass.remove(this.sideBarToggle, rCls);
             domClass.add(this.sideBarToggle, aCls);
         },
-        _createTitlePaneWidget: function(title, position, open, canFloat, parentId) {
-            var options = {
+        _createTitlePaneWidget: function(parentId, title, position, open, canFloat, placeAt) {
+            var tp, options = {
                 title: title || 'Widget',
                 open: open || false,
-                canFloat: canFloat || false,
-                sidebar: this.sidebar
+                canFloat: canFloat || false
             };
             if (parentId) {
                 options.id = parentId;
             }
-            var tp = new FloatingTitlePane(options).placeAt(this.sidebar, position);
-            tp.startup();
+            if (!placeAt) {
+                placeAt = this.panes.sidebar;
+            } else if (typeof(placeAt) === 'string') {
+                placeAt = this.panes[placeAt];
+            }
+            if (placeAt) {
+                options.sidebar = placeAt;
+                tp = new FloatingTitlePane(options).placeAt(placeAt, position);
+                tp.startup();
+            }
             return tp;
         },
-        _createFloatingWidget: function(title, parentId) {
+        _createFloatingWidget: function(parentId, title) {
             var options = {
                 title: title
             };
@@ -203,28 +235,52 @@ define([
             fw.startup();
             return fw;
         },
+        _createContentPaneWidget: function(parentId, title, className, region, placeAt) {
+            var cp, options = {
+                title: title,
+                region: region || 'center'
+            };
+            if (className) {
+                options.className = className;
+            }
+            if (parentId) {
+                options.id = parentId;
+            }
+            if (!placeAt) {
+                placeAt = this.panes.sidebar;
+            } else if (typeof(placeAt) === 'string') {
+                placeAt = this.panes[placeAt];
+            }
+            if (placeAt) {
+                cp = new ContentPane(options).placeAt(placeAt);
+                cp.startup();
+            }
+            return cp;
+        },
         widgetLoader: function(widgetConfig, position) {
             var parentId, pnl;
 
             // only proceed for valid widget types
-            var widgetTypes = ['titlePane', 'floating', 'domNode', 'invisible', 'map'];
+            var widgetTypes = ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map'];
             if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
                 console.log('Widget type ' + widgetConfig.type + ' (' + widgetConfig.title + ') at position ' + position + ' is not supported.');
                 return;
             }
 
             // build a titlePane or floating widget as the parent
-            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
+            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
                 parentId = widgetConfig.id + '_parent';
                 if (widgetConfig.type === 'titlePane') {
-                    pnl = this._createTitlePaneWidget(widgetConfig.title, position, widgetConfig.open, widgetConfig.canFloat, parentId);
+                    pnl = this._createTitlePaneWidget(parentId, widgetConfig.title, position, widgetConfig.open, widgetConfig.canFloat, widgetConfig.placeAt);
+                } else if (widgetConfig.type === 'contentPane') {
+                    pnl = this._createContentPaneWidget(parentId, widgetConfig.title, widgetConfig.className, widgetConfig.region, widgetConfig.placeAt);
                 } else if (widgetConfig.type === 'floating') {
-                    pnl = this._createFloatingWidget(widgetConfig.title, parentId);
+                    pnl = this._createFloatingWidget(parentId, widgetConfig.title);
                 }
                 widgetConfig.parentWidget = pnl;
             }
 
-            // 2 ways to use require to accomodate widgets that may have an optional separate configuration file
+            // 2 ways to use require to accommodate widgets that may have an optional separate configuration file
             if (typeof(widgetConfig.options) === 'string') {
                 require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
             } else {
@@ -254,9 +310,7 @@ define([
 
             // create the widget
             var pnl = options.parentWidget;
-            if (widgetConfig.type === 'titlePane') {
-                this[widgetConfig.id] = new WidgetClass(options, domConstruct.create('div')).placeAt(pnl.containerNode);
-            } else if (widgetConfig.type === 'floating') {
+            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
                 this[widgetConfig.id] = new WidgetClass(options, domConstruct.create('div')).placeAt(pnl.containerNode);
             } else if (widgetConfig.type === 'domNode') {
                 this[widgetConfig.id] = new WidgetClass(options, widgetConfig.srcNodeRef);
@@ -265,7 +319,7 @@ define([
             }
 
             // start up the widget
-            if (this[widgetConfig.id] && this[widgetConfig.id].startup) {
+            if (this[widgetConfig.id] && this[widgetConfig.id].startup && !this[widgetConfig.id]._started) {
                 this[widgetConfig.id].startup();
             }
         }

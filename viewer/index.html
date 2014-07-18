@@ -48,9 +48,17 @@
         </script>
         <script type="text/javascript" src="//js.arcgis.com/3.10"></script>
         <script type="text/javascript">
+            // get the config file from the url if present
+            var file = 'config/viewer', s = window.location.search, q = s.match(/config=([^&]*)/i);
+            if (q && q.length > 0) {
+                file = q[1];
+                if(file.indexOf('/') < 0) {
+                    file = 'config/' + file;
+                }
+            }
             var app; //dev only
-            require(['dbootstrap','viewer/Controller'], function(dbootstrap, Controller){
-                Controller.startup();
+            require(['dbootstrap','viewer/Controller', file], function(dbootstrap, Controller, config){
+                Controller.startup(config);
                 app = Controller; //dev only
             });
         </script>
