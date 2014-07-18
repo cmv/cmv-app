@@ -144,7 +144,7 @@ define([
             this.tocLayerInfos.push({ //push because Legend and TOC need the layers in the opposite order
                 layer: l,
                 title: layer.title || null,
-                slider: layer.slider || true,
+                slider: (layer.slider === false) ? false : true,
                 noLegend: layer.noLegend || false,
                 collapsed: layer.collapsed || false,
                 sublayerToggle: layer.sublayerToggle || false
