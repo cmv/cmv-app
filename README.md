@@ -19,7 +19,7 @@ Note: Not all functions work in the demo site due to a limitation in GitHub proj
 
 ## Customize:
 * Use the ConfigurableViewerJSAPI\js\config\viewer.js file to customize your own map layers, task urls and widgets.
-
+* Use the [wiki](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/wiki) documentation for guidance on configuring widgets.
 
 ## Widgets Included:
 * Base Maps
