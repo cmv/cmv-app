@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.org/DavidSpriggs/ConfigurableViewerJSAPI.svg?branch=master)](https://travis-ci.org/DavidSpriggs/ConfigurableViewerJSAPI)
 
-This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for OO and classes in JS (via dojo's great [declare](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html) system). 
+This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for modular design and OOP via classes in JS using dojo's great [declare](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html) system.
+
 
 ## Demo Site
 [http://davidspriggs.github.io/ConfigurableViewerJSAPI/viewer](http://davidspriggs.github.io/ConfigurableViewerJSAPI/viewer)
@@ -19,10 +20,6 @@ Note: Not all functions work in the demo site due to a limitation in GitHub proj
 ## Customize:
 * Use the ConfigurableViewerJSAPI\js\config\viewer.js file to customize your own map layers, task urls and widgets.
 
-## Notes:
-* This is the beginning of a viewer, it in no way represents a complete solution and is intended for well versed JS developers as a starting point.
-* If there is a feature you would like to request, add it to the projects [trello board](https://trello.com/b/TjjipGmV/configurable-map-viewer) for consideration.
-* This app demonstrates best practices of OO programing in dojo and JS, using modular design and classes.
 
 ## Widgets Included:
 * Base Maps
@@ -44,14 +41,15 @@ Note: Not all functions work in the demo site due to a limitation in GitHub proj
 * Scalebar
 * StreetView
 * Table of contents
+* If there is a feature you would like to request, add it to the projects [trello board](https://trello.com/b/TjjipGmV/configurable-map-viewer) for consideration.
 
 ## Change log:
 See [releases](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/releases) for change logs.
 
-# IRC
+## IRC
 We have an IRC channel: `#cmv` on freenode for the project. If you have questions, stop on by. I recommend [HexChat](http://hexchat.github.io) as an IRC client or you can use freenode's [webchat](http://webchat.freenode.net) client.
 
-# Contributing to the project
+## Contributing to the project
 There are many ways to contribute:
 
 1. Contribute code as widgets (see below).
