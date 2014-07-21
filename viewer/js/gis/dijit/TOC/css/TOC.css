@@ -53,3 +53,17 @@
 .agsjsTOCSlider {
     padding: 5px 20px 5px 30px;
 }
+
+.agsjsTOCNode .dijitTreeExpando {
+    background-image: url('../images/treeExpandImages.png');
+    width: 15px;
+    height: 15px;
+    background-position: -15px 0px;
+    background-size: 30px 15px;
+    vertical-align: top;
+    margin: 3px 3px 2px 2px;
+}
+
+.agsjsTOCNode .dijitTreeExpandoClosed {
+    background-position: -0px 0px;
+}

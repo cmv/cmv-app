@@ -15,13 +15,13 @@ define([
     'esri/symbols/PictureMarkerSymbol',
     'dojo/on',
     'dojo/dom-style',
-    'esri/geometry/webMercatorUtils',
     'esri/geometry/Point',
     'esri/SpatialReference',
     'gis/dijit/_FloatingWidgetMixin',
     'xstyle/css!./StreetView/css/StreetView.css',
-    'gis/plugins/async!//maps.google.com/maps/api/js?v=3&sensor=false'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, aspect, GraphicsLayer, Graphic, SimpleRenderer, template, UniqueValueRenderer, PictureMarkerSymbol, on, domStyle, webMercatorUtils, Point, SpatialReference, _FloatingWidgetMixin, css, gmaps) {
+    'gis/plugins/async!//maps.google.com/maps/api/js?v=3&sensor=false',
+    '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.1/proj4.js'
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, aspect, GraphicsLayer, Graphic, SimpleRenderer, template, UniqueValueRenderer, PictureMarkerSymbol, on, domStyle, Point, SpatialReference, _FloatingWidgetMixin, css, gmaps, proj4) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin], {
         widgetsInTemplate: true,
@@ -38,6 +38,18 @@ define([
             },
             enableCloseButton: false
         },
+
+        // in case this changes some day
+        proj4BaseURL: 'http://spatialreference.org/',
+
+        //  options are ESRI, EPSG and SR-ORG
+        // See http://spatialreference.org/ for more information
+        proj4Catalog: 'EPSG',
+
+        // if desired, you can load a projection file from your server
+        // instead of using one from spatialreference.org
+        // i.e., http://server/projections/102642.js
+        projCustomURL: null,
 
         postCreate: function() {
             this.inherited(arguments);
@@ -60,6 +72,10 @@ define([
                 })));
             }
 
+            // spatialreference.org uses the old
+            // Proj4js style so we need an alias
+            // https://github.com/proj4js/proj4js/issues/23
+            window.Proj4js = proj4;
         },
         onOpen: function() {
             this.pointGraphics.show();
@@ -115,10 +131,40 @@ define([
                     // this.disableStreetViewClick();
                 // }
                 var mapPoint = evt.mapPoint;
-                domStyle.set(this.noStreetViewResults, 'display', 'none');
-                domStyle.set(this.loadingStreetView, 'display', 'inline-block');
-                var geometry = webMercatorUtils.webMercatorToGeographic(mapPoint);
-                this.getPanoramaLocation(geometry);
+                if (!mapPoint) {
+                    return;
+                }
+
+                // convert the map point's coordinate system into lat/long
+                var geometry = null, wkid = mapPoint.spatialReference.wkid;
+                if (wkid === 102100) {
+                    wkid = 3857;
+                }
+                var key = this.proj4Catalog + ':' + wkid;
+                if (!proj4.defs[key]) {
+                    var url = this.proj4CustomURL || this.proj4BaseURL + 'ref/' + this.proj4Catalog.toLowerCase() + '/' + wkid + '/proj4js/';
+                    require([url], lang.hitch(this, 'getStreetView', evt));
+                    return;
+                }
+                // only need one projection as we are
+                // converting to WGS84 lat/long
+                var projPoint = proj4(proj4.defs[key]).inverse([mapPoint.x, mapPoint.y]);
+                if (projPoint) {
+                    geometry = {
+                        x: projPoint[0],
+                        y: projPoint[1]
+                    };
+                }
+
+                if (geometry) {
+                    domStyle.set(this.noStreetViewResults, 'display', 'none');
+                    domStyle.set(this.loadingStreetView, 'display', 'inline-block');
+                    this.getPanoramaLocation(geometry);
+                } else {
+                    this.setPanoPlace = null;
+                    this.clearGraphics();
+                    domStyle.set(this.noStreetViewResults, 'display', 'block');
+                }
             }
 
         },
@@ -141,6 +187,8 @@ define([
             } else if (StreetViewStatus === 'ZERO_RESULTS') {
                 this.setPanoPlace = null;
                 this.clearGraphics();
+                // reset default map click mode
+                this.connectMapClick();
                 domStyle.set(this.noStreetViewResults, 'display', 'block');
             } else {
                 this.setPanoPlace = null;
@@ -160,36 +208,39 @@ define([
             var positionLong = panoPosition.lng();
             // Make sure they are numbers
             if (!isNaN(positionLat) && !isNaN(positionLong)) {
-                // convert from 4326 to 26852
-                // var fromProjection = this.wkt_4326;
-                // var toProjection = this.wkt_26852;
-                // var coordinatesToProject = {
-                //   x: positionLong,
-                //   y: positionLat,
-                // };
+                // convert the resulting lat/long to the map's spatial reference
+                var xy = null, wkid = this.map.spatialReference.wkid;
+                if (wkid === 102100) {
+                    wkid = 3857;
+                }
+                var key = this.proj4Catalog + ':' + wkid;
+                if (!proj4.defs[key]) {
+                    var url = this.proj4CustomURL || this.proj4BaseURL + 'ref/' + this.proj4Catalog.toLowerCase() + '/' + wkid + '/proj4js/';
+                    require([url], lang.hitch(this, 'setPlaceMarkerPosition'));
+                    return;
+                }
+                // only need the one projection as we are
+                // converting from WGS84 lat/long
+                xy = proj4(proj4.defs[key]).forward([positionLong, positionLat]);
+                if (xy) {
+                    var point = new Point(xy, new SpatialReference({
+                        wkid: wkid
+                    }));
 
-                // var pcsPointCoords = proj4(fromProjection, toProjection, coordinatesToProject);
-                // var pcsPoint = new esri.geometry.Point(pcsPointCoords.x, pcsPointCoords.y, new esri.SpatialReference({
-                //   wkid: 26852
-                // }));
-                var xy = webMercatorUtils.lngLatToXY(positionLong, positionLat);
-                var point = new Point(xy, new SpatialReference({
-                    wkid: 102100
-                }));
-
-                // change point position on the map
-                this.placeMarker.setGeometry(point);
-                if (this.setPanoPlace && !this.firstSet) {
-                    var heading = google.maps.geometry.spherical.computeHeading(panoPosition, this.setPanoPlace);
-                    this.panorama.setPov({
-                        heading: heading,
-                        pitch: 0
-                    });
-                    setTimeout(lang.hitch(this, function() {
-                        this.setPanoPlace = null;
-                    }), 1000);
-                } else {
-                    this.firstSet = false;
+                    // change point position on the map
+                    this.placeMarker.setGeometry(point);
+                    if (this.setPanoPlace && !this.firstSet) {
+                        var heading = google.maps.geometry.spherical.computeHeading(panoPosition, this.setPanoPlace);
+                        this.panorama.setPov({
+                            heading: heading,
+                            pitch: 0
+                        });
+                        setTimeout(lang.hitch(this, function() {
+                            this.setPanoPlace = null;
+                        }), 1000);
+                    } else {
+                        this.firstSet = false;
+                    }
                 }
             }
         },

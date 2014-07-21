@@ -8,23 +8,12 @@ define([
 	'xstyle/css!./Bookmarks/css/Bookmarks.css'
 ], function(declare, _WidgetBase, Bookmarks, json, cookie, lang, css) {
 
-	var bookmarks = [{
-		extent: {
-			xmin: -15489130.48708616,
-			ymin: 398794.4860580916,
-			xmax: -5891085.7193757,
-			ymax: 8509680.431452557,
-			spatialReference: {
-				wkid: 102100
-			}
-		},
-		name: 'USA'
-	}];
-
 	return declare([_WidgetBase], {
 		declaredClass: 'gis.digit.Bookmarks',
 		postCreate: function() {
 			this.inherited(arguments);
+
+			var bookmarks = this.bookmarks; // from the options passed in
 
 			this.bookmarkItems = cookie('bookmarkItems');
 			if (this.bookmarkItems === undefined) {

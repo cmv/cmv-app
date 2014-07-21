@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+- '0.10'
+before_install: npm install -g grunt-cli
+before_script: grunt build --verbose
+deploy:
+  provider: releases
+  api_key:
+    secure: RH6f8GbwwkXZvoxOS88NhOhEAfFHL52wQ9cadmzPTCnqNNVeC5GhAvwoNvBTobZhB+Jt0W9oVQt2WTnAomxC9cqh07fSqLBk8I8UpuhRkmL+AZPwnquDxD9Bi6yNAgwd5IQfMqP251Qlzfwe7ffL42yAsjGfJOoliZRvfQyKQho=
+  file: dist/viewer.zip
+  on:
+    tags: true
+    all_branches: true
+  skip_cleanup: true

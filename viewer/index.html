@@ -3,8 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>Configurable Viewer</title>
-        <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.9/js/dojo/dojo/resources/dojo.css">
-        <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.9/js/esri/css/esri.css">
+        <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.10/js/esri/css/esri.css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
     </head>
     <body class="dbootstrap">
@@ -36,6 +35,9 @@
                     name: 'viewer',
                     location: location.pathname.replace(/[^\/]+$/, '') + 'js/viewer'
                 },{
+                    name: "config",
+                    location: location.pathname.replace(/[^\/]+$/, '') + "js/config"
+                },{
                     name: 'gis',
                     location: location.pathname.replace(/[^\/]+$/, '') + 'js/gis'
                 },{
@@ -44,11 +46,19 @@
                 }]
             };
         </script>
-        <script type="text/javascript" src="//js.arcgis.com/3.9"></script>
+        <script type="text/javascript" src="//js.arcgis.com/3.10"></script>
         <script type="text/javascript">
+            // get the config file from the url if present
+            var file = 'config/viewer', s = window.location.search, q = s.match(/config=([^&]*)/i);
+            if (q && q.length > 0) {
+                file = q[1];
+                if(file.indexOf('/') < 0) {
+                    file = 'config/' + file;
+                }
+            }
             var app; //dev only
-            require(['dbootstrap','viewer/Controller'], function(dbootstrap, Controller){
-                Controller.startup();
+            require(['dbootstrap','viewer/Controller', file], function(dbootstrap, Controller, config){
+                Controller.startup(config);
                 app = Controller; //dev only
             });
         </script>
