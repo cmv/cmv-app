@@ -3,14 +3,19 @@ define([
 	'esri/units',
 	'esri/geometry/Extent',
 	'esri/config',
-	'esri/tasks/GeometryService'
-], function(InfoTemplate, units, Extent, esriConfig, GeometryService) {
+	'esri/tasks/GeometryService',
+	'esri/layers/ImageParameters'
+], function(InfoTemplate, units, Extent, esriConfig, GeometryService, ImageParameters) {
 
 	// url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
 	esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
 	esriConfig.defaults.io.alwaysUseProxy = false;
 	// url to your geometry server.
 	esriConfig.defaults.geometryService = new GeometryService('http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
+
+	//image paramaters for dynamic services, set to png32 for higher quality exports.
+	var imageParameters = new ImageParameters();
+	imageParameters.format = 'png32';
 
 	return {
 		//default mapClick mode, mapClickMode lets widgets know what mode the map is in to avoid multipult map click actions from taking place (ie identify while drawing).
@@ -51,7 +56,8 @@ define([
 			options: {
 				id: 'louisvillePubSafety',
 				opacity: 1.0,
-				visible: true
+				visible: true,
+				imageParameters: imageParameters
 			}
 		}, {
 			type: 'dynamic',
@@ -63,7 +69,8 @@ define([
 			options: {
 				id: 'DamageAssessment',
 				opacity: 1.0,
-				visible: true
+				visible: true,
+				imageParameters: imageParameters
 			}
 		}],
 		// set include:true to load. For titlePane type set position the the desired order in the sidebar
@@ -203,16 +210,16 @@ define([
 				options: 'config/bookmarks'
 			},
 			find: {
-                include: true,
+				include: true,
 				id: 'find',
 				type: 'titlePane',
 				canFloat: true,
 				path: 'gis/dijit/Find',
-                title: 'Find',
-                open: false,
-                position: 3,
+				title: 'Find',
+				open: false,
+				position: 3,
 				options: 'config/find'
-            },
+			},
 			draw: {
 				include: true,
 				id: 'draw',
@@ -328,8 +335,7 @@ define([
 				type: 'floating',
 				path: 'gis/dijit/Help',
 				title: 'Help',
-				options: {
-				}
+				options: {}
 			}
 
 		}
