@@ -26,7 +26,7 @@ define([
                 }
             }, this);
             this.map.on('click', lang.hitch(this, function(evt) {
-                if (this.mapClickMode.current === 'identify') {
+                if (this.mapClickMode.current === 'identify' && !evt.graphic) {
                     this.executeIdentifyTask(evt);
                 }
             }));
