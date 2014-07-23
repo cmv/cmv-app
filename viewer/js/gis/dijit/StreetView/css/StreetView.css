@@ -14,6 +14,7 @@
     position: relative;
     top: 5px;
     margin-right: 10px;
+    background-image: url('../images/loading.gif');
 }
 
 .gis_StreetView .streetViewNode {
