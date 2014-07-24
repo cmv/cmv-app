@@ -4,16 +4,29 @@ define([
 	'dijit/_TemplatedMixin',
 	'dijit/_WidgetsInTemplateMixin',
 	'dojo/_base/lang',
+    'dojo/_base/array',
 	'dojo/dom-construct'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, domConstruct) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, array, domConstruct) {
 
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		templateString: '<div><div style="text-align:center;"><button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:toggleEditing" data-dojo-props="label:\'Start Editing\',class:\'success\'" data-dojo-attach-point="toggleBTN"></button></div><div class="editDijit" style="margin-top:5px;" data-dojo-attach-point="containerNode"></div></div>',
 		widgetsInTemplate: true,
 		editor: null,
 		isEdit: false,
+        infoTemplates: {},
 		toggleEditing: function() {
+            var layer;
 			if (!this.isEdit) {
+                // remove any infoTemplates that might interfere with clicking on the features
+                this.infoTemplates = {};
+				array.forEach(this.layerInfos, function(layerInfo) {
+					layer = layerInfo.featureLayer;
+					if (layer && layer.infoTemplate) {
+						this.infoTemplates[layer.id] = lang.clone(layer.infoTemplate);
+						layer.infoTemplate = null;
+					}
+                }, this);
+
 				var ops = lang.clone(this.settings);
 				ops.map = this.map;
 				ops.layerInfos = this.layerInfos;
@@ -35,6 +48,15 @@ define([
 				this.isEdit = true;
 				this.mapClickMode.current = 'editor';
 			} else {
+                // add back any infoTemplates that might have been previously removed
+                array.forEach(this.layerInfos, function(layerInfo) {
+                    layer = layerInfo.featureLayer;
+                    if (layer && this.infoTemplates[layer.id]) {
+                        layer.infoTemplate = lang.clone(this.infoTemplates[layer.id]);
+                    }
+                }, this);
+                this.infoTemplates = {};
+
 				this.editor.destroyRecursive();
 				this.toggleBTN.set('label', 'Start Editing');
 				this.toggleBTN.set('class', 'success');
