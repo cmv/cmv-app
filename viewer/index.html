@@ -2,8 +2,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Configurable Viewer</title>
-        <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.10/js/esri/css/esri.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <title>Configurable Map Viewer</title>
+        <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.10compact/js/esri/css/esri.css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
     </head>
     <body class="dbootstrap">
@@ -46,7 +50,7 @@
                 }]
             };
         </script>
-        <script type="text/javascript" src="//js.arcgis.com/3.10"></script>
+        <script type="text/javascript" src="//js.arcgis.com/3.10compact/"></script>
         <script type="text/javascript">
             // get the config file from the url if present
             var file = 'config/viewer', s = window.location.search, q = s.match(/config=([^&]*)/i);
