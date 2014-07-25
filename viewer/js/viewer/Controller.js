@@ -25,17 +25,8 @@ define([
             left: {
                 id: 'sidebarLeft',
                 placeAt: 'outer',
+                collapsible: true,
                 region: 'left'
-            },
-            right: {
-                id: 'sidebarRight',
-                placeAt: 'outer',
-                region: 'right'
-            },
-            bottom: {
-                id: 'sidebarBottom',
-                placeAt: 'outer',
-                region: 'bottom'
             },
             center: {
                 id: 'mapCenter',
@@ -52,7 +43,6 @@ define([
                 defaultMode: this.config.defaultMapClickMode
             };
             this.initPanes();
-            // this.initMap();
         },
         initPanes: function() {
             var panes = lang.mixin({}, this.panes, this.config.panes);
@@ -63,8 +53,8 @@ define([
                 gutters: false
             }).placeAt(win.body());
 
-            var options, placeAt, type;
-            for (var key in panes) {
+            var options, placeAt, type, key;
+            for (key in panes) {
                 if (panes.hasOwnProperty(key)) {
                     options = lang.clone(panes[key]);
                     placeAt = this.panes[options.placeAt] || this.panes.outer;
@@ -72,6 +62,7 @@ define([
                     type = options.type;
                     delete options.placeAt;
                     delete options.type;
+                    delete options.collapsible;
                     if (placeAt) {
                         if (type === 'border') {
                             this.panes[key] = new BorderContainer(options).placeAt(placeAt);
@@ -84,22 +75,16 @@ define([
             this.panes.outer.startup();
             this.initMap();
 
-            array.forEach(['left', 'right', 'bottom'], function(pane) {
-                if (this.panes[pane]) {
-                    this.collapseButtons[pane] = {};
-                    this.collapseButtons[pane].node = put(win.body(), 'div.sidebar' + ((pane === 'bottom') ? 'bottom' : '') + 'CollapseButton' + '.sidebar' + pane + 'CollapseButton div.dijitIcon.button.close').parentNode;
-                    this.collapseButtons[pane].openWidth = (domGeom.getMarginBox(this.panes[pane].domNode)[(pane === 'bottom') ? 'h' : 'w'] - 1).toString() + 'px';
-                    domStyle.set(this.collapseButtons[pane].node, pane, this.collapseButtons[pane].openWidth);
-                    on(this.collapseButtons[pane].node, 'click', lang.hitch(this, 'togglePane', pane));
+            for (key in panes) {
+                if (panes.hasOwnProperty(key)) {
+                    if (panes[key].collapsible) {
+                        this.collapseButtons[key] = put(this.panes.center.domNode, 'div.sidebarCollapseButton.sidebar' + key + 'CollapseButton.sidebarCollapseButton' + ((key === 'bottom' || key === 'top') ? 'Vert' : 'Horz') + ' div.dijitIcon.button.close').parentNode;
+                        on(this.collapseButtons[key], 'click', lang.hitch(this, 'togglePane', key));
+                        this.positionSideBarToggle(key);
+                    }
                 }
-            }, this);
+            }
 
-            // this.sideBarToggle = dom.byId('sidebarCollapseButton');
-            // if (this.panes.sidebar && !this.panes.sidebar.splitter) {
-            //     this.positionSideBarToggle();
-            //     on(this.sideBarToggle, 'click', lang.hitch(this, 'togglePane', 'sidebar'));
-            //     domStyle.set(this.sideBarToggle, 'display', 'block');
-            // }
         },
         initMap: function() {
             this.map = new Map('mapCenter', this.config.mapOptions);
@@ -222,13 +207,8 @@ define([
             var disp = domStyle.get(this.panes[id].domNode, 'display');
             var rCls = (disp === 'none') ? 'close' : 'open';
             var aCls = (disp === 'none') ? 'open' : 'close';
-            domClass.remove(this.collapseButtons[id].node.children[0], rCls);
-            domClass.add(this.collapseButtons[id].node.children[0], aCls);
-            if (aCls === 'open') {
-                domStyle.set(this.collapseButtons[id].node, id, '0px');
-            } else {
-                domStyle.set(this.collapseButtons[id].node, id, this.collapseButtons[id].openWidth);
-            }
+            domClass.remove(this.collapseButtons[id].children[0], rCls);
+            domClass.add(this.collapseButtons[id].children[0], aCls);
         },
         _createTitlePaneWidget: function(parentId, title, position, open, canFloat, placeAt) {
             var tp, options = {
