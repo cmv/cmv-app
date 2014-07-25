@@ -51,7 +51,7 @@ body, html {
 .appHeader .headerLinks a {
     color: #FFFFFF;
 }
-#borderContainer {
+#borderContainerOuter {
     position: absolute;
     top: 70px;
     bottom: 0;
@@ -59,7 +59,7 @@ body, html {
     right: 0;
     background-color: #FFFFFF
 }
-#sidebar {
+#sidebarLeft {
     width: 334px;
     padding: 4px;
     margin: 0;
@@ -67,7 +67,23 @@ body, html {
     overflow-x: hidden;
     border-right: 1px solid #B5BCC7;
 }
-#map {
+#sidebarRight {
+    width: 334px;
+    padding: 4px;
+    margin: 0;
+    overflow: auto;
+    overflow-x: hidden;
+    border-left: 1px solid #B5BCC7;
+}
+#sidebarBottom {
+    height: 300px;
+    padding: 4px;
+    margin: 0;
+    overflow: auto;
+    overflow-x: hidden;
+    border-top: 1px solid #B5BCC7;
+}
+#mapCenter {
     padding: 0;
     overflow: hidden;
     background: url("../images/noisy_grid.png") #fff;
@@ -86,23 +102,63 @@ body, html {
     height: 25px;
     position: absolute;
     top: 250px;
-    border-top: 1px solid #B5BCC7;
-    border-right: 1px solid #B5BCC7;
-    border-bottom: 1px solid #B5BCC7;
     z-index: 40;
+    border-bottom: 1px solid #B5BCC7;
+    border-top: 1px solid #B5BCC7;
     background-color: white;
-    border-radius: 0 5px 5px 0;
-    background-position: -1px 4px;
-    background-repeat: no-repeat;
     cursor: pointer;
+    color: #666666;
+    font-size: 1.3em;
 }
-.sidebarCollapseButton.close {
-    left: 342px;
-    background-image: url("../images/close.png");
+.sidebarbottomCollapseButton {
+    width: 25px;
+    height: 18px;
+    position: absolute;
+    left: 50%;
+    z-index: 40;
+    border-left: 1px solid #B5BCC7;
+    border-right: 1px solid #B5BCC7;
+    background-color: white;
+    cursor: pointer;
+    color: #666666;
+    font-size: 1.3em;
 }
-.sidebarCollapseButton.open {
-    background-image: url("../images/open.png");
-    left: 0;
+.sidebarleftCollapseButton {
+    border-radius: 0 5px 5px 0;
+    border-right: 1px solid #B5BCC7;
+}
+.sidebarbottomCollapseButton {
+    border-radius: 5px 5px 0 0;
+    border-top: 1px solid #B5BCC7;
+}
+.sidebarrightCollapseButton {
+    border-radius: 5px 0 0 5px;
+    border-left: 1px solid #B5BCC7;
+}
+.sidebarCollapseButton .button {
+    padding-top: 3px;
+    padding-left: 2px;
+}
+.sidebarbottomCollapseButton .button {
+    padding-left: 4px;
+}
+.sidebarleftCollapseButton .close:before {
+    content: "\f053";
+}
+.sidebarleftCollapseButton .open:before {
+    content: "\f054";
+}
+.sidebarrightCollapseButton .open:before {
+    content: "\f053";
+}
+.sidebarrightCollapseButton .close:before {
+    content: "\f054";
+}
+.sidebarbottomCollapseButton .open:before {
+    content: "\f077";
+}
+.sidebarbottomCollapseButton .close:before {
+    content: "\f078";
 }
 .floatingWidget_underlay {
     display: none

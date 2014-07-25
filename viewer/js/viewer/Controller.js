@@ -1,9 +1,8 @@
 define([
     'dojo/_base/declare',
     'esri/map',
-    'dojo/dom',
-    'dojo/dom-construct',
     'dojo/dom-style',
+    'dojo/dom-geometry',
     'dojo/dom-class',
     'dojo/on',
     'dojo/_base/array',
@@ -14,27 +13,38 @@ define([
     'dojo/_base/lang',
     'dojo/text!./templates/mapOverlay.html',
     'esri/IdentityManager',
-    'gis/dijit/FloatingWidgetDialog'
-], function(declare, Map, dom, domConstruct, domStyle, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, win, lang, mapOverlay, IdentityManager, FloatingWidgetDialog) {
+    'gis/dijit/FloatingWidgetDialog',
+    'put-selector'
+], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, win, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put) {
 
     return {
         legendLayerInfos: [],
         editorLayerInfos: [],
         tocLayerInfos: [],
         panes: {
-            sidebar: {
-                id: 'sidebar',
+            left: {
+                id: 'sidebarLeft',
                 placeAt: 'outer',
-                className: 'sidebar',
                 region: 'left'
             },
-            map: {
-                id: 'map',
+            right: {
+                id: 'sidebarRight',
+                placeAt: 'outer',
+                region: 'right'
+            },
+            bottom: {
+                id: 'sidebarBottom',
+                placeAt: 'outer',
+                region: 'bottom'
+            },
+            center: {
+                id: 'mapCenter',
                 placeAt: 'outer',
                 region: 'center',
                 content: mapOverlay
             }
         },
+        collapseButtons: {},
         startup: function(config) {
             this.config = config;
             this.mapClickMode = {
@@ -42,15 +52,17 @@ define([
                 defaultMode: this.config.defaultMapClickMode
             };
             this.initPanes();
-            this.initMap();
+            // this.initMap();
         },
         initPanes: function() {
             var panes = lang.mixin({}, this.panes, this.config.panes);
+
             this.panes.outer = new BorderContainer({
-                id: 'borderContainer',
+                id: 'borderContainerOuter',
                 design: 'sidebar',
                 gutters: false
             }).placeAt(win.body());
+
             var options, placeAt, type;
             for (var key in panes) {
                 if (panes.hasOwnProperty(key)) {
@@ -70,15 +82,27 @@ define([
                 }
             }
             this.panes.outer.startup();
-            this.sideBarToggle = dom.byId('sidebarCollapseButton');
-            if (this.panes.sidebar && !this.panes.sidebar.splitter) {
-                this.positionSideBarToggle();
-                on(this.sideBarToggle, 'click', lang.hitch(this, 'togglePane', 'sidebar'));
-                domStyle.set(this.sideBarToggle, 'display', 'block');
-            }
+            this.initMap();
+
+            array.forEach(['left', 'right', 'bottom'], function(pane) {
+                if (this.panes[pane]) {
+                    this.collapseButtons[pane] = {};
+                    this.collapseButtons[pane].node = put(win.body(), 'div.sidebar' + ((pane === 'bottom') ? 'bottom' : '') + 'CollapseButton' + '.sidebar' + pane + 'CollapseButton div.dijitIcon.button.close').parentNode;
+                    this.collapseButtons[pane].openWidth = (domGeom.getMarginBox(this.panes[pane].domNode)[(pane === 'bottom') ? 'h' : 'w'] - 1).toString() + 'px';
+                    domStyle.set(this.collapseButtons[pane].node, pane, this.collapseButtons[pane].openWidth);
+                    on(this.collapseButtons[pane].node, 'click', lang.hitch(this, 'togglePane', pane));
+                }
+            }, this);
+
+            // this.sideBarToggle = dom.byId('sidebarCollapseButton');
+            // if (this.panes.sidebar && !this.panes.sidebar.splitter) {
+            //     this.positionSideBarToggle();
+            //     on(this.sideBarToggle, 'click', lang.hitch(this, 'togglePane', 'sidebar'));
+            //     domStyle.set(this.sideBarToggle, 'display', 'block');
+            // }
         },
         initMap: function() {
-            this.map = new Map('map', this.config.mapOptions);
+            this.map = new Map('mapCenter', this.config.mapOptions);
 
             if (this.config.mapOptions.basemap) {
                 this.map.on('load', lang.hitch(this, 'initLayers'));
@@ -188,20 +212,23 @@ define([
             if (domNode) {
                 var disp = (domStyle.get(domNode, 'display') === 'none') ? 'block' : 'none';
                 domStyle.set(domNode, 'display', disp);
-                if (id === 'sidebar') {
-                    this.positionSideBarToggle();
-                }
+                this.positionSideBarToggle(id);
                 if (this.panes.outer) {
                     this.panes.outer.resize();
                 }
             }
         },
-        positionSideBarToggle: function() {
-            var disp = domStyle.get(this.panes.sidebar.domNode, 'display');
+        positionSideBarToggle: function(id) {
+            var disp = domStyle.get(this.panes[id].domNode, 'display');
             var rCls = (disp === 'none') ? 'close' : 'open';
             var aCls = (disp === 'none') ? 'open' : 'close';
-            domClass.remove(this.sideBarToggle, rCls);
-            domClass.add(this.sideBarToggle, aCls);
+            domClass.remove(this.collapseButtons[id].node.children[0], rCls);
+            domClass.add(this.collapseButtons[id].node.children[0], aCls);
+            if (aCls === 'open') {
+                domStyle.set(this.collapseButtons[id].node, id, '0px');
+            } else {
+                domStyle.set(this.collapseButtons[id].node, id, this.collapseButtons[id].openWidth);
+            }
         },
         _createTitlePaneWidget: function(parentId, title, position, open, canFloat, placeAt) {
             var tp, options = {
@@ -213,7 +240,7 @@ define([
                 options.id = parentId;
             }
             if (!placeAt) {
-                placeAt = this.panes.sidebar;
+                placeAt = this.panes.left;
             } else if (typeof(placeAt) === 'string') {
                 placeAt = this.panes[placeAt];
             }
@@ -311,7 +338,7 @@ define([
             // create the widget
             var pnl = options.parentWidget;
             if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
-                this[widgetConfig.id] = new WidgetClass(options, domConstruct.create('div')).placeAt(pnl.containerNode);
+                this[widgetConfig.id] = new WidgetClass(options, put('div')).placeAt(pnl.containerNode);
             } else if (widgetConfig.type === 'domNode') {
                 this[widgetConfig.id] = new WidgetClass(options, widgetConfig.srcNodeRef);
             } else {
