@@ -117,7 +117,7 @@ body, html {
 .sidebarCollapseButtonHorz {
     width: 16px;
     height: 25px;
-    top: calc(50% - 12px);
+    top: 180px;
     border-bottom: 1px solid #B5BCC7;
     border-top: 1px solid #B5BCC7;
 }
@@ -156,11 +156,11 @@ body, html {
     padding-left: 4px;
     margin-top: -2px;
 }
-.sidebarleftCollapseButton .close:before {
-    content: "\f053";
-}
 .sidebarleftCollapseButton .open:before {
     content: "\f054";
+}
+.sidebarleftCollapseButton .close:before {
+    content: "\f053";
 }
 .sidebarrightCollapseButton .open:before {
     content: "\f053";
@@ -213,4 +213,71 @@ body, html {
 .dbootstrap :focus {
     outline: none !important;
 }
+
 /* end dbootstrap overrides*/
+
+/* esri mobile popup overrides */
+
+.esriPopupMobile {
+    z-index: 999;
+}
+.esriMobileNavigationBar {
+    background-color: #666666;
+    background: url("../images/linen.jpg") repeat-x scroll left top transparent;
+    color: #FFFFFF;
+}
+.esriPopupMobile .titlePane {
+    background-color: #666666;
+    background: url("../images/linen.jpg") repeat-x scroll left top transparent;
+    color: #FFFFFF;
+}
+.esriPopupMobile .pointer.bottom{
+    background:url("../images/pointertop.png");
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+.esriPopupMobile .pointer.top {
+    background:url("../images/pointertop.png");
+}
+
+/* end esri mobile popup overrides */
+
+/*
+    media queries bootstrap style
+    http://getbootstrap.com/css/#grid-media-queries
+*/
+
+@media screen and (max-width: 991px) {
+    /* adjust the l/r sidebars on small and extra-small devices. */
+    #sidebarLeft {
+        width: 204px;
+        max-width: 95%;
+    }
+    #sidebarRight {
+        display: none;
+        max-width: 95%;
+    }
+}
+@media screen and (max-width: 767px) {
+    /* hide the l/r sidebars by default on extra-small devices (phones) */
+    #sidebarLeft, sidebarBottom, sidebar Top {
+        display: none;
+    }
+    /* no search widget in app header */
+    .appHeader .search {
+        display: none;
+    }
+    /* no logo in app header */
+    .appHeader .headerLogo {
+        display: none;
+    }
+    /* move the title when no logo */
+    .appHeader .headerTitle {
+        left: 10px;
+    }
+}
+
+/* end media queries bootstrap style */

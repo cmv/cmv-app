@@ -29,7 +29,10 @@ define([
 		},
 
 		panes: {
-			right: {
+            left: {
+                splitter: true
+            },
+            right: {
                 id: 'sidebarRight',
                 placeAt: 'outer',
                 region: 'right'
@@ -46,9 +49,9 @@ define([
                 placeAt: 'outer',
                 collapsible: true,
                 region: 'top'
-
             }
         },
+        // collapseButtonsPane: 'center',
 
 		// operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: 'dynamic', 'tiled', 'feature'.
 		// The 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.

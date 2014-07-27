@@ -9,13 +9,16 @@ define([
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane',
     'gis/dijit/FloatingTitlePane',
-    'dojo/_base/window',
     'dojo/_base/lang',
     'dojo/text!./templates/mapOverlay.html',
     'esri/IdentityManager',
     'gis/dijit/FloatingWidgetDialog',
-    'put-selector'
-], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, win, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put) {
+    'put-selector',
+    'dojo/aspect',
+    'dojo/has',
+    'dojo/window',
+    'esri/dijit/PopupMobile'
+], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, win, PopupMobile) {
 
     return {
         legendLayerInfos: [],
@@ -45,15 +48,20 @@ define([
             this.initPanes();
         },
         initPanes: function() {
-            var panes = lang.mixin({}, this.panes, this.config.panes);
+            var key, panes = this.config.panes || {};
+            for (key in this.panes) {
+                if (this.panes.hasOwnProperty(key)) {
+                    panes[key] = lang.mixin(this.panes[key], panes[key]);
+                }
+            }
 
             this.panes.outer = new BorderContainer({
                 id: 'borderContainerOuter',
                 design: 'sidebar',
                 gutters: false
-            }).placeAt(win.body());
+            }).placeAt(document.body);
 
-            var options, placeAt, type, key;
+            var options, placeAt, type;
             for (key in panes) {
                 if (panes.hasOwnProperty(key)) {
                     options = lang.clone(panes[key]);
@@ -75,18 +83,34 @@ define([
             this.panes.outer.startup();
             this.initMap();
 
+            // where to place the buttons
+            // either the center map pane or the outer pane?
+            this.collapseButtonsPane = this.config.collapseButtonsPane || 'outer';
+
             for (key in panes) {
                 if (panes.hasOwnProperty(key)) {
                     if (panes[key].collapsible) {
-                        this.collapseButtons[key] = put(this.panes.center.domNode, 'div.sidebarCollapseButton.sidebar' + key + 'CollapseButton.sidebarCollapseButton' + ((key === 'bottom' || key === 'top') ? 'Vert' : 'Horz') + ' div.dijitIcon.button.close').parentNode;
+                        this.collapseButtons[key] = put(this.panes[this.collapseButtonsPane].domNode, 'div.sidebarCollapseButton.sidebar' + key + 'CollapseButton.sidebarCollapseButton' + ((key === 'bottom' || key === 'top') ? 'Vert' : 'Horz') + ' div.dijitIcon.button.close').parentNode;
                         on(this.collapseButtons[key], 'click', lang.hitch(this, 'togglePane', key));
                         this.positionSideBarToggle(key);
+                        var splitter = this.panes[key]._splitterWidget;
+                        if (splitter) {
+                            aspect.after(splitter, '_startDrag', lang.hitch(this, 'splitterStartDrag', key));
+                            aspect.after(splitter, '_stopDrag', lang.hitch(this, 'splitterStopDrag', key));
+                        }
                     }
                 }
             }
 
         },
         initMap: function() {
+            if (!this.config.mapOptionsinfoWindow) {
+                // simple feature detection. kinda like dojox/mobile without the overhead
+                var box = win.getBox();
+                if (has('touch') && (box.w < 768 || box.h < 768)) {
+                    this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
+                }
+            }
             this.map = new Map('mapCenter', this.config.mapOptions);
 
             if (this.config.mapOptions.basemap) {
@@ -189,13 +213,13 @@ define([
                 this.widgetLoader(widget, i);
             }, this);
         },
-        togglePane: function(id) {
+        togglePane: function(id, show) {
             if (!this.panes[id]) {
                 return;
             }
             var domNode = this.panes[id].domNode;
             if (domNode) {
-                var disp = (domStyle.get(domNode, 'display') === 'none') ? 'block' : 'none';
+                var disp = (show && typeof(show) === 'string') ? show : (domStyle.get(domNode, 'display') === 'none') ? 'block' : 'none';
                 domStyle.set(domNode, 'display', disp);
                 this.positionSideBarToggle(id);
                 if (this.panes.outer) {
@@ -204,11 +228,41 @@ define([
             }
         },
         positionSideBarToggle: function(id) {
-            var disp = domStyle.get(this.panes[id].domNode, 'display');
+            var pane = this.panes[id];
+            var btn = this.collapseButtons[id];
+            if (!pane || !btn) {
+                return;
+            }
+            var disp = domStyle.get(pane.domNode, 'display');
             var rCls = (disp === 'none') ? 'close' : 'open';
             var aCls = (disp === 'none') ? 'open' : 'close';
-            domClass.remove(this.collapseButtons[id].children[0], rCls);
-            domClass.add(this.collapseButtons[id].children[0], aCls);
+            domClass.remove(btn.children[0], rCls);
+            domClass.add(btn.children[0], aCls);
+
+            // extra management required when the buttons
+            // are not in the center map pane
+            if (this.collapseButtonsPane === 'outer') {
+                var pos = -1;
+                var orie = (id === 'bottom' || id === 'top') ? 'h' : 'w';
+                if (disp === 'block') { // pane is open
+                    pos += domGeom.getMarginBox(pane.domNode)[orie];
+                }
+                if (pane._splitterWidget) { // account for a splitter
+                    pos += domGeom.getMarginBox(pane._splitterWidget.domNode)[orie];
+                }
+                domStyle.set(btn, id, pos.toString() + 'px');
+                domStyle.set(btn, 'display', 'block');
+            }
+        },
+        splitterStartDrag: function (id) {
+            this.togglePane(id, 'block');
+            if (this.collapseButtonsPane === 'outer') {
+                var btn = this.collapseButtons[id];
+                domStyle.set(btn, 'display', 'none');
+            }
+        },
+        splitterStopDrag: function (id) {
+            this.positionSideBarToggle(id);
         },
         _createTitlePaneWidget: function(parentId, title, position, open, canFloat, placeAt) {
             var tp, options = {
