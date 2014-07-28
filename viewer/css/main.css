@@ -263,7 +263,7 @@ body, html {
 }
 @media screen and (max-width: 767px) {
     /* hide the l/r sidebars by default on extra-small devices (phones) */
-    #sidebarLeft, sidebarBottom, sidebar Top {
+    #sidebarLeft, #sidebarBottom, #sidebarTop {
         display: none;
     }
     /* no search widget in app header */

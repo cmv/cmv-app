@@ -39,12 +39,18 @@ define([
             }
         },
         collapseButtons: {},
+        isPhone: false,
         startup: function(config) {
             this.config = config;
             this.mapClickMode = {
-                current: this.config.defaultMapClickMode,
-                defaultMode: this.config.defaultMapClickMode
+                current: config.defaultMapClickMode,
+                defaultMode: config.defaultMapClickMode
             };
+            // simple feature detection. kinda like dojox/mobile without the overhead
+            var box = win.getBox();
+            if (has('touch') && (box.w < 768 || box.h < 768) && (has('ios') || has('android') || has('bb'))) {
+                this.isPhone = true;
+            }
             this.initPanes();
         },
         initPanes: function() {
@@ -104,12 +110,8 @@ define([
 
         },
         initMap: function() {
-            if (!this.config.mapOptionsinfoWindow) {
-                // simple feature detection. kinda like dojox/mobile without the overhead
-                var box = win.getBox();
-                if (has('touch') && (box.w < 768 || box.h < 768)) {
-                    this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
-                }
+            if (this.isPhone && !this.config.mapOptionsinfoWindow) {
+                this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
             }
             this.map = new Map('mapCenter', this.config.mapOptions);
 
