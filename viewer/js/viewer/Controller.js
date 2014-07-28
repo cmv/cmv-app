@@ -16,9 +16,8 @@ define([
     'put-selector',
     'dojo/aspect',
     'dojo/has',
-    'dojo/window',
     'esri/dijit/PopupMobile'
-], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, win, PopupMobile) {
+], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, PopupMobile) {
 
     return {
         legendLayerInfos: [],
@@ -39,7 +38,6 @@ define([
             }
         },
         collapseButtons: {},
-        isPhone: false,
         startup: function(config) {
             this.config = config;
             this.mapClickMode = {
@@ -47,9 +45,13 @@ define([
                 defaultMode: config.defaultMapClickMode
             };
             // simple feature detection. kinda like dojox/mobile without the overhead
-            var box = win.getBox();
-            if (has('touch') && (box.w < 768 || box.h < 768) && (has('ios') || has('android') || has('bb'))) {
-                this.isPhone = true;
+            if (has('touch') && (has('ios') || has('android') || has('bb'))) {
+                has.add('mobile', true);
+                if (screen.availWidth < 500 || screen.availHeight < 500) {
+                    has.add('phone', true);
+                } else {
+                    has.add('tablet', true);
+                }
             }
             this.initPanes();
         },
@@ -110,7 +112,7 @@ define([
 
         },
         initMap: function() {
-            if (this.isPhone && !this.config.mapOptionsinfoWindow) {
+            if (has('phone') && !this.config.mapOptionsinfoWindow) {
                 this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
             }
             this.map = new Map('mapCenter', this.config.mapOptions);
