@@ -13,7 +13,7 @@ define([
 	// url to your geometry server.
 	esriConfig.defaults.geometryService = new GeometryService('http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
 
-	//image paramaters for dynamic services, set to png32 for higher quality exports.
+	//image parameters for dynamic services, set to png32 for higher quality exports.
 	var imageParameters = new ImageParameters();
 	imageParameters.format = 'png32';
 

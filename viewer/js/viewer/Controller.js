@@ -101,10 +101,12 @@ define([
                         this.collapseButtons[key] = put(this.panes[this.collapseButtonsPane].domNode, 'div.sidebarCollapseButton.sidebar' + key + 'CollapseButton.sidebarCollapseButton' + ((key === 'bottom' || key === 'top') ? 'Vert' : 'Horz') + ' div.dijitIcon.button.close').parentNode;
                         on(this.collapseButtons[key], 'click', lang.hitch(this, 'togglePane', key));
                         this.positionSideBarToggle(key);
-                        var splitter = this.panes[key]._splitterWidget;
-                        if (splitter) {
-                            aspect.after(splitter, '_startDrag', lang.hitch(this, 'splitterStartDrag', key));
-                            aspect.after(splitter, '_stopDrag', lang.hitch(this, 'splitterStopDrag', key));
+                        if (this.collapseButtonsPane === 'outer') {
+                            var splitter = this.panes[key]._splitterWidget;
+                            if (splitter) {
+                                aspect.after(splitter, '_startDrag', lang.hitch(this, 'splitterStartDrag', key));
+                                aspect.after(splitter, '_stopDrag', lang.hitch(this, 'splitterStopDrag', key));
+                            }
                         }
                     }
                 }
@@ -225,6 +227,9 @@ define([
             if (domNode) {
                 var disp = (show && typeof(show) === 'string') ? show : (domStyle.get(domNode, 'display') === 'none') ? 'block' : 'none';
                 domStyle.set(domNode, 'display', disp);
+                if (this.panes[id]._splitterWidget) { // show/hide the splitter, if found
+                    domStyle.set(this.panes[id]._splitterWidget.domNode, 'display', disp);
+                }
                 this.positionSideBarToggle(id);
                 if (this.panes.outer) {
                     this.panes.outer.resize();
@@ -258,16 +263,17 @@ define([
                 domStyle.set(btn, 'display', 'block');
             }
         },
+
+        // extra management of splitter required when the buttons
+        // are not in the center map pane
         splitterStartDrag: function (id) {
-            this.togglePane(id, 'block');
-            if (this.collapseButtonsPane === 'outer') {
-                var btn = this.collapseButtons[id];
-                domStyle.set(btn, 'display', 'none');
-            }
+            var btn = this.collapseButtons[id];
+            domStyle.set(btn, 'display', 'none');
         },
         splitterStopDrag: function (id) {
             this.positionSideBarToggle(id);
         },
+
         _createTitlePaneWidget: function(parentId, title, position, open, canFloat, placeAt) {
             var tp, options = {
                 title: title || 'Widget',
