@@ -94,8 +94,19 @@ body, html {
 #mapCenter {
     padding: 0;
     overflow: hidden;
-    border-bottom: 1px solid #B5BCC7;
     background: url("../images/noisy_grid.png") #fff;
+}
+.panetop {
+    border-top: 1px solid #B5BCC7;
+}
+.panebottom {
+    border-bottom: 1px solid #B5BCC7;
+}
+.paneleft {
+    border-left: 1px solid #B5BCC7;
+}
+.paneright {
+    border-right: 1px solid #B5BCC7;
 }
 .HomeButton, .LocateButton {
     margin-bottom: 10px;
@@ -117,7 +128,7 @@ body, html {
 .sidebarCollapseButtonHorz {
     width: 16px;
     height: 25px;
-    top: 180px;
+    top: calc(50% - 12px);
     border-bottom: 1px solid #B5BCC7;
     border-top: 1px solid #B5BCC7;
 }
@@ -149,7 +160,7 @@ body, html {
     border-bottom: 1px solid #B5BCC7;
 }
 .sidebarCollapseButtonHorz .button {
-    padding-top: 2px;
+    padding-top: 4px;
     padding-left: 2px;
 }
 .sidebarCollapseButtonVert .button {

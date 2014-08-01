@@ -109,9 +109,24 @@ define([
                             }
                         }
                     }
+                    if (key !== 'center' && this.panes[key]._splitterWidget) {
+                        domClass.add(this.map.root.parentNode, 'pane' + key);
+                        if (key === 'right' && this.panes.top) {
+                            domClass.add(this.panes.top.domNode, 'pane' + key);
+                        }
+                        if (key === 'right' && this.panes.bottom) {
+                            domClass.add(this.panes.bottom.domNode, 'pane' + key);
+                        }
+                        if (key === 'left' && this.panes.top) {
+                            domClass.add(this.panes.top.domNode, 'pane' + key);
+                        }
+                        if (key === 'left' && this.panes.bottom) {
+                            domClass.add(this.panes.bottom.domNode, 'pane' + key);
+                        }
+                    }
                 }
             }
-
+            this.panes.outer.resize();
         },
         initMap: function() {
             if (has('phone') && !this.config.mapOptionsinfoWindow) {
@@ -266,11 +281,11 @@ define([
 
         // extra management of splitter required when the buttons
         // are not in the center map pane
-        splitterStartDrag: function (id) {
+        splitterStartDrag: function(id) {
             var btn = this.collapseButtons[id];
             domStyle.set(btn, 'display', 'none');
         },
-        splitterStopDrag: function (id) {
+        splitterStopDrag: function(id) {
             this.positionSideBarToggle(id);
         },
 
