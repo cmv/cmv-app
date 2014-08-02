@@ -214,7 +214,8 @@ define([
             }
         },
         initWidgets: function(evt) {
-            var widgets = [];
+            var widgets = [],
+                paneWidgets;
 
             for (var key in this.config.widgets) {
                 if (this.config.widgets.hasOwnProperty(key)) {
@@ -225,12 +226,27 @@ define([
                     }
                 }
             }
-
-            widgets.sort(function(a, b) {
+            for (var pane in this.panes) {
+                if (this.panes.hasOwnProperty(pane) && (pane !== 'outer' || pane !== 'center')) {
+                    paneWidgets = array.filter(widgets, function(widget) {
+                        return (widget.placeAt && widget.placeAt === pane);
+                    });
+                    paneWidgets.sort(function(a, b) {
+                        return a.position - b.position;
+                    });
+                    array.forEach(paneWidgets, function(widget, i) {
+                        this.widgetLoader(widget, i);
+                    }, this);
+                }
+            }
+            paneWidgets = array.filter(widgets, function(widget) {
+                return !widget.placeAt;
+            });
+            paneWidgets.sort(function(a, b) {
                 return a.position - b.position;
             });
 
-            array.forEach(widgets, function(widget, i) {
+            array.forEach(paneWidgets, function(widget, i) {
                 this.widgetLoader(widget, i);
             }, this);
         },
@@ -298,10 +314,11 @@ define([
             if (parentId) {
                 options.id = parentId;
             }
+            if (typeof(placeAt) === 'string') {
+                placeAt = this.panes[placeAt];
+            }
             if (!placeAt) {
                 placeAt = this.panes.left;
-            } else if (typeof(placeAt) === 'string') {
-                placeAt = this.panes[placeAt];
             }
             if (placeAt) {
                 options.sidebar = placeAt;

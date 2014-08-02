@@ -29,15 +29,16 @@ define([
 		},
 		panes: {
 			left: {
-				splitter: true
-			}/*,
+				// splitter: true
+			},
 			right: {
 				id: 'sidebarRight',
 				placeAt: 'outer',
 				region: 'right',
-				splitter: true,
+				// splitter: true,
 				collapsible: true
-			},
+			}
+			/*,
 			bottom: {
 				id: 'sidebarBottom',
 				placeAt: 'outer',
@@ -220,6 +221,7 @@ define([
 				type: 'titlePane',
 				path: 'gis/dijit/TOC',
 				title: 'Layers',
+				placeAt: 'right',
 				open: false,
 				position: 1,
 				options: {
@@ -242,6 +244,7 @@ define([
 				id: 'find',
 				type: 'titlePane',
 				canFloat: true,
+				placeAt: 'right',
 				path: 'gis/dijit/Find',
 				title: 'Find',
 				open: false,

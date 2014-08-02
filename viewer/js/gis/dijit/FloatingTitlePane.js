@@ -1,7 +1,6 @@
 define([
 	'dojo/_base/declare',
 	'dijit/TitlePane',
-	'dijit/_Contained',
 	'dojo/on',
 	'dojo/_base/lang',
 	'dojo/dnd/Moveable',
@@ -14,8 +13,8 @@ define([
 	'dojo/dom-attr',
 	'dojo/dom-class',
 	'xstyle/css!./FloatingTitlePane/css/FloatingTitlePane.css'
-], function(declare, TitlePane, _Contained, on, lang, Moveable, aspect, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass, css) {
-	return declare([TitlePane, _Contained], {
+], function(declare, TitlePane, on, lang, Moveable, aspect, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass, css) {
+	return declare([TitlePane], {
 		postCreate: function() {
 			if (this.canFloat) {
 				this.dockHandleNode = domConstruct.create('span', {
@@ -42,7 +41,6 @@ define([
 			this.inherited(arguments);
 		},
 		startup: function() {
-			this.index = this.getIndexInParent();
 			if (this.titleBarNode && this.canFloat) {
 				this._moveable = new Moveable(this.domNode, {
 					handle: this.moveHandleNode
