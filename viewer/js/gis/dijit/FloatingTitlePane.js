@@ -29,14 +29,15 @@ define([
 				}, this.titleNode, 'after');
 				domClass.add(this.moveHandleNode, 'floatingWidgetPopout');
 
-				on(this.moveHandleNode, 'click', lang.hitch(this, function(evt) {
+				this.own(on(this.moveHandleNode, 'click', lang.hitch(this, function(evt) {
 					this._undockWidget();
 					evt.stopImmediatePropagation();
-				}));
-				on(this.dockHandleNode, 'click', lang.hitch(this, function(evt) {
+				})));
+				this.own(on(this.dockHandleNode, 'click', lang.hitch(this, function(evt) {
 					this._dockWidget();
 					evt.stopImmediatePropagation();
-				}));
+				})));
+				this.own(on(window, 'resize', lang.hitch(this, '_endDrag')));
 			}
 			this.inherited(arguments);
 		},
@@ -74,12 +75,12 @@ define([
 				domClass.remove(this.moveHandleNode, 'floatingWidgetPopout');
 				var computedStyle = domStyle.getComputedStyle(this.containerNode);
 				var width = parseInt(domStyle.getComputedStyle(this.sidebar.containerNode).width, 10);
-				domGeom.setContentSize(this.containerNode, {
-					w: (width - 32)
+				domGeom.setContentSize(this.domNode, {
+					w: (width - 2)
 				}, computedStyle);
-				domGeom.setContentSize(this.titleBarNode, {
-					w: (width - 32)
-				}, computedStyle);
+				// domGeom.setContentSize(this.titleBarNode, {
+				// 	w: (width - 32)
+				// }, computedStyle);
 				this.isFloating = true;
 				this.placeAt(win.body());
 			}

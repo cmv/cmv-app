@@ -266,7 +266,7 @@ define([
             // extra management required when the buttons
             // are not in the center map pane
             if (this.collapseButtonsPane === 'outer') {
-                var pos = -1;
+                var pos = (pane._splitterWidget) ? 0 : -1;
                 var orie = (id === 'bottom' || id === 'top') ? 'h' : 'w';
                 if (disp === 'block') { // pane is open
                     pos += domGeom.getMarginBox(pane.domNode)[orie];

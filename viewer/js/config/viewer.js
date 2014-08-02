@@ -30,7 +30,7 @@ define([
 		panes: {
 			left: {
 				splitter: true
-			},
+			}/*,
 			right: {
 				id: 'sidebarRight',
 				placeAt: 'outer',
@@ -51,7 +51,7 @@ define([
 				collapsible: true,
 				splitter: true,
 				region: 'top'
-			}
+			}*/
 		},
 		// collapseButtonsPane: 'center',
 
