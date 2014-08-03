@@ -13,7 +13,7 @@ define([
 	// url to your geometry server.
 	esriConfig.defaults.geometryService = new GeometryService('http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
 
-	//image paramaters for dynamic services, set to png32 for higher quality exports.
+	//image parameters for dynamic services, set to png32 for higher quality exports.
 	var imageParameters = new ImageParameters();
 	imageParameters.format = 'png32';
 
@@ -27,6 +27,35 @@ define([
 			zoom: 5,
 			sliderStyle: 'small'
 		},
+		panes: {
+			left: {
+				// splitter: true
+			},
+			right: {
+				id: 'sidebarRight',
+				placeAt: 'outer',
+				region: 'right',
+				// splitter: true,
+				collapsible: true
+			}
+			/*,
+			bottom: {
+				id: 'sidebarBottom',
+				placeAt: 'outer',
+				splitter: true,
+				collapsible: true,
+				region: 'bottom'
+			},
+			top: {
+				id: 'sidebarTop',
+				placeAt: 'outer',
+				collapsible: true,
+				splitter: true,
+				region: 'top'
+			}*/
+		},
+		// collapseButtonsPane: 'center',
+
 		// operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: 'dynamic', 'tiled', 'feature'.
 		// The 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
 		// 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
@@ -192,6 +221,7 @@ define([
 				type: 'titlePane',
 				path: 'gis/dijit/TOC',
 				title: 'Layers',
+				placeAt: 'right',
 				open: false,
 				position: 1,
 				options: {
@@ -214,6 +244,7 @@ define([
 				id: 'find',
 				type: 'titlePane',
 				canFloat: true,
+				placeAt: 'right',
 				path: 'gis/dijit/Find',
 				title: 'Find',
 				open: false,
