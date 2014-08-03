@@ -27,33 +27,33 @@ define([
 			zoom: 5,
 			sliderStyle: 'small'
 		},
-		panes: {
-			left: {
-				// splitter: true
-			},
-			right: {
-				id: 'sidebarRight',
-				placeAt: 'outer',
-				region: 'right',
-				// splitter: true,
-				collapsible: true
-			}
-			/*,
-			bottom: {
-				id: 'sidebarBottom',
-				placeAt: 'outer',
-				splitter: true,
-				collapsible: true,
-				region: 'bottom'
-			},
-			top: {
-				id: 'sidebarTop',
-				placeAt: 'outer',
-				collapsible: true,
-				splitter: true,
-				region: 'top'
-			}*/
-		},
+		// panes: {
+		// 	left: {
+		// 		splitter: true
+		// 	},
+		// 	right: {
+		// 		id: 'sidebarRight',
+		// 		placeAt: 'outer',
+		// 		region: 'right',
+		// 		splitter: true,
+		// 		collapsible: true
+		// 	}
+		// 	,
+		// 	bottom: {
+		// 		id: 'sidebarBottom',
+		// 		placeAt: 'outer',
+		// 		splitter: true,
+		// 		collapsible: true,
+		// 		region: 'bottom'
+		// 	},
+		// 	top: {
+		// 		id: 'sidebarTop',
+		// 		placeAt: 'outer',
+		// 		collapsible: true,
+		// 		splitter: true,
+		// 		region: 'top'
+		// 	}
+		// },
 		// collapseButtonsPane: 'center',
 
 		// operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: 'dynamic', 'tiled', 'feature'.
@@ -221,7 +221,6 @@ define([
 				type: 'titlePane',
 				path: 'gis/dijit/TOC',
 				title: 'Layers',
-				placeAt: 'right',
 				open: false,
 				position: 1,
 				options: {
@@ -244,7 +243,6 @@ define([
 				id: 'find',
 				type: 'titlePane',
 				canFloat: true,
-				placeAt: 'right',
 				path: 'gis/dijit/Find',
 				title: 'Find',
 				open: false,
