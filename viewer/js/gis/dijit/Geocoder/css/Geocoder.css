@@ -40,7 +40,7 @@
 	position: absolute;
 	top: 0;
 	left: 100%;
-	width: 170px;
+	width: 196px;
 }
 .gis_GeocoderDijit .esriGeocoderContainer * {
 	-moz-box-sizing: content-box;
@@ -165,7 +165,7 @@
 .gis_GeocoderDijit .esriGeocoderResults {
 	display: none;
 	z-index: 99;
-	width: 199px;
+	width: 225px;
 	position: absolute;
 	left: 0;
 	top: 100%;
