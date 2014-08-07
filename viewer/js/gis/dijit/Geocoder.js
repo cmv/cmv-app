@@ -16,8 +16,8 @@ function (declare, _WidgetBase, _TemplatedMixin, a11yclick, lang, on, domClass, 
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         baseClass: 'gis_GeocoderDijit',
-        expanded: false,
-        collapsible: true,
+        expanded: true,
+        collapsible: false,
         geocoderOptions: {
             autoComplete: true
         },

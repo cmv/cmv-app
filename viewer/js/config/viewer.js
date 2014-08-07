@@ -117,7 +117,7 @@ define([
 				id: 'geocoder',
 				type: 'domNode',
 				path: 'gis/dijit/Geocoder',
-				srcNodeRef: 'geocoderButton',
+				srcNodeRef: 'geocodeDijit',
 				options: {
 					map: true,
 					autoComplete: true
