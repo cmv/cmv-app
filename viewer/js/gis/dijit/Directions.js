@@ -98,13 +98,8 @@ define([
 				wkid: 4326
 			}));
 			this[leg]();
-			// var wmPoint = esri.geometry.geographicToWebMercator(point);
 		},
 		locationError: function(error) {
-			this.growler.growl({
-				title: 'Error',
-				message: 'There was a problem with getting your location: ' + error.message
-			});
 			topic.publish('growler/growl', {
 				title: 'Error',
 				message: 'There was a problem with getting your location: ' + error.message,
