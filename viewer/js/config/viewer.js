@@ -116,7 +116,7 @@ define([
 				include: true,
 				id: 'geocoder',
 				type: 'domNode',
-				path: 'esri/dijit/Geocoder',
+				path: 'gis/dijit/Geocoder',
 				srcNodeRef: 'geocodeDijit',
 				options: {
 					map: true,
