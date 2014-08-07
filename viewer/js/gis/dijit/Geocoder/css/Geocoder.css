@@ -165,11 +165,11 @@
 .gis_GeocoderDijit .esriGeocoderResults {
 	display: none;
 	z-index: 99;
-	width: 100%;
+	width: 199px;
 	position: absolute;
 	left: 0;
 	top: 100%;
-	margin: 0 0 0 -2px;
+	margin: -3px 0 0 -31px;
 	border: 1px solid #57585A;
 	border-top: 0;
 	padding: 0;
