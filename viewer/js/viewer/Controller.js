@@ -16,8 +16,9 @@ define([
     'put-selector',
     'dojo/aspect',
     'dojo/has',
-    'esri/dijit/PopupMobile'
-], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, PopupMobile) {
+    'esri/dijit/PopupMobile',
+    'dijit/Menu'
+], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, PopupMobile, Menu) {
 
     return {
         legendLayerInfos: [],
@@ -133,6 +134,12 @@ define([
                 this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
             }
             this.map = new Map('mapCenter', this.config.mapOptions);
+            // create right-click menu
+            this.mapRightClickMenu = new Menu({
+                targetNodeIds: [this.map.root],
+                selector: '.layersDiv' // restrict to map only
+            });
+            this.mapRightClickMenu.startup();
 
             if (this.config.mapOptions.basemap) {
                 this.map.on('load', lang.hitch(this, 'initLayers'));
@@ -397,6 +404,9 @@ define([
 
             if (options.map) {
                 options.map = this.map;
+            }
+            if (options.mapRightClickMenu) {
+                options.mapRightClickMenu = this.mapRightClickMenu;
             }
             if (options.mapClickMode) {
                 options.mapClickMode = this.mapClickMode;

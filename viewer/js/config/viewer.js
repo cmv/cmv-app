@@ -308,6 +308,7 @@ define([
 				position: 7,
 				options: {
 					map: true,
+					mapRightClickMenu: true,
 					options: {
 						routeTaskUrl: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Network/USA/NAServer/Route',
 						routeParams: {
