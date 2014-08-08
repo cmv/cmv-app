@@ -356,7 +356,8 @@ define([
 				options: {
 					map: true,
 					mapClickMode: true,
-					openOnStartup: true
+					openOnStartup: true,
+					mapRightClickMenu: true
 				}
 			},
 			help: {
