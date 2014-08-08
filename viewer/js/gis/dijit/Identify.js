@@ -71,9 +71,6 @@ define([
         executeIdentifyTask: function(mapPoint) {
             this.map.infoWindow.hide();
             this.map.infoWindow.clearFeatures();
-            this.map.infoWindow.setTitle('Identifying...');
-            this.map.infoWindow.setContent('<div class="loading"></div>');
-            this.map.infoWindow.show(mapPoint);
 
             var identifyParams = new IdentifyParameters();
             identifyParams.tolerance = this.identifyTolerance;
@@ -93,9 +90,11 @@ define([
             if (this.parentWidget) {
                 var form = this.identifyFormDijit.get('value');
                 if (!form.identifyLayer || form.identifyLayer === '') {
-                    return;
+                    selectedLayer = '***';
+                    this.identifyLayerDijit.set('value', selectedLayer);
+                } else {
+                    selectedLayer = form.identifyLayer;
                 }
-                selectedLayer = form.identifyLayer;
             }
 
             // all layers
@@ -133,7 +132,13 @@ define([
                 });
             }
 
-            all(identifies).then(lang.hitch(this, 'identifyCallback', identifiedlayers), lang.hitch(this, 'identifyError'));
+            if (identifies.length > 0) {
+                this.map.infoWindow.setTitle('Identifying...');
+                this.map.infoWindow.setContent('<div class="loading"></div>');
+                this.map.infoWindow.show(mapPoint);
+
+                all(identifies).then(lang.hitch(this, 'identifyCallback', identifiedlayers), lang.hitch(this, 'identifyError'));
+            }
         },
         identifyCallback: function(identifiedlayers, responseArray) {
             var fSet = [];

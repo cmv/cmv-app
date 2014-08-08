@@ -229,6 +229,10 @@ body, html {
 
 /* esri popup window overrides */
 
+.esriPopup .sizer {
+    width: 325px;
+}
+
 .esriPopup .esriPopupWrapper {
     background-color: #FFFFFF;
 }
@@ -239,6 +243,10 @@ body, html {
     text-align: right;
     font-weight: bold;
     color: #333333;
+    width: 40%;
+}
+.esriPopup .mainSection table.attrTable td.attrValue {
+    width: 60%;
 }
 .esriPopup .mainSection table.attrTable tr {
     vertical-align: top;
