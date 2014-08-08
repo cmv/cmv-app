@@ -12,7 +12,7 @@
 }
 
 .gis_FindDijit .clearButton {
-	margin-left: 70px;
+	float: right;
 }
 
 .gis_FindDijit .searchIcon {

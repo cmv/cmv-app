@@ -1,6 +1,7 @@
 define({
 	map: true,
 	mapClickMode: true,
+	mapRightClickMenu: true,
 	identifyTolerance: 5,
 
 	// config object definition:

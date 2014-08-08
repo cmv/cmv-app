@@ -126,8 +126,11 @@ define([
 			identify: {
 				include: true,
 				id: 'identify',
-				type: 'invisible',
+				type: 'titlePane',
 				path: 'gis/dijit/Identify',
+				title: 'Identify',
+				open: false,
+				position: 3,
 				options: 'config/identify'
 			},
 			basemaps: {
