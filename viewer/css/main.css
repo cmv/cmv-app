@@ -227,6 +227,32 @@ body, html {
 
 /* end dbootstrap overrides*/
 
+/* esri popup window overrides */
+
+.esriPopup .esriPopupWrapper {
+    background-color: #FFFFFF;
+}
+.esriPopup .mainSection table.attrTable {
+    width: 100%;
+}
+.esriPopup .mainSection table.attrTable td.attrName {
+    text-align: right;
+    font-weight: bold;
+    color: #333333;
+}
+.esriPopup .mainSection table.attrTable tr {
+    vertical-align: top;
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+.esriPopup .mainSection table.attrTable tr:nth-child(odd) {
+    background-color: none;
+}
+.esriPopup .mainSection table.attrTable tr:nth-child(even) {
+    background-color: rgb(238, 238, 238);
+}
+
+/* end esri popup window overrides */
+
 /* esri mobile popup overrides */
 
 .esriPopupMobile {
