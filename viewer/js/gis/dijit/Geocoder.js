@@ -36,7 +36,7 @@ define([
                     '<tr valign="top">','<td class="attrName">Region</td>','<td class="attrValue">${Region}</td>','</tr>',
                     '<tr valign="top">','<td class="attrName">Postal Code</td>','<td class="attrValue">${Postal}&nbsp;${PostalExt}</td>','</tr>',
                     '<tr valign="top">','<td class="attrName">Country Code</td>','<td class="attrValue">${CountryCode}</td>','</tr>',
-                    '<tr valign="top">','<td class="attrName">Location Name</td>','<td class="attrValue">${Loc_name}</td>','</tr>',
+                    '<tr valign="top">','<td class="attrName">Locator Name</td>','<td class="attrValue">${Loc_name}</td>','</tr>',
                 '</table>'
             ].join(''),
 
