@@ -56,21 +56,21 @@ define([
                 } else {
                     this.hide();
                 }
-                // if (this.mapRightClickMenu) {
-                //     this.map.on('MouseDown', lang.hitch(this, function(evt) {
-                //         this.mapRightClickPoint = evt.mapPoint;
-                //     }));
-                //     this.mapRightClickMenu.addChild(new MenuItem({
-                //         label: 'Get address here',
-                //         onClick: lang.hitch(this, 'reverseGeocode')
-                //     }));
-                //     this.symbol = new SimpleMarkerSymbol();
-                //     this.infoTemplate = new InfoTemplate('Location', '${*}');
-                //     this.graphics = new GraphicsLayer({
-                //         id: 'reverseGeocode'
-                //     });
-                //     this.map.addLayer(this.graphics);
-                // }
+                if (this.mapRightClickMenu) {
+                    this.map.on('MouseDown', lang.hitch(this, function(evt) {
+                        this.mapRightClickPoint = evt.mapPoint;
+                    }));
+                    this.mapRightClickMenu.addChild(new MenuItem({
+                        label: 'Get address here',
+                        onClick: lang.hitch(this, 'reverseGeocode')
+                    }));
+                    this.symbol = new SimpleMarkerSymbol();
+                    this.infoTemplate = new InfoTemplate('Location', '${*}');
+                    this.graphics = new GraphicsLayer({
+                        id: 'reverseGeocode'
+                    });
+                    this.map.addLayer(this.graphics);
+                }
             },
             toggle: function() {
                 var display = domStyle.get(this.searchContainerNode, 'display');
