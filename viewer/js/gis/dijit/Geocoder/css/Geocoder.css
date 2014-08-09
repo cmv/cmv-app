@@ -50,7 +50,6 @@
 .gis_GeocoderDijit .esriGeocoderContainer {
 	width: 100%;
 	font-size: 12px;
-	height: 16px;
 	font-family: verdana, helvetica;
 }
 .gis_GeocoderDijit .esriGeocoderContainer ul {
@@ -63,7 +62,6 @@
 	float: left;
 	outline: 0;
 	width: 16px;
-	height: 16px;
 	display: block;
 	overflow: hidden;
 	margin: 6px 0 6px 6px;
