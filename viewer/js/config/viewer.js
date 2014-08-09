@@ -120,7 +120,8 @@ define([
 				srcNodeRef: 'geocodeDijit',
 				options: {
 					map: true,
-					autoComplete: true
+					autoComplete: true,
+					mapRightClickMenu: true
 				}
 			},
 			identify: {
