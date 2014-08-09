@@ -116,7 +116,7 @@ define([
 				include: true,
 				id: 'geocoder',
 				type: 'domNode',
-				path: 'esri/dijit/Geocoder',
+				path: 'gis/dijit/Geocoder',
 				srcNodeRef: 'geocodeDijit',
 				options: {
 					map: true,
@@ -126,8 +126,11 @@ define([
 			identify: {
 				include: true,
 				id: 'identify',
-				type: 'invisible',
+				type: 'titlePane',
 				path: 'gis/dijit/Identify',
+				title: 'Identify',
+				open: false,
+				position: 3,
 				options: 'config/identify'
 			},
 			basemaps: {
@@ -308,6 +311,7 @@ define([
 				position: 7,
 				options: {
 					map: true,
+					mapRightClickMenu: true,
 					options: {
 						routeTaskUrl: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Network/USA/NAServer/Route',
 						routeParams: {
@@ -355,7 +359,8 @@ define([
 				options: {
 					map: true,
 					mapClickMode: true,
-					openOnStartup: true
+					openOnStartup: true,
+					mapRightClickMenu: true
 				}
 			},
 			help: {
