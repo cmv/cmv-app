@@ -249,16 +249,24 @@ define([
                         }
                     }
                 } else if (layer._outFields && (layer._outFields.length) && (layer._outFields[0] !== '*')) {
-                    array.forEach(layer._outFields, function(field) {
-                        fieldInfos.push({
-                            fieldName: field,
-                            visible: true
+                    var fields = layer.fields;
+                    array.forEach(layer._outFields, function(fieldName) {
+                        var foundField = array.filter(fields, function (field) {
+                            return (field.name === fieldName);
                         });
+                        if (foundField.length > 0) {
+                            fieldInfos.push({
+                                fieldName: foundField[0].name,
+                                label: foundField[0].alias,
+                                visible: true
+                            });
+                        }
                     });
                 } else if (layer.fields) {
                     array.forEach(layer.fields, function(field) {
                         fieldInfos.push({
                             fieldName: field.name,
+                            label: field.alias,
                             visible: true
                         });
                     });
@@ -267,7 +275,7 @@ define([
                     popup = new PopupTemplate({
                         title: layerName,
                         fieldInfos: fieldInfos,
-                        showAttachments: (layer.declaredClass === 'esri.layers.FeatureLayer')
+                        showAttachments: (layer.hasAttachments)
                     });
                     if (!this.identifies[layer.id]) {
                         this.identifies[layer.id] = {};

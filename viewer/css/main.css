@@ -239,6 +239,9 @@ body, html {
 .esriPopup .mainSection table.attrTable {
     width: 100%;
 }
+.esriPopup .attachmentsSection div {
+    font-weight: bold;
+}
 .esriPopup .mainSection table.attrTable td.attrName {
     text-align: right;
     font-weight: bold;

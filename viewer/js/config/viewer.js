@@ -66,11 +66,22 @@ define([
 				id: 'meetupHometowns',
 				opacity: 1.0,
 				visible: true,
-				outFields: ['Location'],
+				outFields: ['*'],
 				mode: 0
 			},
 			editorLayerInfos: {
 				disableGeometryUpdate: false
+			}
+		}, {
+			type: 'feature',
+			url: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
+			title: 'San Francisco 311 Incidents',
+			options: {
+				id: 'sf311Incidents',
+				opacity: 1.0,
+				visible: true,
+				outFields: ['req_type','req_date','req_time','address','district'],
+				mode: 0
 			}
 		}, {
 			type: 'dynamic',

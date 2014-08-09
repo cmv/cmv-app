@@ -21,6 +21,15 @@ define({
 	// for details on pop-up definition see: https://developers.arcgis.com/javascript/jshelp/intro_popuptemplate.html
 
 	identifies: {
+		meetupHometowns: {
+			0: {
+				title: 'Hometowns',
+				fieldInfos: [{
+					fieldName: 'Location',
+					visible: true
+				}]
+			}
+		},
 		louisvillePubSafety: {
 			2: {
 				title: 'Police Station',
