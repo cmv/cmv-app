@@ -1,11 +1,10 @@
 define([
-	'esri/InfoTemplate',
 	'esri/units',
 	'esri/geometry/Extent',
 	'esri/config',
 	'esri/tasks/GeometryService',
 	'esri/layers/ImageParameters'
-], function(InfoTemplate, units, Extent, esriConfig, GeometryService, ImageParameters) {
+], function(units, Extent, esriConfig, GeometryService, ImageParameters) {
 
 	// url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
 	esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
@@ -68,11 +67,21 @@ define([
 				opacity: 1.0,
 				visible: true,
 				outFields: ['*'],
-				infoTemplate: new InfoTemplate('Hometown', '${*}'),
 				mode: 0
 			},
 			editorLayerInfos: {
 				disableGeometryUpdate: false
+			}
+		}, {
+			type: 'feature',
+			url: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
+			title: 'San Francisco 311 Incidents',
+			options: {
+				id: 'sf311Incidents',
+				opacity: 1.0,
+				visible: true,
+				outFields: ['req_type','req_date','req_time','address','district'],
+				mode: 0
 			}
 		}, {
 			type: 'dynamic',
@@ -87,6 +96,9 @@ define([
 				opacity: 1.0,
 				visible: true,
 				imageParameters: imageParameters
+			},
+			identifyLayerInfos: {
+				layerIds: [2,4,5,8,12,21]
 			}
 		}, {
 			type: 'dynamic',
@@ -120,7 +132,8 @@ define([
 				srcNodeRef: 'geocodeDijit',
 				options: {
 					map: true,
-					autoComplete: true
+					autoComplete: true,
+					mapRightClickMenu: true
 				}
 			},
 			identify: {

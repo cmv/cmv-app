@@ -23,6 +23,7 @@ define([
     return {
         legendLayerInfos: [],
         editorLayerInfos: [],
+        identifyLayerInfos: [],
         tocLayerInfos: [],
         panes: {
             left: {
@@ -218,6 +219,17 @@ define([
                     lang.mixin(options, layer.editorLayerInfos);
                 }
                 this.editorLayerInfos.push(options);
+            }
+            if (layer.type === 'dynamic' || layer.type === 'feature') {
+                var identifyLayerInfo = {
+                    layer: l
+                };
+                if (layer.identifyLayerInfos) {
+                    lang.mixin(identifyLayerInfo, layer.identifyLayerInfos);
+                }
+                if (identifyLayerInfo.include !== false) {
+                    this.identifyLayerInfos.push(identifyLayerInfo);
+                }
             }
         },
         initWidgets: function(evt) {
@@ -419,6 +431,9 @@ define([
             }
             if (options.editorLayerInfos) {
                 options.layerInfos = this.editorLayerInfos;
+            }
+            if (options.identifyLayerInfos) {
+                options.layerInfos = this.identifyLayerInfos;
             }
 
             // create the widget

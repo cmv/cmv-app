@@ -236,26 +236,34 @@ body, html {
 .esriPopup .esriPopupWrapper {
     background-color: #FFFFFF;
 }
-.esriPopup .mainSection table.attrTable {
-    width: 100%;
+.esriPopup .attachmentsSection div {
+    font-weight: bold;
 }
-.esriPopup .mainSection table.attrTable td.attrName {
+.esriPopup .contentPane table.attrTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+.esriPopup .contentPane table.attrTable td {
+    padding: 2px;
+}
+.esriPopup .contentPane table.attrTable td.attrName {
     text-align: right;
     font-weight: bold;
     color: #333333;
     width: 40%;
+    padding-right: 5px;
 }
-.esriPopup .mainSection table.attrTable td.attrValue {
+.esriPopup .contentPane table.attrTable td.attrValue {
     width: 60%;
 }
-.esriPopup .mainSection table.attrTable tr {
+.esriPopup .contentPane table.attrTable tr {
     vertical-align: top;
     border-bottom: 1px solid rgb(221, 221, 221);
 }
-.esriPopup .mainSection table.attrTable tr:nth-child(odd) {
+.esriPopup .contentPane table.attrTable tr:nth-child(odd) {
     background-color: none;
 }
-.esriPopup .mainSection table.attrTable tr:nth-child(even) {
+.esriPopup .contentPane table.attrTable tr:nth-child(even) {
     background-color: rgb(238, 238, 238);
 }
 
