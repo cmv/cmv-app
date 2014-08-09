@@ -22,15 +22,48 @@ define([
         widgetsInTemplate: true,
         templateString: IdentifyTemplate,
         baseClass: 'gis_IdentifyDijit',
+
+        layerSeparator: '||',
+        allLayersId: '***',
+
         postCreate: function() {
             this.inherited(arguments);
             this.layers = [];
-            array.forEach(this.map.layerIds, function(layerId) {
-                var layer = this.map.getLayer(layerId);
-                if (layer.declaredClass === 'esri.layers.ArcGISDynamicMapServiceLayer') {
+            array.forEach(this.layerInfos, function(layerInfo) {
+                var lyrId = layerInfo.layer.id;
+                var layer = this.map.getLayer(lyrId);
+                if (layer) {
+                    var url = layer.url;
+
+                    // handle feature layers
+                    if (layer.declaredClass === 'esri.layers.FeatureLayer') {
+
+                        // If is a feature layer that does not support
+                        // Identify (Feature Service), create an
+                        // infoTemplate for the graphic features. Create
+                        // it only if one does not already exist.
+                        if (layer.capabilities.toLowerCase().indexOf('data') < 0) {
+                            if (!layer.infoTemplate) {
+                                var infoTemplate = this.getInfoTemplate(layer);
+                                if (infoTemplate) {
+                                    layer.setInfoTemplate(infoTemplate);
+                                    return;
+                                }
+                            }
+                        }
+
+                        // If it is a feature Layer, we get the base url
+                        // for the map service by removing the layerId.
+                        var lastSL = url.lastIndexOf('/' + layer.layerId);
+                        if (lastSL > 0) {
+                            url = url.substring(0, lastSL);
+                        }
+                    }
+
                     this.layers.push({
                         ref: layer,
-                        identifyTask: new IdentifyTask(layer.url)
+                        layerInfo: layerInfo,
+                        identifyTask: new IdentifyTask(url)
                     });
 
                     // rebuild the layer selection list when any layer is hidden
@@ -45,13 +78,13 @@ define([
                 }
             }, this);
             this.map.on('click', lang.hitch(this, function(evt) {
-                if (this.mapClickMode.current === 'identify' && !evt.graphic) {
-                    this.handleMapClick(evt);
+                if (this.mapClickMode.current === 'identify') {
+                    this.executeIdentifyTask(evt);
                 }
             }));
             if (this.mapRightClickMenu) {
                 this.map.on('MouseDown', lang.hitch(this, function(evt) {
-                    this.mapRightClickPoint = evt.mapPoint;
+                    this.mapRightClick = evt;
                 }));
                 this.mapRightClickMenu.addChild(new MenuItem({
                     label: 'Identify here',
@@ -68,11 +101,20 @@ define([
                 }));
             }
         },
-        executeIdentifyTask: function(mapPoint) {
+        executeIdentifyTask: function(evt) {
+            // handle feature layers that come from a feature service
+            if (evt.graphic) {
+                var layer = evt.graphic._layer;
+                if (layer.infoTemplate || layer.capabilities.toLowerCase().indexOf('data') < 0) {
+                    return;
+                }
+            }
+
             this.map.infoWindow.hide();
             this.map.infoWindow.clearFeatures();
 
             var identifyParams = new IdentifyParameters();
+            var mapPoint = evt.mapPoint;
             identifyParams.tolerance = this.identifyTolerance;
             identifyParams.returnGeometry = true;
             identifyParams.layerOption = IdentifyParameters.LAYER_OPTION_VISIBLE;
@@ -84,89 +126,74 @@ define([
 
             var identifies = [];
             var identifiedlayers = [];
-            var selectedLayer = '***'; // default is all layers
+            var selectedLayer = this.allLayersId; // default is all layers
 
             // if we have a UI, then get the selected layer
             if (this.parentWidget) {
                 var form = this.identifyFormDijit.get('value');
                 if (!form.identifyLayer || form.identifyLayer === '') {
-                    selectedLayer = '***';
+                    selectedLayer = this.allLayersId;
                     this.identifyLayerDijit.set('value', selectedLayer);
                 } else {
                     selectedLayer = form.identifyLayer;
                 }
             }
 
-            // all layers
-            if (selectedLayer === '***') {
-                array.forEach(this.layers, function(layer) {
-                    if (layer.ref.visible && layer.ref.visibleLayers.length !== 0 && layer.ref.visibleLayers[0] !== -1) {
-                        var params = lang.clone(identifyParams);
-                        var nonGroupLayers = array.filter(layer.ref.layerInfos, function (x) {
-                            return x.subLayerIds === null;
-                        });
-                        params.layerIds = [];
-                        array.forEach(nonGroupLayers, function(subLayer) {
-                            if (array.indexOf(layer.ref.visibleLayers, subLayer.id) !== -1) {
-                                params.layerIds.push(subLayer.id);
-                            }
-                        });
-                        identifies.push(layer.identifyTask.execute(params));
-                        identifiedlayers.push(layer);
+            var arrIds = form.identifyLayer.split(this.layerSeparator);
+            var allLayersId = this.allLayersId;
+            array.forEach(this.layers, function(layer) {
+                var ref = layer.ref,
+                    selectedIds = layer.layerInfo.layerIds;
+                if (ref.visible) {
+                    if (arrIds[0] === allLayersId || ref.id === arrIds[0]) {
+                        var layerIds = [];
+                        if (arrIds.length > 1 && arrIds[1]) { // layer explicity requested
+                            layerIds = [arrIds[1]];
+                        } else if ((ref.declaredClass === 'esri.layers.FeatureLayer') && !isNaN(ref.layerId)) { // feature layer
+                            layerIds = [ref.layerId];
+                        } else if (ref.layerInfos) {
+                            layerIds = [];
+                            array.forEach(ref.layerInfos, function (x) {
+                                if (selectedIds) { // restrict which layers are included
+                                    if (array.indexOf(selectedIds, x.id) < 0) {
+                                        return;
+                                    }
+                                }
+                                if (x.visible && x.subLayerIds === null) {
+                                    layerIds.push(x.id);
+                                }
+                            });
+                        }
+                        if (layerIds.length > 0) {
+                            var params = lang.clone(identifyParams);
+                            params.layerIds = layerIds;
+                            identifies.push(layer.identifyTask.execute(params));
+                            identifiedlayers.push(layer);
+                        }
                     }
-                });
-            // only selected layer
-            } else {
-                var arrIds = form.identifyLayer.split('||');
-                array.forEach(this.layers, function(layer) {
-                    if (layer.ref.id === arrIds[0]) {
-                        array.forEach(layer.ref.layerInfos, function(layerInfo) {
-                            if (layerInfo.id.toString() === arrIds[1]) {
-                                var params = lang.clone(identifyParams);
-                                params.layerIds = [layerInfo.id];
-                                identifies.push(layer.identifyTask.execute(params));
-                                identifiedlayers.push(layer);
-                            }
-                        });
-                    }
-                });
-            }
+                }
+            });
 
             if (identifies.length > 0) {
                 this.map.infoWindow.setTitle('Identifying...');
                 this.map.infoWindow.setContent('<div class="loading"></div>');
                 this.map.infoWindow.show(mapPoint);
-
                 all(identifies).then(lang.hitch(this, 'identifyCallback', identifiedlayers), lang.hitch(this, 'identifyError'));
             }
         },
         identifyCallback: function(identifiedlayers, responseArray) {
             var fSet = [];
             array.forEach(responseArray, function(response, i) {
-                var layerId = identifiedlayers[i].ref.id;
+                var ref = identifiedlayers[i].ref;
                 array.forEach(response, function(result) {
                     result.feature.geometry.spatialReference = this.map.spatialReference; //temp workaround for ags identify bug. remove when fixed.
-                    // see if we have a Popup config defined for this layer
-                    if (this.identifies.hasOwnProperty(layerId)) {
-                        if (this.identifies[layerId].hasOwnProperty(result.layerId)) {
-                            result.feature.setInfoTemplate(new PopupTemplate(this.identifies[layerId][result.layerId]));
-                        }
-                    }
-                    // if no Popup defined output all attributes
                     if (result.feature.infoTemplate === undefined) {
-                        var fieldInfos = [];
-                        for (var prop in result.feature.attributes) {
-                            if (result.feature.attributes.hasOwnProperty(prop)) {
-                                fieldInfos.push({
-                                    fieldName: prop,
-                                    visible: true
-                                });
-                            }
+                        var infoTemplate = this.getInfoTemplate(ref, result);
+                        if (infoTemplate) {
+                            result.feature.setInfoTemplate(infoTemplate);
+                        } else {
+                            return;
                         }
-                        result.feature.setInfoTemplate(new PopupTemplate({
-                            title: result.layerName,
-                            fieldInfos: fieldInfos
-                        }));
                     }
                     fSet.push(result.feature);
                 }, this);
@@ -177,38 +204,122 @@ define([
             this.map.infoWindow.hide();
             console.log('identify tasks error: ', err);
         },
-        handleMapClick: function(evt) {
-            if (evt && evt.mapPoint) {
-                this.executeIdentifyTask(evt.mapPoint);
+        handleRightClick: function(evt) {
+            if (this.mapRightClick) {
+                this.executeIdentifyTask(this.mapRightClick);
             }
         },
-        handleRightClick: function() {
-            if (this.mapRightClickPoint) {
-                this.executeIdentifyTask(this.mapRightClickPoint);
+        getInfoTemplate: function (layer, result) {
+            var popup = null;
+            var layerId = layer.layerId;
+            var layerName = layer.name;
+            if (layer._titleForLegend) {
+                layerName = layer._titleForLegend;
             }
+            if (result) {
+                layerId = result.layerId;
+                layerName = result.layerName;
+            }
+            // see if we have a Popup config defined for this layer
+            if (this.identifies.hasOwnProperty(layer.id)) {
+                if (this.identifies[layer.id].hasOwnProperty(layerId)) {
+                    popup = this.identifies[layer.id][layerId];
+                    if (popup) {
+                        if (typeof(popup.declaredClass) !== 'string') { // has it been created already?
+                            popup = new PopupTemplate(popup);
+                            this.identifies[layer.id][layerId] = popup;
+                        }
+                    }
+                }
+            }
+
+            // if no Popup config found, create one with all attributes or layer fields
+            if (!popup) {
+                var fieldInfos = [];
+                if (result && result.feature) {
+                    var attributes = result.feature.attributes;
+                    if (attributes) {
+                        for (var prop in attributes) {
+                            if (attributes.hasOwnProperty(prop)) {
+                                fieldInfos.push({
+                                    fieldName: prop,
+                                    visible: true
+                                });
+                            }
+                        }
+                    }
+                } else if (layer._outFields && (layer._outFields.length) && (layer._outFields[0] !== '*')) {
+                    array.forEach(layer._outFields, function(field) {
+                        fieldInfos.push({
+                            fieldName: field,
+                            visible: true
+                        });
+                    });
+                } else if (layer.fields) {
+                    array.forEach(layer.fields, function(field) {
+                        fieldInfos.push({
+                            fieldName: field.name,
+                            visible: true
+                        });
+                    });
+                }
+                if (fieldInfos.length > 0) {
+                    popup = new PopupTemplate({
+                        title: layerName,
+                        fieldInfos: fieldInfos,
+                        showAttachments: (layer.declaredClass === 'esri.layers.FeatureLayer')
+                    });
+                    if (!this.identifies[layer.id]) {
+                        this.identifies[layer.id] = {};
+                    }
+                    this.identifies[layer.id][layerId] = popup;
+                }
+            }
+
+            return popup;
         },
+
         createIdentifyLayerList: function() {
             var id = null;
             var identifyItems = [];
             var selectedId = this.identifyLayerDijit.get('value');
+            var sep = this.layerSeparator;
 
             array.forEach(this.layers, lang.hitch(this, function(layer) {
+                var ref = layer.ref,
+                    selectedIds = layer.layerInfo.layerIds;
                 // only include layers that are currently visible
-                if (layer.ref.visible !== false) {
-                    array.forEach(layer.ref.layerInfos, lang.hitch(this, function (layerInfo) {
-                        var ref = layer.ref;
-                        // only include sublayers that are currently visible
-                        if (array.indexOf(ref.visibleLayers, layerInfo.id) !== -1 && this.layerVisibleAtCurrentScale(layerInfo)) {
-                            identifyItems.push({
-                                name: ref._titleForLegend + ' \\ ' + layerInfo.name,
-                                id: ref.id + '||' + layerInfo.id
-                            });
-                            // previously selected sublayer is still visible so keep it selected
-                            if (ref.id + '||' + layerInfo.id === selectedId) {
-                                id = selectedId;
-                            }
+                if (ref.visible) {
+                    var name = ref._titleForLegend;
+                    if ((ref.declaredClass === 'esri.layers.FeatureLayer') && !isNaN(ref.layerId)) { // feature layer
+                        identifyItems.push({
+                            name: name,
+                            id: ref.id + sep + ref.layerId
+                        });
+                        // previously selected layer is still visible so keep it selected
+                        if (ref.id + sep + ref.layerId === selectedId) {
+                            id = selectedId;
                         }
-                    }));
+                    } else { // dynamic layer
+                        array.forEach(ref.layerInfos, lang.hitch(this, function (layerInfo) {
+                            // only include sublayers that are currently visible
+                            if (layerInfo.visible && (layerInfo.subLayerIds === null) && this.layerVisibleAtCurrentScale(layerInfo)) {
+                                if (selectedIds) { // restrict which layers are included
+                                    if (array.indexOf(selectedIds, layerInfo.id) < 0) {
+                                        return;
+                                    }
+                                }
+                                identifyItems.push({
+                                    name: name + ' \\ ' + layerInfo.name,
+                                    id: ref.id + sep + layerInfo.id
+                                });
+                                // previously selected sublayer is still visible so keep it selected
+                                if (ref.id + sep + layerInfo.id === selectedId) {
+                                    id = selectedId;
+                                }
+                            }
+                        }));
+                    }
                 }
             }));
 

@@ -2,6 +2,7 @@ define({
 	map: true,
 	mapClickMode: true,
 	mapRightClickMenu: true,
+	identifyLayerInfos: true,
 	identifyTolerance: 5,
 
 	// config object definition:

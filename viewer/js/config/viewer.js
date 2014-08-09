@@ -1,11 +1,10 @@
 define([
-	'esri/InfoTemplate',
 	'esri/units',
 	'esri/geometry/Extent',
 	'esri/config',
 	'esri/tasks/GeometryService',
 	'esri/layers/ImageParameters'
-], function(InfoTemplate, units, Extent, esriConfig, GeometryService, ImageParameters) {
+], function(units, Extent, esriConfig, GeometryService, ImageParameters) {
 
 	// url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
 	esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
@@ -67,8 +66,7 @@ define([
 				id: 'meetupHometowns',
 				opacity: 1.0,
 				visible: true,
-				outFields: ['*'],
-				infoTemplate: new InfoTemplate('Hometown', '${*}'),
+				outFields: ['Location'],
 				mode: 0
 			},
 			editorLayerInfos: {
@@ -87,6 +85,9 @@ define([
 				opacity: 1.0,
 				visible: true,
 				imageParameters: imageParameters
+			},
+			identifyLayerInfos: {
+				layerIds: [2,4,5,8,12,21]
 			}
 		}, {
 			type: 'dynamic',
