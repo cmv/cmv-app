@@ -42,7 +42,7 @@ define([
                         // Identify (Feature Service), create an
                         // infoTemplate for the graphic features. Create
                         // it only if one does not already exist.
-                        if (layer.capabilities.toLowerCase().indexOf('data') < 0) {
+                        if (layer.capabilities && layer.capabilities.toLowerCase().indexOf('data') < 0) {
                             if (!layer.infoTemplate) {
                                 var infoTemplate = this.getInfoTemplate(layer);
                                 if (infoTemplate) {
@@ -102,10 +102,21 @@ define([
             }
         },
         executeIdentifyTask: function(evt) {
-            // handle feature layers that come from a feature service
             if (evt.graphic) {
+                // handle feature layers that come from a feature service
+                // and may already have an info template
                 var layer = evt.graphic._layer;
-                if (layer.infoTemplate || layer.capabilities.toLowerCase().indexOf('data') < 0) {
+                if (layer.infoTemplate || (layer.capabilities && layer.capabilities.toLowerCase().indexOf('data') < 0)) {
+                    return;
+                }
+
+                // handle graphic from another type of graphics layer
+                // added to the map and so the identify is not found
+                if (!this.identifies.hasOwnProperty(layer.id)) {
+                    return;
+                }
+                // no layerId (graphics) or sublayer not defined
+                if (isNaN(layer.layerId) || !this.identifies[layer.id].hasOwnProperty(layer.layerId)) {
                     return;
                 }
             }
@@ -132,14 +143,13 @@ define([
             if (this.parentWidget) {
                 var form = this.identifyFormDijit.get('value');
                 if (!form.identifyLayer || form.identifyLayer === '') {
-                    selectedLayer = this.allLayersId;
                     this.identifyLayerDijit.set('value', selectedLayer);
                 } else {
                     selectedLayer = form.identifyLayer;
                 }
             }
 
-            var arrIds = form.identifyLayer.split(this.layerSeparator);
+            var arrIds = selectedLayer.split(this.layerSeparator);
             var allLayersId = this.allLayersId;
             array.forEach(this.layers, function(layer) {
                 var ref = layer.ref,
@@ -205,7 +215,7 @@ define([
             console.log('identify tasks error: ', err);
         },
         handleRightClick: function(evt) {
-            if (this.mapRightClick) {
+            if ((this.mapClickMode.current === 'identify') && (this.mapRightClick)) {
                 this.executeIdentifyTask(this.mapRightClick);
             }
         },
