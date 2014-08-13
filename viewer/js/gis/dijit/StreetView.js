@@ -95,6 +95,22 @@ define([
             if (!this.panorama || !this.panoramaService) {
                 this.panorama = new google.maps.StreetViewPanorama(this.panoNode, this.panoOptions);
                 this.panoramaService = new google.maps.StreetViewService();
+                if (this.parentWidget) {
+                    this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, function() {
+                        if (this.panorama) {
+                            google.maps.event.trigger(this.panorama, 'resize');
+                        }
+                    })));
+
+                }
+                if (this.parentWidget && this.parentWidget._dockWidget) {
+                    this.own(aspect.after(this.parentWidget, '_dockWidget', lang.hitch(this, function() {
+                        if (this.panorama) {
+                            google.maps.event.trigger(this.panorama, 'resize');
+                        }
+                    })));
+
+                }
             }
             // if (this.parentWidget.toggleable) {
             //     this.disconnectMapClick();
