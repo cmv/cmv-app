@@ -108,7 +108,7 @@
 	color: #444;
 	background: none;
 	margin: 0 6px 0 0;
-	width: 140px;
+	/*width: 140px;*/
 }
 .gis_GeocoderDijit .esriGeocoderMultiple input {
 	width: 146px;

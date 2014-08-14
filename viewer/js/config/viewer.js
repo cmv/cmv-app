@@ -131,8 +131,13 @@ define([
 				srcNodeRef: 'geocodeDijit',
 				options: {
 					map: true,
-					autoComplete: true,
-					mapRightClickMenu: true
+					mapRightClickMenu: true,
+					geocoderOptions: {
+						autoComplete: false,
+						arcgisGeocoder: {
+							placeholder: 'Enter an address or place'
+						}
+					}
 				}
 			},
 			identify: {
