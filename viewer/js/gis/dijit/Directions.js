@@ -44,6 +44,24 @@ define([
 			}));
 			this.menu.startup();
 		},
+		useCurLocStart: function() {
+			if (this.useCurrentLocationStart.checked) {
+				if (this.useCurrentLocationEnd.checked){
+					this.directions.reset();
+					this.useCurrentLocationEnd.checked= false;
+				}
+				this.getGeoLocation('directionsFrom');
+			}
+		},
+		useCurLocEnd: function() {
+			if (this.useCurrentLocationEnd.checked) {
+				if (this.useCurrentLocationStart.checked){
+					this.directions.reset();
+					this.useCurrentLocationStart.checked= false;
+				}
+				this.getGeoLocation('directionsTo');
+			}
+		},
 		clearStops: function() {
 			this.directions.reset();
 		},
