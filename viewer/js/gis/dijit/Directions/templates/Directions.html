@@ -2,6 +2,14 @@
 	<div style="text-align:right;font-size:11px;">
 		<a href="#" data-dojo-attach-event="onclick:clearStops">clear stops</a> <!-- <a href="#" data-dojo-attach-event="onclick:clearMap">clear map</a> -->
 	</div>
-	<div data-dojo-attach-point="directionsNode">
-	</div>
+	<div data-dojo-attach-point="useCurrentLocationStartDom">
+		<input type="checkbox" data-dojo-attach-event="onClick:useCurLocStart" data-dojo-attach-point="useCurrentLocationStart" data-dojo-type="dijit.form.CheckBox" /> <!-- data-dojo-props="class:'containsCheck'"/-->
+		<label>Use Current Location As Start Point</label>
+    </div>
+	<div data-dojo-attach-point="useCurrentLocationEndDom">
+		<input type="checkbox" data-dojo-attach-event="onClick:useCurLocEnd" data-dojo-attach-point="useCurrentLocationEnd" data-dojo-type="dijit.form.CheckBox" /> <!-- data-dojo-props="class:'containsCheck'"/-->
+		<label>Use Current Location As End Point</label>
+    </div>
+	<div data-dojo-attach-point="directionsNode"/>
+	
 </div>
