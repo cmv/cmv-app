@@ -133,7 +133,7 @@ define([
 					map: true,
 					mapRightClickMenu: true,
 					geocoderOptions: {
-						autoComplete: false,
+						autoComplete: true,
 						arcgisGeocoder: {
 							placeholder: 'Enter an address or place'
 						}
