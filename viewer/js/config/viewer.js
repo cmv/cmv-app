@@ -36,8 +36,7 @@ define([
 		// 		region: 'right',
 		// 		splitter: true,
 		// 		collapsible: true
-		// 	}
-		// 	,
+		// 	},
 		// 	bottom: {
 		// 		id: 'sidebarBottom',
 		// 		placeAt: 'outer',
@@ -53,7 +52,7 @@ define([
 		// 		region: 'top'
 		// 	}
 		// },
-		// collapseButtonsPane: 'center',
+		// collapseButtonsPane: 'center', //center or outer
 
 		// operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: 'dynamic', 'tiled', 'feature'.
 		// The 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
@@ -80,7 +79,7 @@ define([
 				id: 'sf311Incidents',
 				opacity: 1.0,
 				visible: true,
-				outFields: ['req_type','req_date','req_time','address','district'],
+				outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
 				mode: 0
 			}
 		}, {
@@ -98,7 +97,7 @@ define([
 				imageParameters: imageParameters
 			},
 			identifyLayerInfos: {
-				layerIds: [2,4,5,8,12,21]
+				layerIds: [2, 4, 5, 8, 12, 21]
 			}
 		}, {
 			type: 'dynamic',
@@ -132,8 +131,13 @@ define([
 				srcNodeRef: 'geocodeDijit',
 				options: {
 					map: true,
-					autoComplete: true,
-					mapRightClickMenu: true
+					mapRightClickMenu: true,
+					geocoderOptions: {
+						autoComplete: true,
+						arcgisGeocoder: {
+							placeholder: 'Enter an address or place'
+						}
+					}
 				}
 			},
 			identify: {

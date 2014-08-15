@@ -29,14 +29,14 @@ define([
             },
             reverseGeocodeTemplate: [
                 '<table class="attrTable">',
-                    '<tr valign="top">','<td class="attrName">Address</td>','<td class="attrValue">${Address}</td>','</tr>',
-                    '<tr valign="top">','<td class="attrName">Neighborhood</td>','<td class="attrValue">${Neighborhood}</td>','</tr>',
-                    '<tr valign="top">','<td class="attrName">City</td>','<td class="attrValue">${City}</td>','</tr>',
-                    '<tr valign="top">','<td class="attrName">Subregion</td>','<td class="attrValue">${SubRegion}</td>','</tr>',
-                    '<tr valign="top">','<td class="attrName">Region</td>','<td class="attrValue">${Region}</td>','</tr>',
-                    '<tr valign="top">','<td class="attrName">Postal Code</td>','<td class="attrValue">${Postal}&nbsp;${PostalExt}</td>','</tr>',
-                    '<tr valign="top">','<td class="attrName">Country Code</td>','<td class="attrValue">${CountryCode}</td>','</tr>',
-                    '<tr valign="top">','<td class="attrName">Locator Name</td>','<td class="attrValue">${Loc_name}</td>','</tr>',
+                '<tr valign="top">', '<td class="attrName">Address</td>', '<td class="attrValue">${Address}</td>', '</tr>',
+                '<tr valign="top">', '<td class="attrName">Neighborhood</td>', '<td class="attrValue">${Neighborhood}</td>', '</tr>',
+                '<tr valign="top">', '<td class="attrName">City</td>', '<td class="attrValue">${City}</td>', '</tr>',
+                '<tr valign="top">', '<td class="attrName">Subregion</td>', '<td class="attrValue">${SubRegion}</td>', '</tr>',
+                '<tr valign="top">', '<td class="attrName">Region</td>', '<td class="attrValue">${Region}</td>', '</tr>',
+                '<tr valign="top">', '<td class="attrName">Postal Code</td>', '<td class="attrValue">${Postal}&nbsp;${PostalExt}</td>', '</tr>',
+                '<tr valign="top">', '<td class="attrName">Country Code</td>', '<td class="attrValue">${CountryCode}</td>', '</tr>',
+                '<tr valign="top">', '<td class="attrName">Locator Name</td>', '<td class="attrValue">${Loc_name}</td>', '</tr>',
                 '</table>'
             ].join(''),
 
