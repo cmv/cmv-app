@@ -1,7 +1,6 @@
 define([
 	'dojo/_base/declare',
 	'dijit/TitlePane',
-	'dijit/_Contained',
 	'dojo/on',
 	'dojo/_base/lang',
 	'dojo/dnd/Moveable',
@@ -14,8 +13,8 @@ define([
 	'dojo/dom-attr',
 	'dojo/dom-class',
 	'xstyle/css!./FloatingTitlePane/css/FloatingTitlePane.css'
-], function(declare, TitlePane, _Contained, on, lang, Moveable, aspect, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass, css) {
-	return declare([TitlePane, _Contained], {
+], function(declare, TitlePane, on, lang, Moveable, aspect, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass, css) {
+	return declare([TitlePane], {
 		postCreate: function() {
 			if (this.canFloat) {
 				this.dockHandleNode = domConstruct.create('span', {
@@ -29,19 +28,19 @@ define([
 				}, this.titleNode, 'after');
 				domClass.add(this.moveHandleNode, 'floatingWidgetPopout');
 
-				on(this.moveHandleNode, 'click', lang.hitch(this, function(evt) {
+				this.own(on(this.moveHandleNode, 'click', lang.hitch(this, function(evt) {
 					this._undockWidget();
 					evt.stopImmediatePropagation();
-				}));
-				on(this.dockHandleNode, 'click', lang.hitch(this, function(evt) {
+				})));
+				this.own(on(this.dockHandleNode, 'click', lang.hitch(this, function(evt) {
 					this._dockWidget();
 					evt.stopImmediatePropagation();
-				}));
+				})));
+				this.own(on(window, 'resize', lang.hitch(this, '_endDrag')));
 			}
 			this.inherited(arguments);
 		},
 		startup: function() {
-			this.index = this.getIndexInParent();
 			if (this.titleBarNode && this.canFloat) {
 				this._moveable = new Moveable(this.domNode, {
 					handle: this.moveHandleNode
@@ -74,12 +73,12 @@ define([
 				domClass.remove(this.moveHandleNode, 'floatingWidgetPopout');
 				var computedStyle = domStyle.getComputedStyle(this.containerNode);
 				var width = parseInt(domStyle.getComputedStyle(this.sidebar.containerNode).width, 10);
-				domGeom.setContentSize(this.containerNode, {
-					w: (width - 32)
+				domGeom.setContentSize(this.domNode, {
+					w: (width - 2)
 				}, computedStyle);
-				domGeom.setContentSize(this.titleBarNode, {
-					w: (width - 32)
-				}, computedStyle);
+				// domGeom.setContentSize(this.titleBarNode, {
+				// 	w: (width - 32)
+				// }, computedStyle);
 				this.isFloating = true;
 				this.placeAt(win.body());
 			}

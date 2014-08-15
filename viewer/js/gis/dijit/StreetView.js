@@ -18,10 +18,11 @@ define([
     'esri/geometry/Point',
     'esri/SpatialReference',
     'gis/dijit/_FloatingWidgetMixin',
+    'dijit/MenuItem',
     'xstyle/css!./StreetView/css/StreetView.css',
     'gis/plugins/async!//maps.google.com/maps/api/js?v=3&sensor=false',
     '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.1/proj4.js'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, aspect, GraphicsLayer, Graphic, SimpleRenderer, template, UniqueValueRenderer, PictureMarkerSymbol, on, domStyle, Point, SpatialReference, _FloatingWidgetMixin, css, gmaps, proj4) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, aspect, GraphicsLayer, Graphic, SimpleRenderer, template, UniqueValueRenderer, PictureMarkerSymbol, on, domStyle, Point, SpatialReference, _FloatingWidgetMixin, MenuItem, css, gmaps, proj4) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin], {
         widgetsInTemplate: true,
@@ -76,12 +77,40 @@ define([
             // Proj4js style so we need an alias
             // https://github.com/proj4js/proj4js/issues/23
             window.Proj4js = proj4;
+
+
+
+            if (this.mapRightClickMenu) {
+                this.map.on('MouseDown', lang.hitch(this, function(evt) {
+                    this.mapRightClickPoint = evt.mapPoint;
+                }));
+                this.mapRightClickMenu.addChild(new MenuItem({
+                    label: 'See Street View here',
+                    onClick: lang.hitch(this, 'streetViewFromMapRightClick')
+                }));
+            }
         },
         onOpen: function() {
             this.pointGraphics.show();
             if (!this.panorama || !this.panoramaService) {
                 this.panorama = new google.maps.StreetViewPanorama(this.panoNode, this.panoOptions);
                 this.panoramaService = new google.maps.StreetViewService();
+                if (this.parentWidget) {
+                    this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, function() {
+                        if (this.panorama) {
+                            google.maps.event.trigger(this.panorama, 'resize');
+                        }
+                    })));
+
+                }
+                if (this.parentWidget && this.parentWidget._dockWidget) {
+                    this.own(aspect.after(this.parentWidget, '_dockWidget', lang.hitch(this, function() {
+                        if (this.panorama) {
+                            google.maps.event.trigger(this.panorama, 'resize');
+                        }
+                    })));
+
+                }
             }
             // if (this.parentWidget.toggleable) {
             //     this.disconnectMapClick();
@@ -125,10 +154,10 @@ define([
         disableStreetViewClick: function() {
             this.connectMapClick();
         },
-        getStreetView: function(evt) {
-            if (this.mapClickMode.current === 'streetview') {
+        getStreetView: function(evt, overRide) {
+            if (this.mapClickMode.current === 'streetview' || overRide) {
                 // if (!this.parentWidget.toggleable) {
-                    // this.disableStreetViewClick();
+                // this.disableStreetViewClick();
                 // }
                 var mapPoint = evt.mapPoint;
                 if (!mapPoint) {
@@ -136,14 +165,15 @@ define([
                 }
 
                 // convert the map point's coordinate system into lat/long
-                var geometry = null, wkid = mapPoint.spatialReference.wkid;
+                var geometry = null,
+                    wkid = mapPoint.spatialReference.wkid;
                 if (wkid === 102100) {
                     wkid = 3857;
                 }
                 var key = this.proj4Catalog + ':' + wkid;
                 if (!proj4.defs[key]) {
                     var url = this.proj4CustomURL || this.proj4BaseURL + 'ref/' + this.proj4Catalog.toLowerCase() + '/' + wkid + '/proj4js/';
-                    require([url], lang.hitch(this, 'getStreetView', evt));
+                    require([url], lang.hitch(this, 'getStreetView', evt, true));
                     return;
                 }
                 // only need one projection as we are
@@ -209,7 +239,8 @@ define([
             // Make sure they are numbers
             if (!isNaN(positionLat) && !isNaN(positionLong)) {
                 // convert the resulting lat/long to the map's spatial reference
-                var xy = null, wkid = this.map.spatialReference.wkid;
+                var xy = null,
+                    wkid = this.map.spatialReference.wkid;
                 if (wkid === 102100) {
                     wkid = 3857;
                 }
@@ -250,6 +281,15 @@ define([
                 this.pointSymbol.setAngle(pov.heading);
                 this.pointGraphics.refresh();
             }
+        },
+        streetViewFromMapRightClick: function() {
+            if (this.parentWidget && !this.parentWidget.open) {
+                this.parentWidget.toggle();
+            }
+            var evt = {
+                mapPoint: this.mapRightClickPoint
+            };
+            this.getStreetView(evt, true);
         }
     });
 });

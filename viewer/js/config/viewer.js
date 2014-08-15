@@ -1,16 +1,20 @@
 define([
-	'esri/InfoTemplate',
 	'esri/units',
 	'esri/geometry/Extent',
 	'esri/config',
-	'esri/tasks/GeometryService'
-], function(InfoTemplate, units, Extent, esriConfig, GeometryService) {
+	'esri/tasks/GeometryService',
+	'esri/layers/ImageParameters'
+], function(units, Extent, esriConfig, GeometryService, ImageParameters) {
 
 	// url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
 	esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
 	esriConfig.defaults.io.alwaysUseProxy = false;
 	// url to your geometry server.
 	esriConfig.defaults.geometryService = new GeometryService('http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
+
+	//image parameters for dynamic services, set to png32 for higher quality exports.
+	var imageParameters = new ImageParameters();
+	imageParameters.format = 'png32';
 
 	return {
 		//default mapClick mode, mapClickMode lets widgets know what mode the map is in to avoid multipult map click actions from taking place (ie identify while drawing).
@@ -22,6 +26,34 @@ define([
 			zoom: 5,
 			sliderStyle: 'small'
 		},
+		// panes: {
+		// 	left: {
+		// 		splitter: true
+		// 	},
+		// 	right: {
+		// 		id: 'sidebarRight',
+		// 		placeAt: 'outer',
+		// 		region: 'right',
+		// 		splitter: true,
+		// 		collapsible: true
+		// 	},
+		// 	bottom: {
+		// 		id: 'sidebarBottom',
+		// 		placeAt: 'outer',
+		// 		splitter: true,
+		// 		collapsible: true,
+		// 		region: 'bottom'
+		// 	},
+		// 	top: {
+		// 		id: 'sidebarTop',
+		// 		placeAt: 'outer',
+		// 		collapsible: true,
+		// 		splitter: true,
+		// 		region: 'top'
+		// 	}
+		// },
+		// collapseButtonsPane: 'center', //center or outer
+
 		// operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: 'dynamic', 'tiled', 'feature'.
 		// The 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
 		// 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
@@ -34,11 +66,21 @@ define([
 				opacity: 1.0,
 				visible: true,
 				outFields: ['*'],
-				infoTemplate: new InfoTemplate('Hometown', '${*}'),
 				mode: 0
 			},
 			editorLayerInfos: {
 				disableGeometryUpdate: false
+			}
+		}, {
+			type: 'feature',
+			url: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
+			title: 'San Francisco 311 Incidents',
+			options: {
+				id: 'sf311Incidents',
+				opacity: 1.0,
+				visible: true,
+				outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
+				mode: 0
 			}
 		}, {
 			type: 'dynamic',
@@ -51,7 +93,11 @@ define([
 			options: {
 				id: 'louisvillePubSafety',
 				opacity: 1.0,
-				visible: true
+				visible: true,
+				imageParameters: imageParameters
+			},
+			identifyLayerInfos: {
+				layerIds: [2, 4, 5, 8, 12, 21]
 			}
 		}, {
 			type: 'dynamic',
@@ -63,7 +109,8 @@ define([
 			options: {
 				id: 'DamageAssessment',
 				opacity: 1.0,
-				visible: true
+				visible: true,
+				imageParameters: imageParameters
 			}
 		}],
 		// set include:true to load. For titlePane type set position the the desired order in the sidebar
@@ -80,18 +127,27 @@ define([
 				include: true,
 				id: 'geocoder',
 				type: 'domNode',
-				path: 'esri/dijit/Geocoder',
+				path: 'gis/dijit/Geocoder',
 				srcNodeRef: 'geocodeDijit',
 				options: {
 					map: true,
-					autoComplete: true
+					mapRightClickMenu: true,
+					geocoderOptions: {
+						autoComplete: true,
+						arcgisGeocoder: {
+							placeholder: 'Enter an address or place'
+						}
+					}
 				}
 			},
 			identify: {
 				include: true,
 				id: 'identify',
-				type: 'invisible',
+				type: 'titlePane',
 				path: 'gis/dijit/Identify',
+				title: 'Identify',
+				open: false,
+				position: 3,
 				options: 'config/identify'
 			},
 			basemaps: {
@@ -203,16 +259,16 @@ define([
 				options: 'config/bookmarks'
 			},
 			find: {
-                include: true,
+				include: true,
 				id: 'find',
 				type: 'titlePane',
 				canFloat: true,
 				path: 'gis/dijit/Find',
-                title: 'Find',
-                open: false,
-                position: 3,
+				title: 'Find',
+				open: false,
+				position: 3,
 				options: 'config/find'
-            },
+			},
 			draw: {
 				include: true,
 				id: 'draw',
@@ -272,6 +328,7 @@ define([
 				position: 7,
 				options: {
 					map: true,
+					mapRightClickMenu: true,
 					options: {
 						routeTaskUrl: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Network/USA/NAServer/Route',
 						routeParams: {
@@ -319,7 +376,8 @@ define([
 				options: {
 					map: true,
 					mapClickMode: true,
-					openOnStartup: true
+					openOnStartup: true,
+					mapRightClickMenu: true
 				}
 			},
 			help: {
@@ -328,8 +386,7 @@ define([
 				type: 'floating',
 				path: 'gis/dijit/Help',
 				title: 'Help',
-				options: {
-				}
+				options: {}
 			}
 
 		}
