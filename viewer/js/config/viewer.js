@@ -158,20 +158,20 @@ define([
 				srcNodeRef: 'basemapsDijit',
 				options: 'config/basemaps'
 			},
-            mapInfo: {
+			mapInfo: {
 				include: false,
 				id: 'mapInfo',
 				type: 'domNode',
 				path: 'gis/dijit/MapInfo',
 				srcNodeRef: 'mapInfoDijit',
 				options: {
-                    map: true,
-                    coordFormat: 'dms', //'dec' or 'dms'
-                    showScale: true, //default: false
-                    showZoom: false, //default: false
-                    zoomLabel: 'Z', //zoom label default: 'Z'
-                    minWidth: 286 //set min-width default: 0
-                }
+					map: true,
+					coordFormat: 'dms', //'dec' or 'dms'
+					showScale: true,
+					showZoom: false,
+					zoomLabel: 'Z',
+					minWidth: 286
+				}
 			},
 			scalebar: {
 				include: true,
