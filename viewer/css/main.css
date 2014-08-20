@@ -221,6 +221,9 @@ body, html {
 .dbootstrap .dijitTitlePaneContentInner {
     background-color: #FFFFFF;
 }
+.dijitBorderContainerNoGutterPane {
+    z-index: auto;
+}
 .dbootstrap :focus {
     outline: none !important;
 }
