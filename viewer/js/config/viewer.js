@@ -158,6 +158,23 @@ define([
 				srcNodeRef: 'basemapsDijit',
 				options: 'config/basemaps'
 			},
+			mapInfo: {
+				include: false,
+				id: 'mapInfo',
+				type: 'domNode',
+				path: 'gis/dijit/MapInfo',
+				srcNodeRef: 'mapInfoDijit',
+				options: {
+					map: true,
+					mode: 'dms',
+					firstCoord: 'y',
+					unitScale: 3,
+					showScale: true,
+					xLabel: '',
+					yLabel: '',
+					minWidth: 286
+				}
+			},
 			scalebar: {
 				include: true,
 				id: 'scalebar',

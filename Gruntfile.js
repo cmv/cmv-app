@@ -3,10 +3,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     tag: {
       banner: '/*  <%= pkg.name %>\n' +
-        ' *  @version <%= pkg.version %>\n' +
-        ' *  @author <%= pkg.author %>\n' +
+        ' *  version <%= pkg.version %>\n' +
         ' *  Project: <%= pkg.homepage %>\n' +
-        ' *  Copyright <%= pkg.year %>. <%= pkg.license %> licensed.\n' +
         ' */\n'
     },
     copy: {
@@ -19,7 +17,7 @@ module.exports = function(grunt) {
     },
     clean: {
       build: {
-        src: ['dist/viewer']
+        src: ['dist']
       }
     },
     autoprefixer: {
@@ -58,10 +56,7 @@ module.exports = function(grunt) {
         }],
         options: {
           banner: '<%= tag.banner %>',
-          sourceMap: true,
-          sourceMapName: function(filePath) {
-            return filePath + '.map';
-          }
+          sourceMap: true
         }
       }
     },

@@ -80,6 +80,12 @@ define([
 				this.directions.getDirections();
 			}
 		},
+		startAtMyLocation: function() {
+			this.getGeoLocation('directionsFrom');
+		},
+		endAtMyLocation: function() {
+			this.getGeoLocation('directionsTo');
+		},
 		getGeoLocation: function(leg) {
 			if (navigator && navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(lang.hitch(this, 'locationSuccess', leg), lang.hitch(this, 'locationError'));
