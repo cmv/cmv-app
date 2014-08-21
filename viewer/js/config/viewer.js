@@ -166,10 +166,12 @@ define([
 				srcNodeRef: 'mapInfoDijit',
 				options: {
 					map: true,
-					coordFormat: 'dms', //'dec' or 'dms'
+					mode: 'dms',
+					firstCoord: 'y',
+					unitScale: 3,
 					showScale: true,
-					showZoom: false,
-					zoomLabel: 'Z',
+					xLabel: '',
+					yLabel: '',
 					minWidth: 286
 				}
 			},
