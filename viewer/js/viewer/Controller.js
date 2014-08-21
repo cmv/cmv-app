@@ -388,6 +388,12 @@ define([
                 console.log('Widget type ' + widgetConfig.type + ' (' + widgetConfig.title + ') at position ' + position + ' is not supported.');
                 return;
             }
+            if (widgetConfig.type === 'invisible' && widgetConfig.position >= 0) {
+				console.log(widgetConfig.title + ' widget has type:' + widgetConfig.type + ' and can not have a position:' + position);
+				console.log ('Please comment out position value in viewer.js for ' + widgetConfig.title + ' widget');
+				console.log('App stopped loading, correct error above');
+				return;
+			}
 
             // build a titlePane or floating widget as the parent
             if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
@@ -442,9 +448,9 @@ define([
                 this[widgetConfig.id] = new WidgetClass(options, put('div')).placeAt(pnl.containerNode);
             } else if (widgetConfig.type === 'domNode') {
                 this[widgetConfig.id] = new WidgetClass(options, widgetConfig.srcNodeRef);
-            } else {
-                this[widgetConfig.id] = new WidgetClass(options);
-            }
+            } else if (widgetConfig.type === 'invisible' && !widgetConfig.position) {
+				this[widgetConfig.id] = new WidgetClass(options);
+			}
 
             // start up the widget
             if (this[widgetConfig.id] && this[widgetConfig.id].startup && !this[widgetConfig.id]._started) {
