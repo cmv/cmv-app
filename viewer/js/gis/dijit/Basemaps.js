@@ -38,7 +38,9 @@ define([
                         return map.basemap;
                     })
                 });
-                this.gallery.select(this.mapStartBasemap);
+                // if (this.map.getBasemap() !== this.mapStartBasemap) { //based off the title of custom basemaps in viewer.js config
+                //     this.gallery.select(this.mapStartBasemap);
+                // }
                 this.gallery.startup();
             }
 
@@ -81,10 +83,14 @@ define([
         startup: function() {
             this.inherited(arguments);
             if (this.mode === 'custom') {
-                this.gallery.select(this.mapStartBasemap);
+                if (this.map.getBasemap() !== this.mapStartBasemap) { //based off the title of custom basemaps in viewer.js config
+                    this.gallery.select(this.mapStartBasemap);
+                }
             } else {
                 if (this.mapStartBasemap) {
-                    this.map.setBasemap(this.mapStartBasemap);
+                    if (this.map.getBasemap() !== this.mapStartBasemap) { //based off the agol basemap name
+                        this.map.setBasemap(this.mapStartBasemap);
+                    }
                 }
             }
         }
