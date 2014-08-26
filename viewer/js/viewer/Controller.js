@@ -209,7 +209,9 @@ define([
                 slider: (layer.slider === false) ? false : true,
                 noLegend: layer.noLegend || false,
                 collapsed: layer.collapsed || false,
-                sublayerToggle: layer.sublayerToggle || false
+                sublayerToggle: layer.sublayerToggle || false,
+                type: layer.type, //additional property for btfou's LayerController
+                url: layer.url //additional property for btfou's LayerController
             });
             if (layer.type === 'feature') {
                 var options = {
