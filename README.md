@@ -45,6 +45,9 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Map Right click menu with various widget functions.
 * Highly configurable UI, right or left sidebars with widgets in both, top and bottom regions for other content.
 
+## User contributed widgets
+Users can submit widgets to the [cmv-contrib-widgets](https://github.com/DavidSpriggs/cmv-contrib-widgets) repo. These widgets are created and submitted by users. Head on over and read the details.
+
 ## Proposing Features
 If there is a feature you would like to request, add it to the [issues list](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/issues) for consideration.
 
