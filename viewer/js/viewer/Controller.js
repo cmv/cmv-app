@@ -26,9 +26,6 @@ define([
         legendLayerInfos: [],
         tocLayerInfos: [],
         layerControlLayerInfos: [],
-        _legendInfos: false,
-        _tocInfos: false,
-        _layerControlInfos: false,
         panes: {
             left: {
                 id: 'sidebarLeft',
@@ -145,17 +142,6 @@ define([
                 selector: '.layersDiv' // restrict to map only
             });
             this.mapRightClickMenu.startup();
-            //check for widgets which require an array of custom infos
-            var widgets = this.config.widgets;
-            if (widgets.legend && widgets.legend.include === true) {
-                this._legendInfos = true;
-            }
-            if (widgets.TOC && widgets.TOC.include === true) {
-                this._tocInfos = true;
-            }
-            if (widgets.layerControl && widgets.layerControl.include === true) {
-                this._layerControlInfos = true;
-            }
             //initialize layers and widgets
             if (this.config.mapOptions.basemap) {
                 this.map.on('load', lang.hitch(this, 'initLayers'));
@@ -214,32 +200,30 @@ define([
         initLayer: function(layer, Layer) {
             var l = new Layer(layer.url, layer.options);
             this.layers.unshift(l); // unshift instead of push to keep layer ordering on map intact
-            if (this._legendInfos) {
-                this.legendLayerInfos.unshift({
-                    layer: l,
-                    title: layer.title || null
-                });
-            }
-            if (this._tocInfos) {
-                this.tocLayerInfos.push({ //push because Legend and TOC need the layers in the opposite order
-                    layer: l,
-                    title: layer.title || null,
-                    slider: (layer.slider === false) ? false : true,
-                    noLegend: layer.noLegend || false,
-                    collapsed: layer.collapsed || false,
-                    sublayerToggle: layer.sublayerToggle || false
-                });
-            }
-            if (this._layerControlInfos) {
-                this.layerControlLayerInfos.unshift({
-                    layer: l,
-                    type: layer.type,
-                    title: layer.title,
-                    controlOptions: lang.mixin({
-                        sublayers: true
-                    }, layer.controlOptions)
-                });
-            }
+            //custom LayerInfos arrays
+            //esri Legend
+            this.legendLayerInfos.unshift({
+                layer: l,
+                title: layer.title || null
+            });
+            //TOC
+            this.tocLayerInfos.push({ //push because Legend and TOC need the layers in the opposite order
+                layer: l,
+                title: layer.title || null,
+                slider: (layer.slider === false) ? false : true,
+                noLegend: layer.noLegend || false,
+                collapsed: layer.collapsed || false,
+                sublayerToggle: layer.sublayerToggle || false
+            });
+            //LayerControl
+            this.layerControlLayerInfos.unshift({
+                layer: l,
+                type: layer.type,
+                title: layer.title,
+                controlOptions: lang.mixin({
+                    sublayers: true
+                }, layer.controlOptions)
+            });
             if (layer.type === 'feature') {
                 var options = {
                     featureLayer: l

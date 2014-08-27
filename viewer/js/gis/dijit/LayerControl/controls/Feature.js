@@ -150,7 +150,7 @@ define([
                 leftClickToOpen: true
             });
             //reorder menu items
-            if (this.controller.overlayReorder) {
+            if (this.controller.vectorReorder) {
                 menu.addChild(new MenuItem({
                     label: 'Move Up',
                     onClick: lang.hitch(this, function() {

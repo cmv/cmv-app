@@ -251,12 +251,12 @@ define([
 				type: 'titlePane',
 				path: 'gis/dijit/LayerControl',
 				title: 'Layers',
-				open: true,
+				open: false,
 				position: 0,
 				options: {
 					map: true,
 					layerControlLayerInfos: true,
-					vectorReoreder: true,
+					vectorReorder: true
 				}
 			},
 			legend: {
