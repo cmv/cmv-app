@@ -56,7 +56,11 @@ module.exports = function(grunt) {
         }],
         options: {
           banner: '<%= tag.banner %>',
-          sourceMap: true
+          sourceMap: true,
+          sourceMapIncludeSources: true,
+          compress: {
+            drop_console: true
+          }
         }
       }
     },
