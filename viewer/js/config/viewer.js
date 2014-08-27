@@ -96,9 +96,9 @@ define([
 				visible: true,
 				imageParameters: imageParameters
 			},
-            controlOptions: {
-                transparency: true
-            },
+			controlOptions: {
+				transparency: true
+			},
 			identifyLayerInfos: {
 				layerIds: [2, 4, 5, 8, 12, 21]
 			}
@@ -115,9 +115,9 @@ define([
 				visible: false,
 				imageParameters: imageParameters
 			},
-            controlOptions: {
-                transparency: true
-            }
+			controlOptions: {
+				transparency: true
+			}
 		}],
 		// set include:true to load. For titlePane type set position the the desired order in the sidebar
 		widgets: {
@@ -245,20 +245,20 @@ define([
 					})
 				}
 			},
-            layerControl: {
-                include: false,
-                id: 'layerControl',
-                type: 'titlePane',
-                path: 'gis/dijit/LayerControl',
-                title: 'Layers',
-                open: true,
-                position: 0,
-                options: {
-                    map: true,
-                    layerControlLayerInfos: true,
-                    vectorReoreder: true,
-                }
-            },
+			layerControl: {
+				include: false,
+				id: 'layerControl',
+				type: 'titlePane',
+				path: 'gis/dijit/LayerControl',
+				title: 'Layers',
+				open: true,
+				position: 0,
+				options: {
+					map: true,
+					layerControlLayerInfos: true,
+					vectorReoreder: true,
+				}
+			},
 			legend: {
 				include: true,
 				id: 'legend',
