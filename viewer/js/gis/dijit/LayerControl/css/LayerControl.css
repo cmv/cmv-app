@@ -1,0 +1,95 @@
+.vectorLayerContainer {
+
+}
+
+.overlayLayerContainer {
+
+}
+
+.layerControl {
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: solid 1px #e5e5e5;
+}
+
+.layerControlTable {
+    width: 100%;
+}
+
+.layerControlTable tr {
+    vertical-align: middle;
+}
+
+.layerControlTable td {
+    padding: 0;
+}
+
+.layerControlTableExpand {
+    cursor: pointer;
+    width: 18px;
+    height: 15px;
+    line-height: 15px;
+}
+
+.layerControlTableCheck {
+    cursor: pointer;
+    width: 19px;
+    height: 16px;
+    line-height: 16px;
+}
+
+.layerControlTableLabel {
+    font-size: 15px;
+    height: 16px;
+    line-height: 16px;
+}
+
+.layerControlTableUpdate {
+    width: 21px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+}
+
+.layerControlIndent {
+    padding-left: 22px;
+}
+
+.layerControlIcon {
+    font-size: 16px;
+}
+
+.layerControlUpdateIcon {
+    font-size: 12px
+}
+
+.layerControlCheckIconOutScale {
+    color: #BBB;
+}
+
+.layerControlClick {
+    cursor: pointer;
+    color: #1f78af;
+    text-decoration: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.layerControlClick:hover {
+    text-decoration: underline;
+}
+
+.layerControlLegendTable tr {
+    vertical-align: middle;
+}
+
+.layerControlLegendImage > img {
+    border: none;
+    padding: 0;
+}
+
+.layerControlLegendLabel {
+    padding: 0 0 0 4px;
+}

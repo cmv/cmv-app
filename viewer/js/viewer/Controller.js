@@ -21,10 +21,11 @@ define([
 ], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, PopupMobile, Menu) {
 
     return {
-        legendLayerInfos: [],
         editorLayerInfos: [],
         identifyLayerInfos: [],
+        legendLayerInfos: [],
         tocLayerInfos: [],
+        layerControlLayerInfos: [],
         panes: {
             left: {
                 id: 'sidebarLeft',
@@ -141,7 +142,7 @@ define([
                 selector: '.layersDiv' // restrict to map only
             });
             this.mapRightClickMenu.startup();
-
+            //initialize layers and widgets
             if (this.config.mapOptions.basemap) {
                 this.map.on('load', lang.hitch(this, 'initLayers'));
             } else {
@@ -198,11 +199,14 @@ define([
         },
         initLayer: function(layer, Layer) {
             var l = new Layer(layer.url, layer.options);
-            this.layers.unshift(l); // unshift instead of oush to keep layer ordering on map intact
+            this.layers.unshift(l); // unshift instead of push to keep layer ordering on map intact
+            //custom LayerInfos arrays
+            //esri Legend
             this.legendLayerInfos.unshift({
                 layer: l,
                 title: layer.title || null
             });
+            //TOC
             this.tocLayerInfos.push({ //push because Legend and TOC need the layers in the opposite order
                 layer: l,
                 title: layer.title || null,
@@ -210,6 +214,15 @@ define([
                 noLegend: layer.noLegend || false,
                 collapsed: layer.collapsed || false,
                 sublayerToggle: layer.sublayerToggle || false
+            });
+            //LayerControl
+            this.layerControlLayerInfos.unshift({
+                layer: l,
+                type: layer.type,
+                title: layer.title,
+                controlOptions: lang.mixin({
+                    sublayers: true
+                }, layer.controlOptions)
             });
             if (layer.type === 'feature') {
                 var options = {
@@ -434,6 +447,9 @@ define([
             }
             if (options.identifyLayerInfos) {
                 options.layerInfos = this.identifyLayerInfos;
+            }
+            if (options.layerControlLayerInfos) {
+                options.layerInfos = this.layerControlLayerInfos;
             }
 
             // create the widget

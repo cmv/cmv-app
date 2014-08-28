@@ -96,6 +96,9 @@ define([
 				visible: true,
 				imageParameters: imageParameters
 			},
+			controlOptions: {
+				transparency: true
+			},
 			identifyLayerInfos: {
 				layerIds: [2, 4, 5, 8, 12, 21]
 			}
@@ -109,8 +112,11 @@ define([
 			options: {
 				id: 'DamageAssessment',
 				opacity: 1.0,
-				visible: true,
+				visible: false,
 				imageParameters: imageParameters
+			},
+			controlOptions: {
+				transparency: true
 			}
 		}],
 		// set include:true to load. For titlePane type set position the the desired order in the sidebar
@@ -237,6 +243,20 @@ define([
 							wkid: 4326
 						}
 					})
+				}
+			},
+			layerControl: {
+				include: false,
+				id: 'layerControl',
+				type: 'titlePane',
+				path: 'gis/dijit/LayerControl',
+				title: 'Layers',
+				open: false,
+				position: 0,
+				options: {
+					map: true,
+					layerControlLayerInfos: true,
+					vectorReorder: true
 				}
 			},
 			legend: {
