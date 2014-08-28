@@ -20,7 +20,7 @@ define([
     'esri/layers/FeatureLayer',
     'dojo/on',
     'xstyle/css!./Draw/css/Draw.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, Select, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Font, TextSymbol, FeatureLayer, on, css) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Font, TextSymbol, FeatureLayer, on, css) {
 
     // main draw dijit
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {

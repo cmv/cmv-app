@@ -1,6 +1,10 @@
 .gis_DrawDijit {
 }
 
+.gis_DrawDijit table {
+    width:100%;
+}
+
 .gis_DrawDijit .polyIcon {
     background-image: url(../images/toolbar_icons.png);
     background-position: -68px 0;
@@ -65,6 +69,7 @@
 
 .gis_DrawDijit .dijitButton {
     width: 49%;
+    margin:0;
 }
 
 .gis_DrawDijit .dijitButtonText {
