@@ -2,44 +2,36 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/array',
+    //'dojo/_base/array',
     'dojo/on',
-    'dojo/query',
     'dojo/dom-class',
     'dojo/dom-style',
-    'dojo/dom-construct',
-    'dojo/dom-attr',
     'dojo/html',
-    'dijit/registry',
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_Contained',
     'dijit/Menu',
     'dijit/MenuItem',
     'dijit/MenuSeparator',
-    'esri/request',
+    //'esri/request',
     'gis/dijit/LayerControl/plugins/Transparency',
     'gis/dijit/LayerControl/plugins/Scales',
     'dojo/text!./templates/Control.html'
 ], function (
     declare,
     lang,
-    arrayUtil,
+    //arrayUtil, //will need for legend
     on,
-    query,
     domClass,
     domStyle,
-    domConst,
-    domAttr,
     html,
-    registry,
     WidgetBase,
     TemplatedMixin,
     Contained,
     Menu,
     MenuItem,
     MenuSeparator,
-    esriRequest,
+    //esriRequest, //may need for legend
     Transparency,
     Scales,
     controlTemplate
@@ -72,7 +64,7 @@ define([
             }
         },
         //add layer and init control
-        _initialize: function(params, map) {
+        _initialize: function() {
             var layer = this.layer;
             //template defaults as unchecked if visible checked
             if (layer.visible) {
@@ -192,7 +184,7 @@ define([
         //  what really needs to happen is build a legend from the drawing info
         //  probably a lot of work or at least digging into feature layer and dojox/gfx
         _legend: function(layer) {
-            //console.log(layer);
+            layer = layer; //lint free
             
             html.set(this.expandNode, 'No Legend');
             

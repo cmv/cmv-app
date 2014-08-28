@@ -8,7 +8,6 @@ define([
     'dojo/html',
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
-    'dijit/form/CheckBox',
     'dojo/text!./templates/Folder.html'
 ], function(
     declare,
@@ -20,7 +19,6 @@ define([
     html,
     WidgetBase,
     TemplatedMixin,
-    CheckBox,
     folderTemplate
 ) {
     'use strict';

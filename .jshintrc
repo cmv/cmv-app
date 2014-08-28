@@ -28,7 +28,7 @@
                                 //   "single" : require single quotes
                                 //   "double" : require double quotes
     "undef"         : true,     // true: Require all non-global variables to be declared (prevents global leaks)
-    "unused"        : "vars",   // true: Require all defined variables be used
+    "unused"        : "strict",   // true: Require all defined variables be used http://www.jshint.com/docs/options/#unused
     "strict"        : false,    // true: Requires all functions run in ES5 Strict Mode ** Dojo style and existing codebase conflicts **
     "trailing"      : false,    // true: Prohibit trailing whitespaces
     //"indent"        : 4,        // {int} Number of spaces to use for indentation
