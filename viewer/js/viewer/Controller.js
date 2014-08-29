@@ -1,6 +1,7 @@
 define([
     'dojo/_base/declare',
     'esri/map',
+    'dojo/dom',
     'dojo/dom-style',
     'dojo/dom-geometry',
     'dojo/dom-class',
@@ -18,7 +19,7 @@ define([
     'dojo/has',
     'esri/dijit/PopupMobile',
     'dijit/Menu'
-], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, PopupMobile, Menu) {
+], function(declare, Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, PopupMobile, Menu) {
 
     return {
         legendLayerInfos: [],
@@ -55,7 +56,27 @@ define([
                     has.add('tablet', true);
                 }
             }
+            this.initTitles();
             this.initPanes();
+        },
+        initTitles: function() {
+            var titles = lang.mixin( {
+                                         headerTitle: 'Configurable Viewer',
+                                         subHeaderTitle: 'make it your own',
+                                         pageTitle: 'Configurable Viewer CMV'
+                                     }, this.config.titles );
+
+            var headerTitleNode = dom.byId( 'headerTitleSpan' );
+            if ( headerTitleNode ) {
+                headerTitleNode.innerText = titles.headerTitle;
+            }
+
+            var subHeaderTitle = dom.byId( 'subHeaderTitleSpan' );
+            if ( subHeaderTitle ) {
+                subHeaderTitle.innerText = titles.subHeaderTitle;
+            }
+
+            document.title = titles.pageTitle;
         },
         initPanes: function() {
             var key, panes = this.config.panes || {};
