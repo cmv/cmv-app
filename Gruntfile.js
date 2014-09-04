@@ -79,7 +79,33 @@ module.exports = function(grunt) {
         options: {
           port: 3000,
           base: 'viewer',
-          hostname: '*'
+          hostname: '*',
+          middleware: function(connect, options, middlewares) {
+            // inject a custom middleware into the array of default middlewares for proxy page
+            var proxypage = require('proxypage');
+            var proxyRe = /\/proxy\/proxy.ashx/i;
+
+            var enableCORS = function(req, res, next) {
+              res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+              res.setHeader('Access-Control-Allow-Credentials', true);
+              res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+              res.setHeader('Access-Control-Allow-Headers', req.headers['access-control-request-headers']);
+              return next();
+            };
+
+            var proxyMiddleware = function(req, res, next) {
+              if (!proxyRe.test(req.url)) {
+                return next();
+              }
+              proxypage.proxy(req, res);
+            };
+
+            middlewares.unshift(proxyMiddleware);
+            middlewares.unshift(enableCORS);
+            middlewares.unshift(connect.json()); //body parser, see https://github.com/senchalabs/connect/wiki/Connect-3.0
+            middlewares.unshift(connect.urlencoded()); //body parser
+            return middlewares;
+          }
         }
       },
       build: {
