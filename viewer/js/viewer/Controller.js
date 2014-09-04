@@ -110,6 +110,9 @@ define([
                                 aspect.after(splitter, '_stopDrag', lang.hitch(this, 'splitterStopDrag', key));
                             }
                         }
+                        if(this,panes[key].open !== undefined){
+                            this.togglePane(key, this.panes[key].open);
+                        }
                     }
                     if (key !== 'center' && this.panes[key]._splitterWidget) {
                         domClass.add(this.map.root.parentNode, 'pane' + key);
