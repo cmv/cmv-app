@@ -219,4 +219,5 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 
+#Jetbrains Webstorm IDE directory
 .idea
