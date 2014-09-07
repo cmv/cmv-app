@@ -1,6 +1,6 @@
 # Configurable Map Viewer (CMV)
 
-[![Build Status](https://travis-ci.org/DavidSpriggs/ConfigurableViewerJSAPI.svg?branch=master)](https://travis-ci.org/DavidSpriggs/ConfigurableViewerJSAPI)
+[![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app)
 
 This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for modular design and OOP via classes in JS using dojo's great [declare](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html) system.
 
