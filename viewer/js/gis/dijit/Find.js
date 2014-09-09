@@ -13,6 +13,8 @@ define([
     'dojo/_base/lang',
     'dojo/_base/Color',
     'dojo/_base/array',
+    'dojo/on',
+    'dojo/keys',
     'dojo/store/Memory',
     'dgrid/OnDemandGrid',
     'dgrid/Selection',
@@ -30,7 +32,7 @@ define([
     'esri/geometry/Extent',
     'dojo/text!./Find/templates/Find.html',
     'xstyle/css!./Find/css/Find.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, CheckBox, dom, domConstruct, domClass, lang, Color, array, Memory, OnDemandGrid, Selection, Keyboard, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, graphicsUtils, FindTask, FindParameters, Extent, FindTemplate, css) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, CheckBox, dom, domConstruct, domClass, lang, Color, array, on, keys, Memory, OnDemandGrid, Selection, Keyboard, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, graphicsUtils, FindTask, FindParameters, Extent, FindTemplate, css) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -151,6 +153,12 @@ define([
             this.map.addLayer(this.polylineGraphics);
             this.map.addLayer(this.pointGraphics);
 
+            this.own(on(this.searchTextDijit, 'keyup', lang.hitch(this, function (evt) {
+                if (evt.keyCode === keys.ENTER) {
+                    this.search();
+                }
+            })));
+
             var k = 0, queryLen = this.queries.length;
 
             // add an id so it becomes key/value pair store
@@ -170,13 +178,14 @@ define([
         },
         search: function () {
             var query = this.queries[this.queryIdx];
-            var searchText = this.searchTextDijit.value;
-            if (query && query.minChars && searchText) {
-                if (searchText.length === 0 || (query.minChars && (searchText.length < query.minChars))) {
-                    this.findResultsNode.innerHTML = 'You must enter at least ' + query.minChars + ' characters.';
-                    this.findResultsNode.style.display = 'block';
-                    return;
-                }
+            var searchText = this.searchTextDijit.get('value');
+            if (!query || !searchText || searchText.length === 0) {
+                return;
+            }
+            if (query.minChars && (searchText.length < query.minChars)) {
+                this.findResultsNode.innerHTML = 'You must enter at least ' + query.minChars + ' characters.';
+                this.findResultsNode.style.display = 'block';
+                return;
             }
 
             this.createResultsGrid();
@@ -250,13 +259,15 @@ define([
             if (this.results.length > 0) {
                 var s = (this.results.length === 1) ? '' : 's';
                 resultText = this.results.length + ' Result' + s + ' Found';
-                this.highlightFeatures();
                 this.showResultsGrid();
             } else {
                 resultText = 'No Results Found';
             }
             this.findResultsNode.innerHTML = resultText;
 
+            if (this.results.length > 0) {
+                this.highlightFeatures();
+            }
         },
 
         showResultsGrid: function () {
