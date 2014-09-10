@@ -259,15 +259,13 @@ define([
             if (this.results.length > 0) {
                 var s = (this.results.length === 1) ? '' : 's';
                 resultText = this.results.length + ' Result' + s + ' Found';
+                this.highlightFeatures();
                 this.showResultsGrid();
             } else {
                 resultText = 'No Results Found';
             }
             this.findResultsNode.innerHTML = resultText;
 
-            if (this.results.length > 0) {
-                this.highlightFeatures();
-            }
         },
 
         showResultsGrid: function () {
@@ -295,18 +293,27 @@ define([
                 var graphic, feature = result.feature;
                 switch (feature.geometry.type) {
                     case 'point':
-                        graphic = new Graphic(feature.geometry);
-                        this.pointGraphics.add(graphic);
+                        // only add points to the map that have an X/Y
+                        if (feature.geometry.x && feature.geometry.y) {
+                            graphic = new Graphic(feature.geometry);
+                            this.pointGraphics.add(graphic);
+                        }
                         break;
                     case 'polyline':
-                        graphic = new Graphic(feature.geometry);
-                        this.polylineGraphics.add(graphic);
+                        // only add polylines to the map that have paths
+                        if (feature.geometry.paths && feature.geometry.paths.length > 0) {
+                            graphic = new Graphic(feature.geometry);
+                            this.polylineGraphics.add(graphic);
+                        }
                         break;
                     case 'polygon':
-                        graphic = new Graphic(feature.geometry, null, {
-                            ren: 1
-                        });
-                        this.polygonGraphics.add(graphic);
+                        // only add polygons to the map that have rings
+                        if (feature.geometry.rings && feature.geometry.rings.length > 0) {
+                            graphic = new Graphic(feature.geometry, null, {
+                                ren: 1
+                            });
+                            this.polygonGraphics.add(graphic);
+                        }
                         break;
                     default:
                 }
@@ -336,7 +343,9 @@ define([
                 }
             }
 
-            this.zoomToExtent(zoomExtent);
+            if (zoomExtent) {
+                this.zoomToExtent(zoomExtent);
+            }
         },
 
         selectFeature: function (event) {
