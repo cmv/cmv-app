@@ -36,6 +36,7 @@ define([
 		minWidth: 0,
 		proj4Catalog: null,
 		proj4Wkid: null,
+		proj4CustomURL: null,
 		//0 = Web Mercator as grid
 		//1 = Web Mercator as dec or DMS
 		//2 = geographic as dec (grid) or DMS
@@ -93,12 +94,24 @@ define([
 				this._mode = 3;
 			} else {
 				this._mode = 4;
-				if (this.proj4Catalog && this.proj4Wkid) {
+				window.Proj4js = proj4;
+				//load custom projection file or default to spatialreference.org
+				if (!this.proj4Catalog && !this.proj4Wkid){
+					console.log('MapInfo error:: a proj4Catalog and a proj4Wkid must be defined');
+					console.log('MapInfo error:: MapInfo failed');
+					return;
+				}
+				if (this.proj4CustomURL){
+					//console.log('Custom URL: ' + this.proj4CustomURL);
+					require([this.proj4CustomURL], lang.hitch(this, function() {
+						this._projectionLoaded = true;
+						this._projection = this.proj4Catalog + ':' + this.proj4Wkid;
+					}));
+				} else if (!this.proj4CustomURL) {
+					//console.log('Custom URL: ' + this.proj4CustomURL)
 					// spatialreference.org uses the old
 					// Proj4js style so we need an alias
 					// https://github.com/proj4js/proj4js/issues/23
-					window.Proj4js = proj4;
-					//load projection
 					require(['http://spatialreference.org/ref/' + this.proj4Catalog.toLowerCase() + '/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function() {
 						this._projectionLoaded = true;
 						this._projection = this.proj4Catalog + ':' + this.proj4Wkid;
