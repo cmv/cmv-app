@@ -94,6 +94,7 @@ define([
 				this._mode = 3;
 			} else {
 				this._mode = 4;
+				window.Proj4js = proj4;
 				//load custom projection file or default to spatialreference.org
 				if (!this.proj4Catalog && !this.proj4Wkid){
 					console.log('MapInfo error:: a proj4Catalog and a proj4Wkid must be defined');
@@ -111,7 +112,6 @@ define([
 					// spatialreference.org uses the old
 					// Proj4js style so we need an alias
 					// https://github.com/proj4js/proj4js/issues/23
-					window.Proj4js = proj4;
 					require(['http://spatialreference.org/ref/' + this.proj4Catalog.toLowerCase() + '/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function() {
 						this._projectionLoaded = true;
 						this._projection = this.proj4Catalog + ':' + this.proj4Wkid;
