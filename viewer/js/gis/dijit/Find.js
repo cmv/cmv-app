@@ -52,21 +52,21 @@ define([
                 type: 'esriSMS',
                 style: 'esriSMSCircle',
                 size: 25,
-                color: [0, 255, 255, 255],
+                color: [0, 255, 255, 32],
                 angle: 0,
                 xoffset: 0,
                 yoffset: 0,
                 outline: {
                     type: 'esriSLS',
                     style: 'esriSLSSolid',
-                    color: [0, 0, 0, 255],
+                    color: [0, 255, 255, 255],
                     width: 2
                 }
             },
             polyline: {
                 type: 'esriSLS',
                 style: 'esriSLSSolid',
-                color: [0, 0, 255, 255],
+                color: [0, 255, 255, 255],
                 width: 3
             },
             polygon: {
