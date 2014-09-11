@@ -4,29 +4,28 @@ define([
 	'dijit/_TemplatedMixin',
 	'dijit/_WidgetsInTemplateMixin',
 	'dojo/_base/lang',
-    'dojo/_base/array',
-	'dojo/dom-construct'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, array, domConstruct) {
+	'dojo/dom-construct',
+	'dojo/topic',
+	'dojo/aspect'
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, domConstruct, topic, aspect) {
 
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		templateString: '<div><div style="text-align:center;"><button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:toggleEditing" data-dojo-props="label:\'Start Editing\',class:\'success\'" data-dojo-attach-point="toggleBTN"></button></div><div class="editDijit" style="margin-top:5px;" data-dojo-attach-point="containerNode"></div></div>',
 		widgetsInTemplate: true,
 		editor: null,
 		isEdit: false,
-        infoTemplates: {},
+		mapClickMode: null,
+		postCreate: function() {
+			this.inherited(arguments);
+			this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
+			if (this.parentWidget && this.parentWidget.toggleable) {
+				this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function() {
+					this.onLayoutChange(this.parentWidget.open);
+				})));
+			}
+		},
 		toggleEditing: function() {
-            var layer;
 			if (!this.isEdit) {
-                // remove any infoTemplates that might interfere with clicking on the features
-                this.infoTemplates = {};
-				array.forEach(this.layerInfos, function(layerInfo) {
-					layer = layerInfo.featureLayer;
-					if (layer && layer.infoTemplate) {
-						this.infoTemplates[layer.id] = lang.clone(layer.infoTemplate);
-						layer.infoTemplate = null;
-					}
-                }, this);
-
 				var ops = lang.clone(this.settings);
 				ops.map = this.map;
 				ops.layerInfos = this.layerInfos;
@@ -46,23 +45,33 @@ define([
 				this.toggleBTN.set('label', 'Stop Editing');
 				this.toggleBTN.set('class', 'danger');
 				this.isEdit = true;
-				this.mapClickMode.current = 'editor';
+				topic.publish('mapClickMode/setCurrent', 'editor');
 			} else {
-                // add back any infoTemplates that might have been previously removed
-                array.forEach(this.layerInfos, function(layerInfo) {
-                    layer = layerInfo.featureLayer;
-                    if (layer && this.infoTemplates[layer.id]) {
-                        layer.infoTemplate = lang.clone(this.infoTemplates[layer.id]);
-                    }
-                }, this);
-                this.infoTemplates = {};
-
+				this.endEditing();
+				topic.publish('mapClickMode/setDefault');
+			}
+		},
+		endEditing: function () {
+			if (this.editor && this.editor.destroyRecursive) {
 				this.editor.destroyRecursive();
-				this.toggleBTN.set('label', 'Start Editing');
-				this.toggleBTN.set('class', 'success');
-				this.isEdit = false;
-				this.editor = null;
-				this.mapClickMode.current = this.mapClickMode.defaultMode;
+			}
+			this.toggleBTN.set('label', 'Start Editing');
+			this.toggleBTN.set('class', 'success');
+			this.isEdit = false;
+			this.editor = null;
+		},
+
+	  	onLayoutChange: function (open) {
+	  		// end edit on close of title pane
+			if (!open && this.mapClickMode === 'editor') {
+				this.endEditing();
+				topic.publish('mapClickMode/setDefault');
+			}
+	  	},
+		setMapClickMode: function (mode) {
+			this.mapClickMode = mode;
+			if (mode !== 'editor') {
+				this.endEditing();
 			}
 		}
 	});
