@@ -157,4 +157,5 @@ module.exports = function(grunt) {
   grunt.registerTask('build-view', 'Compiles all of the assets and copies the files to the build directory starts a web server and opens browser to preview app.', ['clean', 'copy', 'scripts', 'stylesheets', 'compress:build', 'connect:build', 'open:build_browser', 'watch:build']);
   grunt.registerTask('scripts', 'Compiles the JavaScript files.', ['jshint', 'uglify']);
   grunt.registerTask('stylesheets', 'Auto prefixes css and compiles the stylesheets.', ['autoprefixer', 'cssmin']);
+  grunt.registerTask('hint', 'Run simple jshint.', ['jshint']);
 };
