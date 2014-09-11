@@ -14,7 +14,6 @@ define([
 	'dojo/text!./StreetView/templates/StreetView.html',
 	'esri/renderers/UniqueValueRenderer',
 	'esri/symbols/PictureMarkerSymbol',
-	'dojo/topic',
 	'dojo/dom-style',
 	'esri/geometry/Point',
 	'esri/SpatialReference',
@@ -22,7 +21,7 @@ define([
 	'xstyle/css!./StreetView/css/StreetView.css',
 	'gis/plugins/async!//maps.google.com/maps/api/js?v=3&sensor=false',
 	'//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.2/proj4.js'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, UniqueValueRenderer, PictureMarkerSymbol, topic, domStyle, Point, SpatialReference, MenuItem, css, gmaps, proj4) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, UniqueValueRenderer, PictureMarkerSymbol, domStyle, Point, SpatialReference, MenuItem, css, gmaps, proj4) {
 
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		widgetsInTemplate: true,
