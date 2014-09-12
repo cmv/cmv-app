@@ -17,6 +17,13 @@ define([
 	imageParameters.format = 'png32';
 
 	return {
+        //optional page and browser titles
+        titles: {
+            headerTitle: 'Configurable Viewer', //header title
+            subHeaderTitle: 'make it your own', //sub header title
+            pageTitle: 'CMV - Configurable Viewer' //page title
+        },
+
 		//default mapClick mode, mapClickMode lets widgets know what mode the map is in to avoid multipult map click actions from taking place (ie identify while drawing).
 		defaultMapClickMode: 'identify',
 		// map options, passed to map constructor. see: https://developers.arcgis.com/javascript/jsapi/map-amd.html#map1
