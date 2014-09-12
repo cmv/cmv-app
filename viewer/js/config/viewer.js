@@ -26,7 +26,7 @@ define([
 			zoom: 5,
 			sliderStyle: 'small'
 		},
-		// panes: {
+	     panes: {
 		// 	left: {
 		// 		splitter: true
 		// 	},
@@ -35,24 +35,28 @@ define([
 		// 		placeAt: 'outer',
 		// 		region: 'right',
 		// 		splitter: true,
-		// 		collapsible: true
-		// 	},
-		// 	bottom: {
-		// 		id: 'sidebarBottom',
-		// 		placeAt: 'outer',
-		// 		splitter: true,
 		// 		collapsible: true,
-		// 		region: 'bottom'
+        //      open: false
 		// 	},
+			bottom: {
+				id: 'sidebarBottom',
+				placeAt: 'outer',
+				splitter: true,
+				collapsible: true,
+				region: 'bottom',
+                open: true
+			}
+        //  ,
 		// 	top: {
 		// 		id: 'sidebarTop',
 		// 		placeAt: 'outer',
 		// 		collapsible: true,
 		// 		splitter: true,
-		// 		region: 'top'
+		// 		region: 'top',
+        //      open: false
 		// 	}
-		// },
-		// collapseButtonsPane: 'center', //center or outer
+		},
+		collapseButtonsPane: 'center', //center or outer
 
 		// operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: 'dynamic', 'tiled', 'feature'.
 		// The 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
