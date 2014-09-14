@@ -1,17 +1,17 @@
 # Configurable Map Viewer (CMV)
 
-[![Build Status](https://travis-ci.org/DavidSpriggs/ConfigurableViewerJSAPI.svg?branch=master)](https://travis-ci.org/DavidSpriggs/ConfigurableViewerJSAPI)
+[![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app)
 
 This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for modular design and OOP via classes in JS using dojo's great [declare](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html) system.
 
 ![screen shot 2014-08-20 at 9 59 48 pm](https://cloud.githubusercontent.com/assets/661156/3991302/5aa2e0f2-28df-11e4-94d0-9c813937d933.png)
 
 ## Demo Site
-[http://davidspriggs.github.io/ConfigurableViewerJSAPI/viewer](http://davidspriggs.github.io/ConfigurableViewerJSAPI/viewer)
+[http://cmv.github.io/cmv-app/viewer/](http://cmv.github.io/cmv-app/viewer/)
 
 
 ## Installation:
-* Download the latest release [here](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/releases).
+* Download the latest release [here](https://github.com/cmv/cmv-app/releases).
 * Move to your web server
 * configure the proper proxy page. Should work out of the box if using IIS.
 * Edit the config.js file to include your services and desired widgets.
@@ -19,7 +19,7 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 
 ## Customize:
 * Use the `ConfigurableViewerJSAPI\js\config\viewer.js` file to customize your own map layers, task urls and widgets.
-* Use the [wiki](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/wiki) documentation for guidance on configuring individual widgets.
+* Use the [wiki](https://github.com/cmv/cmv-app/wiki) documentation for guidance on configuring individual widgets.
 
 # Widgets Included:
 * Base Maps
@@ -46,13 +46,13 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 * Highly configurable UI, right or left sidebars with widgets in both, top and bottom regions for other content.
 
 ## User contributed widgets
-Users can submit widgets to the [cmv-contrib-widgets](https://github.com/DavidSpriggs/cmv-contrib-widgets) repo. These widgets are created and submitted by users. Head on over and read the details.
+Users can submit widgets to the [cmv-contrib-widgets](https://github.com/cmv/cmv-contrib-widgets) repo. These widgets are created and submitted by users. Head on over and read the details.
 
 ## Proposing Features
-If there is a feature you would like to request, add it to the [issues list](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/issues) for consideration.
+If there is a feature you would like to request, add it to the [issues list](https://github.com/cmv/cmv-app/issues) for consideration.
 
 ## Change log:
-See [releases](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/releases) for change logs.
+See [releases](https://github.com/cmv/cmv-app/releases) for change logs.
 
 # Community
 We have an IRC channel: `#cmv` on freenode for the project. If you have questions, stop on by. I recommend [HexChat](http://hexchat.github.io) as an IRC client or you can use freenode's [webchat](http://webchat.freenode.net) client.
@@ -61,8 +61,8 @@ We have an IRC channel: `#cmv` on freenode for the project. If you have question
 There are many ways to contribute:
 
 1. Contribute code as widgets (see below).
-2. Created documentation in [the wiki](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/wiki).
-3. Submit issues you find in the [issues log](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI/issues?state=open).
+2. Created documentation in [the wiki](https://github.com/cmv/cmv-app/wiki).
+3. Submit issues you find in the [issues log](https://github.com/cmv/cmv-app/issues?state=open).
 
 ### Grunt tasks
 This project uses grunt to automate tasks like minifying css and js as well as js linting and css prefixing.

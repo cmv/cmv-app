@@ -13,6 +13,8 @@ define([
     'dojo/_base/lang',
     'dojo/_base/Color',
     'dojo/_base/array',
+    'dojo/on',
+    'dojo/keys',
     'dojo/store/Memory',
     'dgrid/OnDemandGrid',
     'dgrid/Selection',
@@ -30,7 +32,7 @@ define([
     'esri/geometry/Extent',
     'dojo/text!./Find/templates/Find.html',
     'xstyle/css!./Find/css/Find.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, CheckBox, dom, domConstruct, domClass, lang, Color, array, Memory, OnDemandGrid, Selection, Keyboard, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, graphicsUtils, FindTask, FindParameters, Extent, FindTemplate, css) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, CheckBox, dom, domConstruct, domClass, lang, Color, array, on, keys, Memory, OnDemandGrid, Selection, Keyboard, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, graphicsUtils, FindTask, FindParameters, Extent, FindTemplate, css) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -50,21 +52,21 @@ define([
                 type: 'esriSMS',
                 style: 'esriSMSCircle',
                 size: 25,
-                color: [0, 255, 255, 255],
+                color: [0, 255, 255, 32],
                 angle: 0,
                 xoffset: 0,
                 yoffset: 0,
                 outline: {
                     type: 'esriSLS',
                     style: 'esriSLSSolid',
-                    color: [0, 0, 0, 255],
+                    color: [0, 255, 255, 255],
                     width: 2
                 }
             },
             polyline: {
                 type: 'esriSLS',
                 style: 'esriSLSSolid',
-                color: [0, 0, 255, 255],
+                color: [0, 255, 255, 255],
                 width: 3
             },
             polygon: {
@@ -151,6 +153,12 @@ define([
             this.map.addLayer(this.polylineGraphics);
             this.map.addLayer(this.pointGraphics);
 
+            this.own(on(this.searchTextDijit, 'keyup', lang.hitch(this, function (evt) {
+                if (evt.keyCode === keys.ENTER) {
+                    this.search();
+                }
+            })));
+
             var k = 0, queryLen = this.queries.length;
 
             // add an id so it becomes key/value pair store
@@ -170,13 +178,14 @@ define([
         },
         search: function () {
             var query = this.queries[this.queryIdx];
-            var searchText = this.searchTextDijit.value;
-            if (query && query.minChars && searchText) {
-                if (searchText.length === 0 || (query.minChars && (searchText.length < query.minChars))) {
-                    this.findResultsNode.innerHTML = 'You must enter at least ' + query.minChars + ' characters.';
-                    this.findResultsNode.style.display = 'block';
-                    return;
-                }
+            var searchText = this.searchTextDijit.get('value');
+            if (!query || !searchText || searchText.length === 0) {
+                return;
+            }
+            if (query.minChars && (searchText.length < query.minChars)) {
+                this.findResultsNode.innerHTML = 'You must enter at least ' + query.minChars + ' characters.';
+                this.findResultsNode.style.display = 'block';
+                return;
             }
 
             this.createResultsGrid();
@@ -284,18 +293,27 @@ define([
                 var graphic, feature = result.feature;
                 switch (feature.geometry.type) {
                     case 'point':
-                        graphic = new Graphic(feature.geometry);
-                        this.pointGraphics.add(graphic);
+                        // only add points to the map that have an X/Y
+                        if (feature.geometry.x && feature.geometry.y) {
+                            graphic = new Graphic(feature.geometry);
+                            this.pointGraphics.add(graphic);
+                        }
                         break;
                     case 'polyline':
-                        graphic = new Graphic(feature.geometry);
-                        this.polylineGraphics.add(graphic);
+                        // only add polylines to the map that have paths
+                        if (feature.geometry.paths && feature.geometry.paths.length > 0) {
+                            graphic = new Graphic(feature.geometry);
+                            this.polylineGraphics.add(graphic);
+                        }
                         break;
                     case 'polygon':
-                        graphic = new Graphic(feature.geometry, null, {
-                            ren: 1
-                        });
-                        this.polygonGraphics.add(graphic);
+                        // only add polygons to the map that have rings
+                        if (feature.geometry.rings && feature.geometry.rings.length > 0) {
+                            graphic = new Graphic(feature.geometry, null, {
+                                ren: 1
+                            });
+                            this.polygonGraphics.add(graphic);
+                        }
                         break;
                     default:
                 }
@@ -325,7 +343,9 @@ define([
                 }
             }
 
-            this.zoomToExtent(zoomExtent);
+            if (zoomExtent) {
+                this.zoomToExtent(zoomExtent);
+            }
         },
 
         selectFeature: function (event) {
