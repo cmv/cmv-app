@@ -94,7 +94,7 @@ define([
                     q = s.match(/config=([^&]*)/i);
                 if (q && q.length > 0) {
                     config = q[1];
-                    if(file.indexOf('/') < 0) {
+                    if(config.indexOf('/') < 0) {
                         config = 'config/' + config;
                     }
                 }
