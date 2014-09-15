@@ -58,6 +58,10 @@ define([
 			}
 			this.addTopics();
 			this.initPanes();
+
+			if (config.isDebug) {
+                window.app = this; //dev only
+			}
 		},
 		// add topics for subscribing and publishing
 		addTopics: function () {
@@ -71,8 +75,8 @@ define([
 				this.widgetLoader(args.options, args.position);
 			}));
 
-			// setup error handler
-			if (this.config.debug) {
+			// setup error handler. centralize the debugging
+			if (this.config.isDebug) {
 				topic.subscribe('viewer/handleError', lang.hitch(this, 'handleError'));
 			}
 
@@ -218,7 +222,10 @@ define([
 				if (type) {
 					modules.push('esri/layers/' + type + 'Layer');
 				} else {
-					console.log('Layer type not supported: ', layer.type);
+					this.handleError({
+						source: 'Controller',
+						error: 'Layer type "' + layer.type + '"" isnot supported: '
+					});
 				}
 			}, this);
 			require(modules, lang.hitch(this, function() {
@@ -420,7 +427,10 @@ define([
 			// only proceed for valid widget types
 			var widgetTypes = ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map'];
 			if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
-				console.log('Widget type ' + widgetConfig.type + ' (' + widgetConfig.title + ') at position ' + position + ' is not supported.');
+				this.handleError({
+					source: 'Controller',
+					error: 'Widget type "' + widgetConfig.type + '"" (' + widgetConfig.title + ') at position ' + position + ' is not supported.'
+				});
 				return;
 			}
 
@@ -488,7 +498,7 @@ define([
 		},
 		//centralized error handler
 		handleError: function(options) {
-			if (this.config.debug) {
+			if (this.config.isDebug) {
 				if (typeof(console) === 'object') {
 					for (var option in options) {
 						if (options.hasOwnProperty(option)) {
