@@ -69,7 +69,7 @@ There are many ways to contribute to CMV:
 
 4. __Create documentation__ Please make constructive in [the wiki](https://github.com/cmv/cmv-app/wiki).
 
-5. __Submit a Pull Request__ - If you are developer and have an enhancement or bug fix you would like to submit, pull requests are welcome. Please review the [CONTRIBUTORS.md](CONTRIBUTORS.md) documentation before submitting any Pull Requests.
+5. __Submit a Pull Request__ - If you are developer and have an enhancement or bug fix you would like to submit, pull requests are welcome. Please review the [CONTRIBUTING.md](CONTRIBUTING.md) documentation before submitting any Pull Requests.
 
 # Grunt tasks
 This project uses grunt to automate tasks like minifying css and js as well as js linting and css prefixing.
