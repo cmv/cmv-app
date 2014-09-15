@@ -9,7 +9,8 @@ define([
     'dojo/html',
     'dojo/dom-style',
     'dojo/number',
-    '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.1/proj4.js',
+    'dojo/topic',
+    '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.2/proj4.js',
     'xstyle/css!./MapInfo/css/MapInfo.css'
 ], function(
     declare,
@@ -19,6 +20,7 @@ define([
     html,
     style,
     number,
+    topic,
     proj4
 ) {
     'use strict';
@@ -70,7 +72,10 @@ define([
         postCreate: function() {
             var map = this.map;
             if (!map) {
-                console.log('MapInfo error::a map reference is required');
+                topic.publish('viewer/handleError', {
+                    source: 'MapInfo',
+                    error: 'A map reference is required'
+                });
                 this.destroy();
                 return;
             }
@@ -99,8 +104,11 @@ define([
                 // https://github.com/proj4js/proj4js/issues/23
                 window.Proj4js = proj4;
                 //load custom projection file or default to spatialreference.org
-                if (!this.proj4Catalog && !this.proj4Wkid) {
-                    console.log('MapInfo error::a proj4Catalog and proj4Wkid must be defined');
+                if (!this.proj4Catalog && !this.proj4Wkid && !this.proj4CustomURL) {
+                    topic.publish('viewer/handleError', {
+                        source: 'MapInfo',
+                        error: 'MapInfo error::a proj4Catalog/proj4Wkid or custom URL must be defined'
+                    });
                     return;
                 }
                 if (this.proj4CustomURL) {

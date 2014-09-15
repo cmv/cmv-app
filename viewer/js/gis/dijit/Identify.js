@@ -233,7 +233,7 @@ define([
 		identifyError: function(err) {
 			this.map.infoWindow.hide();
 			topic.publish('viewer/handleError', {
-				widget: 'Identify',
+				source: 'Identify',
 				error: err
 			});
 		},

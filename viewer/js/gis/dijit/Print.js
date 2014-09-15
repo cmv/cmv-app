@@ -17,6 +17,7 @@ define([
     'dojo/store/Memory',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/topic',
     'dojo/dom-style',
     'dojo/dom-construct',
     'dojo/dom-class',
@@ -27,7 +28,7 @@ define([
     'esri/tasks/PrintParameters',
     'esri/request',
     'xstyle/css!./Print/css/Print.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, Style, domConstruct, domClass, printTemplate, printResultTemplate, aspect, PrintTemplate, PrintParameters, esriRequest, css) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, aspect, PrintTemplate, PrintParameters, esriRequest, css) {
 
     // Main print dijit
     var PrintDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -66,7 +67,6 @@ define([
             //aspect.after(this.printTask, '_createOperationalLayers', this.operationalLayersInspector, false);
         },
         operationalLayersInspector: function(opLayers) {
-            console.log(opLayers);
             array.forEach(opLayers, function(layer) {
                 if (layer.id == 'Measurement_graphicslayer') {
                     array.forEach(layer.featureCollection.layers, function(fcLayer) {
@@ -82,14 +82,20 @@ define([
             return opLayers;
         },
         _handleError: function(err) {
-            console.log(1, err);
+            topic.publish('viewer/handleError', {
+                source: 'Print',
+                error: err
+            });
         },
         _handlePrintInfo: function(data) {
             var Layout_Template = array.filter(data.parameters, function(param, idx) {
                 return param.name === 'Layout_Template';
             });
             if (Layout_Template.length === 0) {
-                console.log('print service parameters name for templates must be \'Layout_Template\'');
+                topic.publish('viewer/handleError', {
+                    source: 'Print',
+                    error: 'Print service parameters name for templates must be \'Layout_Template\''
+                });
                 return;
             }
             var layoutItems = array.map(Layout_Template[0].choiceList, function(item, i) {
@@ -115,7 +121,10 @@ define([
                 return param.name === 'Format';
             });
             if (Format.length === 0) {
-                console.log('print service parameters name for format must be \'Format\'');
+                topic.publish('viewer/handleError', {
+                    source: 'Print',
+                    error: 'Print service parameters name for format must be \'Format\''
+                });
                 return;
             }
             var formatItems = array.map(Format[0].choiceList, function(item, i) {
@@ -206,7 +215,10 @@ define([
             }
         },
         _onPrintError: function(err) {
-            console.log(err);
+            topic.publish('viewer/handleError', {
+                source: 'Print',
+                error: err
+            });
             this.nameNode.innerHTML = '<span class="bold">Error, try again</span>';
             domClass.add(this.resultNode, 'printResultError');
         },

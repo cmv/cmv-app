@@ -48,7 +48,10 @@ define([
                 }, 250);
                 this.setTimeout();
             } else {
-                console.log('Growl container not found/specified.');
+                topic.publish('viewer/handleError', {
+                    source: 'Growler',
+                    error: 'Growl container not found/specified.'
+                });
             }
         },
         setTimeout: function() {

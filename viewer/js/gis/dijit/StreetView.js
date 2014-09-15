@@ -220,7 +220,10 @@ define([
 			} else {
 				this.setPanoPlace = null;
 				this.clearGraphics();
-				console.log('StreetView error unknown.');
+				topic.publish('viewer/handleError', {
+					source: 'StreetView',
+					error: 'Unknown.'
+				});
 			}
 		},
 		setPlaceMarkerPosition: function() {
