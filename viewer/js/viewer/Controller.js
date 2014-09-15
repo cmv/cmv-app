@@ -21,10 +21,12 @@ define([
 ], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, PopupMobile, Menu) {
 
     return {
+        //LayerInfos arrays
         legendLayerInfos: [],
         editorLayerInfos: [],
         identifyLayerInfos: [],
         tocLayerInfos: [],
+        layerControlLayerInfos: [],
         panes: {
             left: {
                 id: 'sidebarLeft',
@@ -198,18 +200,29 @@ define([
         },
         initLayer: function(layer, Layer) {
             var l = new Layer(layer.url, layer.options);
-            this.layers.unshift(l); // unshift instead of oush to keep layer ordering on map intact
-            this.legendLayerInfos.unshift({
+            this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
+            //Legend LayerInfos array
+            this.legendLayerInfos.unshift({ //unshift instead of push to keep layer ordering in legend intact
                 layer: l,
                 title: layer.title || null
             });
-            this.tocLayerInfos.push({ //push because Legend and TOC need the layers in the opposite order
+            //TOC LayerInfos array
+            this.tocLayerInfos.push({ //push because TOC needs the layers in the opposite order
                 layer: l,
                 title: layer.title || null,
                 slider: (layer.slider === false) ? false : true,
                 noLegend: layer.noLegend || false,
                 collapsed: layer.collapsed || false,
                 sublayerToggle: layer.sublayerToggle || false
+            });
+            //LayerControl LayerInfos array
+            this.layerControlLayerInfos.unshift({ //unshift instead of push to keep layer ordering in LayerControl intact
+                layer: l,
+                type: layer.type,
+                title: layer.title,
+                controlOptions: lang.mixin({
+                    sublayers: true
+                }, layer.controlOptions)
             });
             if (layer.type === 'feature') {
                 var options = {
@@ -413,7 +426,8 @@ define([
             // set any additional options
             options.id = widgetConfig.id + '_widget';
             options.parentWidget = widgetConfig.parentWidget;
-
+            
+            //replace config map, layerInfos arrays, etc
             if (options.map) {
                 options.map = this.map;
             }
@@ -435,7 +449,10 @@ define([
             if (options.identifyLayerInfos) {
                 options.layerInfos = this.identifyLayerInfos;
             }
-
+            if (options.layerControlLayerInfos) {
+                options.layerInfos = this.layerControlLayerInfos;
+            }
+            
             // create the widget
             var pnl = options.parentWidget;
             if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
