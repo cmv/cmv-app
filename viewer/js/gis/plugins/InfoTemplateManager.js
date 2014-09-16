@@ -45,6 +45,7 @@ define ( [
 
             disableInfoTemplates: function () {
 
+                this.map.infoWindow.hide();
                 //user this to test for pre 3.10
                 //this.stripInfoTemplates();
 

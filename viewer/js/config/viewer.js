@@ -34,8 +34,8 @@ define([
 		// map options, passed to map constructor. see: https://developers.arcgis.com/javascript/jsapi/map-amd.html#map1
 		mapOptions: {
 			basemap: 'streets',
-			center: [-96.59179687497497, 39.09596293629694],
-			zoom: 5,
+			center: [-84.482278, 42.723222],
+			zoom: 18,
 			sliderStyle: 'small'
 		},
 		// panes: {
