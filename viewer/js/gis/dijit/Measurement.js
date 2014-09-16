@@ -43,9 +43,11 @@ define([
 		},
 		disconnectMapClick: function () {
 			topic.publish('mapClickMode/setCurrent', 'measure');
+            topic.publish( 'mapInfoTemplates/disable' );
 		},
 		connectMapClick: function() {
 			topic.publish('mapClickMode/setDefault');
+            topic.publish( 'mapInfoTemplates/enable' );
 		},
 	  	onLayoutChange: function (open) {
 	  		// end measurement on close of title pane

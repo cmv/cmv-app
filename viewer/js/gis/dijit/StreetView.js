@@ -135,10 +135,12 @@ define([
 		disconnectMapClick: function() {
 			this.map.setMapCursor('crosshair');
             topic.publish('mapClickMode/setCurrent', 'streetview');
+            topic.publish( 'mapInfoTemplates/disable' );
 		},
 		connectMapClick: function() {
 			this.map.setMapCursor('auto');
             topic.publish('mapClickMode/setDefault');
+            topic.publish( 'mapInfoTemplates/enable' );
 		},
 		clearGraphics: function() {
 			this.pointGraphics.clear();

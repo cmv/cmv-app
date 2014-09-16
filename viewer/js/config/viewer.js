@@ -71,9 +71,9 @@ define([
 		// 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
 		operationalLayers: [
             {
-                type   : 'dynamic',
-                url    : 'http://prod.gis.msu.edu/arcgis/rest/services/features/gigapan_loc/MapServer',
-                title  : 'Panoramic Photos',
+                type   : 'feature',
+                url    : 'http://prod.gis.msu.edu/arcgis/rest/services/features/gigapan_loc/MapServer/0',
+                title  : 'Panoramic Photos (feat. layer)',
                 slider: false,
                 noLegend: false,
                 collapsed: false,
@@ -81,6 +81,26 @@ define([
                     id     : 'panoFeatureLayer',
                     opacity: 0.8,
                     visible: true,
+                    minScale: 2500,
+                    infoTemplate: panoInfoTemplate,
+                    outFields: ['LOCATIONID']
+                },
+                controlOptions: {
+                    transparency: true, //include transparency plugin
+                    scales: true //include layer scale setting plugin
+                }
+            },
+            {
+                type   : 'dynamic',
+                url    : 'http://prod.gis.msu.edu/arcgis/rest/services/features/gigapan_loc/MapServer',
+                title  : 'Panoramic Photos (dyn. layer)',
+                slider: false,
+                noLegend: false,
+                collapsed: false,
+                options: {
+                    id     : 'panoDynamicLayer',
+                    opacity: 0.8,
+                    visible: false,
                     minScale: 2500,
                     infoTemplates: panoInfoTemplates,
                     outFields: ['LOCATIONID']

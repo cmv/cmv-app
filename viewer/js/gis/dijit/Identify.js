@@ -408,25 +408,12 @@ define([
 
 		setMapClickMode: function (mode) {
 			this.mapClickMode = mode;
-            array.forEach(this.layerInfos, function(layerInfo) {
-                var layer = layerInfo.layer;
-                if (layer) {
-		            // add back any infoTemplates that
-		            // had been previously removed
-					if (mode === 'identify') {
-        	            if (this.infoTemplates[layer.id]) {
-            	            layer.infoTemplate = lang.clone(this.infoTemplates[layer.id]);
-                	    }
-   	                // remove any infoTemplates that might
-   	                // interfere with clicking on a feature
-    				} else {
-						if (layer.infoTemplate) {
-							this.infoTemplates[layer.id] = lang.clone(layer.infoTemplate);
-							layer.infoTemplate = null;
-						}
-					}
-                }
-            }, this);
+
+            if ( mode === 'identify' ) {
+                topic.publish( 'mapInfoTemplates/disable' );
+            } else {
+                topic.publish( 'mapInfoTemplates/enable' );
+            }
 		}
 	});
 
