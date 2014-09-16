@@ -40,13 +40,18 @@ define([
 		baseClass: 'gis_IdentifyDijit',
 
 		mapClickMode: null,
+		identifies: {},
         infoTemplates: {},
 		ignoreOtherGraphics: true,
+		createDefaultInfoTemplates: true,
 		layerSeparator: '||',
 		allLayersId: '***',
 
 		postCreate: function() {
 			this.inherited(arguments);
+			if (!this.identifies) {
+				this.identifies = {};
+			}
 			this.layers = [];
 			array.forEach(this.layerInfos, function(layerInfo) {
 				var lyrId = layerInfo.layer.id;
@@ -184,7 +189,11 @@ define([
 						if (arrIds.length > 1 && arrIds[1]) { // layer explicity requested
 							layerIds = [arrIds[1]];
 						} else if ((ref.declaredClass === 'esri.layers.FeatureLayer') && !isNaN(ref.layerId)) { // feature layer
-							layerIds = [ref.layerId];
+							// do not allow feature layer that does not support
+							// Identify (Feature Service)
+							if (ref.capabilities && ref.capabilities.toLowerCase().indexOf('data') > 0) {
+								layerIds = [ref.layerId];
+							}
 						} else if (ref.layerInfos) {
 							layerIds = [];
 							array.forEach(ref.layerInfos, lang.hitch(this, function (layerInfo) {
@@ -393,6 +402,15 @@ define([
 			// restrict which layers are included
 			if (selectedIds) {
 				if (array.indexOf(selectedIds, layerInfo.id) < 0) {
+					return false;
+				}
+			}
+
+			// don't allow the layer if we don't have an  infoTemplate
+			// already and creating a default one is not desired
+			if (!this.createDefaultInfoTemplates) {
+				var infoTemplate = this.getInfoTemplate(ref, layerInfo.id);
+				if (!infoTemplate) {
 					return false;
 				}
 			}
