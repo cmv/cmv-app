@@ -445,7 +445,7 @@ define([
 			if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
 				this.handleError({
 					source: 'Controller',
-					error: 'Widget type "' + widgetConfig.type + '"" (' + widgetConfig.title + ') at position ' + position + ' is not supported.'
+					error: 'Widget type "' + widgetConfig.type + '" (' + widgetConfig.title + ') at position ' + position + ' is not supported.'
 				});
 				return;
 			}
