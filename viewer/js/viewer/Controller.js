@@ -61,7 +61,7 @@ define([
 			this.addTopics();
 			this.initPanes();
 
-            //this.infoTemplateManager = new InfoTemplateManager( this.map );
+            this.infoTemplateManager = new InfoTemplateManager( this.map );
 
 			if (config.isDebug) {
                 window.app = this; //dev only

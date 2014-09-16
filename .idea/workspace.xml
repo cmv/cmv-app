@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd937d1b-509e-4b04-a54b-03f9f523db33" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/viewer/js/gis/plugins/InfoTemplateManager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/viewer/js/viewer/Controller.js" afterPath="$PROJECT_DIR$/viewer/js/viewer/Controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/viewer/js/gis/dijit/Draw.js" afterPath="$PROJECT_DIR$/viewer/js/gis/dijit/Draw.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/viewer/js/gis/plugins/InfoTemplateManager.js" afterPath="$PROJECT_DIR$/viewer/js/gis/plugins/InfoTemplateManager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/viewer/index.html" afterPath="$PROJECT_DIR$/viewer/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/viewer/js/config/viewer.js" afterPath="$PROJECT_DIR$/viewer/js/config/viewer.js" />
     </list>
     <ignored path="ConfigurableViewerJSAPI-GitLab.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,7 +27,7 @@
     <favorites_list name="ConfigurableViewerJSAPI-GitLab" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
+    <splitter split-orientation="horizontal" split-proportion="0.71387696">
       <split-first>
         <leaf>
           <file leaf-file-name="package.json" pinned="false" current="false" current-in-tab="false">
@@ -45,8 +43,8 @@
           <file leaf-file-name="Identify.js" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/viewer/js/gis/dijit/Identify.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-153.46153" vertical-offset="0" max-vertical-offset="6600">
-                  <caret line="266" column="10" selection-start-line="266" selection-start-column="8" selection-end-line="266" selection-end-column="8" />
+                <state vertical-scroll-proportion="-69.26923" vertical-offset="1859" max-vertical-offset="6600">
+                  <caret line="244" column="8" selection-start-line="244" selection-start-column="8" selection-end-line="244" selection-end-column="8" />
                   <folding />
                 </state>
               </provider>
@@ -56,7 +54,7 @@
             <entry file="file://$PROJECT_DIR$/viewer/js/viewer/Controller.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0" vertical-offset="585" max-vertical-offset="7875">
-                  <caret line="63" column="14" selection-start-line="63" selection-start-column="14" selection-end-line="63" selection-end-column="14" />
+                  <caret line="63" column="12" selection-start-line="63" selection-start-column="12" selection-end-line="63" selection-end-column="12" />
                   <folding />
                 </state>
               </provider>
@@ -86,7 +84,7 @@
             <entry file="file://$PROJECT_DIR$/viewer/index.html">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="-8.666667" vertical-offset="542" max-vertical-offset="1080">
-                  <caret line="50" column="63" selection-start-line="50" selection-start-column="63" selection-end-line="50" selection-end-column="63" />
+                  <caret line="50" column="64" selection-start-line="50" selection-start-column="64" selection-end-line="50" selection-end-column="64" />
                   <folding />
                 </state>
               </provider>
@@ -115,8 +113,8 @@
           <file leaf-file-name="InfoTemplateManager.js" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/viewer/js/gis/plugins/InfoTemplateManager.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.2669039" vertical-offset="270" max-vertical-offset="1050">
-                  <caret line="28" column="46" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
+                <state vertical-scroll-proportion="0.8417431" vertical-offset="623" max-vertical-offset="1185">
+                  <caret line="66" column="55" selection-start-line="66" selection-start-column="55" selection-end-line="66" selection-end-column="55" />
                   <folding />
                 </state>
               </provider>
@@ -139,7 +137,7 @@
           <file leaf-file-name="Draw.js" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/viewer/js/gis/dijit/Draw.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.26837608" vertical-offset="2198" max-vertical-offset="3240">
+                <state vertical-scroll-proportion="0.34204793" vertical-offset="2198" max-vertical-offset="3240">
                   <caret line="157" column="37" selection-start-line="157" selection-start-column="37" selection-end-line="157" selection-end-column="37" />
                   <folding />
                 </state>
@@ -210,10 +208,10 @@
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/viewer/js/gis/dijit/Identify.js" />
         <option value="$PROJECT_DIR$/viewer/js/gis/dijit/Draw.js" />
-        <option value="$PROJECT_DIR$/viewer/index.html" />
-        <option value="$PROJECT_DIR$/viewer/js/gis/plugins/InfoTemplateManager.js" />
         <option value="$PROJECT_DIR$/viewer/js/config/viewer.js" />
+        <option value="$PROJECT_DIR$/viewer/index.html" />
         <option value="$PROJECT_DIR$/viewer/js/viewer/Controller.js" />
+        <option value="$PROJECT_DIR$/viewer/js/gis/plugins/InfoTemplateManager.js" />
       </list>
     </option>
   </component>
@@ -559,10 +557,10 @@
     <frame x="0" y="22" width="1440" height="804" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.12078652" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12078652" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32916668" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.13333334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.084269665" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2977528" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297568" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -772,34 +770,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/viewer/js/gis/dijit/Draw.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.26837608" vertical-offset="0" max-vertical-offset="3240">
-          <caret line="157" column="37" selection-start-line="157" selection-start-column="37" selection-end-line="157" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/viewer/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.666667" vertical-offset="542" max-vertical-offset="1080">
-          <caret line="50" column="63" selection-start-line="50" selection-start-column="63" selection-end-line="50" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/viewer/js/config/identify.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1095">
           <caret line="32" column="27" selection-start-line="32" selection-start-column="8" selection-end-line="32" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/viewer/js/gis/dijit/Identify.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-153.46153" vertical-offset="0" max-vertical-offset="6600">
-          <caret line="266" column="10" selection-start-line="266" selection-start-column="8" selection-end-line="266" selection-end-column="8" />
           <folding />
         </state>
       </provider>
@@ -820,14 +794,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/viewer/js/viewer/Controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="585" max-vertical-offset="7875">
-          <caret line="63" column="14" selection-start-line="63" selection-start-column="14" selection-end-line="63" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/viewer/js/config/viewer.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1035" max-vertical-offset="6735">
@@ -836,10 +802,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/viewer/js/gis/dijit/Draw.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34204793" vertical-offset="2198" max-vertical-offset="3240">
+          <caret line="157" column="37" selection-start-line="157" selection-start-column="37" selection-end-line="157" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/viewer/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.666667" vertical-offset="542" max-vertical-offset="1080">
+          <caret line="50" column="64" selection-start-line="50" selection-start-column="64" selection-end-line="50" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/viewer/js/viewer/Controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="585" max-vertical-offset="7875">
+          <caret line="63" column="12" selection-start-line="63" selection-start-column="12" selection-end-line="63" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/viewer/js/gis/dijit/Identify.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-69.26923" vertical-offset="1859" max-vertical-offset="6600">
+          <caret line="244" column="8" selection-start-line="244" selection-start-column="8" selection-end-line="244" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/viewer/js/gis/plugins/InfoTemplateManager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2669039" vertical-offset="270" max-vertical-offset="1050">
-          <caret line="28" column="46" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.8417431" vertical-offset="623" max-vertical-offset="1185">
+          <caret line="66" column="55" selection-start-line="66" selection-start-column="55" selection-end-line="66" selection-end-column="55" />
           <folding />
         </state>
       </provider>
