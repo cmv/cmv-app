@@ -315,14 +315,12 @@ body, html {
 
     #sidebarRight {
         max-width: 95%;
-    },
-    #sidebarRight, .sidebarrightCollapseButton {
         display: none;
     }
 }
 @media screen and (max-width: 767px) {
     /* hide the sidebars by default on extra-small devices (phones) */
-    #sidebarLeft, #sidebarBottom, #sidebarTop, .sidebarCollapseButton {
+    #sidebarLeft, #sidebarBottom, #sidebarTop {
         display: none;
     }
     /* no search widget in app header */
