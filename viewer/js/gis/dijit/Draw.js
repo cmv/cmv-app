@@ -151,11 +151,13 @@ define([
 		},
 		disconnectMapClick: function() {
 			topic.publish('mapClickMode/setCurrent', 'draw');
+            topic.publish( 'mapInfoTemplates/disable' );
 			// dojo.disconnect(this.mapClickEventHandle);
 			// this.mapClickEventHandle = null;
 		},
 		connectMapClick: function() {
 			topic.publish('mapClickMode/setDefault');
+            topic.publish( 'mapInfoTemplates/enable' );
 			// if (this.mapClickEventHandle === null) {
 			//     this.mapClickEventHandle = dojo.connect(this.map, 'onClick', this.mapClickEventListener);
 			// }

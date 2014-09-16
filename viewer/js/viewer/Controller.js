@@ -13,13 +13,14 @@ define([
 	'dojo/text!./templates/mapOverlay.html',
 	'esri/IdentityManager',
 	'gis/dijit/FloatingWidgetDialog',
+    'gis/plugins/InfoTemplateManager',
 	'put-selector',
 	'dojo/aspect',
 	'dojo/has',
 	'dojo/topic',
 	'esri/dijit/PopupMobile',
 	'dijit/Menu'
-], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
+], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, InfoTemplateManager, put, aspect, has, topic, PopupMobile, Menu) {
 
 	return {
 		legendLayerInfos: [],
@@ -41,6 +42,7 @@ define([
 			}
 		},
 		collapseButtons: {},
+        infoTemplateManager: null,
 		startup: function(config) {
 			this.config = config;
 			this.mapClickMode = {
@@ -58,6 +60,8 @@ define([
 			}
 			this.addTopics();
 			this.initPanes();
+
+            //this.infoTemplateManager = new InfoTemplateManager( this.map );
 
 			if (config.isDebug) {
                 window.app = this; //dev only
