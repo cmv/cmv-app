@@ -43,6 +43,7 @@ define([
 		},
 		collapseButtons: {},
         infoTemplateManager: null,
+        mapUnloadHandle: null,
 		startup: function(config) {
 			this.config = config;
 			this.mapClickMode = {
@@ -195,6 +196,8 @@ define([
 			} else {
 				this.initWidgets();
 			}
+
+            this.mapUnloadHandle = on( this.map, 'unload', lang.hitch( this, this.onMapUnload ) );
 		},
 		initLayers: function(evt) {
 			this.map.on('resize', function(evt) {
@@ -514,6 +517,20 @@ define([
 				// add growler here?
 				return;
 			}
-		}
+		},
+
+        //not sure if this is necessary, will cause infoTemplate manager to unsubscribe from it's topics.
+        //put this in place in lieu of this.own( topic.subscribe() ) syntax used in widgets
+        onMapUnload: function ( event ) {
+
+            this.infoTemplateManager.destroy();
+            this.infoTemplateManager = null;
+
+            this.mapUnloadHandle.remove();
+            this.mapUnloadHandle = null;
+
+            //may also want to unsubscribe other topics here?
+
+        }
 	};
 });

@@ -14,6 +14,7 @@ define ( [
             map: null,
             mapClickHandlerHandle: null,
             infoTemplates: {},
+            topicHandles: [],
 
             constructor: function( map ) {
 
@@ -24,8 +25,12 @@ define ( [
 
             subscribeTopics: function () {
 
-                topic.subscribe('mapInfoTemplates/disable', lang.hitch(this, this.disableInfoTemplates ) );
-                topic.subscribe('mapInfoTemplates/enable', lang.hitch(this, this.enableInfoTemplates ) );
+                this.topicHandles.push(
+                    topic.subscribe('mapInfoTemplates/disable', lang.hitch(this, this.disableInfoTemplates ) )
+                );
+                this.topicHandles.push(
+                    topic.subscribe('mapInfoTemplates/enable', lang.hitch(this, this.enableInfoTemplates ) )
+                );
 
             },
 
@@ -46,6 +51,7 @@ define ( [
             disableInfoTemplates: function () {
 
                 this.map.infoWindow.hide();
+
                 //user this to test for pre 3.10
                 //this.stripInfoTemplates();
 
@@ -95,6 +101,12 @@ define ( [
 
                 }, this );
 
+            },
+
+            destroy: function () {
+                array.forEach( this.topicHandles, function( handle ) {
+                   handle.remove();
+                }, this );
             }
         } );
     }
