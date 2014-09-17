@@ -1,23 +1,23 @@
 <div class="gis_FindDijit" >
     <div class="formContainer">
-        <div data-dojo-type="dijit.form.Form" data-dojo-attach-point="searchFormDijit">
+        <div data-dojo-type="dijit/form/Form" data-dojo-attach-point="searchFormDijit">
             <div data-dojo-attach-point="querySelectDom">
                 <label>Select A Query:</label><br/>
-    			<input type="select" data-dojo-type="dijit.form.FilteringSelect" data-dojo-props="name:'query',autoComplete:true,required:true,searchAttr:'description',class:'querySelect'"
+    			<input type="select" data-dojo-type="dijit/form/FilteringSelect" data-dojo-props="name:'query',autoComplete:true,required:true,searchAttr:'description',class:'querySelect'"
                 data-dojo-attach-point="querySelectDijit" data-dojo-attach-event="onChange:_onQueryChange"/>
             </div>
             <div data-dojo-attach-point="queryTextDom">
                 <label>Search For Text:</label><br/>
-    			<input type="text" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-attach-point="searchTextDijit" data-dojo-props="name:'searchText',trim:true,required:true,value:'',placeholder:'Enter the text you want to search for.',class:'searchText'" /><br/>
+    			<input type="text" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-attach-point="searchTextDijit" data-dojo-props="name:'searchText',trim:true,required:true,value:'',placeholder:'Enter the text you want to search for.',class:'searchText'" /><br/>
             </div>
             <div data-dojo-attach-point="queryContainsDom">
-                <input type="checkbox" data-dojo-attach-point="containsSearchText" data-dojo-type="dijit.form.CheckBox" data-dojo-props="class:'containsCheck'"/>
+                <input type="checkbox" data-dojo-attach-point="containsSearchText" data-dojo-type="dijit/form/CheckBox" data-dojo-props="class:'containsCheck'"/>
                 <label>Find Exact Matches Only</label>
             </div>
-			<div data-dojo-type="dijit.form.Button" data-dojo-props="busyLabel:'searching',iconClass:'searchIcon',class:'searchButton'" data-dojo-attach-event="onClick:search" data-dojo-attach-point="searchButtonDijit">
+			<div data-dojo-type="dijit/form/Button" data-dojo-props="busyLabel:'searching',iconClass:'searchIcon',class:'searchButton'" data-dojo-attach-event="onClick:search" data-dojo-attach-point="searchButtonDijit">
 				Search
 			</div>
-			<div data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'clearIcon',class:'clearButton'" data-dojo-attach-event="onClick:clearResults" data-dojo-attach-point="clearButtonDijit">
+			<div data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'clearIcon',class:'clearButton'" data-dojo-attach-event="onClick:clearResults" data-dojo-attach-point="clearButtonDijit">
 				Clear
 			</div>
     	</div>
