@@ -1,30 +1,36 @@
 define([
-    'dojo/_base/declare',
-    'esri/map',
-    'dojo/dom-style',
-    'dojo/dom-geometry',
-    'dojo/dom-class',
-    'dojo/on',
-    'dojo/_base/array',
-    'dijit/layout/BorderContainer',
-    'dijit/layout/ContentPane',
-    'gis/dijit/FloatingTitlePane',
-    'dojo/_base/lang',
-    'dojo/text!./templates/mapOverlay.html',
-    'esri/IdentityManager',
-    'gis/dijit/FloatingWidgetDialog',
-    'put-selector',
-    'dojo/aspect',
-    'dojo/has',
-    'esri/dijit/PopupMobile',
-    'dijit/Menu'
-], function(declare, Map, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, PopupMobile, Menu) {
+           'dojo/_base/declare',
+           'esri/map',
+           'dojo/dom',
+           'dojo/dom-style',
+           'dojo/dom-geometry',
+           'dojo/dom-class',
+           'dojo/on',
+           'dojo/_base/array',
+           'dojo/hash',
+           'dojo/topic',
+           'dijit/layout/BorderContainer',
+           'dijit/layout/ContentPane',
+           'gis/dijit/FloatingTitlePane',
+           'dojo/_base/lang',
+           'dojo/text!./templates/mapOverlay.html',
+           'esri/IdentityManager',
+           'esri/geometry/webMercatorUtils',
+           'gis/dijit/FloatingWidgetDialog',
+           'put-selector',
+           'dojo/aspect',
+           'dojo/has',
+           'esri/dijit/PopupMobile',
+           'dijit/Menu',
+           'viewer/modules/router/Router'
+       ], function(declare, Map, dom, domStyle, domGeom, domClass, on, array, hash, topic, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, webMercatorUtils, FloatingWidgetDialog, put, aspect, has, PopupMobile, Menu, Router) {
 
     return {
         legendLayerInfos: [],
         editorLayerInfos: [],
         identifyLayerInfos: [],
         tocLayerInfos: [],
+        layerControlLayerInfos: [], //LayerControl custom LayerInfos array
         panes: {
             left: {
                 id: 'sidebarLeft',
@@ -40,12 +46,28 @@ define([
             }
         },
         collapseButtons: {},
-        startup: function(config) {
-            this.config = config;
+        currentConfig: null,
+        mapUpdating: false,
+        hashUpdating: false,
+        router: null,
+
+        startup: function(){
+
+            topic.subscribe( Router.TOPIC_CONFIG_LOADED,
+                             lang.hitch( this, this.initialize )
+            );
+            this.router = new Router();
+
+        },
+
+        initialize: function() {
+
+            this.config = this.router.config;
             this.mapClickMode = {
-                current: config.defaultMapClickMode,
-                defaultMode: config.defaultMapClickMode
+                current: this.config.defaultMapClickMode,
+                defaultMode: this.config.defaultMapClickMode
             };
+
             // simple feature detection. kinda like dojox/mobile without the overhead
             if (has('touch') && (has('ios') || has('android') || has('bb'))) {
                 has.add('mobile', true);
@@ -55,7 +77,29 @@ define([
                     has.add('tablet', true);
                 }
             }
+
+            this.initTitles();
             this.initPanes();
+
+        },
+        initTitles: function() {
+          var titles = lang.mixin( {
+                                      headerTitle: 'Configurable Viewer',
+                                      subHeaderTitle: 'make it your own',
+                                      pageTitle: 'Configurable Viewer CMV'
+                                   }, this.config.titles );
+
+            var headerTitleNode = dom.byId( 'headerTitleSpan' );
+            if ( headerTitleNode ) {
+                headerTitleNode.innerText = titles.headerTitle;
+            }
+
+            var subHeaderTitle = dom.byId( 'subHeaderTitleSpan' );
+            if ( subHeaderTitle ) {
+                subHeaderTitle.innerText = titles.subHeaderTitle;
+            }
+
+            document.title = titles.pageTitle;
         },
         initPanes: function() {
             var key, panes = this.config.panes || {};
@@ -131,10 +175,14 @@ define([
             this.panes.outer.resize();
         },
         initMap: function() {
+
             if (has('phone') && !this.config.mapOptionsinfoWindow) {
                 this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
             }
             this.map = new Map('mapCenter', this.config.mapOptions);
+
+            on( this.map, 'extent-change', lang.hitch( this, this.updateLocationHash ) );
+
             // create right-click menu
             this.mapRightClickMenu = new Menu({
                 targetNodeIds: [this.map.root],
@@ -142,16 +190,41 @@ define([
             });
             this.mapRightClickMenu.startup();
 
+
+
             if (this.config.mapOptions.basemap) {
                 this.map.on('load', lang.hitch(this, 'initLayers'));
             } else {
                 this.initLayers();
             }
+
             if (this.config.operationalLayers && this.config.operationalLayers.length > 0) {
                 on.once(this.map, 'layers-add-result', lang.hitch(this, 'initWidgets'));
             } else {
                 this.initWidgets();
             }
+
+        },
+        updateLocationHash: function( event ) {
+
+            if ( !this.mapUpdating ) {
+
+                this.hashUpdating = true;
+
+                var x = (event.extent.xmax + event.extent.xmin) / 2,
+                    y = (event.extent.ymax + event.extent.ymin) / 2;
+                var geographicLocation = webMercatorUtils.xyToLngLat( x, y );
+
+                var currentHash = hash().split( '/' );
+                currentHash[ 1 ] = this.currentConfig.replace( 'config/', '' );
+                currentHash[ 2 ] = geographicLocation[0];
+                currentHash[ 3 ] = geographicLocation[1];
+                currentHash[ 4 ] = this.map.getLevel();
+
+                hash( currentHash.join('/') );
+                this.hashUpdating = false;
+            }
+
         },
         initLayers: function(evt) {
             this.map.on('resize', function(evt) {
@@ -209,7 +282,9 @@ define([
                 slider: (layer.slider === false) ? false : true,
                 noLegend: layer.noLegend || false,
                 collapsed: layer.collapsed || false,
-                sublayerToggle: layer.sublayerToggle || false
+                sublayerToggle: layer.sublayerToggle || false,
+                type: layer.type,
+                url: layer.url
             });
             if (layer.type === 'feature') {
                 var options = {
@@ -220,6 +295,15 @@ define([
                 }
                 this.editorLayerInfos.push(options);
             }
+            //LayerControl custom LayerInfos array
+            this.layerControlLayerInfos.unshift({
+                layer: l,
+                type: layer.type,
+                title: layer.title,
+                controlOptions: lang.mixin({
+                    sublayers: true
+                }, layer.controlOptions)
+            });
             if (layer.type === 'dynamic' || layer.type === 'feature') {
                 var identifyLayerInfo = {
                     layer: l
@@ -385,7 +469,7 @@ define([
             // only proceed for valid widget types
             var widgetTypes = ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map'];
             if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
-                console.log('Widget type ' + widgetConfig.type + ' (' + widgetConfig.title + ') at position ' + position + ' is not supported.');
+                //console.log('Widget type ' + widgetConfig.type + ' (' + widgetConfig.title + ') at position ' + position + ' is not supported.');
                 return;
             }
 
@@ -435,7 +519,10 @@ define([
             if (options.identifyLayerInfos) {
                 options.layerInfos = this.identifyLayerInfos;
             }
-
+            //pass LayerControl LayerInfos array
+            if (options.layerControlLayerInfos) {
+                options.layerInfos = this.layerControlLayerInfos;
+            }
             // create the widget
             var pnl = options.parentWidget;
             if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
