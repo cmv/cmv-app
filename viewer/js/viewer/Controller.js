@@ -172,6 +172,14 @@ define([
 					}
 				}
 			}
+
+			// respond to media query changes
+			// matchMedia works in most browsers (http://caniuse.com/#feat=matchmedia)
+			if (window.matchMedia) {
+				window.matchMedia('(max-width: 991px)').addListener(lang.hitch(this, 'repositionSideBarButtons'));
+				window.matchMedia('(max-width: 767px)').addListener(lang.hitch(this, 'repositionSideBarButtons'));
+			}
+
 			this.panes.outer.resize();
 		},
 		initMap: function() {
@@ -363,7 +371,15 @@ define([
 			}
 		},
 
-		// extra management of splitter required when the buttons
+		repositionSideBarButtons: function () {
+			var btns = ['left', 'right', 'top', 'bottom'];
+			array.forEach(btns, lang.hitch(this, function (id) {
+				console.log(id);
+				this.positionSideBarToggle(id);
+			}));
+		},
+
+		// extra management of splitters required when the buttons
 		// are not in the center map pane
 		splitterStartDrag: function(id) {
 			var btn = this.collapseButtons[id];
@@ -436,7 +452,7 @@ define([
 			if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
 				this.handleError({
 					source: 'Controller',
-					error: 'Widget type "' + widgetConfig.type + '"" (' + widgetConfig.title + ') at position ' + position + ' is not supported.'
+					error: 'Widget type "' + widgetConfig.type + '" (' + widgetConfig.title + ') at position ' + position + ' is not supported.'
 				});
 				return;
 			}
