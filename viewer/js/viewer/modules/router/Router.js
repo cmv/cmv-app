@@ -1,5 +1,6 @@
 define( [
           'dojo/_base/declare',
+          'dojo/_base/array',
           'dojo/_base/lang',
           'dojo/hash',
           'dojo/on',
@@ -9,6 +10,7 @@ define( [
           'config/global'
         ],
         function( declare,
+                  array,
                   lang,
                   hash,
                   on,
@@ -167,7 +169,6 @@ define( [
 
                     var lng = this.hashParams.lng || null;
                     var lat = this.hashParams.lat || null;
-                    var zoom = this.hashParams.zoomLevel || null;
 
                     var center = config.mapOptions.center || [ lng,lat ];
                     var newLng = lng || center[0];
@@ -261,7 +262,7 @@ define( [
 
                     array.forEach( this.topicHandles, function( handle ) {
                         handle.remove();
-                    }, this )
+                    }, this );
 
                     array.forEach( this.eventHandles, function( handle ) {
                         handle.remove();

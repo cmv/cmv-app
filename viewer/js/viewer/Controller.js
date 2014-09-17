@@ -7,7 +7,6 @@ define([
            'dojo/dom-class',
            'dojo/on',
            'dojo/_base/array',
-           'dojo/router',
            'dojo/hash',
            'dojo/topic',
            'dijit/layout/BorderContainer',
@@ -24,7 +23,7 @@ define([
            'esri/dijit/PopupMobile',
            'dijit/Menu',
            'viewer/modules/router/Router'
-       ], function(declare, Map, dom, domStyle, domGeom, domClass, on, array, Router, hash, topic, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, webMercatorUtils, FloatingWidgetDialog, put, aspect, has, PopupMobile, Menu, Router) {
+       ], function(declare, Map, dom, domStyle, domGeom, domClass, on, array, hash, topic, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, webMercatorUtils, FloatingWidgetDialog, put, aspect, has, PopupMobile, Menu, Router) {
 
     return {
         legendLayerInfos: [],
