@@ -26,6 +26,7 @@ define([
 		editorLayerInfos: [],
 		identifyLayerInfos: [],
 		tocLayerInfos: [],
+		layerControlLayerInfos: [],
 		panes: {
 			left: {
 				id: 'sidebarLeft',
@@ -60,7 +61,7 @@ define([
 			this.initPanes();
 
 			if (config.isDebug) {
-                window.app = this; //dev only
+				window.app = this; //dev only
 			}
 		},
 		// add topics for subscribing and publishing
@@ -248,18 +249,29 @@ define([
 		},
 		initLayer: function(layer, Layer) {
 			var l = new Layer(layer.url, layer.options);
-			this.layers.unshift(l); // unshift instead of oush to keep layer ordering on map intact
-			this.legendLayerInfos.unshift({
+			this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
+			//Legend LayerInfos array
+			this.legendLayerInfos.unshift({ //unshift instead of push to keep layer ordering in legend intact
 				layer: l,
 				title: layer.title || null
 			});
-            this.tocLayerInfos.push({ //push because Legend and TOC need the layers in the opposite order
+			//TOC LayerInfos array
+			this.tocLayerInfos.push({ //push because TOC needs the layers in the opposite order
 				layer: l,
-                title: layer.title || null,
-                slider: (layer.slider === false) ? false : true,
-                noLegend: layer.noLegend || false,
-                collapsed: layer.collapsed || false,
-                sublayerToggle: layer.sublayerToggle || false
+				title: layer.title || null,
+				slider: (layer.slider === false) ? false : true,
+				noLegend: layer.noLegend || false,
+				collapsed: layer.collapsed || false,
+				sublayerToggle: layer.sublayerToggle || false
+			});
+			//LayerControl LayerInfos array
+			this.layerControlLayerInfos.unshift({ //unshift instead of push to keep layer ordering in LayerControl intact
+				layer: l,
+				type: layer.type,
+				title: layer.title,
+				controlOptions: lang.mixin({
+					sublayers: true
+				}, layer.layerControlLayerInfos)
 			});
 			if (layer.type === 'feature') {
 				var options = {
@@ -271,14 +283,15 @@ define([
 				this.editorLayerInfos.push(options);
 			}
 			if (layer.type === 'dynamic' || layer.type === 'feature') {
-				var identifyLayerInfo = {
-					layer: l
+				var idOptions = {
+					layer: l,
+					title: layer.title
 				};
 				if (layer.identifyLayerInfos) {
-					lang.mixin(identifyLayerInfo, layer.identifyLayerInfos);
+					lang.mixin(idOptions, layer.identifyLayerInfos);
 				}
-				if (identifyLayerInfo.include !== false) {
-					this.identifyLayerInfos.push(identifyLayerInfo);
+				if (idOptions.exclude !== true) {
+					this.identifyLayerInfos.push(idOptions);
 				}
 			}
 		},
@@ -475,21 +488,25 @@ define([
 			options.id = widgetConfig.id + '_widget';
 			options.parentWidget = widgetConfig.parentWidget;
 
+			//replace config map, layerInfos arrays, etc
 			if (options.map) {
 				options.map = this.map;
 			}
 			if (options.mapRightClickMenu) {
 				options.mapRightClickMenu = this.mapRightClickMenu;
 			}
-            if (options.mapClickMode) {
+			if (options.mapClickMode) {
                 options.mapClickMode = this.mapClickMode.current;
-            }
+			}
 			if (options.legendLayerInfos) {
 				options.layerInfos = this.legendLayerInfos;
 			}
 			if (options.tocLayerInfos) {
 				options.layerInfos = this.tocLayerInfos;
 			}
+            if (options.layerControlLayerInfos) {
+                options.layerInfos = this.layerControlLayerInfos;
+            }
 			if (options.editorLayerInfos) {
 				options.layerInfos = this.editorLayerInfos;
 			}
