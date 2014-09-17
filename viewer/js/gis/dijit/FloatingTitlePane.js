@@ -14,7 +14,7 @@ define([
 	'dojo/dom-attr',
 	'dojo/dom-class',
 	'xstyle/css!./FloatingTitlePane/css/FloatingTitlePane.css'
-], function(declare, TitlePane, on, lang, Moveable, aspect, topic, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass, css) {
+], function(declare, TitlePane, on, lang, Moveable, aspect, topic, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass) {
 	return declare([TitlePane], {
 		postCreate: function() {
 			if (this.canFloat) {
