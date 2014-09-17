@@ -3,7 +3,6 @@ define([
 	'dijit/_WidgetBase',
 	'dijit/_TemplatedMixin',
 	'dijit/_WidgetsInTemplateMixin',
-	'dijit/form/Button',
 	'dojo/_base/lang',
 	'dojo/_base/Color',
 	'esri/toolbars/draw',
@@ -18,12 +17,12 @@ define([
 	'esri/layers/FeatureLayer',
 	'dojo/topic',
 	'dojo/aspect',
-	'gis/dijit/_FloatingWidgetMixin',
+	'dijit/form/Button',
 	'xstyle/css!./Draw/css/Draw.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, topic, aspect, _FloatingWidgetMixin, css) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, topic, aspect) {
 
 	// main draw dijit
-	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin], {
+	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		widgetsInTemplate: true,
 		templateString: drawTemplate,
 		drawToolbar: null,
