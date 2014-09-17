@@ -380,7 +380,6 @@ define([
 		repositionSideBarButtons: function () {
 			var btns = ['left', 'right', 'top', 'bottom'];
 			array.forEach(btns, lang.hitch(this, function (id) {
-				console.log(id);
 				this.positionSideBarToggle(id);
 			}));
 		},
