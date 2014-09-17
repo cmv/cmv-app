@@ -252,17 +252,19 @@ define([
 					legendLayerInfos: true
 				}
 			},
-			TOC: {
+			layerControl: {
 				include: true,
-				id: 'toc',
+				id: 'layerControl',
 				type: 'titlePane',
-				path: 'gis/dijit/TOC',
+				path: 'gis/dijit/LayerControl',
 				title: 'Layers',
 				open: false,
-				position: 1,
+				position: 0,
 				options: {
 					map: true,
-					tocLayerInfos: true
+					layerControlLayerInfos: true,
+					vectorReorder: true,
+					overlayReorder: true
 				}
 			},
 			bookmarks: {
