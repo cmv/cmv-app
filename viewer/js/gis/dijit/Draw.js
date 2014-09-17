@@ -3,7 +3,6 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'dijit/form/Button',
     'dojo/_base/lang',
     'dojo/_base/Color',
     'esri/toolbars/draw',
@@ -16,9 +15,9 @@ define([
     'esri/symbols/SimpleLineSymbol',
     'esri/symbols/SimpleFillSymbol',
     'esri/layers/FeatureLayer',
-    'dojo/on',
+    'dijit/form/Button',
     'xstyle/css!./Draw/css/Draw.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, on, css) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer) {
 
     // main draw dijit
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {

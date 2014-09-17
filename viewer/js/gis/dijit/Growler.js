@@ -9,7 +9,7 @@ define([
     'dojo/dom-class',
     'dojo/topic',
     'xstyle/css!./Growler/css/Growler.css'
-], function(declare, _WidgetBase, _TemplatedMixin, lang, Style, domConstruct, fx, domClass, topic, css) {
+], function(declare, _WidgetBase, _TemplatedMixin, lang, Style, domConstruct, fx, domClass, topic) {
 
     // main growler dijit container
     var Growler = declare([_WidgetBase, _TemplatedMixin], {

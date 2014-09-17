@@ -8,12 +8,12 @@ define([
     'dojo/on',
     'dojo/_base/lang',
     'dojo/aspect',
-	'dijit/form/Button',
+	'dojo/text!./Help/templates/HelpDialog.html',
+    'dijit/form/Button',
 	'dijit/layout/TabContainer',
 	'dijit/layout/ContentPane',
-	'dojo/text!./Help/templates/HelpDialog.html',
 	'xstyle/css!./Help/css/Help.css'
-	], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin, domConstruct, on, lang, aspect, Button, TabContainer, ContentPane, template, css) {
+	], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin, domConstruct, on, lang, aspect, template) {
 
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin], {
         widgetsInTemplate: true,

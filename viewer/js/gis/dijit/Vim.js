@@ -11,9 +11,8 @@ define([
 	'dojo/cookie',
 	'dojo/json',
 	'dojo/_base/unload',
-	'dojo/_base/lang',
-	'esri/IdentityManager'
-], function(declare, kernel, cookie, JSON, baseUnload, lang, IdentityManager) {
+	'dojo/_base/lang'
+], function(declare, kernel, cookie, JSON, baseUnload, lang) {
 	return declare(null, {
 		constructor: function(idStateName) {
 			this.idStateName = idStateName || 'esri_jsapi_id_manager_data';

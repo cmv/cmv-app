@@ -6,15 +6,13 @@ define([
 	'dojo/cookie',
 	'dojo/_base/lang',
 	'xstyle/css!./Bookmarks/css/Bookmarks.css'
-], function(declare, _WidgetBase, Bookmarks, json, cookie, lang, css) {
+], function(declare, _WidgetBase, Bookmarks, json, cookie, lang) {
 
 	return declare([_WidgetBase], {
 		declaredClass: 'gis.digit.Bookmarks',
 		postCreate: function() {
 			this.inherited(arguments);
-
 			var bookmarks = this.bookmarks; // from the options passed in
-
 			this.bookmarkItems = cookie('bookmarkItems');
 			if (this.bookmarkItems === undefined) {
 				this.bookmarkItems = [];
