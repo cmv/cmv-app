@@ -4,7 +4,6 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'dojo/_base/lang',
-    'dijit/form/DropDownButton',
     'dijit/DropDownMenu',
     'dijit/MenuItem',
     'dojo/_base/array',
@@ -12,7 +11,7 @@ define([
     'dojo/text!./Basemaps/templates/Basemaps.html',
     'esri/dijit/BasemapGallery',
     'xstyle/css!./Basemaps/css/Basemaps.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownButton, DropDownMenu, MenuItem, array, functional, template, BasemapGallery, css) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownMenu, MenuItem, array, functional, template, BasemapGallery) {
 
     // main basemap widget
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
