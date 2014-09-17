@@ -6,7 +6,7 @@ define( [
           'dojo/router',
           'dojo/topic',
           'esri/geometry/webMercatorUtils',
-          'viewer/global'
+          'config/global'
         ],
         function( declare,
                   lang,
