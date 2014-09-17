@@ -1,28 +1,30 @@
 define([
-    'dojo/_base/declare',
-    'esri/map',
-    'dojo/dom',
-    'dojo/dom-style',
-    'dojo/dom-geometry',
-    'dojo/dom-class',
-    'dojo/on',
-    'dojo/_base/array',
-    'dojo/router',
-    'dojo/hash',
-    'dijit/layout/BorderContainer',
-    'dijit/layout/ContentPane',
-    'gis/dijit/FloatingTitlePane',
-    'dojo/_base/lang',
-    'dojo/text!./templates/mapOverlay.html',
-    'esri/IdentityManager',
-    'esri/geometry/webMercatorUtils',
-    'gis/dijit/FloatingWidgetDialog',
-    'put-selector',
-    'dojo/aspect',
-    'dojo/has',
-    'esri/dijit/PopupMobile',
-    'dijit/Menu'
-], function(declare, Map, dom, domStyle, domGeom, domClass, on, array, router, hash, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, webMercatorUtils, FloatingWidgetDialog, put, aspect, has, PopupMobile, Menu) {
+           'dojo/_base/declare',
+           'esri/map',
+           'dojo/dom',
+           'dojo/dom-style',
+           'dojo/dom-geometry',
+           'dojo/dom-class',
+           'dojo/on',
+           'dojo/_base/array',
+           'dojo/router',
+           'dojo/hash',
+           'dojo/topic',
+           'dijit/layout/BorderContainer',
+           'dijit/layout/ContentPane',
+           'gis/dijit/FloatingTitlePane',
+           'dojo/_base/lang',
+           'dojo/text!./templates/mapOverlay.html',
+           'esri/IdentityManager',
+           'esri/geometry/webMercatorUtils',
+           'gis/dijit/FloatingWidgetDialog',
+           'put-selector',
+           'dojo/aspect',
+           'dojo/has',
+           'esri/dijit/PopupMobile',
+           'dijit/Menu',
+           'viewer/modules/router/Router'
+       ], function(declare, Map, dom, domStyle, domGeom, domClass, on, array, Router, hash, topic, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, webMercatorUtils, FloatingWidgetDialog, put, aspect, has, PopupMobile, Menu, Router) {
 
     return {
         legendLayerInfos: [],
@@ -48,114 +50,23 @@ define([
         currentConfig: null,
         mapUpdating: false,
         hashUpdating: false,
+        router: null,
 
         startup: function(){
 
-            router.register( '/:config/:lng/:lat/:zoom', lang.hitch( this, this.onHashChange ) );
-            router.register( '/:config/:lng/:lat', lang.hitch( this, this.onHashChange ) );
-            router.register( '/:config', lang.hitch( this, this.onHashChange ) );
-            router.startup();
-
-            if ( hash() !== '' ) {
-                router.go( hash() );
-            } else {
-                this.loadConfigFromUrl();
-            }
+            topic.subscribe( Router.TOPIC_CONFIG_LOADED,
+                             lang.hitch( this, this.initialize )
+            );
+            this.router = new Router();
 
         },
-        onHashChange: function ( event ) {
 
-            var config = this.getConfig( event );
+        initialize: function() {
 
-            if ( this.currentConfig && this.currentConfig !== config ) {
-                location.reload();
-            } else if ( this.currentConfig && this.currentConfig === config ) {
-                this.setCenterAndZoom( event );
-            } else {
-                this.loadConfigFromRoute( event );
-
-            }
-
-        },
-        getConfig: function ( routeEvent ) {
-
-            var config;
-
-            if ( routeEvent ) {
-
-                config = 'viewer';
-                config = routeEvent.params.config || config;
-                config  = 'config/' + config;
-
-            } else {
-
-                config = 'config/viewer';
-                var s = window.location.search,
-                    q = s.match(/config=([^&]*)/i);
-                if (q && q.length > 0) {
-                    config = q[1];
-                    if(config.indexOf('/') < 0) {
-                        config = 'config/' + config;
-                    }
-                }
-
-            }
-
-            return config;
-        },
-        loadConfigFromRoute: function ( routeEvent ) {
-
-            var config = this.getConfig( routeEvent );
-            this.currentConfig = config;
-
-            var lng = routeEvent.params.lng || null;
-            var lat = routeEvent.params.lat || null;
-            var zoom = routeEvent.params.zoom || null;
-
-            require( [ config ], lang.hitch( this, function( lng, lat, zoom, config ) {
-
-                var center = config.mapOptions.center || [ lng,lat ];
-                var newLng = lng || center[0];
-                var newLat = lat || center[1];
-                config.mapOptions.center = [ newLng, newLat ];
-
-                var newZoom = zoom || config.mapOptions.zoom;
-                config.mapOptions.zoom = newZoom;
-
-                this.initialize( config );
-
-            }, lng, lat, zoom ) );
-
-        },
-        loadConfigFromUrl: function () {
-
-            var config = this.getConfig( null );
-            this.currentConfig = config;
-
-            require( [ config ], lang.hitch( this, function( config ) {
-                this.initialize( config );
-            } ) );
-
-        },
-        setCenterAndZoom: function ( routeEvent ) {
-
-            if ( !this.hashUpdating ) {
-
-                this.mapUpdating = true;
-                var zoom = routeEvent.params.zoom || this.map.getLevel();
-
-                this.map.centerAndZoom([routeEvent.params.lng, routeEvent.params.lat], zoom).then( lang.hitch( this, function () {
-                    this.mapUpdating = false;
-                }));
-
-            }
-        },
-        initialize: function(config) {
-
-            this.config = config;
+            this.config = this.router.config;
             this.mapClickMode = {
-                current: config.defaultMapClickMode,
-                defaultMode: config.defaultMapClickMode
+                current: this.config.defaultMapClickMode,
+                defaultMode: this.config.defaultMapClickMode
             };
 
             // simple feature detection. kinda like dojox/mobile without the overhead
