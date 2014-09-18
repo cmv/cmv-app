@@ -20,7 +20,7 @@ define([
 	'dojo/topic',
 	'esri/dijit/PopupMobile',
 	'dijit/Menu'
-], function(declare, Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
+], function (declare, Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
 
 	return {
 		legendLayerInfos: [],
@@ -43,7 +43,7 @@ define([
 			}
 		},
 		collapseButtons: {},
-		startup: function(config) {
+		startup: function (config) {
 			this.config = config;
 			this.mapClickMode = {
 				current: config.defaultMapClickMode,
@@ -98,26 +98,26 @@ define([
 
 		},
 		// set titles (if any)
-		addTitles: function() {
+		addTitles: function () {
 			var titles = this.config.titles;
 			if (titles.header) {
-	            var headerTitleNode = dom.byId( 'headerTitleSpan' );
-	            if ( headerTitleNode ) {
-	                headerTitleNode.innerText = titles.header;
-	            }
+				var headerTitleNode = dom.byId('headerTitleSpan');
+				if (headerTitleNode) {
+					headerTitleNode.innerText = titles.header;
+				}
 			}
 			if (titles.subHeader) {
-	            var subHeaderTitle = dom.byId( 'subHeaderTitleSpan' );
-    	        if ( subHeaderTitle ) {
-        	        subHeaderTitle.innerText = titles.subHeader;
-            	}
-            }
+				var subHeaderTitle = dom.byId('subHeaderTitleSpan');
+				if (subHeaderTitle) {
+					subHeaderTitle.innerText = titles.subHeader;
+				}
+			}
 			if (titles.pageTitle) {
-	            document.title = titles.pageTitle;
-	        }
-        },
+				document.title = titles.pageTitle;
+			}
+		},
 		// setup all the sidebar panes
-		initPanes: function() {
+		initPanes: function () {
 			var key, panes = this.config.panes || {};
 			for (key in this.panes) {
 				if (this.panes.hasOwnProperty(key)) {
@@ -201,7 +201,7 @@ define([
 
 			this.panes.outer.resize();
 		},
-		initMap: function() {
+		initMap: function () {
 			if (has('phone') && !this.config.mapOptionsinfoWindow) {
 				this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
 			}
@@ -217,10 +217,10 @@ define([
 				this.initWidgets();
 			}
 		},
-		initLayers: function(evt) {
-			this.map.on('resize', function(evt) {
+		initLayers: function () {
+			this.map.on('resize', function (evt) {
 				var pnt = evt.target.extent.getCenter();
-				setTimeout(function() {
+				setTimeout(function () {
 					evt.target.centerAt(pnt);
 				}, 100);
 			});
@@ -242,7 +242,7 @@ define([
 			};
 			// loading all the required modules first ensures the layer order is maintained
 			var modules = [];
-			array.forEach(this.config.operationalLayers, function(layer) {
+			array.forEach(this.config.operationalLayers, function (layer) {
 				var type = layerTypes[layer.type];
 				if (type) {
 					modules.push('esri/layers/' + type + 'Layer');
@@ -253,8 +253,8 @@ define([
 					});
 				}
 			}, this);
-			require(modules, lang.hitch(this, function() {
-				array.forEach(this.config.operationalLayers, function(layer) {
+			require(modules, lang.hitch(this, function () {
+				array.forEach(this.config.operationalLayers, function (layer) {
 					var type = layerTypes[layer.type];
 					if (type) {
 						require(['esri/layers/' + type + 'Layer'], lang.hitch(this, 'initLayer', layer));
@@ -263,7 +263,7 @@ define([
 				this.map.addLayers(this.layers);
 			}));
 		},
-		initLayer: function(layer, Layer) {
+		initLayer: function (layer, Layer) {
 			var l = new Layer(layer.url, layer.options);
 			this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
 			//Legend LayerInfos array
@@ -285,7 +285,7 @@ define([
 				layer: l,
 				type: layer.type,
 				title: layer.title,
-				controlOptions: layer.controlOptions
+				controlOptions: layer.layerControlLayerInfos
 			});
 			if (layer.type === 'feature') {
 				var options = {
@@ -309,7 +309,7 @@ define([
 				}
 			}
 		},
-		initWidgets: function(evt) {
+		initWidgets: function () {
 			var widgets = [],
 				paneWidgets;
 
@@ -317,42 +317,42 @@ define([
 				if (this.config.widgets.hasOwnProperty(key)) {
 					var widget = lang.clone(this.config.widgets[key]);
 					if (widget.include) {
-						widget.position = ('undefined' !== typeof(widget.position)) ? widget.position : 10000;
+						widget.position = ('undefined' !== typeof (widget.position)) ? widget.position : 10000;
 						widgets.push(widget);
 					}
 				}
 			}
 			for (var pane in this.panes) {
 				if (this.panes.hasOwnProperty(pane) && (pane !== 'outer' || pane !== 'center')) {
-					paneWidgets = array.filter(widgets, function(widget) {
+					paneWidgets = array.filter(widgets, function (widget) {
 						return (widget.placeAt && widget.placeAt === pane);
 					});
-					paneWidgets.sort(function(a, b) {
+					paneWidgets.sort(function (a, b) {
 						return a.position - b.position;
 					});
-					array.forEach(paneWidgets, function(widget, i) {
+					array.forEach(paneWidgets, function (widget, i) {
 						this.widgetLoader(widget, i);
 					}, this);
 				}
 			}
-			paneWidgets = array.filter(widgets, function(widget) {
+			paneWidgets = array.filter(widgets, function (widget) {
 				return !widget.placeAt;
 			});
-			paneWidgets.sort(function(a, b) {
+			paneWidgets.sort(function (a, b) {
 				return a.position - b.position;
 			});
 
-			array.forEach(paneWidgets, function(widget, i) {
+			array.forEach(paneWidgets, function (widget, i) {
 				this.widgetLoader(widget, i);
 			}, this);
 		},
-		togglePane: function(id, show) {
+		togglePane: function (id, show) {
 			if (!this.panes[id]) {
 				return;
 			}
 			var domNode = this.panes[id].domNode;
 			if (domNode) {
-				var disp = (show && typeof(show) === 'string') ? show : (domStyle.get(domNode, 'display') === 'none') ? 'block' : 'none';
+				var disp = (show && typeof (show) === 'string') ? show : (domStyle.get(domNode, 'display') === 'none') ? 'block' : 'none';
 				domStyle.set(domNode, 'display', disp);
 				if (this.panes[id]._splitterWidget) { // show/hide the splitter, if found
 					domStyle.set(this.panes[id]._splitterWidget.domNode, 'display', disp);
@@ -363,7 +363,7 @@ define([
 				}
 			}
 		},
-		positionSideBarToggle: function(id) {
+		positionSideBarToggle: function (id) {
 			var pane = this.panes[id];
 			var btn = this.collapseButtons[id];
 			if (!pane || !btn) {
@@ -400,24 +400,24 @@ define([
 
 		// extra management of splitters required when the buttons
 		// are not in the center map pane
-		splitterStartDrag: function(id) {
+		splitterStartDrag: function (id) {
 			var btn = this.collapseButtons[id];
 			domStyle.set(btn, 'display', 'none');
 		},
-		splitterStopDrag: function(id) {
+		splitterStopDrag: function (id) {
 			this.positionSideBarToggle(id);
 		},
 
-		_createTitlePaneWidget: function(parentId, title, position, open, canFloat, placeAt) {
+		_createTitlePaneWidget: function (parentId, title, position, open, canFloat, placeAt) {
 			var tp, options = {
-				title: title || 'Widget',
-				open: open || false,
-				canFloat: canFloat || false
-			};
+					title: title || 'Widget',
+					open: open || false,
+					canFloat: canFloat || false
+				};
 			if (parentId) {
 				options.id = parentId;
 			}
-			if (typeof(placeAt) === 'string') {
+			if (typeof (placeAt) === 'string') {
 				placeAt = this.panes[placeAt];
 			}
 			if (!placeAt) {
@@ -430,7 +430,7 @@ define([
 			}
 			return tp;
 		},
-		_createFloatingWidget: function(parentId, title) {
+		_createFloatingWidget: function (parentId, title) {
 			var options = {
 				title: title
 			};
@@ -441,11 +441,11 @@ define([
 			fw.startup();
 			return fw;
 		},
-		_createContentPaneWidget: function(parentId, title, className, region, placeAt) {
+		_createContentPaneWidget: function (parentId, title, className, region, placeAt) {
 			var cp, options = {
-				title: title,
-				region: region || 'center'
-			};
+					title: title,
+					region: region || 'center'
+				};
 			if (className) {
 				options.className = className;
 			}
@@ -454,7 +454,7 @@ define([
 			}
 			if (!placeAt) {
 				placeAt = this.panes.sidebar;
-			} else if (typeof(placeAt) === 'string') {
+			} else if (typeof (placeAt) === 'string') {
 				placeAt = this.panes[placeAt];
 			}
 			if (placeAt) {
@@ -463,7 +463,7 @@ define([
 			}
 			return cp;
 		},
-		widgetLoader: function(widgetConfig, position) {
+		widgetLoader: function (widgetConfig, position) {
 			var parentId, pnl;
 
 			// only proceed for valid widget types
@@ -490,13 +490,13 @@ define([
 			}
 
 			// 2 ways to use require to accommodate widgets that may have an optional separate configuration file
-			if (typeof(widgetConfig.options) === 'string') {
+			if (typeof (widgetConfig.options) === 'string') {
 				require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
 			} else {
 				require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
 			}
 		},
-		createWidget: function(widgetConfig, options, WidgetClass) {
+		createWidget: function (widgetConfig, options, WidgetClass) {
 			// set any additional options
 			options.id = widgetConfig.id + '_widget';
 			options.parentWidget = widgetConfig.parentWidget;
@@ -517,7 +517,7 @@ define([
 				options.mapRightClickMenu = this.mapRightClickMenu;
 			}
 			if (options.mapClickMode) {
-                options.mapClickMode = this.mapClickMode.current;
+				options.mapClickMode = this.mapClickMode.current;
 			}
 			if (options.legendLayerInfos) {
 				options.layerInfos = this.legendLayerInfos;
@@ -525,9 +525,9 @@ define([
 			if (options.tocLayerInfos) {
 				options.layerInfos = this.tocLayerInfos;
 			}
-            if (options.layerControlLayerInfos) {
-                options.layerInfos = this.layerControlLayerInfos;
-            }
+			if (options.layerControlLayerInfos) {
+				options.layerInfos = this.layerControlLayerInfos;
+			}
 			if (options.editorLayerInfos) {
 				options.layerInfos = this.editorLayerInfos;
 			}
@@ -551,9 +551,9 @@ define([
 			}
 		},
 		//centralized error handler
-		handleError: function(options) {
+		handleError: function (options) {
 			if (this.config.isDebug) {
-				if (typeof(console) === 'object') {
+				if (typeof (console) === 'object') {
 					for (var option in options) {
 						if (options.hasOwnProperty(option)) {
 							console.log(option, options[option]);
