@@ -34,7 +34,10 @@ define([
         overlayLabel: false,
         vectorReorder: false,
         vectorLabel: false,
-        swipe: false,
+        noLegend: null,
+        noZoom: null,
+        noTransparency: null,
+        swipe: null,
         fontAwesome: true,
         fontAwesomeUrl: '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', //4.2.0 looks funny @ 16px?
         swiperButtonStyle: 'position:absolute;top:20px;left:120px;z-index:50;',
@@ -137,7 +140,14 @@ define([
                 controller: this,
                 layer: layerInfo.layer,
                 layerTitle: layerInfo.title,
-                controlOptions: layerInfo.controlOptions || {}
+                controlOptions: lang.mixin({
+                    noLegend: null,
+                    noZoom: null,
+                    noTransparency: null,
+                    swipe: null,
+                    expanded: false,
+                    sublayers: true
+                }, layerInfo.controlOptions)
             });
             layerControl.startup();
             if (this.separated) {

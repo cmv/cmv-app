@@ -42,7 +42,7 @@ define([
                 menu.addChild(new MenuSeparator());
             }
             //zoom to layer
-            if (controlOptions.noZoom !== true || (controller.noZoom === true && controlOptions.noZoom === false)) {
+            if ((controlOptions.noZoom !== true && controller.noZoom !== true) || (controller.noZoom === true && controlOptions.noZoom === false)) {
                 menu.addChild(new MenuItem({
                     label: 'Zoom to Layer',
                     onClick: function() {
@@ -51,14 +51,14 @@ define([
                 }));
             }
             //transparency
-            if (controlOptions.noTransparency !== true || (controller.noTransparency === true && controlOptions.noTransparency === false)) {
+            if ((controlOptions.noTransparency !== true &&  controller.noTransparency !== true) || (controller.noTransparency === true && controlOptions.noTransparency === false)) {
                 menu.addChild(new Transparency({
                     label: 'Transparency',
                     layer: layer
                 }));
             }
             //layer swipe
-            if (controller.swipe === true || (controller.swipe === false && controlOptions.swipe === true)) {
+            if (controlOptions.swipe === true || (controller.swipe === true && controlOptions.swipe !== false)) {
                 var swipeMenu = new Menu();
                 swipeMenu.addChild(new MenuItem({
                     label: 'Vertical',
@@ -79,7 +79,7 @@ define([
             }
             //if last child is a separator remove it
             var lastChild = menu.getChildren()[menu.getChildren().length - 1];
-            if (lastChild.isInstanceOf(MenuSeparator)) {
+            if (lastChild && lastChild.isInstanceOf(MenuSeparator)) {
                 menu.removeChild(lastChild);
             }
         }

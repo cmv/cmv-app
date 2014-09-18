@@ -269,9 +269,9 @@ define([
 				options: {
 					map: true,
 					layerControlLayerInfos: true,
-					separated: true,
-					vectorReorder: true,
-					overlayReorder: true
+                    separated: true,
+                    vectorReorder: true,
+                    overlayReorder: true
 				}
 			},
 			bookmarks: {
