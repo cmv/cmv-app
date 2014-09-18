@@ -202,7 +202,7 @@ define([
 			this.panes.outer.resize();
 		},
 		initMap: function () {
-			if (has('phone') && !this.config.mapOptionsinfoWindow) {
+			if (has('phone') && !this.config.mapOptions.infoWindow) {
 				this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
 			}
 			this.map = new Map('mapCenter', this.config.mapOptions);
