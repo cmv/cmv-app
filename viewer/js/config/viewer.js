@@ -115,7 +115,7 @@ define([
 				visible: true,
 				imageParameters: imageParameters
 			},
-            controlOptions: {
+            layerControlLayerInfos: {
                 swipe: true
             }
 		}],
