@@ -206,13 +206,6 @@ define([
 				this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
 			}
 			this.map = new Map('mapCenter', this.config.mapOptions);
-			// create right-click menu
-			this.mapRightClickMenu = new Menu({
-				targetNodeIds: [this.map.root],
-				selector: '.layersDiv' // restrict to map only
-			});
-			this.mapRightClickMenu.startup();
-
 			if (this.config.mapOptions.basemap) {
 				this.map.on('load', lang.hitch(this, 'initLayers'));
 			} else {
@@ -515,6 +508,14 @@ define([
 				options.map = this.map;
 			}
 			if (options.mapRightClickMenu) {
+				// create right-click menu
+				if (!this.mapRightClickMenu) {
+					this.mapRightClickMenu = new Menu({
+						targetNodeIds: [this.map.root],
+						selector: '.layersDiv' // restrict to map only
+					});
+					this.mapRightClickMenu.startup();
+				}
 				options.mapRightClickMenu = this.mapRightClickMenu;
 			}
 			if (options.mapClickMode) {
