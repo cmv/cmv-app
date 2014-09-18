@@ -237,10 +237,13 @@ define([
                     }), function(r) {
                         map.setExtent(r[0], true);
                     }, function(e) {
-                        console.log(e);
+                        //console.log(e);
                     });
                 } else {
-                    console.log('LayerControl _zoomToLayer::esriConfig.defaults.geometryService is not set');
+                    topic.publish('viewer/handleError', {
+                        source: 'LayerControl._zoomToLayer',
+                        error: 'esriConfig.defaults.geometryService is not set'
+                    });
                 }
             }
         },
