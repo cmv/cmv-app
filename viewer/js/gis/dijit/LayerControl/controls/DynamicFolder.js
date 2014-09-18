@@ -1,6 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
     'dojo/on',
     'dojo/dom-class',
     'dojo/dom-style',
@@ -12,6 +13,7 @@ define([
 ], function(
     declare,
     lang,
+    array,
     on,
     domClass,
     domStyle,
@@ -28,7 +30,7 @@ define([
         templateString: folderTemplate,
         postCreate: function() {
             this.inherited(arguments);
-            if (this.folderInfo.defaultVisibility) {
+            if (array.indexOf(this.control.layer.visibleLayers, this.folderInfo.id) !== -1) {
                 domClass.remove(this.checkNode, 'fa-square-o');
                 domClass.add(this.checkNode, 'fa fa-check-square-o');
                 domAttr.set(this.checkNode, 'data-checked', 'checked');
