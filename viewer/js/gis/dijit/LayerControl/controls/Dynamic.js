@@ -14,15 +14,11 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_Contained',
-    'dijit/Menu',
-    'dijit/MenuItem',
-    'dijit/PopupMenuItem',
-    'dijit/MenuSeparator',
     'esri/request',
-    'gis/dijit/LayerControl/controls/DynamicSublayer',
-    'gis/dijit/LayerControl/controls/DynamicFolder',
-    'dojo/text!./templates/Control.html',
-    'gis/dijit/LayerControl/plugins/Transparency'
+    './../plugins/LayerMenu',
+    './DynamicSublayer',
+    './DynamicFolder',
+    'dojo/text!./templates/Control.html'
 ], function (
     declare,
     lang,
@@ -39,32 +35,28 @@ define([
     WidgetBase,
     TemplatedMixin,
     Contained,
-    Menu,
-    MenuItem,
-    PopupMenuItem,
-    MenuSeparator,
     esriRequest,
+    LayerMenu,
     DynamicSublayer,
     DynamicFolder,
-    controlTemplate,
-    Transparency
+    controlTemplate
 ) {
-    'use strict';
     return declare([WidgetBase, TemplatedMixin, Contained], {
-        templateString: controlTemplate,
+        controller: null,
+        layer: null,
         layerTitle: 'Layer Title',
-        _layerType: 'overlay', //for reoredering
+        controlOptions: null,
+        // ^args
+        templateString: controlTemplate,
+        layerMenu: null,
+        _layerType: 'overlay',
         _scaleRangeHandler: null,
         _expandClickHandler: null,
-        _sublayerControls: [], //array of sublayer controls
-        layerMenu: null,
-        _reorderUp: null, //reorder move up menu item
-        _reorderDown: null, //reorder move down menu item
-        constructor: function(options) {
-            options = options || {};
-            declare.safeMixin(this, options);
-        },
+        _sublayerControls: [],
+        _reorderUp: null, //used by LayerMenu
+        _reorderDown: null, //used by LayerMenu
         postCreate: function() {
+            this.inherited(arguments);
             if (!this.controller) {
                 topic.publish('viewer/handleError', {
                     source: 'LayerControl/Dynamic',
@@ -141,7 +133,13 @@ define([
                 this.expandClickNode.click();
             }
             //layer menu
-            this._createMenu(layer);
+            this.layerMenu = new LayerMenu({
+                control: this,
+                contextMenuForWindow: false,
+                targetNodeIds: [this.labelNode],
+                leftClickToOpen: true
+            });
+            this.layerMenu.startup();
             //if layer has scales set
             if (layer.minScale !== 0 || layer.maxScale !== 0) {
                 this._checkboxScaleRange();
@@ -224,79 +222,9 @@ define([
             //create legend
             this._createLegend(layer);
         },
-        //create the layer control menu
-        _createMenu: function(layer) {
-            this.layerMenu = new Menu({
-                contextMenuForWindow: false,
-                targetNodeIds: [this.labelNode],
-                leftClickToOpen: true
-            });
-            var menu = this.layerMenu,
-                controlOptions = this.controlOptions;
-            //reorder menu items
-            if (this.controller.overlayReorder) {
-                this._reorderUp = new MenuItem({
-                    label: 'Move Up',
-                    onClick: lang.hitch(this, function() {
-                        this.controller._moveUp(this);
-                    })
-                });
-                menu.addChild(this._reorderUp);
-                this._reorderDown = new MenuItem({
-                    label: 'Move Down',
-                    onClick: lang.hitch(this, function() {
-                        this.controller._moveDown(this);
-                    })
-                });
-                menu.addChild(this._reorderDown);
-                menu.addChild(new MenuSeparator());
-            }
-            //zoom to layer
-            if (controlOptions.noZoom !== true) {
-                menu.addChild(new MenuItem({
-                    label: 'Zoom to Layer',
-                    onClick: lang.hitch(this, function() {
-                        this.controller._zoomToLayer(layer);
-                    })
-                }));
-            }
-            //transparency
-            if (controlOptions.noTransparency !== true) {
-                menu.addChild(new Transparency({
-                    label: 'Transparency',
-                    layer: layer
-                }));
-            }
-            //layer swipe
-            if (controlOptions.noSwipe !== true) {
-                var swipeMenu = new Menu();
-                swipeMenu.addChild(new MenuItem({
-                    label: 'Vertical',
-                    onClick: lang.hitch(this, function () {
-                        this.controller._swipeLayer(layer, 'vertical');
-                    })
-                }));
-                swipeMenu.addChild(new MenuItem({
-                    label: 'Horizontal',
-                    onClick: lang.hitch(this, function () {
-                        this.controller._swipeLayer(layer, 'horizontal');
-                    })
-                }));
-                menu.addChild(new PopupMenuItem({
-                    label: 'Layer Swipe',
-                    popup: swipeMenu
-                }));
-            }
-            menu.startup();
-            //if last child is a separator remove it
-            var lastChild = menu.getChildren()[menu.getChildren().length - 1];
-            if (lastChild.isInstanceOf(MenuSeparator)) {
-                menu.removeChild(lastChild);
-            }
-        },
         //create legend
         _createLegend: function(layer) {
-            if (this.controlOptions.noLegend === true) {
+            if ((this.controlOptions.noLegend === true || this.controller.noLegend === true) && (this.controller.noLegend === true && this.controlOptions.noLegend !== false)) {
                 this._noLegend();
                 return;
             }
@@ -409,12 +337,15 @@ define([
                     setLayers.splice(array.indexOf(setLayers, info.id), 1);
                 }
             });
-            if (setLayers.length) {
-                layer.setVisibleLayers(setLayers);
-            } else {
-                layer.setVisibleLayers([-1]);
+            if (!setLayers.length) {
+                setLayers.push(-1);
             }
+            layer.setVisibleLayers(setLayers);
             layer.refresh();
+            topic.publish('layerControl/setVisibleLayers', {
+                id: layer.id,
+                visibleLayers: setLayers
+            });
         },
         //check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function() {

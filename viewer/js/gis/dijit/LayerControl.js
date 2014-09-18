@@ -11,7 +11,6 @@ define([
     'dijit/form/Button',
     'esri/tasks/ProjectParameters',
     'esri/config',
-    //the css
     'xstyle/css!./LayerControl/css/LayerControl.css'
 ], function(
     declare,
@@ -27,12 +26,23 @@ define([
     ProjectParameters,
     esriConfig
 ) {
-    'use strict';
     return declare([WidgetBase, Container], {
+        map: null,
+        layerInfos: [],
+        separated: false,
+        overlayReorder: false,
+        overlayLabel: false,
+        vectorReorder: false,
+        vectorLabel: false,
+        swipe: false,
+        fontAwesome: true,
+        fontAwesomeUrl: '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', //4.2.0 looks funny @ 16px?
+        swiperButtonStyle: 'position:absolute;top:20px;left:120px;z-index:50;',
+        // ^args
         baseClass: 'layerControlDijit',
-        _vectorContainer: null, //vector layer control container
-        _overlayContainer: null, //overlay layer control container
-        _swiper: null, //layer swipe widget
+        _vectorContainer: null,
+        _overlayContainer: null,
+        _swiper: null,
         _swipeLayerToggleHandle: null,
         _controls: {
             dynamic: 'gis/dijit/LayerControl/controls/Dynamic',
@@ -49,20 +59,9 @@ define([
                 });
                 return;
             }
-            declare.safeMixin(this, {
-                map: null,
-                layerInfos: [],
-                separated: true,
-                overlayReorder: false,
-                overlayLabel: 'Map Overlays',
-                vectorReorder: false,
-                vectorLabel: 'Feature Layers',
-                fontAwesome: true,
-                fontAwesomeUrl: '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', //4.2.0 looks funny @ 16px?
-                swiperButtonStyle: 'position:absolute;top:20px;left:120px;z-index:50;'
-            }, options);
         },
         postCreate: function() {
+            this.inherited(arguments);
             if (this.separated) {
                 var ControlContainer = declare([WidgetBase, Container]);
                 //vector layer label
@@ -180,14 +179,14 @@ define([
             if (control._layerType === 'overlay') {
                 if (control.getNextSibling()) {
                     index = array.indexOf(this.map.layerIds, id);
-                    this.map.reorderLayer(id, index + 1);
+                    this.map.reorderLayer(id, index - 1);
                     this._overlayContainer.containerNode.insertBefore(node, node.nextSibling.nextSibling);
                     this._checkReorder();
                 }
             } else if (control._layerType === 'vector') {
                 if (control.getNextSibling()) {
                     index = array.indexOf(this.map.graphicsLayerIds, id);
-                    this.map.reorderLayer(id, index + 1);
+                    this.map.reorderLayer(id, index - 1);
                     this._vectorContainer.containerNode.insertBefore(node, node.nextSibling.nextSibling);
                     this._checkReorder();
                 }

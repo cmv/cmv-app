@@ -111,7 +111,10 @@ define([
 				opacity: 1.0,
 				visible: true,
 				imageParameters: imageParameters
-			}
+			},
+            controlOptions: {
+                swipe: true
+            }
 		}],
 		// set include:true to load. For titlePane type set position the the desired order in the sidebar
 		widgets: {
@@ -263,6 +266,7 @@ define([
 				options: {
 					map: true,
 					layerControlLayerInfos: true,
+					separated: true,
 					vectorReorder: true,
 					overlayReorder: true
 				}
