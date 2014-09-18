@@ -18,7 +18,7 @@ define([
 
 	return {
 		// used for debugging your app
-		isDebug: true,
+		isDebug: false,
 
 		//default mapClick mode, mapClickMode lets widgets know what mode the map is in to avoid multipult map click actions from taking place (ie identify while drawing).
 		defaultMapClickMode: 'identify',
