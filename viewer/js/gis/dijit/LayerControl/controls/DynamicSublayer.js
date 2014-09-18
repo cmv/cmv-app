@@ -21,17 +21,14 @@ define([
     TemplatedMixin,
     sublayerTemplate
 ) {
-    'use strict';
     return declare([WidgetBase, TemplatedMixin], {
-        templateString: sublayerTemplate,
         control: null,
         sublayerInfo: null,
+        // ^args
+        templateString: sublayerTemplate,
         _expandClickHandler: null,
-        constructor: function(options) {
-            options = options || {};
-            lang.mixin(this, options);
-        },
         postCreate: function() {
+            this.inherited(arguments);
             if (this.sublayerInfo.defaultVisibility) {
                 domClass.remove(this.checkNode, 'fa-square-o');
                 domClass.add(this.checkNode, 'fa fa-check-square-o');

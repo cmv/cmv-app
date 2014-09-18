@@ -21,16 +21,13 @@ define([
     TemplatedMixin,
     folderTemplate
 ) {
-    'use strict';
     return declare([WidgetBase, TemplatedMixin], {
-        templateString: folderTemplate,
         control: null,
         folderInfo: null,
-        constructor: function(options) {
-            options = options || {};
-            lang.mixin(this, options);
-        },
+        // ^args
+        templateString: folderTemplate,
         postCreate: function() {
+            this.inherited(arguments);
             if (this.folderInfo.defaultVisibility) {
                 domClass.remove(this.checkNode, 'fa-square-o');
                 domClass.add(this.checkNode, 'fa fa-check-square-o');

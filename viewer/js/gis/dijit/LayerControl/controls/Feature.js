@@ -12,11 +12,7 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_Contained',
-    'dijit/Menu',
-    'dijit/MenuItem',
-    'dijit/PopupMenuItem',
-    'dijit/MenuSeparator',
-    'gis/dijit/LayerControl/plugins/Transparency',
+    './../plugins/LayerMenu',
     'dojo/text!./templates/Control.html'
 ], function (
     declare,
@@ -32,27 +28,25 @@ define([
     WidgetBase,
     TemplatedMixin,
     Contained,
-    Menu,
-    MenuItem,
-    PopupMenuItem,
-    MenuSeparator,
-    Transparency,
+    LayerMenu,
     controlTemplate
 ) {
-    'use strict';
     return declare([WidgetBase, TemplatedMixin, Contained], {
-        templateString: controlTemplate,
+        controller: null,
+        layer: null,
         layerTitle: 'Layer Title',
-        _layerType: 'vector', //for reoredering
+        controlOptions: null,
+        // ^args
+        templateString: controlTemplate,
+        layerMenu: null,
+        _layerType: 'vector',
         _scaleRangeHandler: null,
         _expandClickHandler: null,
         _surfaceDims: [20, 20],
-        layerMenu: null,
-        constructor: function(options) {
-            options = options || {};
-            declare.safeMixin(this, options);
-        },
+        _reorderUp: null, //used by LayerMenu
+        _reorderDown: null, //used by LayerMenu
         postCreate: function() {
+            this.inherited(arguments);
             if (!this.controller) {
                 topic.publish('viewer/handleError', {
                     source: 'LayerControl/Feature',
@@ -122,7 +116,13 @@ define([
                 this.expandClickNode.click();
             }
             //layer menu
-            this._createMenu(layer);
+            this.layerMenu = new LayerMenu({
+                control: this,
+                contextMenuForWindow: false,
+                targetNodeIds: [this.labelNode],
+                leftClickToOpen: true
+            });
+            this.layerMenu.startup();
             //legend
             this._createLegend(layer);
             //if layer has scales set
@@ -158,79 +158,9 @@ define([
                 }
             }));
         },
-        //create the layer control menu
-        _createMenu: function(layer) {
-            this.layerMenu = new Menu({
-                contextMenuForWindow: false,
-                targetNodeIds: [this.labelNode],
-                leftClickToOpen: true
-            });
-            var menu = this.layerMenu,
-                controlOptions = this.controlOptions;
-            //reorder menu items
-            if (this.controller.vectorReorder) {
-                this._reorderUp = new MenuItem({
-                    label: 'Move Up',
-                    onClick: lang.hitch(this, function() {
-                        this.controller._moveUp(this);
-                    })
-                });
-                menu.addChild(this._reorderUp);
-                this._reorderDown = new MenuItem({
-                    label: 'Move Down',
-                    onClick: lang.hitch(this, function() {
-                        this.controller._moveDown(this);
-                    })
-                });
-                menu.addChild(this._reorderDown);
-                menu.addChild(new MenuSeparator());
-            }
-            //zoom to layer
-            if (controlOptions.noZoom !== true) {
-                menu.addChild(new MenuItem({
-                    label: 'Zoom to Layer',
-                    onClick: lang.hitch(this, function() {
-                        this.controller._zoomToLayer(layer);
-                    })
-                }));
-            }
-            //transparency
-            if (controlOptions.noTransparency !== true) {
-                menu.addChild(new Transparency({
-                    label: 'Transparency',
-                    layer: layer
-                }));
-            }
-            //layer swipe
-            if (controlOptions.noSwipe !== true) {
-                var swipeMenu = new Menu();
-                swipeMenu.addChild(new MenuItem({
-                    label: 'Vertical',
-                    onClick: lang.hitch(this, function () {
-                        this.controller._swipeLayer(layer, 'vertical');
-                    })
-                }));
-                swipeMenu.addChild(new MenuItem({
-                    label: 'Horizontal',
-                    onClick: lang.hitch(this, function () {
-                        this.controller._swipeLayer(layer, 'horizontal');
-                    })
-                }));
-                menu.addChild(new PopupMenuItem({
-                    label: 'Layer Swipe',
-                    popup: swipeMenu
-                }));
-            }
-            menu.startup();
-            //if last child is a separator remove it
-            var lastChild = menu.getChildren()[menu.getChildren().length - 1];
-            if (lastChild.isInstanceOf(MenuSeparator)) {
-                menu.removeChild(lastChild);
-            }
-        },
         //create legend (check for noLegend and decide how to proceed)
         _createLegend: function(layer) {
-            if (this.controlOptions.noLegend === true) {
+            if ((this.controlOptions.noLegend === true || this.controller.noLegend === true) && (this.controller.noLegend === true && this.controlOptions.noLegend !== false)) {
                 domClass.remove(this.expandIconNode, ['fa', 'fa-plus-square-o', 'layerControlToggleIcon']);
                 domStyle.set(this.expandClickNode, 'cursor', 'default');
                 domConst.destroy(this.expandNode);

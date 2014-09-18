@@ -285,9 +285,7 @@ define([
 				layer: l,
 				type: layer.type,
 				title: layer.title,
-				controlOptions: lang.mixin({
-					sublayers: true
-				}, layer.layerControlLayerInfos)
+				controlOptions: layer.controlOptions
 			});
 			if (layer.type === 'feature') {
 				var options = {
