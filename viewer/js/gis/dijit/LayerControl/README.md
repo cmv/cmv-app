@@ -67,6 +67,7 @@ Additional options can be passed with each layer via the `controlOptions` object
 
 | Option | Description | Affects |
 | :----: | ----------- | ------- |
+| `exclude` | When `true` a layer control will not be added to the widget. Using `exclude` for a layer with layer reordering enabled which is not above or below all included layers will result in layer reordering issues. | all layers |
 | `noLegend` |  When `true` no legend is created. Set to `false` to override `noLegend: true` widget option. | dynamic, feature and tiled |
 | `noZoom` | When `true` removes "Zoom to Layer" menu item. Set to `false` to override `noZoom: true` widget option. | all layers |
 | `noTransparency` | When `true` removes "Transparency" menu item. Set to `false` to override `noTransparency: true` widget option. | all layers |
