@@ -3,16 +3,6 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'dijit/form/Form',
-    'dijit/form/FilteringSelect',
-    'dijit/form/ValidationTextBox',
-    'dijit/form/NumberTextBox',
-    'dijit/form/Button',
-    'dijit/form/CheckBox',
-    'dijit/ProgressBar',
-    'dijit/form/DropDownButton',
-    'dijit/TooltipDialog',
-    'dijit/form/RadioButton',
     'esri/tasks/PrintTask',
     'dojo/store/Memory',
     'dojo/_base/lang',
@@ -23,12 +13,22 @@ define([
     'dojo/dom-class',
     'dojo/text!./Print/templates/Print.html',
     'dojo/text!./Print/templates/PrintResult.html',
-    'dojo/aspect',
     'esri/tasks/PrintTemplate',
     'esri/tasks/PrintParameters',
     'esri/request',
+
+    'dijit/form/Form',
+    'dijit/form/FilteringSelect',
+    'dijit/form/ValidationTextBox',
+    'dijit/form/NumberTextBox',
+    'dijit/form/Button',
+    'dijit/form/CheckBox',
+    'dijit/ProgressBar',
+    'dijit/form/DropDownButton',
+    'dijit/TooltipDialog',
+    'dijit/form/RadioButton',
     'xstyle/css!./Print/css/Print.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, aspect, PrintTemplate, PrintParameters, esriRequest) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, PrintTemplate, PrintParameters, esriRequest) {
 
     // Main print dijit
     var PrintDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {

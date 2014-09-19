@@ -28,7 +28,10 @@
                                 //   "single" : require single quotes
                                 //   "double" : require double quotes
     "undef"         : true,     // true: Require all non-global variables to be declared (prevents global leaks)
-    "unused"        : true,   // true: Require all defined variables be used
+    "unused"        : "strict", //  Warns when you define and never use your variables
+                                //   true     : allow unused parameters that are followed by a used parameter.
+                                //   "vars"   : to only check for variables, not function parameters
+                                //   "strict" : to check all variables and parameters.
     "strict"        : false,    // true: Requires all functions run in ES5 Strict Mode ** Dojo style and existing codebase conflicts **
     "trailing"      : false,    // true: Prohibit trailing whitespaces
     "indent"        : 4,        // {int} Number of spaces to use for indentation

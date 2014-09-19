@@ -3,8 +3,6 @@ define([
 	'dijit/_WidgetBase',
 	'dijit/_TemplatedMixin',
 	'dijit/_WidgetsInTemplateMixin',
-	'dijit/form/Form',
-	'dijit/form/FilteringSelect',
 	'dijit/MenuItem',
 	'dojo/_base/lang',
 	'dojo/_base/array',
@@ -15,25 +13,10 @@ define([
 	'esri/tasks/IdentifyParameters',
 	'esri/dijit/PopupTemplate',
 	'dojo/text!./Identify/templates/Identify.html',
+	'dijit/form/Form',
+	'dijit/form/FilteringSelect',
 	'xstyle/css!./Identify/css/Identify.css'
-], function (
-	declare,
-	_WidgetBase,
-	_TemplatedMixin,
-	_WidgetsInTemplateMixin,
-	Form,
-	FilteringSelect,
-	MenuItem,
-	lang,
-	array,
-	all,
-	topic,
-	Memory,
-	IdentifyTask,
-	IdentifyParameters,
-	PopupTemplate,
-	IdentifyTemplate
-) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, IdentifyTemplate) {
 	var Identify = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		widgetsInTemplate: true,
 		templateString: IdentifyTemplate,
@@ -41,19 +24,19 @@ define([
 
 		mapClickMode: null,
 		identifies: {},
-        infoTemplates: {},
+		infoTemplates: {},
 		ignoreOtherGraphics: true,
 		createDefaultInfoTemplates: true,
 		layerSeparator: '||',
 		allLayersId: '***',
 
-		postCreate: function() {
+		postCreate: function () {
 			this.inherited(arguments);
 			if (!this.identifies) {
 				this.identifies = {};
 			}
 			this.layers = [];
-			array.forEach(this.layerInfos, function(layerInfo) {
+			array.forEach(this.layerInfos, function (layerInfo) {
 				var lyrId = layerInfo.layer.id;
 				var layer = this.map.getLayer(lyrId);
 				if (layer) {
@@ -93,7 +76,7 @@ define([
 					// rebuild the layer selection list when any layer is hidden
 					// but only if we have a UI
 					if (this.parentWidget) {
-						layer.on('visibility-change', lang.hitch(this, function(evt) {
+						layer.on('visibility-change', lang.hitch(this, function (evt) {
 							if (evt.visible === false) {
 								this.createIdentifyLayerList();
 							}
@@ -104,13 +87,13 @@ define([
 
 			this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
 
-			this.map.on('click', lang.hitch(this, function(evt) {
+			this.map.on('click', lang.hitch(this, function (evt) {
 				if (this.mapClickMode === 'identify') {
 					this.executeIdentifyTask(evt);
 				}
 			}));
 			if (this.mapRightClickMenu) {
-				this.map.on('MouseDown', lang.hitch(this, function(evt) {
+				this.map.on('MouseDown', lang.hitch(this, function (evt) {
 					this.mapRightClick = evt;
 				}));
 				this.mapRightClickMenu.addChild(new MenuItem({
@@ -123,12 +106,12 @@ define([
 			// but only if we have a UI
 			if (this.parentWidget) {
 				this.createIdentifyLayerList();
-				this.map.on('update-end', lang.hitch(this, function() {
+				this.map.on('update-end', lang.hitch(this, function () {
 					this.createIdentifyLayerList();
 				}));
 			}
 		},
-		executeIdentifyTask: function(evt) {
+		executeIdentifyTask: function (evt) {
 			if (evt.graphic) {
 				// handle feature layers that come from a feature service
 				// and may already have an info template
@@ -180,7 +163,7 @@ define([
 
 			var arrIds = selectedLayer.split(this.layerSeparator);
 			var allLayersId = this.allLayersId;
-			array.forEach(this.layers, lang.hitch(this, function(layer) {
+			array.forEach(this.layers, lang.hitch(this, function (layer) {
 				var ref = layer.ref,
 					selectedIds = layer.layerInfo.layerIds;
 				if (ref.visible) {
@@ -220,11 +203,11 @@ define([
 				all(identifies).then(lang.hitch(this, 'identifyCallback', identifiedlayers), lang.hitch(this, 'identifyError'));
 			}
 		},
-		identifyCallback: function(identifiedlayers, responseArray) {
+		identifyCallback: function (identifiedlayers, responseArray) {
 			var fSet = [];
-			array.forEach(responseArray, function(response, i) {
+			array.forEach(responseArray, function (response, i) {
 				var ref = identifiedlayers[i].ref;
-				array.forEach(response, function(result) {
+				array.forEach(response, function (result) {
 					result.feature.geometry.spatialReference = this.map.spatialReference; //temp workaround for ags identify bug. remove when fixed.
 					if (result.feature.infoTemplate === undefined) {
 						var infoTemplate = this.getInfoTemplate(ref, result);
@@ -239,14 +222,14 @@ define([
 			}, this);
 			this.map.infoWindow.setFeatures(fSet);
 		},
-		identifyError: function(err) {
+		identifyError: function (err) {
 			this.map.infoWindow.hide();
 			topic.publish('viewer/handleError', {
 				source: 'Identify',
 				error: err
 			});
 		},
-		handleRightClick: function() {
+		handleRightClick: function () {
 			if ((this.mapClickMode.current === 'identify') && (this.mapRightClick)) {
 				this.executeIdentifyTask(this.mapRightClick);
 			}
@@ -267,7 +250,7 @@ define([
 				if (this.identifies[layer.id].hasOwnProperty(layerId)) {
 					popup = this.identifies[layer.id][layerId];
 					if (popup) {
-						if (typeof(popup.declaredClass) !== 'string') { // has it been created already?
+						if (typeof (popup.declaredClass) !== 'string') { // has it been created already?
 							popup = new PopupTemplate(popup);
 							this.identifies[layer.id][layerId] = popup;
 						}
@@ -292,7 +275,7 @@ define([
 					}
 				} else if (layer._outFields && (layer._outFields.length) && (layer._outFields[0] !== '*')) {
 					var fields = layer.fields;
-					array.forEach(layer._outFields, function(fieldName) {
+					array.forEach(layer._outFields, function (fieldName) {
 						var foundField = array.filter(fields, function (field) {
 							return (field.name === fieldName);
 						});
@@ -305,7 +288,7 @@ define([
 						}
 					});
 				} else if (layer.fields) {
-					array.forEach(layer.fields, function(field) {
+					array.forEach(layer.fields, function (field) {
 						fieldInfos.push({
 							fieldName: field.name,
 							label: field.alias,
@@ -329,13 +312,13 @@ define([
 			return popup;
 		},
 
-		createIdentifyLayerList: function() {
+		createIdentifyLayerList: function () {
 			var id = null;
 			var identifyItems = [];
 			var selectedId = this.identifyLayerDijit.get('value');
 			var sep = this.layerSeparator;
 
-			array.forEach(this.layers, lang.hitch(this, function(layer) {
+			array.forEach(this.layers, lang.hitch(this, function (layer) {
 				var ref = layer.ref,
 					selectedIds = layer.layerInfo.layerIds;
 				// only include layers that are currently visible
@@ -374,7 +357,10 @@ define([
 
 			this.identifyLayerDijit.set('disabled', (identifyItems.length < 1));
 			if (identifyItems.length > 0) {
-				identifyItems.unshift({name: '*** All Visible Layers ***', id: '***'});
+				identifyItems.unshift({
+					name: '*** All Visible Layers ***',
+					id: '***'
+				});
 				if (!id) {
 					id = identifyItems[0].id;
 				}
@@ -419,7 +405,7 @@ define([
 			return true;
 		},
 
-		layerVisibleAtCurrentScale: function(layer) {
+		layerVisibleAtCurrentScale: function (layer) {
 			var mapScale = this.map.getScale();
 			return !(((layer.maxScale !== 0 && mapScale < layer.maxScale) || (layer.minScale !== 0 && mapScale > layer.minScale)));
 		},
@@ -427,25 +413,25 @@ define([
 		setMapClickMode: function (mode) {
 			this.mapClickMode = mode;
 			var map = this.map;
-            array.forEach(map.graphicsLayerIds, function(layerID) {
-                var layer = map.getLayer(layerID);
-                if (layer) {
-		            // add back any infoTemplates that
-		            // had been previously removed
+			array.forEach(map.graphicsLayerIds, function (layerID) {
+				var layer = map.getLayer(layerID);
+				if (layer) {
+					// add back any infoTemplates that
+					// had been previously removed
 					if (mode === 'identify') {
-        	            if (this.infoTemplates[layer.id]) {
-            	            layer.infoTemplate = lang.clone(this.infoTemplates[layer.id]);
-                	    }
-   	                // remove any infoTemplates that might
-   	                // interfere with clicking on a feature
-    				} else {
+						if (this.infoTemplates[layer.id]) {
+							layer.infoTemplate = lang.clone(this.infoTemplates[layer.id]);
+						}
+						// remove any infoTemplates that might
+						// interfere with clicking on a feature
+					} else {
 						if (layer.infoTemplate) {
 							this.infoTemplates[layer.id] = lang.clone(layer.infoTemplate);
 							layer.infoTemplate = null;
 						}
 					}
-                }
-            }, this);
+				}
+			}, this);
 		}
 	});
 

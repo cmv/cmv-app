@@ -1,5 +1,4 @@
 define([
-	'dojo/_base/declare',
 	'esri/map',
 	'dojo/dom',
 	'dojo/dom-style',
@@ -12,15 +11,15 @@ define([
 	'gis/dijit/FloatingTitlePane',
 	'dojo/_base/lang',
 	'dojo/text!./templates/mapOverlay.html',
-	'esri/IdentityManager',
 	'gis/dijit/FloatingWidgetDialog',
 	'put-selector',
 	'dojo/aspect',
 	'dojo/has',
 	'dojo/topic',
 	'esri/dijit/PopupMobile',
-	'dijit/Menu'
-], function (declare, Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, IdentityManager, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
+	'dijit/Menu',
+	'esri/IdentityManager'
+], function (Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
 
 	return {
 		legendLayerInfos: [],
