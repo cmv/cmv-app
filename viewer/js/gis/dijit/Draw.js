@@ -4,6 +4,8 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'dijit/form/Button',
+    'dijit/form/Form',
+    'dijit/form/ValidationTextBox',
     'dojo/_base/lang',
     'dojo/_base/Color',
     'esri/toolbars/draw',
@@ -20,7 +22,7 @@ define([
     'esri/layers/FeatureLayer',
     'dojo/on',
     'xstyle/css!./Draw/css/Draw.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Font, TextSymbol, FeatureLayer, on, css) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, Form, ValidationTextBox, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Font, TextSymbol, FeatureLayer, on, css) {
 
     // main draw dijit
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -64,20 +66,20 @@ define([
                 layerDefinition: {
                     geometryType: 'esriGeometryPolygon',
                     fields: [{
-                            name: 'OBJECTID',
-                            type: 'esriFieldTypeOID',
-                            alias: 'OBJECTID',
-                            domain: null,
-                            editable: false,
-                            nullable: false
-                        }, {
-                            name: 'ren',
-                            type: 'esriFieldTypeInteger',
-                            alias: 'ren',
-                            domain: null,
-                            editable: true,
-                            nullable: false
-                        }]
+                        name: 'OBJECTID',
+                        type: 'esriFieldTypeOID',
+                        alias: 'OBJECTID',
+                        domain: null,
+                        editable: false,
+                        nullable: false
+                    }, {
+                        name: 'ren',
+                        type: 'esriFieldTypeInteger',
+                        alias: 'ren',
+                        domain: null,
+                        editable: true,
+                        nullable: false
+                    }]
                 },
                 featureSet: null
             }, {
@@ -119,14 +121,14 @@ define([
             this.map.addLayer(this.polygonGraphics);
 
             this.drawToolbar.on('draw-end', lang.hitch(this, 'onDrawToolbarDrawEnd'));
-            
+
             /* set up text draw tools */
             this.textFont = new Font(
-                    '12px',
-                    Font.STYLE_NORMAL,
-                    Font.VARIANT_NORMAL,
-                    Font.WEIGHT_BOLD,
-                    'Helvetica');
+                '12px',
+                Font.STYLE_NORMAL,
+                Font.VARIANT_NORMAL,
+                Font.WEIGHT_BOLD,
+                'Helvetica');
             this.textColor = new Color('#000000');
 
             this.textRenderer = new SimpleRenderer(this.textFont);
@@ -134,7 +136,7 @@ define([
             this.textRenderer.description = 'User drawn text';
             this.textGraphics = new GraphicsLayer(this.textRenderer);
             this.map.addLayer(this.textGraphics);
-            
+
         },
         drawPoint: function() {
             this.disconnectMapClick();
@@ -166,10 +168,10 @@ define([
                 this.disconnectMapClick();
                 var drawTextClickHanlder = this.map.on('click', lang.hitch(this, function(evt, override) {
                     var textSymbol = new TextSymbol(
-                            form.drawText,
-                            this.textFont,
-                            this.textColor
-                            );
+                        form.drawText,
+                        this.textFont,
+                        this.textColor
+                    );
                     var textGraphic = new Graphic(evt.mapPoint, textSymbol);
                     this.textGraphics.add(textGraphic);
                     this.connectMapClick();
