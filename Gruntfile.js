@@ -80,7 +80,7 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           cwd: 'dist/viewer',
-          src: ['**/*.js'],
+          src: ['**/*.js', '!**/config/**'],
           dest: 'dist/viewer',
           ext: '.js'
         }],
