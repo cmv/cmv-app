@@ -63,7 +63,7 @@ layerControl: {
 
 ### Layer Options
 
-Additional options can be passed with each layer via the `controlOptions` object. All layer types have common options while some options are specific to certain layer types. All `controlOptions` are Boolean.
+Additional options can be passed with each layer via the `layerControlLayerInfos` object. All layer types have common options while some options are specific to certain layer types. All `controlOptions` are Boolean.
 
 | Option | Description | Affects |
 | :----: | ----------- | ------- |
@@ -85,7 +85,7 @@ Additional options can be passed with each layer via the `controlOptions` object
     options: {
         //layer options
     },
-    controlOptions: {
+    layerControlLayerInfos: {
         sublayers: false,
         noTransparency: true
     }
@@ -102,7 +102,7 @@ Additional options can be passed with each layer via the `controlOptions` object
     options: {
         //layer options
     },
-    controlOptions: {
+    layerControlLayerInfos: {
         noLegend: true,
         noZoom: true
     }
