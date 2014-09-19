@@ -28,10 +28,10 @@
                                 //   "single" : require single quotes
                                 //   "double" : require double quotes
     "undef"         : true,     // true: Require all non-global variables to be declared (prevents global leaks)
-    "unused"        : "vars",   // true: Require all defined variables be used
+    "unused"        : true,   // true: Require all defined variables be used
     "strict"        : false,    // true: Requires all functions run in ES5 Strict Mode ** Dojo style and existing codebase conflicts **
     "trailing"      : false,    // true: Prohibit trailing whitespaces
-    //"indent"        : 4,        // {int} Number of spaces to use for indentation
+    "indent"        : 4,        // {int} Number of spaces to use for indentation
     //"maxparams"     : false,    // {int} Max number of formal params allowed per function
     //"maxdepth"      : false,    // {int} Max depth of nested blocks (within functions)
     //"maxstatements" : false,    // {int} Max number statements per function

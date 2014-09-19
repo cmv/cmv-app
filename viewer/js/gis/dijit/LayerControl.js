@@ -12,7 +12,7 @@ define([
     'esri/tasks/ProjectParameters',
     'esri/config',
     'xstyle/css!./LayerControl/css/LayerControl.css'
-], function(
+], function (
     declare,
     array,
     lang,
@@ -53,7 +53,7 @@ define([
             image: 'gis/dijit/LayerControl/controls/Image',
             tiled: 'gis/dijit/LayerControl/controls/Tiled'
         },
-        constructor: function(options) {
+        constructor: function (options) {
             options = options || {};
             if (!options.map) {
                 topic.publish('viewer/handleError', {
@@ -63,7 +63,7 @@ define([
                 return;
             }
         },
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             if (this.separated) {
                 var ControlContainer = declare([WidgetBase, Container]);
@@ -102,7 +102,7 @@ define([
                 modules.push('xstyle/css!' + this.fontAwesomeUrl);
             }
             //push layer control mods
-            array.forEach(this.layerInfos, function(layerInfo) {
+            array.forEach(this.layerInfos, function (layerInfo) {
                 //check if control is excluded
                 var controlOptions = layerInfo.controlOptions;
                 if (controlOptions && controlOptions.exclude === true) {
@@ -119,8 +119,8 @@ define([
                 }
             }, this);
             //load and go
-            require(modules, lang.hitch(this, function() {
-                array.forEach(this.layerInfos, function(layerInfo) {
+            require(modules, lang.hitch(this, function () {
+                array.forEach(this.layerInfos, function (layerInfo) {
                     //exclude from widget
                     var controlOptions = layerInfo.controlOptions;
                     if (controlOptions && controlOptions.exclude === true) {
@@ -135,7 +135,7 @@ define([
             }));
         },
         //create layer control and add to appropriate _container
-        _addControl: function(layerInfo, LayerControl) {
+        _addControl: function (layerInfo, LayerControl) {
             var layerControl = new LayerControl({
                 controller: this,
                 layer: layerInfo.layer,
@@ -161,7 +161,7 @@ define([
             }
         },
         //move control up in controller and layer up in map
-        _moveUp: function(control) {
+        _moveUp: function (control) {
             var id = control.layer.id,
                 node = control.domNode,
                 index;
@@ -182,7 +182,7 @@ define([
             }
         },
         //move control down in controller and layer down in map
-        _moveDown: function(control) {
+        _moveDown: function (control) {
             var id = control.layer.id,
                 node = control.domNode,
                 index;
@@ -235,7 +235,7 @@ define([
             }
         },
         //zoom to layer
-        _zoomToLayer: function(layer) {
+        _zoomToLayer: function (layer) {
             var map = this.map;
             if (layer.spatialReference === map.spatialReference) {
                 map.setExtent(layer.fullExtent, true);
@@ -244,10 +244,13 @@ define([
                     esriConfig.defaults.geometryService.project(lang.mixin(new ProjectParameters(), {
                         geometries: [layer.fullExtent],
                         outSR: map.spatialReference
-                    }), function(r) {
+                    }), function (r) {
                         map.setExtent(r[0], true);
-                    }, function(e) {
-                        //console.log(e);
+                    }, function (e) {
+                        topic.publish('viewer/handleError', {
+                            source: 'LayerControl._zoomToLayer',
+                            error: e
+                        });
                     });
                 } else {
                     topic.publish('viewer/handleError', {
@@ -258,7 +261,7 @@ define([
             }
         },
         //layer swiper
-        _swipeLayer: function(layer, type) {
+        _swipeLayer: function (layer, type) {
             if (!layer || !layer.visible) {
                 return;
             }

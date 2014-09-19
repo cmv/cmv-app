@@ -28,7 +28,7 @@ define([
     'esri/tasks/PrintParameters',
     'esri/request',
     'xstyle/css!./Print/css/Print.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, aspect, PrintTemplate, PrintParameters, esriRequest, css) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, aspect, PrintTemplate, PrintParameters, esriRequest) {
 
     // Main print dijit
     var PrintDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -88,7 +88,7 @@ define([
             });
         },
         _handlePrintInfo: function(data) {
-            var Layout_Template = array.filter(data.parameters, function(param, idx) {
+            var Layout_Template = array.filter(data.parameters, function(param) {
                 return param.name === 'Layout_Template';
             });
             if (Layout_Template.length === 0) {
@@ -98,7 +98,7 @@ define([
                 });
                 return;
             }
-            var layoutItems = array.map(Layout_Template[0].choiceList, function(item, i) {
+            var layoutItems = array.map(Layout_Template[0].choiceList, function(item) {
                 return {
                     name: item,
                     id: item
@@ -117,7 +117,7 @@ define([
                 this.layoutDijit.set('value', Layout_Template[0].defaultValue);
             }
 
-            var Format = array.filter(data.parameters, function(param, idx) {
+            var Format = array.filter(data.parameters, function(param) {
                 return param.name === 'Format';
             });
             if (Format.length === 0) {
@@ -127,7 +127,7 @@ define([
                 });
                 return;
             }
-            var formatItems = array.map(Format[0].choiceList, function(item, i) {
+            var formatItems = array.map(Format[0].choiceList, function(item) {
                 return {
                     name: item,
                     id: item
