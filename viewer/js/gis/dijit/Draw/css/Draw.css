@@ -1,6 +1,10 @@
 .gis_DrawDijit {
 }
 
+.gis_DrawDijit table {
+    width:100%;
+}
+
 .gis_DrawDijit .polyIcon {
     background-image: url(../images/toolbar_icons.png);
     background-position: -68px 0;
@@ -36,6 +40,13 @@
     height: 16px;
 }
 
+.gis_DrawDijit .textIcon {
+    background-image: url(../images/toolbar_icons.png);
+    background-position: -306px 0;
+    width: 16px;
+    height: 16px;
+}
+
 .gis_DrawDijit .clearIcon {
     background-image: url(../images/clear.png);
     width: 16px;
@@ -54,4 +65,13 @@
     padding: 3px 0px 2px 0px;
     text-align: right;
     width: 100%;
+}
+
+.gis_DrawDijit .dijitButton {
+    width: 49%;
+    margin:0;
+}
+
+.gis_DrawDijit .dijitButtonText {
+    font-size: 11px;
 }

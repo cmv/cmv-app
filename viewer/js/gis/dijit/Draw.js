@@ -4,6 +4,8 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'dijit/form/Button',
+    'dijit/form/Form',
+    'dijit/form/ValidationTextBox',
     'dojo/_base/lang',
     'dojo/_base/Color',
     'esri/toolbars/draw',
@@ -15,10 +17,12 @@ define([
     'esri/symbols/SimpleMarkerSymbol',
     'esri/symbols/SimpleLineSymbol',
     'esri/symbols/SimpleFillSymbol',
+    'esri/symbols/Font',
+    'esri/symbols/TextSymbol',
     'esri/layers/FeatureLayer',
     'dojo/on',
     'xstyle/css!./Draw/css/Draw.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, on, css) {
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, Form, ValidationTextBox, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Font, TextSymbol, FeatureLayer, on, css) {
 
     // main draw dijit
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -26,6 +30,7 @@ define([
         templateString: drawTemplate,
         drawToolbar: null,
         graphics: null,
+        defaultDrawText: 'Enter text, then click the button to draw it',
         postCreate: function() {
             this.inherited(arguments);
             this.drawToolbar = new Draw(this.map);
@@ -50,6 +55,7 @@ define([
                 id: 'drawGraphics_line',
                 title: 'Draw Graphics'
             });
+
             this.polylineRenderer = new SimpleRenderer(this.polylineSymbol);
             this.polylineRenderer.label = 'User drawn lines';
             this.polylineRenderer.description = 'User drawn lines';
@@ -115,6 +121,22 @@ define([
             this.map.addLayer(this.polygonGraphics);
 
             this.drawToolbar.on('draw-end', lang.hitch(this, 'onDrawToolbarDrawEnd'));
+
+            /* set up text draw tools */
+            this.textFont = new Font(
+                '12px',
+                Font.STYLE_NORMAL,
+                Font.VARIANT_NORMAL,
+                Font.WEIGHT_BOLD,
+                'Helvetica');
+            this.textColor = new Color('#000000');
+
+            this.textRenderer = new SimpleRenderer(this.textFont);
+            this.textRenderer.label = 'User drawn text';
+            this.textRenderer.description = 'User drawn text';
+            this.textGraphics = new GraphicsLayer(this.textRenderer);
+            this.map.addLayer(this.textGraphics);
+
         },
         drawPoint: function() {
             this.disconnectMapClick();
@@ -139,6 +161,28 @@ define([
         drawFreehandPolygon: function() {
             this.disconnectMapClick();
             this.drawToolbar.activate(Draw.FREEHAND_POLYGON);
+        },
+        drawText: function() {
+            if (this.drawTextFormDijit.isValid()) {
+                var form = this.drawTextFormDijit.get('value');
+                this.disconnectMapClick();
+                var drawTextClickHanlder = this.map.on('click', lang.hitch(this, function(evt, override) {
+                    var textSymbol = new TextSymbol(
+                        form.drawText,
+                        this.textFont,
+                        this.textColor
+                    );
+                    var textGraphic = new Graphic(evt.mapPoint, textSymbol);
+                    this.textGraphics.add(textGraphic);
+                    this.connectMapClick();
+                    drawTextClickHanlder.remove();
+                }));
+            } else {
+                this.drawTextFormDijit.validate();
+            }
+        },
+        changeColors: function(val) {
+            console.log(val);
         },
         disconnectMapClick: function() {
             this.mapClickMode.current = 'draw';
@@ -178,6 +222,7 @@ define([
             this.polylineGraphics.clear();
             this.polygonGraphics.clear();
             this.drawToolbar.deactivate();
+            this.textGraphics.clear();
             this.connectMapClick();
         }
     });

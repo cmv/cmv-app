@@ -1,15 +1,15 @@
 <div class="gis_DrawDijit">
     <div class="formContainer">
-        <div style="padding:5px;">
+        <div>
             <table>
                 <tr>
                     <td>
                         <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'pointIcon',showLabel:true"
-                        data-dojo-attach-event="onClick:drawPoint">
+                                data-dojo-attach-event="onClick:drawPoint">
                             Point
                         </button>
                         <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'circleDrawIcon',showLabel:true,drawType:'CIRCLE'"
-                        data-dojo-attach-event="onClick:drawCircle">
+                                data-dojo-attach-event="onClick:drawCircle">
                             Circle
                         </button>
                     </td>
@@ -17,11 +17,11 @@
                 <tr>
                     <td>
                         <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'lineIcon',showLabel:true"
-                        data-dojo-attach-event="onClick:drawLine">
+                                data-dojo-attach-event="onClick:drawLine">
                             Line
                         </button>
                         <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'freehandDrawIcon',showLabel:true"
-                        data-dojo-attach-event="onClick:drawFreehandLine">
+                                data-dojo-attach-event="onClick:drawFreehandLine">
                             Freehand Line
                         </button>
                     </td>
@@ -29,13 +29,25 @@
                 <tr>
                     <td>
                         <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'polyIcon',showLabel:true"
-                        data-dojo-attach-event="onClick:drawPolygon">
+                                data-dojo-attach-event="onClick:drawPolygon">
                             Polygon
                         </button>
                         <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'freehandDrawIcon',showLabel:true"
-                        data-dojo-attach-event="onClick:drawFreehandPolygon">
+                                data-dojo-attach-event="onClick:drawFreehandPolygon">
                             Freehand Polygon
                         </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'textIcon',showLabel:true"
+                                data-dojo-attach-event="onClick:drawText">
+                            Text
+                        </button>
+
+                        <div data-dojo-type="dijit.form.Form" data-dojo-attach-point="drawTextFormDijit">
+                            <input type="text" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="name:'drawText',trim:true,required:true,style:'width:100%;',placeholder:'${defaultDrawText}'" />
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -43,8 +55,9 @@
     </div>
     <div class="buttonActionBar">
         <button data-dojo-type="dijit.form.Button" data-dojo-props="iconClass:'clearIcon',showLabel:true"
-        data-dojo-attach-event="onClick:clearGraphics">
+                data-dojo-attach-event="onClick:clearGraphics">
             Clear Drawing
         </button>
     </div>
+
 </div>
