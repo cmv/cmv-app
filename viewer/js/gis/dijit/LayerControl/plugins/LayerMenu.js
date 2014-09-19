@@ -27,14 +27,14 @@ define([
             if ((layerType === 'vector' && controller.vectorReorder) || (layerType === 'overlay' && controller.overlayReorder)) {
                 control._reorderUp = new MenuItem({
                     label: 'Move Up',
-                    onClick: function() {
+                    onClick: function () {
                         controller._moveUp(control);
                     }
                 });
                 menu.addChild(control._reorderUp);
                 control._reorderDown = new MenuItem({
                     label: 'Move Down',
-                    onClick: function() {
+                    onClick: function () {
                         controller._moveDown(control);
                     }
                 });
@@ -45,13 +45,13 @@ define([
             if ((controlOptions.noZoom !== true && controller.noZoom !== true) || (controller.noZoom === true && controlOptions.noZoom === false)) {
                 menu.addChild(new MenuItem({
                     label: 'Zoom to Layer',
-                    onClick: function() {
+                    onClick: function () {
                         controller._zoomToLayer(layer);
                     }
                 }));
             }
             //transparency
-            if ((controlOptions.noTransparency !== true &&  controller.noTransparency !== true) || (controller.noTransparency === true && controlOptions.noTransparency === false)) {
+            if ((controlOptions.noTransparency !== true && controller.noTransparency !== true) || (controller.noTransparency === true && controlOptions.noTransparency === false)) {
                 menu.addChild(new Transparency({
                     label: 'Transparency',
                     layer: layer

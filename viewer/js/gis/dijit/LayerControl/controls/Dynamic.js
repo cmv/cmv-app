@@ -55,7 +55,7 @@ define([
         _sublayerControls: [],
         _reorderUp: null, //used by LayerMenu
         _reorderDown: null, //used by LayerMenu
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             if (!this.controller) {
                 topic.publish('viewer/handleError', {
@@ -80,7 +80,7 @@ define([
             }
         },
         //add layer and init control
-        _initialize: function() {
+        _initialize: function () {
             var layer = this.layer;
             //template defaults as unchecked if visible checked
             if (layer.visible) {
@@ -113,10 +113,10 @@ define([
             //set title
             html.set(this.labelNode, this.layerTitle);
             //wire up updating indicator
-            layer.on('update-start', lang.hitch(this, function() {
+            layer.on('update-start', lang.hitch(this, function () {
                 domStyle.set(this.layerUpdateNode, 'display', 'inline-block'); //font awesome display
             }));
-            layer.on('update-end', lang.hitch(this, function() {
+            layer.on('update-end', lang.hitch(this, function () {
                 domStyle.set(this.layerUpdateNode, 'display', 'none');
             }));
             //build sublayers
@@ -146,7 +146,7 @@ define([
                 this._scaleRangeHandler = layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
             }
             //if layer scales change
-            this.layer.on('scale-range-change', lang.hitch(this, function() {
+            this.layer.on('scale-range-change', lang.hitch(this, function () {
                 if (layer.minScale !== 0 || layer.maxScale !== 0) {
                     this._checkboxScaleRange();
                     this._scaleRangeHandler = layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
@@ -161,7 +161,7 @@ define([
         },
         //add on event to expandClickNode
         _expandClick: function () {
-            this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function() {
+            this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
                 var expandNode = this.expandNode,
                     iconNode = this.expandIconNode;
                 if (domStyle.get(expandNode, 'display') === 'none') {
@@ -174,10 +174,10 @@ define([
             }));
         },
         //add folder/sublayer controls per layer.layerInfos
-        _createSublayers: function(layer) {
+        _createSublayers: function (layer) {
             //check for single sublayer - if so no sublayer/folder controls
             if (layer.layerInfos.length > 1) {
-                array.forEach(layer.layerInfos, lang.hitch(this, function(info) {
+                array.forEach(layer.layerInfos, lang.hitch(this, function (info) {
                     var pid = info.parentLayerId,
                         slids = info.subLayerIds,
                         controlId = layer.id + '-' + info.id + '-sublayer-control',
@@ -223,7 +223,7 @@ define([
             this._createLegend(layer);
         },
         //create legend
-        _createLegend: function(layer) {
+        _createLegend: function (layer) {
             if ((this.controlOptions.noLegend === true || this.controller.noLegend === true) && (this.controller.noLegend === true && this.controlOptions.noLegend !== false)) {
                 this._noLegend();
                 return;
@@ -237,13 +237,13 @@ define([
                         f: 'json',
                         token: (typeof layer._getToken === 'function') ? layer._getToken() : null
                     }
-                }).then(lang.hitch(this, function(r) {
-                    array.forEach(r.layers, function(_layer) {
+                }).then(lang.hitch(this, function (r) {
+                    array.forEach(r.layers, function (_layer) {
                         //create legend table
                         var table = domConst.create('table');
                         domClass.add(table, 'layerControlLegendTable');
                         //iterate through legends
-                        array.forEach(_layer.legend, function(legend) {
+                        array.forEach(_layer.legend, function (legend) {
                             //create a table row and symbol & label table data
                             //  add label too
                             var row = domConst.create('tr', {}, table, 'last'),
@@ -274,7 +274,7 @@ define([
                             domConst.place(table, this.expandNode);
                         }
                     }, this);
-                }), lang.hitch(this, function(e) {
+                }), lang.hitch(this, function (e) {
                     topic.publish('viewer/handleError', {
                         source: 'LayerControl/Dynamic',
                         error: 'an error occurred retrieving legend'
@@ -315,20 +315,20 @@ define([
             }
         },
         //set dynamic layer visible layers
-        _setVisibleLayers: function() {
+        _setVisibleLayers: function () {
             //because ags doesn't respect a layer group's visibility
             //i.e. layer 3 (the group) is off but it's sublayers still show
             //so check and if group is off also remove the sublayers
             var layer = this.layer,
                 setLayers = [];
-            array.forEach(query('.' + layer.id + '-layerControlSublayerCheck'), function(i) {
+            array.forEach(query('.' + layer.id + '-layerControlSublayerCheck'), function (i) {
                 if (domAttr.get(i, 'data-checked') === 'checked') {
                     setLayers.push(parseInt(domAttr.get(i, 'data-sublayer-id'), 10));
                 }
             });
-            array.forEach(layer.layerInfos, function(info) {
+            array.forEach(layer.layerInfos, function (info) {
                 if (info.subLayerIds !== null && array.indexOf(setLayers, info.id) === -1) {
-                    array.forEach(info.subLayerIds, function(sub) {
+                    array.forEach(info.subLayerIds, function (sub) {
                         if (array.indexOf(setLayers, sub) !== -1) {
                             setLayers.splice(array.indexOf(setLayers, sub), 1);
                         }
@@ -348,7 +348,7 @@ define([
             });
         },
         //check scales and add/remove disabled classes from checkbox
-        _checkboxScaleRange: function() {
+        _checkboxScaleRange: function () {
             var node = this.checkNode,
                 layer = this.layer,
                 scale = layer.getMap().getScale(),

@@ -12,11 +12,11 @@ define([
 	'esri/geometry/Point',
 	'esri/SpatialReference',
 	'dojo/topic'
-], function(declare, _WidgetBase, _TemplatedMixin, Directions, template, lang, Menu, MenuItem, PopupMenuItem, MenuSeparator, Point, SpatialReference, topic) {
+], function (declare, _WidgetBase, _TemplatedMixin, Directions, template, lang, Menu, MenuItem, PopupMenuItem, MenuSeparator, Point, SpatialReference, topic) {
 
 	return declare([_WidgetBase, _TemplatedMixin], {
 		templateString: template,
-		postCreate: function() {
+		postCreate: function () {
 			this.inherited(arguments);
 			this.directions = new Directions(lang.mixin({
 				map: this.map
@@ -24,7 +24,7 @@ define([
 			this.directions.startup();
 
 			// capture map right click position
-			this.map.on('MouseDown', lang.hitch(this, function(evt) {
+			this.map.on('MouseDown', lang.hitch(this, function (evt) {
 				this.mapRightClickPoint = evt.mapPoint;
 			}));
 
@@ -60,19 +60,19 @@ define([
 				}));
 			}
 		},
-		clearStops: function() {
+		clearStops: function () {
 			this.directions.reset();
 		},
-		directionsFrom: function() {
+		directionsFrom: function () {
 			this.directions.updateStop(this.mapRightClickPoint, 0).then(lang.hitch(this, 'doRoute'));
 		},
-		directionsTo: function() {
+		directionsTo: function () {
 			this.directions.updateStop(this.mapRightClickPoint, this.directions.stops.length - 1).then(lang.hitch(this, 'doRoute'));
 		},
-		addStop: function() {
+		addStop: function () {
 			this.directions.addStop(this.mapRightClickPoint, this.directions.stops.length - 1).then(lang.hitch(this, 'doRoute'));
 		},
-		doRoute: function() {
+		doRoute: function () {
 			if (this.parentWidget && !this.parentWidget.open) {
 				this.parentWidget.toggle();
 			}
@@ -80,13 +80,13 @@ define([
 				this.directions.getDirections();
 			}
 		},
-		startAtMyLocation: function() {
+		startAtMyLocation: function () {
 			this.getGeoLocation('directionsFrom');
 		},
-		endAtMyLocation: function() {
+		endAtMyLocation: function () {
 			this.getGeoLocation('directionsTo');
 		},
-		getGeoLocation: function(leg) {
+		getGeoLocation: function (leg) {
 			if (navigator && navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(lang.hitch(this, 'locationSuccess', leg), lang.hitch(this, 'locationError'));
 			} else {
@@ -99,13 +99,13 @@ define([
 				});
 			}
 		},
-		locationSuccess: function(leg, event) {
+		locationSuccess: function (leg, event) {
 			this.mapRightClickPoint = new Point(event.coords.longitude, event.coords.latitude, new SpatialReference({
 				wkid: 4326
 			}));
 			this[leg]();
 		},
-		locationError: function(error) {
+		locationError: function (error) {
 			topic.publish('growler/growl', {
 				title: 'Error',
 				message: 'There was a problem with getting your location: ' + error.message,

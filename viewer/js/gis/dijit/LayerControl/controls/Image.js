@@ -37,7 +37,7 @@ define([
         _scaleRangeHandler: null,
         _reorderUp: null, //used by LayerMenu
         _reorderDown: null, //used by LayerMenu
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             if (!this.controller) {
                 topic.publish('viewer/handleError', {
@@ -62,7 +62,7 @@ define([
             }
         },
         //add layer and init control
-        _initialize: function() {
+        _initialize: function () {
             var layer = this.layer;
             //template defaults as unchecked if visible checked
             if (layer.visible) {
@@ -95,10 +95,10 @@ define([
             //set title
             html.set(this.labelNode, this.layerTitle);
             //wire up updating indicator
-            layer.on('update-start', lang.hitch(this, function() {
+            layer.on('update-start', lang.hitch(this, function () {
                 domStyle.set(this.layerUpdateNode, 'display', 'inline-block'); //font awesome display
             }));
-            layer.on('update-end', lang.hitch(this, function() {
+            layer.on('update-end', lang.hitch(this, function () {
                 domStyle.set(this.layerUpdateNode, 'display', 'none');
             }));
             //remove expandIconNode icon
@@ -118,7 +118,7 @@ define([
                 this._scaleRangeHandler = layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
             }
             //if layer scales change
-            this.layer.on('scale-range-change', lang.hitch(this, function() {
+            this.layer.on('scale-range-change', lang.hitch(this, function () {
                 if (layer.minScale !== 0 || layer.maxScale !== 0) {
                     this._checkboxScaleRange();
                     this._scaleRangeHandler = layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
@@ -132,7 +132,7 @@ define([
             }));
         },
         //check scales and add/remove disabled classes from checkbox
-        _checkboxScaleRange: function() {
+        _checkboxScaleRange: function () {
             var node = this.checkNode,
                 layer = this.layer,
                 scale = layer.getMap().getScale(),

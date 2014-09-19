@@ -23,11 +23,11 @@ define([
     'use strict';
     return declare(PopupMenuItem, {
         layer: null,
-        constructor: function(options) {
+        constructor: function (options) {
             options = options || {};
             lang.mixin(this, options);
         },
-        postCreate: function() {
+        postCreate: function () {
             var transparencySlider = new HorizontalSlider({
                 value: this.layer.opacity,
                 minimum: 0,
@@ -35,9 +35,9 @@ define([
                 discreteValues: 21,
                 intermediateChanges: true,
                 showButtons: false,
-                onChange: lang.hitch(this, function(value) {
+                onChange: lang.hitch(this, function (value) {
                     this.layer.setOpacity(value);
-                    array.forEach(query('.' + this.layer.id + '-layerLegendImage'), function(img) {
+                    array.forEach(query('.' + this.layer.id + '-layerLegendImage'), function (img) {
                         domStyle.set(img, 'opacity', value);
                     });
                 })

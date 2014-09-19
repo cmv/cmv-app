@@ -16,7 +16,7 @@ define([
     'esri/layers/GraphicsLayer',
     'dojo/text!./Geocoder/templates/Geocoder.html',
     'xstyle/css!./Geocoder/css/Geocoder.css'
-], function(declare, _WidgetBase, _TemplatedMixin, a11yclick, lang, on, domClass, domStyle, Geocoder, MenuItem, SimpleMarkerSymbol, Graphic, InfoTemplate, GraphicsLayer, template) {
+], function (declare, _WidgetBase, _TemplatedMixin, a11yclick, lang, on, domClass, domStyle, Geocoder, MenuItem, SimpleMarkerSymbol, Graphic, InfoTemplate, GraphicsLayer, template) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         baseClass: 'gis_GeocoderDijit',
@@ -38,21 +38,21 @@ define([
             '</table>'
         ].join(''),
 
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             var options = lang.mixin({}, this.geocoderOptions, {
                 map: this.map
             });
             this.geocoder = new Geocoder(options, this.geocoderNode);
 
-            on(this.geocoder, 'select', lang.hitch(this, function(e) {
+            on(this.geocoder, 'select', lang.hitch(this, function (e) {
                 if (e.result) {
                     this.show();
                 }
             }));
 
             if (this.collapsible) {
-                on(this.map, 'pan-start', lang.hitch(this, function() {
+                on(this.map, 'pan-start', lang.hitch(this, function () {
                     this.hide();
                 }));
                 this.own(
@@ -68,7 +68,7 @@ define([
                 this.hide();
             }
             if (this.mapRightClickMenu) {
-                this.map.on('MouseDown', lang.hitch(this, function(evt) {
+                this.map.on('MouseDown', lang.hitch(this, function (evt) {
                     this.mapRightClickPoint = evt.mapPoint;
                 }));
                 this.mapRightClickMenu.addChild(new MenuItem({
@@ -83,7 +83,7 @@ define([
                 this.map.addLayer(this.graphics);
             }
         },
-        toggle: function() {
+        toggle: function () {
             var display = domStyle.get(this.searchContainerNode, 'display');
             if (display === 'block') {
                 this.hide();
@@ -91,24 +91,24 @@ define([
                 this.show();
             }
         },
-        hide: function() {
+        hide: function () {
             domStyle.set(this.searchContainerNode, 'display', 'none');
             domClass.remove(this.containerNode, 'open');
             if (this.geocoder) {
                 this.geocoder.blur();
             }
         },
-        show: function() {
+        show: function () {
             domStyle.set(this.searchContainerNode, 'display', 'block');
             domClass.add(this.containerNode, 'open');
             if (this.geocoder && !this.expanded) {
                 this.geocoder.focus();
             }
         },
-        reverseGeocode: function() {
+        reverseGeocode: function () {
             this.geocoder._task.locationToAddress(this.mapRightClickPoint, 1000, lang.hitch(this, 'reverseGeocodeComplete'));
         },
-        reverseGeocodeComplete: function(res) {
+        reverseGeocodeComplete: function (res) {
             var graphic = new Graphic(res.location, this.symbol, res.address, this.infoTemplate);
             this.graphics.add(graphic);
 
@@ -118,7 +118,7 @@ define([
 
             var screenPnt = this.map.toScreen(res.location);
             this.map.infoWindow.show(screenPnt, this.map.getInfoWindowAnchor(screenPnt));
-            on.once(this.map.infoWindow, 'hide', lang.hitch(this, function() {
+            on.once(this.map.infoWindow, 'hide', lang.hitch(this, function () {
                 this.graphics.clear();
             }));
         }

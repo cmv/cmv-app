@@ -12,7 +12,7 @@ define([
     'dojo/topic',
     '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.2/proj4.js',
     'xstyle/css!./MapInfo/css/MapInfo.css'
-], function(
+], function (
     declare,
     WidgetBase,
     TemplatedMixin,
@@ -47,7 +47,7 @@ define([
         _mode: 0,
         _projection: null,
         _projectionLoaded: false,
-        constructor: function(options) {
+        constructor: function (options) {
             declare.safeMixin(this, options || {});
             //template
             var ts = '<div class="gis-dijit-MapInfo">';
@@ -69,7 +69,7 @@ define([
             ts += '</div>';
             this.templateString = ts;
         },
-        postCreate: function() {
+        postCreate: function () {
             var map = this.map;
             if (!map) {
                 topic.publish('viewer/handleError', {
@@ -86,7 +86,7 @@ define([
                 map.on('load', lang.hitch(this, '_initialize', map));
             }
         },
-        _initialize: function(map) {
+        _initialize: function (map) {
             var wkid = map.spatialReference.wkid,
                 mode = this.mode;
             if (wkid === 102100 && mode !== 'dec' && mode !== 'dms') {
@@ -112,12 +112,12 @@ define([
                     return;
                 }
                 if (this.proj4CustomURL) {
-                    require([this.proj4CustomURL], lang.hitch(this, function() {
+                    require([this.proj4CustomURL], lang.hitch(this, function () {
                         this._projectionLoaded = true;
                         this._projection = this.proj4Catalog + ':' + this.proj4Wkid;
                     }));
                 } else {
-                    require(['http://spatialreference.org/ref/' + this.proj4Catalog.toLowerCase() + '/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function() {
+                    require(['http://spatialreference.org/ref/' + this.proj4Catalog.toLowerCase() + '/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function () {
                         this._projectionLoaded = true;
                         this._projection = this.proj4Catalog + ':' + this.proj4Wkid;
                     }));
@@ -136,42 +136,42 @@ define([
             }
             map.on('mouse-move, mouse-drag', lang.hitch(this, '_setCoords'));
         },
-        _setCoords: function(evt) {
+        _setCoords: function (evt) {
             var pnt = evt.mapPoint,
                 mode = this.mode,
                 scale = this.unitScale;
             switch (this._mode) {
-                case 0:
-                case 3:
+            case 0:
+            case 3:
+                this._xCoord(number.round(pnt.x, scale));
+                this._yCoord(number.round(pnt.y, scale));
+                break;
+            case 1:
+                if (mode === 'dms') {
+                    this._xCoord(this._decToDMS(pnt.getLongitude(), 'x'));
+                    this._yCoord(this._decToDMS(pnt.getLatitude(), 'y'));
+                } else {
+                    this._xCoord(number.round(pnt.getLongitude(), scale));
+                    this._yCoord(number.round(pnt.getLatitude(), scale));
+                }
+                break;
+            case 2:
+                if (mode === 'dms') {
+                    this._xCoord(this._decToDMS(pnt.x, 'x'));
+                    this._yCoord(this._decToDMS(pnt.y, 'y'));
+                } else {
                     this._xCoord(number.round(pnt.x, scale));
                     this._yCoord(number.round(pnt.y, scale));
-                    break;
-                case 1:
-                    if (mode === 'dms') {
-                        this._xCoord(this._decToDMS(pnt.getLongitude(), 'x'));
-                        this._yCoord(this._decToDMS(pnt.getLatitude(), 'y'));
-                    } else {
-                        this._xCoord(number.round(pnt.getLongitude(), scale));
-                        this._yCoord(number.round(pnt.getLatitude(), scale));
-                    }
-                    break;
-                case 2:
-                    if (mode === 'dms') {
-                        this._xCoord(this._decToDMS(pnt.x, 'x'));
-                        this._yCoord(this._decToDMS(pnt.y, 'y'));
-                    } else {
-                        this._xCoord(number.round(pnt.x, scale));
-                        this._yCoord(number.round(pnt.y, scale));
-                    }
-                    break;
-                case 4:
-                    if (this._projectionLoaded) {
-                        this._project(pnt);
-                    }
-                    break;
+                }
+                break;
+            case 4:
+                if (this._projectionLoaded) {
+                    this._project(pnt);
+                }
+                break;
             }
         },
-        _project: function(pnt) {
+        _project: function (pnt) {
             var projPnt = proj4(proj4.defs[this._projection]).inverse([pnt.x, pnt.y]);
             if (this.mode === 'dms') {
                 this._xCoord(this._decToDMS(projPnt[0], 'x'));
@@ -181,19 +181,19 @@ define([
                 this._yCoord(number.round(projPnt[1], this.unitScale));
             }
         },
-        _setScale: function() {
+        _setScale: function () {
             html.set(this.scaleNode, String(number.format(number.round(this.map.getScale(), 0))));
         },
-        _setZoom: function() {
+        _setZoom: function () {
             html.set(this.zoomNode, String(this.map.getLevel()));
         },
-        _xCoord: function(value) {
+        _xCoord: function (value) {
             html.set(this.xNode, String(value));
         },
-        _yCoord: function(value) {
+        _yCoord: function (value) {
             html.set(this.yNode, String(value));
         },
-        _decToDMS: function(l, type) {
+        _decToDMS: function (l, type) {
             var dir = '?',
                 abs = Math.abs(l),
                 deg = parseInt(abs, 10),

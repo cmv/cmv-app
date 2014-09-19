@@ -4,7 +4,7 @@ define([
 	'esri/config',
 	'esri/tasks/GeometryService',
 	'esri/layers/ImageParameters'
-], function(units, Extent, esriConfig, GeometryService, ImageParameters) {
+], function (units, Extent, esriConfig, GeometryService, ImageParameters) {
 
 	// url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
 	esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
@@ -115,9 +115,9 @@ define([
 				visible: true,
 				imageParameters: imageParameters
 			},
-            layerControlLayerInfos: {
-                swipe: true
-            }
+			layerControlLayerInfos: {
+				swipe: true
+			}
 		}],
 		// set include:true to load. For titlePane type set position the the desired order in the sidebar
 		widgets: {
@@ -269,9 +269,9 @@ define([
 				options: {
 					map: true,
 					layerControlLayerInfos: true,
-                    separated: true,
-                    vectorReorder: true,
-                    overlayReorder: true
+					separated: true,
+					vectorReorder: true,
+					overlayReorder: true
 				}
 			},
 			bookmarks: {

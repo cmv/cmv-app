@@ -28,7 +28,7 @@ define([
     'dijit/TooltipDialog',
     'dijit/form/RadioButton',
     'xstyle/css!./Print/css/Print.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, PrintTemplate, PrintParameters, esriRequest) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, PrintTemplate, PrintParameters, esriRequest) {
 
     // Main print dijit
     var PrintDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -47,7 +47,7 @@ define([
         imageIcon: require.toUrl('gis/dijit/Print/images/image.png'),
         printTaskURL: null,
         printTask: null,
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             this.printTask = new PrintTask(this.printTaskURL);
             this.printparams = new PrintParameters();
@@ -66,11 +66,11 @@ define([
             });
             //aspect.after(this.printTask, '_createOperationalLayers', this.operationalLayersInspector, false);
         },
-        operationalLayersInspector: function(opLayers) {
-            array.forEach(opLayers, function(layer) {
+        operationalLayersInspector: function (opLayers) {
+            array.forEach(opLayers, function (layer) {
                 if (layer.id == 'Measurement_graphicslayer') {
-                    array.forEach(layer.featureCollection.layers, function(fcLayer) {
-                        array.forEach(fcLayer.featureSet.features, function(feature) {
+                    array.forEach(layer.featureCollection.layers, function (fcLayer) {
+                        array.forEach(fcLayer.featureSet.features, function (feature) {
                             delete feature.attributes;
                             feature.symbol.font.family = 'Courier';
                             //feature.symbol.font.variant = esri.symbol.Font.VARIANT_NORMAL;
@@ -81,14 +81,14 @@ define([
             });
             return opLayers;
         },
-        _handleError: function(err) {
+        _handleError: function (err) {
             topic.publish('viewer/handleError', {
                 source: 'Print',
                 error: err
             });
         },
-        _handlePrintInfo: function(data) {
-            var Layout_Template = array.filter(data.parameters, function(param) {
+        _handlePrintInfo: function (data) {
+            var Layout_Template = array.filter(data.parameters, function (param) {
                 return param.name === 'Layout_Template';
             });
             if (Layout_Template.length === 0) {
@@ -98,13 +98,13 @@ define([
                 });
                 return;
             }
-            var layoutItems = array.map(Layout_Template[0].choiceList, function(item) {
+            var layoutItems = array.map(Layout_Template[0].choiceList, function (item) {
                 return {
                     name: item,
                     id: item
                 };
             });
-            layoutItems.sort(function(a, b) {
+            layoutItems.sort(function (a, b) {
                 return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
             });
             var layout = new Memory({
@@ -117,7 +117,7 @@ define([
                 this.layoutDijit.set('value', Layout_Template[0].defaultValue);
             }
 
-            var Format = array.filter(data.parameters, function(param) {
+            var Format = array.filter(data.parameters, function (param) {
                 return param.name === 'Format';
             });
             if (Format.length === 0) {
@@ -127,13 +127,13 @@ define([
                 });
                 return;
             }
-            var formatItems = array.map(Format[0].choiceList, function(item) {
+            var formatItems = array.map(Format[0].choiceList, function (item) {
                 return {
                     name: item,
                     id: item
                 };
             });
-            formatItems.sort(function(a, b) {
+            formatItems.sort(function (a, b) {
                 return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
             });
             var format = new Memory({
@@ -147,7 +147,7 @@ define([
             }
 
         },
-        print: function() {
+        print: function () {
             if (this.printSettingsFormDijit.isValid()) {
                 var form = this.printSettingsFormDijit.get('value');
                 var preserve = this.preserveFormDijit.get('value');
@@ -189,7 +189,7 @@ define([
                 this.printSettingsFormDijit.validate();
             }
         },
-        clearResults: function() {
+        clearResults: function () {
             domConstruct.empty(this.printResultsNode);
             Style.set(this.clearActionBarNode, 'display', 'none');
             this.count = 1;
@@ -201,11 +201,11 @@ define([
         widgetsInTemplate: true,
         templateString: printResultTemplate,
         url: null,
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             this.fileHandle.then(lang.hitch(this, '_onPrintComplete'), lang.hitch(this, '_onPrintError'));
         },
-        _onPrintComplete: function(data) {
+        _onPrintComplete: function (data) {
             if (data.url) {
                 this.url = data.url;
                 this.nameNode.innerHTML = '<span class="bold">' + this.docName + '</span>';
@@ -214,7 +214,7 @@ define([
                 this._onPrintError('Error, try again');
             }
         },
-        _onPrintError: function(err) {
+        _onPrintError: function (err) {
             topic.publish('viewer/handleError', {
                 source: 'Print',
                 error: err
@@ -222,7 +222,7 @@ define([
             this.nameNode.innerHTML = '<span class="bold">Error, try again</span>';
             domClass.add(this.resultNode, 'printResultError');
         },
-        _openPrint: function() {
+        _openPrint: function () {
             if (this.url !== null) {
                 window.open(this.url);
             }

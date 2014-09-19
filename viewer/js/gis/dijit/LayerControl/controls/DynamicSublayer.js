@@ -10,7 +10,7 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dojo/text!./templates/Sublayer.html'
-], function(
+], function (
     declare,
     lang,
     array,
@@ -29,7 +29,7 @@ define([
         // ^args
         templateString: sublayerTemplate,
         _expandClickHandler: null,
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             if (array.indexOf(this.control.layer.visibleLayers, this.sublayerInfo.id) !== -1) {
                 domClass.remove(this.checkNode, 'fa-square-o');
@@ -40,7 +40,7 @@ define([
             }
             domAttr.set(this.checkNode, 'data-sublayer-id', this.sublayerInfo.id);
             domClass.add(this.checkNode, this.control.layer.id + '-layerControlSublayerCheck');
-            on(this.checkNode, 'click', lang.hitch(this, function() {
+            on(this.checkNode, 'click', lang.hitch(this, function () {
                 if (domAttr.get(this.checkNode, 'data-checked') === 'checked') {
                     domAttr.set(this.checkNode, 'data-checked', 'unchecked');
                     domClass.remove(this.checkNode, 'fa-check-square-o');
@@ -69,7 +69,7 @@ define([
         },
         //add on event to expandClickNode
         _expandClick: function () {
-            this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function() {
+            this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
                 var expandNode = this.expandNode,
                     iconNode = this.expandIconNode;
                 if (domStyle.get(expandNode, 'display') === 'none') {
@@ -82,7 +82,7 @@ define([
             }));
         },
         //check scales and add/remove disabled classes from checkbox
-        _checkboxScaleRange: function() {
+        _checkboxScaleRange: function () {
             var node = this.checkNode,
                 scale = this.control.layer.getMap().getScale(),
                 min = this.sublayerInfo.minScale,

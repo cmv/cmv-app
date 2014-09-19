@@ -11,7 +11,7 @@ define([
     'dojo/text!./Basemaps/templates/Basemaps.html',
     'esri/dijit/BasemapGallery',
     'xstyle/css!./Basemaps/css/Basemaps.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownMenu, MenuItem, array, functional, template, BasemapGallery) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownMenu, MenuItem, array, functional, template, BasemapGallery) {
 
     // main basemap widget
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -25,7 +25,7 @@ define([
         mapStartBasemap: 'streets',
         basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'gray', 'oceans', 'national-geographic', 'osm'],
         validBasemaps: [],
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             this.currentBasemap = this.mapStartBasemap || null;
 
@@ -33,7 +33,7 @@ define([
                 this.gallery = new BasemapGallery({
                     map: this.map,
                     showArcGISBasemaps: false,
-                    basemaps: functional.map(this.basemaps, function(map) {
+                    basemaps: functional.map(this.basemaps, function (map) {
                         return map.basemap;
                     })
                 });
@@ -48,13 +48,13 @@ define([
                 //baseClass: this.menuClass
             });
 
-            array.forEach(this.basemapsToShow, function(basemap) {
+            array.forEach(this.basemapsToShow, function (basemap) {
                 if (this.basemaps.hasOwnProperty(basemap)) {
                     var menuItem = new MenuItem({
                         id: basemap,
                         label: this.basemaps[basemap].title,
                         iconClass: (basemap == this.mapStartBasemap) ? 'selectedIcon' : 'emptyIcon',
-                        onClick: lang.hitch(this, function() {
+                        onClick: lang.hitch(this, function () {
                             if (basemap !== this.currentBasemap) {
                                 this.currentBasemap = basemap;
                                 if (this.mode === 'custom') {
@@ -63,7 +63,7 @@ define([
                                     this.map.setBasemap(basemap);
                                 }
                                 var ch = this.menu.getChildren();
-                                array.forEach(ch, function(c) {
+                                array.forEach(ch, function (c) {
                                     if (c.id == basemap) {
                                         c.set('iconClass', 'selectedIcon');
                                     } else {
@@ -79,7 +79,7 @@ define([
 
             this.dropDownButton.set('dropDown', this.menu);
         },
-        startup: function() {
+        startup: function () {
             this.inherited(arguments);
             if (this.mode === 'custom') {
                 if (this.map.getBasemap() !== this.mapStartBasemap) { //based off the title of custom basemaps in viewer.js config

@@ -10,7 +10,7 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dojo/text!./templates/Folder.html'
-], function(
+], function (
     declare,
     lang,
     array,
@@ -28,7 +28,7 @@ define([
         folderInfo: null,
         // ^args
         templateString: folderTemplate,
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             if (array.indexOf(this.control.layer.visibleLayers, this.folderInfo.id) !== -1) {
                 domClass.remove(this.checkNode, 'fa-square-o');
@@ -39,7 +39,7 @@ define([
             }
             domAttr.set(this.checkNode, 'data-sublayer-id', this.folderInfo.id);
             domClass.add(this.checkNode, this.control.layer.id + '-layerControlSublayerCheck');
-            on(this.checkNode, 'click', lang.hitch(this, function() {
+            on(this.checkNode, 'click', lang.hitch(this, function () {
                 if (domAttr.get(this.checkNode, 'data-checked') === 'checked') {
                     domAttr.set(this.checkNode, 'data-checked', 'unchecked');
                     domClass.remove(this.checkNode, 'fa-check-square-o');
@@ -53,7 +53,7 @@ define([
                 this._checkboxScaleRange();
             }));
             html.set(this.labelNode, this.folderInfo.name);
-            on(this.expandClickNode, 'click', lang.hitch(this, function() {
+            on(this.expandClickNode, 'click', lang.hitch(this, function () {
                 var expandNode = this.expandNode,
                     iconNode = this.expandIconNode;
                 if (domStyle.get(expandNode, 'display') === 'none') {
@@ -72,7 +72,7 @@ define([
             }
         },
         //check scales and add/remove disabled classes from checkbox
-        _checkboxScaleRange: function() {
+        _checkboxScaleRange: function () {
             var node = this.checkNode,
                 scale = this.control.layer.getMap().getScale(),
                 min = this.folderInfo.minScale,
