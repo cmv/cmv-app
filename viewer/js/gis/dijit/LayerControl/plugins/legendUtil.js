@@ -37,10 +37,18 @@ define([
         // check controlOptions and controller to determine legend/no legend
         // aliases e.g. controlOptions.noLegend
         isLegend: function (controlOptions, controller) {
-            if ((controlOptions === true || controller === true) || (controller === true && controlOptions !== false)) {
-                return false;
-            } else {
-                return true;
+            if (controller === null || controller === false) {
+                if (controlOptions === true) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else if (controller === true) {
+                if (controlOptions === false) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         },
 
