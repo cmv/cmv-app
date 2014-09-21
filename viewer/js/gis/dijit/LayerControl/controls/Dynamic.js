@@ -2,6 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/aspect',
     'dojo/topic',
     'dojo/on',
     'dojo/query',
@@ -14,8 +15,8 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_Contained',
-    'esri/request',
     './../plugins/LayerMenu',
+    './../plugins/legendUtil',
     './DynamicSublayer',
     './DynamicFolder',
     'dojo/text!./templates/Control.html'
@@ -23,6 +24,7 @@ define([
     declare,
     lang,
     array,
+    aspect,
     topic,
     on,
     query,
@@ -35,8 +37,8 @@ define([
     WidgetBase,
     TemplatedMixin,
     Contained,
-    esriRequest,
     LayerMenu,
+    legendUtil,
     DynamicSublayer,
     DynamicFolder,
     controlTemplate
@@ -49,12 +51,12 @@ define([
         // ^args
         templateString: controlTemplate,
         layerMenu: null,
-        _layerType: 'overlay',
+        _layerType: 'overlay', // constant
         _scaleRangeHandler: null,
         _expandClickHandler: null,
         _sublayerControls: [],
-        _reorderUp: null, //used by LayerMenu
-        _reorderDown: null, //used by LayerMenu
+        _reorderUp: null, // used by LayerMenu
+        _reorderDown: null, // used by LayerMenu
         postCreate: function () {
             this.inherited(arguments);
             if (!this.controller) {
@@ -79,15 +81,17 @@ define([
                 this.layer.on('load', lang.hitch(this, '_initialize'));
             }
         },
-        //add layer and init control
+        // initialize the control
         _initialize: function () {
-            var layer = this.layer;
-            //template defaults as unchecked if visible checked
+            var layer = this.layer,
+                controlOptions = this.controlOptions,
+                isLegend = legendUtil.isLegend(controlOptions.noLegend, this.controller.noLegend);
+            // template defaults as unchecked if visible checked
             if (layer.visible) {
                 domClass.remove(this.checkNode, 'fa-square-o');
                 domClass.add(this.checkNode, 'fa fa-check-square-o');
             }
-            //toggle layer
+            // toggle layer
             on(this.checkNode, 'click', lang.hitch(this, function () {
                 if (layer.visible) {
                     layer.hide();
@@ -110,29 +114,34 @@ define([
                     this._checkboxScaleRange();
                 }
             }));
-            //set title
+            // set title
             html.set(this.labelNode, this.layerTitle);
-            //wire up updating indicator
+            // wire up updating indicator
             layer.on('update-start', lang.hitch(this, function () {
                 domStyle.set(this.layerUpdateNode, 'display', 'inline-block'); //font awesome display
             }));
             layer.on('update-end', lang.hitch(this, function () {
                 domStyle.set(this.layerUpdateNode, 'display', 'none');
             }));
-            //build sublayers
-            if (this.controlOptions.sublayers) {
+            // build sublayers and create legend
+            if (isLegend && controlOptions.sublayers) {
                 this._expandClick();
                 this._createSublayers(layer);
+                // create legends after sublayers created
+                aspect.after(this, '_createSublayers', lang.hitch(this, legendUtil.dynamicSublayerLegend(layer, this.expandNode)));
+            } else if (isLegend && controlOptions.sublayers === false) {
+                this._expandClick();
+                legendUtil.layerLegend(layer, this.expandNode);
             } else {
                 domClass.remove(this.expandIconNode, ['fa', 'fa-plus-square-o', 'layerControlToggleIcon']);
                 domStyle.set(this.expandClickNode, 'cursor', 'default');
                 domConst.destroy(this.expandNode);
             }
-            //show expandNode
-            if (this.controlOptions.expanded && this.controlOptions.sublayers) {
+            // show expandNode
+            if (controlOptions.expanded && controlOptions.sublayers) {
                 this.expandClickNode.click();
             }
-            //layer menu
+            // create layer menu
             this.layerMenu = new LayerMenu({
                 control: this,
                 contextMenuForWindow: false,
@@ -140,12 +149,12 @@ define([
                 leftClickToOpen: true
             });
             this.layerMenu.startup();
-            //if layer has scales set
+            // if layer has scales set
             if (layer.minScale !== 0 || layer.maxScale !== 0) {
                 this._checkboxScaleRange();
                 this._scaleRangeHandler = layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
             }
-            //if layer scales change
+            // if layer scales change
             this.layer.on('scale-range-change', lang.hitch(this, function () {
                 if (layer.minScale !== 0 || layer.maxScale !== 0) {
                     this._checkboxScaleRange();
@@ -159,7 +168,7 @@ define([
                 }
             }));
         },
-        //add on event to expandClickNode
+        // add on event to expandClickNode
         _expandClick: function () {
             this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
                 var expandNode = this.expandNode,
@@ -173,9 +182,9 @@ define([
                 }
             }));
         },
-        //add folder/sublayer controls per layer.layerInfos
+        // add folder/sublayer controls per layer.layerInfos
         _createSublayers: function (layer) {
-            //check for single sublayer - if so no sublayer/folder controls
+            // check for single sublayer - if so no sublayer/folder controls
             if (layer.layerInfos.length > 1) {
                 array.forEach(layer.layerInfos, lang.hitch(this, function (info) {
                     var pid = info.parentLayerId,
@@ -183,7 +192,7 @@ define([
                         controlId = layer.id + '-' + info.id + '-sublayer-control',
                         control;
                     if (pid === -1 && slids === null) {
-                        //it's a top level sublayer
+                        // it's a top level sublayer
                         control = new DynamicSublayer({
                             id: controlId,
                             control: this,
@@ -191,7 +200,7 @@ define([
                         });
                         domConst.place(control.domNode, this.expandNode, 'last');
                     } else if (pid === -1 && slids !== null) {
-                        //it's a top level folder
+                        // it's a top level folder
                         control = new DynamicFolder({
                             id: controlId,
                             control: this,
@@ -199,7 +208,7 @@ define([
                         });
                         domConst.place(control.domNode, this.expandNode, 'last');
                     } else if (pid !== -1 && slids !== null) {
-                        //it's a nested folder
+                        // it's a nested folder
                         control = new DynamicFolder({
                             id: controlId,
                             control: this,
@@ -207,7 +216,7 @@ define([
                         });
                         domConst.place(control.domNode, registry.byId(layer.id + '-' + info.parentLayerId + '-sublayer-control').expandNode, 'last');
                     } else if (pid !== -1 && slids === null) {
-                        //it's a nested sublayer
+                        // it's a nested sublayer
                         control = new DynamicSublayer({
                             id: controlId,
                             control: this,
@@ -219,106 +228,12 @@ define([
                     this._sublayerControls.push(control);
                 }));
             }
-            //create legend
-            this._createLegend(layer);
         },
-        //create legend
-        _createLegend: function (layer) {
-            if ((this.controlOptions.noLegend === true || this.controller.noLegend === true) && (this.controller.noLegend === true && this.controlOptions.noLegend !== false)) {
-                this._noLegend();
-                return;
-            }
-            //check ags version and create legends
-            if (layer.version >= 10.01) {
-                esriRequest({
-                    url: layer.url + '/legend',
-                    callbackParamName: 'callback',
-                    content: {
-                        f: 'json',
-                        token: (typeof layer._getToken === 'function') ? layer._getToken() : null
-                    }
-                }).then(lang.hitch(this, function (r) {
-                    array.forEach(r.layers, function (_layer) {
-                        //create legend table
-                        var table = domConst.create('table');
-                        domClass.add(table, 'layerControlLegendTable');
-                        //iterate through legends
-                        array.forEach(_layer.legend, function (legend) {
-                            //create a table row and symbol & label table data
-                            //  add label too
-                            var row = domConst.create('tr', {}, table, 'last'),
-                                symbol = domConst.create('td', {}, row, 'first'),
-                                label = domConst.create('td', {
-                                    innerHTML: legend.label || '&nbsp;'
-                                }, row, 'last');
-                            domClass.add(symbol, 'layerControlLegendImage');
-                            domClass.add(label, 'layerControlLegendLabel');
-                            //create image
-                            var img = domConst.create('img', {
-                                src: 'data:' + legend.contentType + ';base64,' + legend.imageData
-                            }, symbol);
-                            domStyle.set(img, {
-                                'width': legend.width + 'px',
-                                'height': legend.height + 'px',
-                                'opacity': layer.opacity
-                            });
-                            domClass.add(img, layer.id + '-layerLegendImage');
-                        }, this);
-                        //place it!
-                        //check for single layer, if so use expandNode for legend
-                        if (layer.layerInfos.length > 1) {
-                            var expandNode = registry.byId(layer.id + '-' + _layer.layerId + '-sublayer-control').expandNode;
-                            html.set(expandNode, ''); //clear "No Legend" placeholder
-                            domConst.place(table, expandNode);
-                        } else {
-                            domConst.place(table, this.expandNode);
-                        }
-                    }, this);
-                }), lang.hitch(this, function (e) {
-                    topic.publish('viewer/handleError', {
-                        source: 'LayerControl/Dynamic',
-                        error: 'an error occurred retrieving legend'
-                    });
-                    topic.publish('viewer/handleError', {
-                        source: 'LayerControl/Dynamic',
-                        error: e
-                    });
-                    this._noLegend();
-                }));
-            } else {
-                this._noLegend();
-            }
-        },
-        //handle no legend checking for number of sublayers in service
-        _noLegend: function () {
-            if (this.layer.layerInfos.length === 1) {
-                this._noLegendRemove(this, false);
-            } else {
-                array.forEach(this._sublayerControls, function (control) {
-                    //layers not folders
-                    if (control.sublayerInfo) {
-                        this._noLegendRemove(control, true);
-                    }
-                }, this);
-            }
-        },
-        //remove classes and click handler
-        _noLegendRemove: function (obj, unindent) {
-            domClass.remove(obj.expandIconNode, ['fa', 'fa-plus-square-o', 'layerControlToggleIcon']);
-            domStyle.set(obj.expandClickNode, 'cursor', 'default');
-            domConst.destroy(obj.expandNode);
-            if (unindent) {
-                domStyle.set(obj.expandClickNode, 'width', '4px');
-            }
-            if (obj._expandClickHandler) {
-                obj._expandClickHandler.remove();
-            }
-        },
-        //set dynamic layer visible layers
+        // set dynamic layer visible layers
         _setVisibleLayers: function () {
-            //because ags doesn't respect a layer group's visibility
-            //i.e. layer 3 (the group) is off but it's sublayers still show
-            //so check and if group is off also remove the sublayers
+            // because ags doesn't respect a layer group's visibility
+            //   i.e. layer 3 (the group) is not in array but it's sublayers are; sublayers will show
+            //   so check and if group is off also remove the sublayers
             var layer = this.layer,
                 setLayers = [];
             array.forEach(query('.' + layer.id + '-layerControlSublayerCheck'), function (i) {
@@ -347,7 +262,7 @@ define([
                 visibleLayers: setLayers
             });
         },
-        //check scales and add/remove disabled classes from checkbox
+        // check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function () {
             var node = this.checkNode,
                 layer = this.layer,

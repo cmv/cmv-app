@@ -72,6 +72,14 @@ define([
                         controller._swipeLayer(layer, 'horizontal');
                     }
                 }));
+                if (controlOptions.swipeScope === true) {
+                    swipeMenu.addChild(new MenuItem({
+                        label: 'Scope',
+                        onClick: function () {
+                            controller._swipeLayer(layer, 'scope');
+                        }
+                    }));
+                }
                 menu.addChild(new PopupMenuItem({
                     label: 'Layer Swipe',
                     popup: swipeMenu

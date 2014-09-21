@@ -71,7 +71,7 @@ define([
                 this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
             }
         },
-        //check scales and add/remove disabled classes from checkbox
+        // check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function () {
             var node = this.checkNode,
                 scale = this.control.layer.getMap().getScale(),

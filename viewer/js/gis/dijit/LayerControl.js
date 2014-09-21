@@ -39,7 +39,7 @@ define([
         noTransparency: null,
         swipe: null,
         fontAwesome: true,
-        fontAwesomeUrl: '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', //4.2.0 looks funny @ 16px?
+        fontAwesomeUrl: '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', // 4.2.0 looks funny @ 16px?
         swiperButtonStyle: 'position:absolute;top:20px;left:120px;z-index:50;',
         // ^args
         baseClass: 'layerControlDijit',
@@ -67,26 +67,26 @@ define([
             this.inherited(arguments);
             if (this.separated) {
                 var ControlContainer = declare([WidgetBase, Container]);
-                //vector layer label
+                // vector layer label
                 if (this.vectorLabel !== false) {
                     this.addChild(new ContentPane({
                         className: 'vectorLabelContainer',
                         content: this.vectorLabel
                     }, domConst.create('div')), 'first');
                 }
-                //vector layer control container
+                // vector layer control container
                 this._vectorContainer = new ControlContainer({
                     className: 'vectorLayerContainer'
                 }, domConst.create('div'));
                 this.addChild(this._vectorContainer, 'last');
-                //overlay layer label
+                // overlay layer label
                 if (this.overlayLabel !== false) {
                     this.addChild(new ContentPane({
                         className: 'overlayLabelContainer',
                         content: this.overlayLabel
                     }, domConst.create('div')), 'last');
                 }
-                //overlay layer control container
+                // overlay layer control container
                 this._overlayContainer = new ControlContainer({
                     className: 'overlayLayerContainer'
                 }, domConst.create('div'));
@@ -95,15 +95,15 @@ define([
                 this.overlayReorder = false;
                 this.vectorReorder = false;
             }
-            //load only the modules we need
+            // load only the modules we need
             var modules = [];
-            //load font awesome
+            // load font awesome
             if (this.fontAwesome) {
                 modules.push('xstyle/css!' + this.fontAwesomeUrl);
             }
-            //push layer control mods
+            // push layer control mods
             array.forEach(this.layerInfos, function (layerInfo) {
-                //check if control is excluded
+                // check if control is excluded
                 var controlOptions = layerInfo.controlOptions;
                 if (controlOptions && controlOptions.exclude === true) {
                     return;
@@ -118,10 +118,10 @@ define([
                     });
                 }
             }, this);
-            //load and go
+            // load and go
             require(modules, lang.hitch(this, function () {
                 array.forEach(this.layerInfos, function (layerInfo) {
-                    //exclude from widget
+                    // exclude from widget
                     var controlOptions = layerInfo.controlOptions;
                     if (controlOptions && controlOptions.exclude === true) {
                         return;
@@ -134,7 +134,7 @@ define([
                 this._checkReorder();
             }));
         },
-        //create layer control and add to appropriate _container
+        // create layer control and add to appropriate _container
         _addControl: function (layerInfo, LayerControl) {
             var layerControl = new LayerControl({
                 controller: this,
@@ -160,7 +160,7 @@ define([
                 this.addChild(layerControl, 'first');
             }
         },
-        //move control up in controller and layer up in map
+        // move control up in controller and layer up in map
         _moveUp: function (control) {
             var id = control.layer.id,
                 node = control.domNode,
@@ -181,7 +181,7 @@ define([
                 }
             }
         },
-        //move control down in controller and layer down in map
+        // move control down in controller and layer down in map
         _moveDown: function (control) {
             var id = control.layer.id,
                 node = control.domNode,
@@ -202,6 +202,7 @@ define([
                 }
             }
         },
+        // enable/disable move up/down menu items when the last or first child respectively
         _checkReorder: function () {
             if (this.separated) {
                 if (this.vectorReorder) {
@@ -234,7 +235,7 @@ define([
                 }
             }
         },
-        //zoom to layer
+        // zoom to layer
         _zoomToLayer: function (layer) {
             var map = this.map;
             if (layer.spatialReference === map.spatialReference) {
@@ -260,7 +261,7 @@ define([
                 }
             }
         },
-        //layer swiper
+        // layer swiper
         _swipeLayer: function (layer, type) {
             if (!layer || !layer.visible) {
                 return;
