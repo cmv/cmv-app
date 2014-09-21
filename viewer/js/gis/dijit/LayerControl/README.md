@@ -12,7 +12,7 @@ A layer control widget for CMV. Just don't call it a TOC.
   * single layer map services display legend in expand area
 * Layer reordering in map and LayerControl widget
 * Separate vector and overlay layers (required for layer reordering)
-* Support for several layer types
+* Support for several layer types:
   * dynamic
   * feature
   * tiled
@@ -56,7 +56,7 @@ layerControl: {
 | `noLegend` | Boolean | When `true` no legend is created for all layers. Can be overridden for specific layer(s) with `noLegend' layer option. |
 | `noZoom` | Boolean | When `true` removes "Zoom to Layer" menu item for all layers. Can be overridden for specific layer(s) with `noZoom' layer option. |
 | `noTransparency` | Boolean | When `true` removes "Transparency" menu item for all layers. Can be overridden for specific layer(s) with `noTransparency' layer option. |
-| `swipe` | Boolean | When `true` adds "Layer Swipe" menu item for all layers.  Can be overridden for specific layer(s) with `swipe' layer option. |
+| `swipe` | Boolean | When `true` adds "Layer Swipe" menu item for all layers.  Can be overridden for specific layer(s) with `swipe` layer option. |
 | `swiperButtonStyle` | String | CSS for positioning "Exit Layer Swipe" button in the map. Must include `position:absolute;` and a `z-index`. Default is `position:absolute;top:20px;left:120px;z-index:50;`. |
 | `fontAwesome` | Boolean | Load Font Awesome CSS. Because dbootstrap uses FA v3.x it is necessary to load FA v4.x. Default is `true`. This can be set to `false` if FA v4.x is being loaded with a `link` tag in `index.html` or as a font. |
 | `fontAwesomeUrl` | String | CDN URL from which to load Font Awesome. Default is FA v4.2.0 from the BootstrapCDN. |
@@ -72,6 +72,7 @@ Additional options can be passed with each layer via the `layerControlLayerInfos
 | `noZoom` | When `true` removes "Zoom to Layer" menu item. Set to `false` to override `noZoom: true` widget option. | all layers |
 | `noTransparency` | When `true` removes "Transparency" menu item. Set to `false` to override `noTransparency: true` widget option. | all layers |
 | `swipe` | When `true` adds "Layer Swipe" menu item. Set to `false` to override `swipe: true` widget option. | all layers |
+| `swipeScope` | When `true` adds Scope option to Layer Swipe menu. Default is `false`. |
 | `expanded` | When `true` expands top level exposing sublayers or legend. | dynamic, feature & tiled |
 | `sublayers` | When `true` dynamic folder/sublayer structure is not created. | dynamic |
 
@@ -133,8 +134,14 @@ topic.subscribe('layerControl/setVisibleLayers', function (r) {
 
 #### Layer Control TODO
 
-1. Support all layer types CMV supports
+Do not include this section is docs outside this file.
+
+1. Support all layer types CMV supports (csv, kml, stream, wms)
 2. More topics published
 3. Method by which to add custom layer menu items
-4. Single legend creating module
-5. Users' awesome ideas and improvements
+4. ~~Single legend module~~
+5. Users' suggestions for improvements
+6. ~~Support pre 10.1 (10.2 in the case of image) legends with arcgis.com legend tool~~
+7. ~~Add 'scope' layer swipe type~~
+8. Optional plugin to set image layer rendering properties (`setBandIds`, `setMosaicRule`, etc)
+9. ~~If dynamic `sublayers: false` but legend would otherwise be created build tiled style legend and place in `expandNode`~~

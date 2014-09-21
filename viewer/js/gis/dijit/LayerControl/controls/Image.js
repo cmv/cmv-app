@@ -3,6 +3,7 @@ define([
     'dojo/_base/lang',
     'dojo/topic',
     'dojo/on',
+    'dojo/dom-construct',
     'dojo/dom-class',
     'dojo/dom-style',
     'dojo/html',
@@ -10,12 +11,14 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_Contained',
     './../plugins/LayerMenu',
+    './../plugins/legendUtil',
     'dojo/text!./templates/Control.html'
 ], function (
     declare,
     lang,
     topic,
     on,
+    domConst,
     domClass,
     domStyle,
     html,
@@ -23,6 +26,7 @@ define([
     TemplatedMixin,
     Contained,
     LayerMenu,
+    legendUtil,
     controlTemplate
 ) {
     return declare([WidgetBase, TemplatedMixin, Contained], {
@@ -35,8 +39,8 @@ define([
         layerMenu: null,
         _layerType: 'overlay',
         _scaleRangeHandler: null,
-        _reorderUp: null, //used by LayerMenu
-        _reorderDown: null, //used by LayerMenu
+        _reorderUp: null, // used by LayerMenu
+        _reorderDown: null, // used by LayerMenu
         postCreate: function () {
             this.inherited(arguments);
             if (!this.controller) {
@@ -61,15 +65,17 @@ define([
                 this.layer.on('load', lang.hitch(this, '_initialize'));
             }
         },
-        //add layer and init control
+        // add layer and init control
         _initialize: function () {
-            var layer = this.layer;
-            //template defaults as unchecked if visible checked
+            var layer = this.layer,
+                controlOptions = this.controlOptions,
+                isLegend = legendUtil.isLegend(controlOptions.noLegend, this.controller.noLegend);
+            // template defaults as unchecked if visible checked
             if (layer.visible) {
                 domClass.remove(this.checkNode, 'fa-square-o');
                 domClass.add(this.checkNode, 'fa fa-check-square-o');
             }
-            //toggle layer
+            // toggle layer
             on(this.checkNode, 'click', lang.hitch(this, function () {
                 if (layer.visible) {
                     layer.hide();
@@ -92,18 +98,28 @@ define([
                     this._checkboxScaleRange();
                 }
             }));
-            //set title
+            // set title
             html.set(this.labelNode, this.layerTitle);
-            //wire up updating indicator
+            // wire up updating indicator
             layer.on('update-start', lang.hitch(this, function () {
                 domStyle.set(this.layerUpdateNode, 'display', 'inline-block'); //font awesome display
             }));
             layer.on('update-end', lang.hitch(this, function () {
                 domStyle.set(this.layerUpdateNode, 'display', 'none');
             }));
-            //remove expandIconNode icon
-            //  retain .layerControlIcon
-            domClass.remove(this.expandIconNode, ['fa', 'fa-minus-square-o', 'fa-plus-square-o']);
+            // create legend
+            if (isLegend) {
+                this._expandClick();
+                legendUtil.layerLegend(layer, this.expandNode);
+            } else {
+                domClass.remove(this.expandIconNode, ['fa', 'fa-plus-square-o', 'layerControlToggleIcon']);
+                domStyle.set(this.expandClickNode, 'cursor', 'default');
+                domConst.destroy(this.expandNode);
+            }
+            // show expandNode
+            if (controlOptions.expanded) {
+                this.expandClickNode.click();
+            }
             //layer menu
             this.layerMenu = new LayerMenu({
                 control: this,
@@ -131,7 +147,21 @@ define([
                 }
             }));
         },
-        //check scales and add/remove disabled classes from checkbox
+        // add on event to expandClickNode
+        _expandClick: function () {
+            this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
+                var expandNode = this.expandNode,
+                    iconNode = this.expandIconNode;
+                if (domStyle.get(expandNode, 'display') === 'none') {
+                    domStyle.set(expandNode, 'display', 'block');
+                    domClass.replace(iconNode, 'fa-minus-square-o', 'fa-plus-square-o');
+                } else {
+                    domStyle.set(expandNode, 'display', 'none');
+                    domClass.replace(iconNode, 'fa-plus-square-o', 'fa-minus-square-o');
+                }
+            }));
+        },
+        // check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function () {
             var node = this.checkNode,
                 layer = this.layer,

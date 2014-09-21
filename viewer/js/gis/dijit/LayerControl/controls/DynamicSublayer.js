@@ -59,15 +59,8 @@ define([
                 this._checkboxScaleRange();
                 this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
             }
-            //add custom menu items
-            var items = this.control.params.controlOptions.sublayerMenuItems;
-            if (items && items.length) {
-                this._sublayerMenu(items);
-            } else {
-                domClass.remove(this.labelNode, 'layerControlClick');
-            }
         },
-        //add on event to expandClickNode
+        // add on event to expandClickNode
         _expandClick: function () {
             this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
                 var expandNode = this.expandNode,
@@ -81,7 +74,7 @@ define([
                 }
             }));
         },
-        //check scales and add/remove disabled classes from checkbox
+        // check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function () {
             var node = this.checkNode,
                 scale = this.control.layer.getMap().getScale(),

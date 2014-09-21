@@ -3,7 +3,7 @@
 }
 
 .layerControlDijit .vectorLabelContainer {
-	
+    
 }
 
 .layerControlDijit .overlayLayerContainer {
@@ -11,11 +11,11 @@
 }
 
 .layerControlDijit .overlayLabelContainer {
-	padding-bottom: 4px;
+    padding-bottom: 4px;
 }
 
 .layerControlDijit .layerControl {
-	padding-bottom: 6px;
+    padding-bottom: 6px;
 }
 
 .layerControlDijit .layerControlExpand {
@@ -24,83 +24,96 @@
 
 
 .layerControlDijit .layerControlTable {
-	width: 100%;
+    width: 100%;
 }
 
 .layerControlDijit .layerControlTable tr {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 .layerControlDijit .layerControlTable td {
-	padding: 0;
+    padding: 0;
 }
 
 .layerControlDijit .layerControlTableExpand {
-	cursor: pointer;
-	width: 18px;
-	height: 15px;
-	line-height: 15px;
+    cursor: pointer;
+    width: 18px;
+    height: 15px;
+    line-height: 15px;
 }
 
 .layerControlDijit .layerControlTableCheck {
-	cursor: pointer;
-	width: 19px;
-	height: 16px;
-	line-height: 16px;
+    cursor: pointer;
+    width: 19px;
+    height: 16px;
+    line-height: 16px;
 }
 
 .layerControlDijit .layerControlTableLabel {
-	font-size: 15px;
-	height: 16px;
-	line-height: 16px;
+    font-size: 15px;
+    height: 16px;
+    line-height: 16px;
 }
 
 .layerControlDijit .layerControlTableUpdate {
-	width: 21px;
-	height: 16px;
-	line-height: 16px;
-	text-align: center;
+    width: 21px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
 }
 
 .layerControlDijit .layerControlIndent {
-	padding-left: 22px;
+    padding-left: 22px;
 }
 
 .layerControlDijit .layerControlIcon {
-	font-size: 17px;
+    font-size: 17px;
 }
 
 .layerControlDijit .layerControlUpdateIcon {
-	font-size: 12px
+    font-size: 12px
 }
 
 .layerControlDijit .layerControlCheckIconOutScale {
-	color: #BBB;
+    color: #BBB;
 }
 
 .layerControlDijit .layerControlClick {
-	cursor: pointer;
-	color: #1f78af;
-	text-decoration: none;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+    cursor: pointer;
+    color: #1f78af;
+    text-decoration: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .layerControlDijit .layerControlClick:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 .layerControlDijit .layerControlLegendTable tr {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 .layerControlDijit .layerControlLegendImage > img {
-	border: none;
-	padding: 0;
+    border: none;
+    padding: 0;
 }
 
 .layerControlDijit .layerControlLegendLabel {
-	padding: 0 0 0 4px;
+    padding: 0 0 0 4px;
+}
+
+/* temp esri/Legend overrides */
+.layerControlDijit .esriLegendService td {
+    padding: 0;
+}
+
+.layerControlDijit .esriLegendGroupLayer, .layerControlDijit .esriLegendLayerLabel {
+    padding: 0;
+}
+
+.layerControlDijit .esriLegendServiceLabel {
+    display: none;
 }
