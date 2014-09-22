@@ -29,7 +29,6 @@ define([
 	'dijit/form/CheckBox',
 	'xstyle/css!./Find/css/Find.css'
 ], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct, lang, array, on, keys, Memory, OnDemandGrid, Selection, Keyboard, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, graphicsUtils, FindTask, FindParameters, Extent, FindTemplate) {
-
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		widgetsInTemplate: true,
 		templateString: FindTemplate,
@@ -92,6 +91,37 @@ define([
 				}
 			}
 
+			this.createGraphicLayers();
+
+			// allow pressing enter key to initiate the search
+			this.own(on(this.searchTextDijit, 'keyup', lang.hitch(this, function (evt) {
+				if (evt.keyCode === keys.ENTER) {
+					this.search();
+				}
+			})));
+
+			this.queryIdx = 0;
+
+			// add an id so the queries becomes key/value pair store
+			var k = 0, queryLen = this.queries.length;
+			for (k = 0; k < queryLen; k++) {
+				this.queries[k].id = k;
+			}
+
+			// add the queries to the drop-down list
+			if (queryLen > 1) {
+				var queryStore = new Memory({
+					data: this.queries
+				});
+				this.querySelectDijit.set('store', queryStore);
+				this.querySelectDijit.set('value', this.queryIdx);
+			} else {
+				this.querySelectDom.style.display = 'none';
+			}
+
+		},
+
+		createGraphicLayers: function () {
 			var pointSymbol = null,
 				polylineSymbol = null,
 				polygonSymbol = null;
@@ -152,30 +182,6 @@ define([
 			this.map.addLayer(this.polygonGraphics);
 			this.map.addLayer(this.polylineGraphics);
 			this.map.addLayer(this.pointGraphics);
-
-			this.own(on(this.searchTextDijit, 'keyup', lang.hitch(this, function (evt) {
-				if (evt.keyCode === keys.ENTER) {
-					this.search();
-				}
-			})));
-
-			var k = 0,
-				queryLen = this.queries.length;
-
-			// add an id so it becomes key/value pair store
-			for (k = 0; k < queryLen; k++) {
-				this.queries[k].id = k;
-			}
-			this.queryIdx = 0;
-			if (queryLen > 1) {
-				var queryStore = new Memory({
-					data: this.queries
-				});
-				this.querySelectDijit.set('store', queryStore);
-				this.querySelectDijit.set('value', this.queryIdx);
-			} else {
-				this.querySelectDom.style.display = 'none';
-			}
 		},
 		search: function () {
 			var query = this.queries[this.queryIdx];

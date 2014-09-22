@@ -54,34 +54,17 @@ define([
 
 		postCreate: function () {
 			this.inherited(arguments);
-			this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/StreetView/images/blueArrow.png'), 30, 30);
-			this.pointGraphics = new GraphicsLayer({
-				id: 'streetview_graphics',
-				title: 'Street View'
-			});
-			this.pointRenderer = new SimpleRenderer(this.pointSymbol);
-			this.pointRenderer.label = 'Street View';
-			this.pointRenderer.description = 'Street View';
-			this.pointGraphics.setRenderer(this.pointRenderer);
-			this.map.addLayer(this.pointGraphics);
+			this.createGraphicsLayer();
 			this.map.on('click', lang.hitch(this, 'getStreetView'));
 
 			this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
-			this.own(topic.subscribe('attributesTable/selectFeatures', lang.hitch(this, function (evt) {
-				if (evt.allowStreetView) {
-					var mc = this.mapClickMode.current;
-					this.getStreetView(evt, true);
-					this.mapClickMode.current = mc;
-				}
-			})));
-
-			if (this.parentWidget && this.parentWidget.toggleable) {
-				this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
-					this.onLayoutChange(this.parentWidget.open);
-				})));
-			}
 
 			if (this.parentWidget) {
+				if (this.parentWidget.toggleable) {
+					this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
+						this.onLayoutChange(this.parentWidget.open);
+					})));
+				}
 				this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, function () {
 					if (this.panorama) {
 						google.maps.event.trigger(this.panorama, 'resize');
@@ -95,14 +78,29 @@ define([
 			window.Proj4js = proj4;
 
 			if (this.mapRightClickMenu) {
-				this.map.on('MouseDown', lang.hitch(this, function (evt) {
-					this.mapRightClickPoint = evt.mapPoint;
-				}));
-				this.mapRightClickMenu.addChild(new MenuItem({
-					label: 'See Street View here',
-					onClick: lang.hitch(this, 'streetViewFromMapRightClick')
-				}));
+				this.addRightClickMenu();
 			}
+		},
+		createGraphicsLayer: function () {
+			this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/StreetView/images/blueArrow.png'), 30, 30);
+			this.pointGraphics = new GraphicsLayer({
+				id: 'streetview_graphics',
+				title: 'Street View'
+			});
+			this.pointRenderer = new SimpleRenderer(this.pointSymbol);
+			this.pointRenderer.label = 'Street View';
+			this.pointRenderer.description = 'Street View';
+			this.pointGraphics.setRenderer(this.pointRenderer);
+			this.map.addLayer(this.pointGraphics);
+		},
+		addRightClickMenu: function () {
+			this.map.on('MouseDown', lang.hitch(this, function (evt) {
+				this.mapRightClickPoint = evt.mapPoint;
+			}));
+			this.mapRightClickMenu.addChild(new MenuItem({
+				label: 'See Street View here',
+				onClick: lang.hitch(this, 'streetViewFromMapRightClick')
+			}));
 		},
 		onOpen: function () {
 			this.pointGraphics.show();

@@ -31,11 +31,20 @@ define([
         postCreate: function () {
             this.inherited(arguments);
             this.drawToolbar = new Draw(this.map);
+            this.drawToolbar.on('draw-end', lang.hitch(this, 'onDrawToolbarDrawEnd'));
 
+            this.createGraphicLayers();
+
+            this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
+            if (this.parentWidget && this.parentWidget.toggleable) {
+                this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
+                    this.onLayoutChange(this.parentWidget.open);
+                })));
+            }
+        },
+        createGraphicLayers: function () {
             this.pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 1), new Color([255, 0, 0, 1.0]));
-
             this.polylineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([255, 0, 0]), 1);
-
             this.polygonSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT, new Color([255, 0, 0]), 2), new Color([255, 255, 0, 0.0]));
 
             this.pointGraphics = new GraphicsLayer({
@@ -115,14 +124,6 @@ define([
             //this.polygonRenderer.description = 'User drawn polygons';
             this.polygonGraphics.setRenderer(this.polygonRenderer);
             this.map.addLayer(this.polygonGraphics);
-
-            this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
-            if (this.parentWidget && this.parentWidget.toggleable) {
-                this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
-                    this.onLayoutChange(this.parentWidget.open);
-                })));
-            }
-            this.drawToolbar.on('draw-end', lang.hitch(this, 'onDrawToolbarDrawEnd'));
         },
         drawPoint: function () {
             this.disconnectMapClick();

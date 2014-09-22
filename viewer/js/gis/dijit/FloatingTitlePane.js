@@ -18,25 +18,7 @@ define([
 	return declare([TitlePane], {
 		postCreate: function () {
 			if (this.canFloat) {
-				this.dockHandleNode = domConstruct.create('span', {
-					title: 'Dock widget'
-				}, this.titleNode, 'after');
-				domStyle.set(this.dockHandleNode, 'display', 'none');
-				domClass.add(this.dockHandleNode, 'floatingWidgetDock');
-
-				this.moveHandleNode = domConstruct.create('span', {
-					title: 'Move widget'
-				}, this.titleNode, 'after');
-				domClass.add(this.moveHandleNode, 'floatingWidgetPopout');
-
-				this.own(on(this.moveHandleNode, 'click', lang.hitch(this, function (evt) {
-					this._undockWidget();
-					evt.stopImmediatePropagation();
-				})));
-				this.own(on(this.dockHandleNode, 'click', lang.hitch(this, function (evt) {
-					this._dockWidget();
-					evt.stopImmediatePropagation();
-				})));
+				this.createDomNodes();
 				this.own(on(window, 'resize', lang.hitch(this, '_endDrag')));
 			}
 			this.own(aspect.after(this, 'toggle', lang.hitch(this, '_afterToggle')));
@@ -51,6 +33,26 @@ define([
 				aspect.after(this._moveable, 'onFirstMove', lang.hitch(this, '_moveDom'), true);
 			}
 			this.inherited(arguments);
+		},
+		createDomNodes: function () {
+			this.dockHandleNode = domConstruct.create('span', {
+				title: 'Dock widget'
+			}, this.titleNode, 'after');
+			domStyle.set(this.dockHandleNode, 'display', 'none');
+			domClass.add(this.dockHandleNode, 'floatingWidgetDock');
+			this.own(on(this.dockHandleNode, 'click', lang.hitch(this, function (evt) {
+				this._dockWidget();
+				evt.stopImmediatePropagation();
+			})));
+
+			this.moveHandleNode = domConstruct.create('span', {
+				title: 'Move widget'
+			}, this.titleNode, 'after');
+			domClass.add(this.moveHandleNode, 'floatingWidgetPopout');
+			this.own(on(this.moveHandleNode, 'click', lang.hitch(this, function (evt) {
+				this._undockWidget();
+				evt.stopImmediatePropagation();
+			})));
 		},
 		_undockWidget: function () {
 			if (!this.isFloating) {

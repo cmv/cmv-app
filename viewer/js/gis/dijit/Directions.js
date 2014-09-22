@@ -23,42 +23,45 @@ define([
 			}, this.options), this.directionsNode);
 			this.directions.startup();
 
+			if (this.mapRightClickMenu) {
+				this.addRightClickMenu();
+			}
+		},
+		addRightClickMenu: function () {
 			// capture map right click position
 			this.map.on('MouseDown', lang.hitch(this, function (evt) {
 				this.mapRightClickPoint = evt.mapPoint;
 			}));
 
-			if (this.mapRightClickMenu) {
-				this.menu = new Menu();
-				this.menu.addChild(new MenuItem({
-					label: 'Directions from here',
-					onClick: lang.hitch(this, 'directionsFrom')
-				}));
-				this.menu.addChild(new MenuItem({
-					label: 'Directions to here',
-					onClick: lang.hitch(this, 'directionsTo')
-				}));
-				this.menu.addChild(new MenuSeparator());
-				this.menu.addChild(new MenuItem({
-					label: 'Add stop',
-					onClick: lang.hitch(this, 'addStop')
-				}));
-				this.menu.addChild(new MenuSeparator());
-				this.menu.addChild(new MenuItem({
-					label: 'Use my location as start point',
-					onClick: lang.hitch(this, 'getGeoLocation', 'directionsFrom')
-				}));
-				this.menu.addChild(new MenuItem({
-					label: 'Use my location as end point',
-					onClick: lang.hitch(this, 'getGeoLocation', 'directionsTo')
-				}));
+			this.menu = new Menu();
+			this.menu.addChild(new MenuItem({
+				label: 'Directions from here',
+				onClick: lang.hitch(this, 'directionsFrom')
+			}));
+			this.menu.addChild(new MenuItem({
+				label: 'Directions to here',
+				onClick: lang.hitch(this, 'directionsTo')
+			}));
+			this.menu.addChild(new MenuSeparator());
+			this.menu.addChild(new MenuItem({
+				label: 'Add stop',
+				onClick: lang.hitch(this, 'addStop')
+			}));
+			this.menu.addChild(new MenuSeparator());
+			this.menu.addChild(new MenuItem({
+				label: 'Use my location as start point',
+				onClick: lang.hitch(this, 'getGeoLocation', 'directionsFrom')
+			}));
+			this.menu.addChild(new MenuItem({
+				label: 'Use my location as end point',
+				onClick: lang.hitch(this, 'getGeoLocation', 'directionsTo')
+			}));
 
-				// add this widgets menu as a sub menu to the map right click menu
-				this.mapRightClickMenu.addChild(new PopupMenuItem({
-					label: 'Directions',
-					popup: this.menu
-				}));
-			}
+			// add this widgets menu as a sub menu to the map right click menu
+			this.mapRightClickMenu.addChild(new PopupMenuItem({
+				label: 'Directions',
+				popup: this.menu
+			}));
 		},
 		clearStops: function () {
 			this.directions.reset();
