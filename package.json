@@ -1,11 +1,11 @@
 {
   "name": "ConfigurableMapViewerCMV",
-  "version": "1.2.1b",
-  "author": "David Spriggs",
+  "version": "1.3.0",
+  "author": "cmv.io - https://github.com/cmv/",
   "license": "MIT",
   "year": "2014",
-  "homepage": "https://github.com/DavidSpriggs/ConfigurableViewerJSAPI",
-  "repository": "https://github.com/DavidSpriggs/ConfigurableViewerJSAPI",
+  "homepage": "http://cmv.io/",
+  "repository": "https://github.com/cmv/cmv-app/",
   "dependencies": {
     "grunt": "0.4.x",
     "grunt-autoprefixer": "0.7.x",

@@ -6,15 +6,13 @@ define([
 	'dojo/cookie',
 	'dojo/_base/lang',
 	'xstyle/css!./Bookmarks/css/Bookmarks.css'
-], function(declare, _WidgetBase, Bookmarks, json, cookie, lang, css) {
+], function (declare, _WidgetBase, Bookmarks, json, cookie, lang) {
 
 	return declare([_WidgetBase], {
 		declaredClass: 'gis.digit.Bookmarks',
-		postCreate: function() {
+		postCreate: function () {
 			this.inherited(arguments);
-
 			var bookmarks = this.bookmarks; // from the options passed in
-
 			this.bookmarkItems = cookie('bookmarkItems');
 			if (this.bookmarkItems === undefined) {
 				this.bookmarkItems = [];
@@ -31,12 +29,12 @@ define([
 			this.connect(this.bookmarks, 'onEdit', 'setBookmarks');
 			this.connect(this.bookmarks, 'onRemove', 'setBookmarks');
 		},
-		setBookmarks: function() {
+		setBookmarks: function () {
 			cookie('bookmarkItems', json.stringify(this.bookmarks.toJson()), {
 				expires: 365
 			});
 		},
-		_export: function() {
+		_export: function () {
 			return json.stringify(this.bookmarks.toJson());
 		}
 	});

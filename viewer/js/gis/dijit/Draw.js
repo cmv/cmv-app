@@ -3,7 +3,6 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'dijit/form/Button',
     'dojo/_base/lang',
     'dojo/_base/Color',
     'esri/toolbars/draw',
@@ -16,9 +15,11 @@ define([
     'esri/symbols/SimpleLineSymbol',
     'esri/symbols/SimpleFillSymbol',
     'esri/layers/FeatureLayer',
-    'dojo/on',
+    'dojo/topic',
+    'dojo/aspect',
+    'dijit/form/Button',
     'xstyle/css!./Draw/css/Draw.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Button, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, on, css) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, topic, aspect) {
 
     // main draw dijit
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -26,14 +27,24 @@ define([
         templateString: drawTemplate,
         drawToolbar: null,
         graphics: null,
-        postCreate: function() {
+        mapClickMode: null,
+        postCreate: function () {
             this.inherited(arguments);
             this.drawToolbar = new Draw(this.map);
+            this.drawToolbar.on('draw-end', lang.hitch(this, 'onDrawToolbarDrawEnd'));
 
+            this.createGraphicLayers();
+
+            this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
+            if (this.parentWidget && this.parentWidget.toggleable) {
+                this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
+                    this.onLayoutChange(this.parentWidget.open);
+                })));
+            }
+        },
+        createGraphicLayers: function () {
             this.pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 1), new Color([255, 0, 0, 1.0]));
-
             this.polylineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([255, 0, 0]), 1);
-
             this.polygonSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT, new Color([255, 0, 0]), 2), new Color([255, 255, 0, 0.0]));
 
             this.pointGraphics = new GraphicsLayer({
@@ -113,72 +124,85 @@ define([
             //this.polygonRenderer.description = 'User drawn polygons';
             this.polygonGraphics.setRenderer(this.polygonRenderer);
             this.map.addLayer(this.polygonGraphics);
-
-            this.drawToolbar.on('draw-end', lang.hitch(this, 'onDrawToolbarDrawEnd'));
         },
-        drawPoint: function() {
+        drawPoint: function () {
             this.disconnectMapClick();
             this.drawToolbar.activate(Draw.POINT);
         },
-        drawCircle: function() {
+        drawCircle: function () {
             this.disconnectMapClick();
             this.drawToolbar.activate(Draw.CIRCLE);
         },
-        drawLine: function() {
+        drawLine: function () {
             this.disconnectMapClick();
             this.drawToolbar.activate(Draw.POLYLINE);
         },
-        drawFreehandLine: function() {
+        drawFreehandLine: function () {
             this.disconnectMapClick();
             this.drawToolbar.activate(Draw.FREEHAND_POLYLINE);
         },
-        drawPolygon: function() {
+        drawPolygon: function () {
             this.disconnectMapClick();
             this.drawToolbar.activate(Draw.POLYGON);
         },
-        drawFreehandPolygon: function() {
+        drawFreehandPolygon: function () {
             this.disconnectMapClick();
             this.drawToolbar.activate(Draw.FREEHAND_POLYGON);
         },
-        disconnectMapClick: function() {
-            this.mapClickMode.current = 'draw';
+        disconnectMapClick: function () {
+            topic.publish('mapClickMode/setCurrent', 'draw');
             // dojo.disconnect(this.mapClickEventHandle);
             // this.mapClickEventHandle = null;
         },
-        connectMapClick: function() {
-            this.mapClickMode.current = this.mapClickMode.defaultMode;
+        connectMapClick: function () {
+            topic.publish('mapClickMode/setDefault');
             // if (this.mapClickEventHandle === null) {
             //     this.mapClickEventHandle = dojo.connect(this.map, 'onClick', this.mapClickEventListener);
             // }
         },
-        onDrawToolbarDrawEnd: function(evt) {
+        onDrawToolbarDrawEnd: function (evt) {
             this.drawToolbar.deactivate();
             this.connectMapClick();
             var graphic;
             switch (evt.geometry.type) {
-                case 'point':
-                    graphic = new Graphic(evt.geometry);
-                    this.pointGraphics.add(graphic);
-                    break;
-                case 'polyline':
-                    graphic = new Graphic(evt.geometry);
-                    this.polylineGraphics.add(graphic);
-                    break;
-                case 'polygon':
-                    graphic = new Graphic(evt.geometry, null, {
-                        ren: 1
-                    });
-                    this.polygonGraphics.add(graphic);
-                    break;
-                default:
+            case 'point':
+                graphic = new Graphic(evt.geometry);
+                this.pointGraphics.add(graphic);
+                break;
+            case 'polyline':
+                graphic = new Graphic(evt.geometry);
+                this.polylineGraphics.add(graphic);
+                break;
+            case 'polygon':
+                graphic = new Graphic(evt.geometry, null, {
+                    ren: 1
+                });
+                this.polygonGraphics.add(graphic);
+                break;
+            default:
             }
         },
-        clearGraphics: function() {
+        clearGraphics: function () {
+            this.endDrawing();
+            this.connectMapClick();
+        },
+        endDrawing: function () {
             this.pointGraphics.clear();
             this.polylineGraphics.clear();
             this.polygonGraphics.clear();
             this.drawToolbar.deactivate();
-            this.connectMapClick();
+        },
+        onLayoutChange: function (open) {
+            // end drawing on close of title pane
+            if (!open) {
+                this.endDrawing();
+                if (this.mapClickMode === 'draw') {
+                    topic.publish('mapClickMode/setDefault');
+                }
+            }
+        },
+        setMapClickMode: function (mode) {
+            this.mapClickMode = mode;
         }
     });
 });

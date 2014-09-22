@@ -3,6 +3,20 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
+    'esri/tasks/PrintTask',
+    'dojo/store/Memory',
+    'dojo/_base/lang',
+    'dojo/_base/array',
+    'dojo/topic',
+    'dojo/dom-style',
+    'dojo/dom-construct',
+    'dojo/dom-class',
+    'dojo/text!./Print/templates/Print.html',
+    'dojo/text!./Print/templates/PrintResult.html',
+    'esri/tasks/PrintTemplate',
+    'esri/tasks/PrintParameters',
+    'esri/request',
+
     'dijit/form/Form',
     'dijit/form/FilteringSelect',
     'dijit/form/ValidationTextBox',
@@ -13,21 +27,8 @@ define([
     'dijit/form/DropDownButton',
     'dijit/TooltipDialog',
     'dijit/form/RadioButton',
-    'esri/tasks/PrintTask',
-    'dojo/store/Memory',
-    'dojo/_base/lang',
-    'dojo/_base/array',
-    'dojo/dom-style',
-    'dojo/dom-construct',
-    'dojo/dom-class',
-    'dojo/text!./Print/templates/Print.html',
-    'dojo/text!./Print/templates/PrintResult.html',
-    'dojo/aspect',
-    'esri/tasks/PrintTemplate',
-    'esri/tasks/PrintParameters',
-    'esri/request',
     'xstyle/css!./Print/css/Print.css'
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Form, FilteringSelect, ValidationTextBox, NumberTextBox, Button, CheckBox, ProgressBar, DropDownButton, TooltipDialog, RadioButton, PrintTask, Memory, lang, array, Style, domConstruct, domClass, printTemplate, printResultTemplate, aspect, PrintTemplate, PrintParameters, esriRequest, css) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, PrintTemplate, PrintParameters, esriRequest) {
 
     // Main print dijit
     var PrintDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -46,7 +47,7 @@ define([
         imageIcon: require.toUrl('gis/dijit/Print/images/image.png'),
         printTaskURL: null,
         printTask: null,
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             this.printTask = new PrintTask(this.printTaskURL);
             this.printparams = new PrintParameters();
@@ -65,12 +66,11 @@ define([
             });
             //aspect.after(this.printTask, '_createOperationalLayers', this.operationalLayersInspector, false);
         },
-        operationalLayersInspector: function(opLayers) {
-            console.log(opLayers);
-            array.forEach(opLayers, function(layer) {
+        operationalLayersInspector: function (opLayers) {
+            array.forEach(opLayers, function (layer) {
                 if (layer.id == 'Measurement_graphicslayer') {
-                    array.forEach(layer.featureCollection.layers, function(fcLayer) {
-                        array.forEach(fcLayer.featureSet.features, function(feature) {
+                    array.forEach(layer.featureCollection.layers, function (fcLayer) {
+                        array.forEach(fcLayer.featureSet.features, function (feature) {
                             delete feature.attributes;
                             feature.symbol.font.family = 'Courier';
                             //feature.symbol.font.variant = esri.symbol.Font.VARIANT_NORMAL;
@@ -81,24 +81,30 @@ define([
             });
             return opLayers;
         },
-        _handleError: function(err) {
-            console.log(1, err);
+        _handleError: function (err) {
+            topic.publish('viewer/handleError', {
+                source: 'Print',
+                error: err
+            });
         },
-        _handlePrintInfo: function(data) {
-            var Layout_Template = array.filter(data.parameters, function(param, idx) {
+        _handlePrintInfo: function (data) {
+            var Layout_Template = array.filter(data.parameters, function (param) {
                 return param.name === 'Layout_Template';
             });
             if (Layout_Template.length === 0) {
-                console.log('print service parameters name for templates must be \'Layout_Template\'');
+                topic.publish('viewer/handleError', {
+                    source: 'Print',
+                    error: 'Print service parameters name for templates must be \'Layout_Template\''
+                });
                 return;
             }
-            var layoutItems = array.map(Layout_Template[0].choiceList, function(item, i) {
+            var layoutItems = array.map(Layout_Template[0].choiceList, function (item) {
                 return {
                     name: item,
                     id: item
                 };
             });
-            layoutItems.sort(function(a, b) {
+            layoutItems.sort(function (a, b) {
                 return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
             });
             var layout = new Memory({
@@ -111,20 +117,23 @@ define([
                 this.layoutDijit.set('value', Layout_Template[0].defaultValue);
             }
 
-            var Format = array.filter(data.parameters, function(param, idx) {
+            var Format = array.filter(data.parameters, function (param) {
                 return param.name === 'Format';
             });
             if (Format.length === 0) {
-                console.log('print service parameters name for format must be \'Format\'');
+                topic.publish('viewer/handleError', {
+                    source: 'Print',
+                    error: 'Print service parameters name for format must be \'Format\''
+                });
                 return;
             }
-            var formatItems = array.map(Format[0].choiceList, function(item, i) {
+            var formatItems = array.map(Format[0].choiceList, function (item) {
                 return {
                     name: item,
                     id: item
                 };
             });
-            formatItems.sort(function(a, b) {
+            formatItems.sort(function (a, b) {
                 return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
             });
             var format = new Memory({
@@ -138,7 +147,7 @@ define([
             }
 
         },
-        print: function() {
+        print: function () {
             if (this.printSettingsFormDijit.isValid()) {
                 var form = this.printSettingsFormDijit.get('value');
                 var preserve = this.preserveFormDijit.get('value');
@@ -180,7 +189,7 @@ define([
                 this.printSettingsFormDijit.validate();
             }
         },
-        clearResults: function() {
+        clearResults: function () {
             domConstruct.empty(this.printResultsNode);
             Style.set(this.clearActionBarNode, 'display', 'none');
             this.count = 1;
@@ -192,11 +201,11 @@ define([
         widgetsInTemplate: true,
         templateString: printResultTemplate,
         url: null,
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             this.fileHandle.then(lang.hitch(this, '_onPrintComplete'), lang.hitch(this, '_onPrintError'));
         },
-        _onPrintComplete: function(data) {
+        _onPrintComplete: function (data) {
             if (data.url) {
                 this.url = data.url;
                 this.nameNode.innerHTML = '<span class="bold">' + this.docName + '</span>';
@@ -205,12 +214,15 @@ define([
                 this._onPrintError('Error, try again');
             }
         },
-        _onPrintError: function(err) {
-            console.log(err);
+        _onPrintError: function (err) {
+            topic.publish('viewer/handleError', {
+                source: 'Print',
+                error: err
+            });
             this.nameNode.innerHTML = '<span class="bold">Error, try again</span>';
             domClass.add(this.resultNode, 'printResultError');
         },
-        _openPrint: function() {
+        _openPrint: function () {
             if (this.url !== null) {
                 window.open(this.url);
             }

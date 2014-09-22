@@ -4,7 +4,7 @@ define([
 	'esri/config',
 	'esri/tasks/GeometryService',
 	'esri/layers/ImageParameters'
-], function(units, Extent, esriConfig, GeometryService, ImageParameters) {
+], function (units, Extent, esriConfig, GeometryService, ImageParameters) {
 
 	// url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
 	esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
@@ -17,6 +17,9 @@ define([
 	imageParameters.format = 'png32';
 
 	return {
+		// used for debugging your app
+		isDebug: false,
+
 		//default mapClick mode, mapClickMode lets widgets know what mode the map is in to avoid multipult map click actions from taking place (ie identify while drawing).
 		defaultMapClickMode: 'identify',
 		// map options, passed to map constructor. see: https://developers.arcgis.com/javascript/jsapi/map-amd.html#map1
@@ -111,6 +114,9 @@ define([
 				opacity: 1.0,
 				visible: true,
 				imageParameters: imageParameters
+			},
+			layerControlLayerInfos: {
+				swipe: true
 			}
 		}],
 		// set include:true to load. For titlePane type set position the the desired order in the sidebar
@@ -252,17 +258,20 @@ define([
 					legendLayerInfos: true
 				}
 			},
-			TOC: {
+			layerControl: {
 				include: true,
-				id: 'toc',
+				id: 'layerControl',
 				type: 'titlePane',
-				path: 'gis/dijit/TOC',
+				path: 'gis/dijit/LayerControl',
 				title: 'Layers',
 				open: false,
-				position: 1,
+				position: 0,
 				options: {
 					map: true,
-					tocLayerInfos: true
+					layerControlLayerInfos: true,
+					separated: true,
+					vectorReorder: true,
+					overlayReorder: true
 				}
 			},
 			bookmarks: {

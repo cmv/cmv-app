@@ -1,8 +1,8 @@
 define([
-    'esri/dijit/Basemap',
-    'esri/dijit/BasemapLayer',
-    'esri/layers/osm'
-], function (Basemap, BasemapLayer, osm) {
+    //'esri/dijit/Basemap',
+    //'esri/dijit/BasemapLayer',
+    //'esri/layers/osm'
+], function ( /* Basemap, BasemapLayer, osm */ ) {
     return {
         map: true, // needs a refrence to the map
         mode: 'agol', //must be either 'agol' or 'custom'
@@ -40,7 +40,7 @@ define([
             }
 
             // examples of custom basemaps
-            
+
             /*streets: {
                 title: 'Streets',
                 basemap: new Basemap({

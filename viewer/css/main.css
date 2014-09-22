@@ -312,13 +312,14 @@ body, html {
         width: 204px;
         max-width: 95%;
     }
+
     #sidebarRight {
-        display: none;
         max-width: 95%;
+        display: none;
     }
 }
 @media screen and (max-width: 767px) {
-    /* hide the l/r sidebars by default on extra-small devices (phones) */
+    /* hide the sidebars by default on extra-small devices (phones) */
     #sidebarLeft, #sidebarBottom, #sidebarTop {
         display: none;
     }

@@ -2,9 +2,9 @@ define([
 	'dojo/_base/declare',
 	'dojo/on',
 	'dojo/_base/lang'
-], function(declare, on, lang) {
+], function (declare, on, lang) {
 	return declare(null, {
-		startup: function() {
+		startup: function () {
 			// var parentWidget = this.getParent();
 			if (this.parentWidget && this.parentWidget.declaredClass === 'gis.dijit.FloatingWidget' && this.onOpen) {
 				on(this.parentWidget, 'show', lang.hitch(this, 'onOpen'));
