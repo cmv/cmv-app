@@ -26,7 +26,8 @@ define([
     ProjectParameters,
     esriConfig
 ) {
-    return declare([WidgetBase, Container], {
+    
+    var LayerControl = declare([WidgetBase, Container], {
         map: null,
         layerInfos: [],
         separated: false,
@@ -38,8 +39,6 @@ define([
         noZoom: null,
         noTransparency: null,
         swipe: null,
-        fontAwesome: true,
-        fontAwesomeUrl: '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', // 4.2.0 looks funny @ 16px?
         swiperButtonStyle: 'position:absolute;top:20px;left:120px;z-index:50;',
         // ^args
         baseClass: 'layerControlDijit',
@@ -97,10 +96,6 @@ define([
             }
             // load only the modules we need
             var modules = [];
-            // load font awesome
-            if (this.fontAwesome) {
-                modules.push('xstyle/css!' + this.fontAwesomeUrl);
-            }
             // push layer control mods
             array.forEach(this.layerInfos, function (layerInfo) {
                 // check if control is excluded
@@ -133,12 +128,16 @@ define([
                 }, this);
                 this._checkReorder();
             }));
+
+
+
+            window.map = this.map;
         },
         // create layer control and add to appropriate _container
         _addControl: function (layerInfo, LayerControl) {
             var layerControl = new LayerControl({
                 controller: this,
-                layer: layerInfo.layer,
+                layer: (typeof layerInfo.layer === 'string') ? this.map.getLayer(layerInfo.layer) : layerInfo.layer, // check if we have a layer or just a layer id
                 layerTitle: layerInfo.title,
                 controlOptions: lang.mixin({
                     noLegend: null,
@@ -304,4 +303,6 @@ define([
             domAttr.set(this._swiper.disableBtn.domNode, 'style', 'display:none;');
         }
     });
+
+    return LayerControl;
 });

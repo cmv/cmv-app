@@ -14,7 +14,9 @@ define([
     Transparency
 ) {
     return declare(Menu, {
+        control: null,
         _removed: false, //for future use
+
         postCreate: function () {
             this.inherited(arguments);
             var control = this.control,
@@ -23,6 +25,7 @@ define([
                 controller = control.controller,
                 layerType = control._layerType,
                 menu = this;
+
             //reorder menu items
             if ((layerType === 'vector' && controller.vectorReorder) || (layerType === 'overlay' && controller.overlayReorder)) {
                 control._reorderUp = new MenuItem({
@@ -41,6 +44,12 @@ define([
                 menu.addChild(control._reorderDown);
                 menu.addChild(new MenuSeparator());
             }
+
+            // toggle all dynamic sublayers
+            if (control._dynamicToggleMenuItems) {
+                control._dynamicToggleMenuItems(menu);
+            }
+
             //zoom to layer
             if ((controlOptions.noZoom !== true && controller.noZoom !== true) || (controller.noZoom === true && controlOptions.noZoom === false)) {
                 menu.addChild(new MenuItem({
@@ -50,6 +59,7 @@ define([
                     }
                 }));
             }
+
             //transparency
             if ((controlOptions.noTransparency !== true && controller.noTransparency !== true) || (controller.noTransparency === true && controlOptions.noTransparency === false)) {
                 menu.addChild(new Transparency({
@@ -57,6 +67,7 @@ define([
                     layer: layer
                 }));
             }
+
             //layer swipe
             if (controlOptions.swipe === true || (controller.swipe === true && controlOptions.swipe !== false)) {
                 var swipeMenu = new Menu();
@@ -85,6 +96,7 @@ define([
                     popup: swipeMenu
                 }));
             }
+
             //if last child is a separator remove it
             var lastChild = menu.getChildren()[menu.getChildren().length - 1];
             if (lastChild && lastChild.isInstanceOf(MenuSeparator)) {

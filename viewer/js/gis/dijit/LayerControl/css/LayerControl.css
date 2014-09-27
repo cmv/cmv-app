@@ -16,6 +16,10 @@
 
 .layerControlDijit .layerControl {
     padding-bottom: 6px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .layerControlDijit .layerControlExpand {
@@ -55,7 +59,8 @@
     line-height: 16px;
 }
 
-.layerControlDijit .layerControlTableUpdate {
+.layerControlDijit .layerControlTableUpdate,
+.layerControlDijit .layerControlTableMenu {
     width: 21px;
     height: 16px;
     line-height: 16px;
