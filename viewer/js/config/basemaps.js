@@ -1,23 +1,19 @@
 define([
-    'esri/dijit/Basemap',
-    'esri/dijit/BasemapLayer',
-    'esri/layers/osm'
-], function (Basemap, BasemapLayer, osm) {
+    //'esri/dijit/Basemap',
+    //'esri/dijit/BasemapLayer',
+    //'esri/layers/osm'
+], function ( /* Basemap, BasemapLayer, osm */ ) {
     return {
-        map: true,
-        //must be either 'agol' or 'custom'
-        mode: 'agol',
-        title: 'Basemaps',
-        // must match one of the basemap keys below
-        mapStartBasemap: 'streets',
+        map: true, // needs a refrence to the map
+        mode: 'agol', //must be either 'agol' or 'custom'
+        title: 'Basemaps', // tilte for widget
+        mapStartBasemap: 'streets', // must match one of the basemap keys below
         //basemaps to show in menu. define in basemaps object below and reference by name here
         // TODO Is this array necessary when the same keys are explicitly included/excluded below?
         basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'lightGray', 'gray', 'national-geographic', 'osm', 'oceans'],
 
         // define all valid custom basemaps here. Object of Basemap objects. For custom basemaps, the key name and basemap id must match.
-        basemaps: {
-
-            // agol basemaps
+        basemaps: { // agol basemaps
             streets: {
                 title: 'Streets'
             },
@@ -44,8 +40,8 @@ define([
             }
 
             // examples of custom basemaps
-            /*
-            streets: {
+
+            /*streets: {
                 title: 'Streets',
                 basemap: new Basemap({
                     id: 'streets',
@@ -91,8 +87,7 @@ define([
                         isReference: true
                     })]
                 })
-            }
-            */
+            }*/
         }
     };
 });

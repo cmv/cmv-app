@@ -9,21 +9,21 @@ define([
     'dojo/dom-class',
     'dojo/topic',
     'xstyle/css!./Growler/css/Growler.css'
-], function(declare, _WidgetBase, _TemplatedMixin, lang, Style, domConstruct, fx, domClass, topic, css) {
+], function (declare, _WidgetBase, _TemplatedMixin, lang, Style, domConstruct, fx, domClass, topic) {
 
     // main growler dijit container
     var Growler = declare([_WidgetBase, _TemplatedMixin], {
         templateString: '<div class="gis-dijit-Growl" data-dojo-attach-point="containerNode"></div>',
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             this.own(topic.subscribe('growler/growl', lang.hitch(this, 'growl')));
         },
-        growl: function(props) {
+        growl: function (props) {
             props = props || {};
             lang.mixin(props, {
                 _container: this.containerNode
             });
-            var g =new Growl(props);
+            var g = new Growl(props);
             g.startup();
         }
     });
@@ -38,7 +38,7 @@ define([
         opacity: 1.0,
         _container: null,
         _timer: null,
-        postCreate: function() {
+        postCreate: function () {
             this.inherited(arguments);
             if (this._container) {
                 Style.set(this.domNode, 'opacity', 0);
@@ -48,30 +48,33 @@ define([
                 }, 250);
                 this.setTimeout();
             } else {
-                console.log('Growl container not found/specified.');
+                topic.publish('viewer/handleError', {
+                    source: 'Growler',
+                    error: 'Growl container not found/specified.'
+                });
             }
         },
-        setTimeout: function() {
+        setTimeout: function () {
             if (this.timeout > 0) {
                 this._timer = setTimeout(lang.hitch(this, 'close'), this.timeout);
             }
         },
-        hoverOver: function() {
+        hoverOver: function () {
             clearInterval(this._timer);
             domClass.add(this.domNode, 'hover');
         },
-        hoverOut: function() {
+        hoverOut: function () {
             if (this.timeout > 0) {
                 this.setTimeout();
             }
             domClass.remove(this.domNode, 'hover');
         },
-        close: function() {
+        close: function () {
             fx.anim(this.domNode, {
                 opacity: 0
             }, 500, null, lang.hitch(this, 'remove'));
         },
-        remove: function() {
+        remove: function () {
             fx.anim(this.domNode, {
                 height: 0,
                 margin: 0

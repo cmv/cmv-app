@@ -16,8 +16,10 @@
                 <img alt="logo" src="images/rocket-logo.png" height="54" />
             </div>
             <div class="headerTitle">
-                Configurable Map Viewer
-                <div class="subHeaderTitle">
+                <span id="headerTitleSpan">
+                    Configurable Map Viewer
+                </span>
+                <div id="subHeaderTitleSpan" class="subHeaderTitle">
                     make it your own
                 </div>
             </div>
@@ -58,10 +60,8 @@
                     file = 'config/' + file;
                 }
             }
-            var app; //dev only
             require(['dbootstrap','viewer/Controller', file], function(dbootstrap, Controller, config){
                 Controller.startup(config);
-                app = Controller; //dev only
             });
         </script>
     </body>

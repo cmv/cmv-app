@@ -1,4 +1,34 @@
 module.exports = function(grunt) {
+
+  // middleware for grunt.connect
+  var middleware = function(connect, options, middlewares) {
+    // inject a custom middleware into the array of default middlewares for proxy page
+    var proxypage = require('proxypage');
+    var proxyRe = /\/proxy\/proxy.ashx/i;
+
+    var enableCORS = function(req, res, next) {
+      res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+      res.setHeader('Access-Control-Allow-Credentials', true);
+      res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+      res.setHeader('Access-Control-Allow-Headers', req.headers['access-control-request-headers']);
+      return next();
+    };
+
+    var proxyMiddleware = function(req, res, next) {
+      if (!proxyRe.test(req.url)) {
+        return next();
+      }
+      proxypage.proxy(req, res);
+    };
+
+    middlewares.unshift(proxyMiddleware);
+    middlewares.unshift(enableCORS);
+    middlewares.unshift(connect.json()); //body parser, see https://github.com/senchalabs/connect/wiki/Connect-3.0
+    middlewares.unshift(connect.urlencoded()); //body parser
+    return middlewares;
+  };
+
+  // grunt task config
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     tag: {
@@ -50,13 +80,17 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           cwd: 'dist/viewer',
-          src: ['**/*.js'],
+          src: ['**/*.js', '!**/config/**'],
           dest: 'dist/viewer',
           ext: '.js'
         }],
         options: {
           banner: '<%= tag.banner %>',
-          sourceMap: true
+          sourceMap: true,
+          sourceMapIncludeSources: true,
+          compress: {
+            drop_console: true
+          }
         }
       }
     },
@@ -75,14 +109,16 @@ module.exports = function(grunt) {
         options: {
           port: 3000,
           base: 'viewer',
-          hostname: '*'
+          hostname: '*',
+          middleware: middleware
         }
       },
       build: {
         options: {
           port: 3001,
           base: 'dist/viewer',
-          hostname: '*'
+          hostname: '*',
+          middleware: middleware
         }
       }
     },
@@ -122,9 +158,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-compress');
 
   // define the tasks
-  grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a web server and opens default browser to preview.', ['connect:dev', 'open:dev_browser', 'watch:dev']);
+  grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a web server and opens default browser to preview.', ['jshint', 'connect:dev', 'open:dev_browser', 'watch:dev']);
   grunt.registerTask('build', 'Compiles all of the assets and copies the files to the build directory.', ['clean', 'copy', 'scripts', 'stylesheets', 'compress:build']);
   grunt.registerTask('build-view', 'Compiles all of the assets and copies the files to the build directory starts a web server and opens browser to preview app.', ['clean', 'copy', 'scripts', 'stylesheets', 'compress:build', 'connect:build', 'open:build_browser', 'watch:build']);
   grunt.registerTask('scripts', 'Compiles the JavaScript files.', ['jshint', 'uglify']);
   grunt.registerTask('stylesheets', 'Auto prefixes css and compiles the stylesheets.', ['autoprefixer', 'cssmin']);
+  grunt.registerTask('hint', 'Run simple jshint.', ['jshint']);
 };
