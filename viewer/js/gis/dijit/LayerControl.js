@@ -128,10 +128,6 @@ define([
                 }, this);
                 this._checkReorder();
             }));
-
-
-
-            window.map = this.map;
         },
         // create layer control and add to appropriate _container
         _addControl: function (layerInfo, LayerControl) {

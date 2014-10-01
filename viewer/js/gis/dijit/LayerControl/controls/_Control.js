@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/array',
+    //'dojo/_base/array',
     'dojo/on',
     'dojo/topic',
     'dojo/dom-construct',
@@ -14,7 +14,7 @@ define([
 ], function (
     declare,
     lang,
-    array,
+    //array,
     on,
     topic,
     domConst,
@@ -78,16 +78,16 @@ define([
 
             var layer = this.layer,
                 controlOptions = this.controlOptions;
-            
+
             // set checkbox
             this._setLayerCheckbox(layer, this.checkNode);
-            
+
             // wire up layer visibility
             on(this.checkNode, 'click', lang.hitch(this, '_setLayerVisibility', layer, this.checkNode));
-            
+
             // set title
             html.set(this.labelNode, this.layerTitle);
-            
+
             // wire up updating indicator
             layer.on('update-start', lang.hitch(this, function () {
                 domStyle.set(this.layerUpdateNode, 'display', 'inline-block'); //font awesome display
@@ -95,7 +95,7 @@ define([
             layer.on('update-end', lang.hitch(this, function () {
                 domStyle.set(this.layerUpdateNode, 'display', 'none');
             }));
-            
+
             // create layer menu
             this.layerMenu = new LayerMenu({
                 control: this,
@@ -104,13 +104,13 @@ define([
                 leftClickToOpen: true
             });
             this.layerMenu.startup();
-            
+
             // if layer has scales set
             if (layer.minScale !== 0 || layer.maxScale !== 0) {
                 this._checkboxScaleRange();
                 this._scaleRangeHandler = layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
             }
-            
+
             // if layer scales change
             this.layer.on('scale-range-change', lang.hitch(this, function () {
                 if (layer.minScale !== 0 || layer.maxScale !== 0) {
@@ -124,10 +124,10 @@ define([
                     }
                 }
             }));
-            
+
             // a function in each control widget for layer type specifics like legends and such
             this._layerTypeInit();
-            
+
             // show expandNode
             //   no harm if click handler wasn't created
             if (controlOptions.expanded && controlOptions.sublayers) {
@@ -219,13 +219,26 @@ define([
         },
 
         // anything the widget may need to do after update
-        _updateEnd: function () {
-            if (this._esriLayerType === 'dynamic' && this._sublayerControls) {
-                array.forEach(this._sublayerControls, function (control) {
-                    var checked = (array.indexOf(this.layer.visibleLayers, control.sublayerInfo.id) !== -1) ? true : false;
-                    control._setSublayerCheckbox(checked, control.checkNode);
+        _updateEnd: function () { 
+            // how to handle external layer.setVisibleLayers() ???
+            /*if (this._esriLayerType === 'dynamic' && this._sublayerControls) {
+                if (this.layer.visibleLayers.length === 1 && this.layer.visibleLayers[0] !== -1) {
+                    return;
+                }
+                var visLayers = [];
+                array.forEach(this.layer.visibleLayers, function (id) {
+                    visLayers.push(id);
+                    var info = this.layer.layerInfos[id];
+                    if (info.parentLayerId !== -1) {
+                        visLayers.push(info.parentLayerId);
+                    }
                 }, this);
-            }
+                array.forEach(this._sublayerControls, function (control) {
+                    if (array.indexOf(visLayers, control.sublayerInfo.id) !== -1) {
+                        control._setSublayerCheckbox(true);
+                    }
+                });
+            }*/
 
             // anything needing before update layer state
             if (!this._layerState) {

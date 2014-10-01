@@ -41,8 +41,12 @@ define([
         _layerType: 'overlay', // constant
         _esriLayerType: 'dynamic', // constant
 
-        _sublayerControls: [], // sublayer/folder controls
+        //_sublayerControls: [], // sublayer/folder controls
         _hasSublayers: false, // true when sublayers created
+
+        constructor: function () {
+            this._sublayerControls = [];
+        },
 
         _layerTypePreInit: function () {
             if (this.layer.layerInfos.length > 1 && this.controlOptions.sublayers) {
@@ -83,15 +87,10 @@ define([
 
         // toggle all sublayers on/off
         _toggleAllSublayers: function (state) {
-            if (state) {
-                var visLayers = [];
-                array.forEach(this.layer.layerInfos, function (info) {
-                    visLayers.push(info.id);
-                });
-                this.layer.setVisibleLayers(visLayers);
-            } else {
-                this.layer.setVisibleLayers([-1]);
-            }
+            array.forEach(this._sublayerControls, function (control) {
+                control._setSublayerCheckbox(state);
+            });
+            this._setVisibleLayers();
         },
 
         // add folder/sublayer controls per layer.layerInfos

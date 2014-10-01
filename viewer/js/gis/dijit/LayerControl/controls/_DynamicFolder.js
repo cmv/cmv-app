@@ -84,6 +84,7 @@ define([
 
         // set checkbox based on layer so it's always in sync
         _setSublayerCheckbox: function (checked, checkNode) {
+            checkNode = checkNode || this.checkNode;
             if (checked) {
                 domAttr.set(checkNode, 'data-checked', 'checked');
                 domClass.replace(checkNode, 'fa-check-square-o', 'fa-square-o');
