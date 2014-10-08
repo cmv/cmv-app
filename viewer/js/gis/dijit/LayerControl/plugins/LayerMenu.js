@@ -97,6 +97,28 @@ define([
                 }));
             }
 
+            // metadata link
+            // service url
+            if (controlOptions.metadataUrl === true && layer.url) {
+                menu.addChild(new MenuSeparator());
+                menu.addChild(new MenuItem({
+                    label: 'Metadata',
+                    onClick: function () {
+                        window.open(layer.url, '_blank');
+                    }
+                }));
+            }
+            // custom url
+            if (controlOptions.metadataUrl && typeof controlOptions.metadataUrl === 'string') {
+                menu.addChild(new MenuSeparator());
+                menu.addChild(new MenuItem({
+                    label: 'Metadata',
+                    onClick: function () {
+                        window.open(controlOptions.metadataUrl, '_blank');
+                    }
+                }));
+            }
+
             //if last child is a separator remove it
             var lastChild = menu.getChildren()[menu.getChildren().length - 1];
             if (lastChild && lastChild.isInstanceOf(MenuSeparator)) {

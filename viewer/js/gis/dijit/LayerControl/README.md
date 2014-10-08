@@ -153,6 +153,7 @@ All layer types have common options while some options are specific to certain l
 | `swipeScope` | When `true` adds Scope option to Layer Swipe menu. Default is `false`. |
 | `expanded` | When `true` expands top level exposing sublayers or legend. | dynamic, feature & tiled |
 | `sublayers` | When `false` dynamic folder/sublayer structure is not created. | dynamic |
+| `metadataUrl` | When `true` and layer has `url` property (ArcGIS layers) links to service URL. When a URL links to said URL. | all layers |
 
 ### Topics
 
