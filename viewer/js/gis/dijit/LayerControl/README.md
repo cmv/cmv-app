@@ -107,6 +107,12 @@ require(['gis/dijit/LayerControl'], function (LayerControl) {
 | `swipe` | Boolean | When `true` adds "Layer Swipe" menu item for all layers.  Can be overridden for specific layer(s) with `swipe` layer option. |
 | `swiperButtonStyle` | String | CSS for positioning "Exit Layer Swipe" button in the map. Must include `position:absolute;` and a `z-index`. Default is `position:absolute;top:20px;left:120px;z-index:50;`. |
 
+#### Methods
+
+| Method | Description |
+| :----: | ----------- |
+| `showAllLayers()` | Turn all layers on. |
+| `hideAllLayers()` | Turn all layers off. |
 
 #### LayerInfos
 

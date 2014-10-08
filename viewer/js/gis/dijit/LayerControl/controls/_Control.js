@@ -221,24 +221,9 @@ define([
         // anything the widget may need to do after update
         _updateEnd: function () { 
             // how to handle external layer.setVisibleLayers() ???
-            /*if (this._esriLayerType === 'dynamic' && this._sublayerControls) {
-                if (this.layer.visibleLayers.length === 1 && this.layer.visibleLayers[0] !== -1) {
-                    return;
-                }
-                var visLayers = [];
-                array.forEach(this.layer.visibleLayers, function (id) {
-                    visLayers.push(id);
-                    var info = this.layer.layerInfos[id];
-                    if (info.parentLayerId !== -1) {
-                        visLayers.push(info.parentLayerId);
-                    }
-                }, this);
-                array.forEach(this._sublayerControls, function (control) {
-                    if (array.indexOf(visLayers, control.sublayerInfo.id) !== -1) {
-                        control._setSublayerCheckbox(true);
-                    }
-                });
-            }*/
+            //
+            // without topics to get/set sublayer state this will be challenging
+            // still up for debate...
 
             // anything needing before update layer state
             if (!this._layerState) {

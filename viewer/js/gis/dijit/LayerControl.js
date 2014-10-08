@@ -297,6 +297,38 @@ define([
                 this._swipeLayerToggleHandle.remove();
             }
             domAttr.set(this._swiper.disableBtn.domNode, 'style', 'display:none;');
+        },
+
+        // turn all layers on/off
+        //   no arguments
+        //   b/c controls are self aware of layer visibility change simply show/hide layers
+        showAllLayers: function () {
+            if (this.separated) {
+                array.forEach(this._vectorContainer.getChildren(), function (child) {
+                    child.layer.show();
+                });
+                array.forEach(this._overlayContainer.getChildren(), function (child) {
+                    child.layer.show();
+                });
+            } else {
+                array.forEach(this.getChildren(), function (child) {
+                    child.layer.show();
+                });
+            }
+        },
+        hideAllLayers: function () {
+            if (this.separated) {
+                array.forEach(this._vectorContainer.getChildren(), function (child) {
+                    child.layer.hide();
+                });
+                array.forEach(this._overlayContainer.getChildren(), function (child) {
+                    child.layer.hide();
+                });
+            } else {
+                array.forEach(this.getChildren(), function (child) {
+                    child.layer.hide();
+                });
+            }
         }
     });
 
