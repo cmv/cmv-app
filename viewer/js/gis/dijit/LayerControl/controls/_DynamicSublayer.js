@@ -23,43 +23,49 @@ define([
     TemplatedMixin,
     sublayerTemplate
 ) {
-    return declare([WidgetBase, TemplatedMixin], {
+    var _DynamicSublayer = declare([WidgetBase, TemplatedMixin], {
         control: null,
         sublayerInfo: null,
         // ^args
+
         templateString: sublayerTemplate,
         _expandClickHandler: null,
+
         postCreate: function () {
             this.inherited(arguments);
+            var checkNode = this.checkNode;
+
+            domAttr.set(checkNode, 'data-sublayer-id', this.sublayerInfo.id);
+            
+            domClass.add(checkNode, this.control.layer.id + '-layerControlSublayerCheck');
+
             if (array.indexOf(this.control.layer.visibleLayers, this.sublayerInfo.id) !== -1) {
-                domClass.remove(this.checkNode, 'fa-square-o');
-                domClass.add(this.checkNode, 'fa fa-check-square-o');
-                domAttr.set(this.checkNode, 'data-checked', 'checked');
+                this._setSublayerCheckbox(true, checkNode);
             } else {
-                domAttr.set(this.checkNode, 'data-checked', 'unchecked');
+
+                this._setSublayerCheckbox(false, checkNode);
             }
-            domAttr.set(this.checkNode, 'data-sublayer-id', this.sublayerInfo.id);
-            domClass.add(this.checkNode, this.control.layer.id + '-layerControlSublayerCheck');
-            on(this.checkNode, 'click', lang.hitch(this, function () {
-                if (domAttr.get(this.checkNode, 'data-checked') === 'checked') {
-                    domAttr.set(this.checkNode, 'data-checked', 'unchecked');
-                    domClass.remove(this.checkNode, 'fa-check-square-o');
-                    domClass.add(this.checkNode, 'fa-square-o');
+                        
+            on(checkNode, 'click', lang.hitch(this, function () {
+                if (domAttr.get(checkNode, 'data-checked') === 'checked') {
+                    this._setSublayerCheckbox(false, checkNode);
                 } else {
-                    domAttr.set(this.checkNode, 'data-checked', 'checked');
-                    domClass.remove(this.checkNode, 'fa-square-o');
-                    domClass.add(this.checkNode, 'fa-check-square-o');
+                    this._setSublayerCheckbox(true, checkNode);
                 }
                 this.control._setVisibleLayers();
                 this._checkboxScaleRange();
             }));
+
             html.set(this.labelNode, this.sublayerInfo.name);
+            
             this._expandClick();
+            
             if (this.sublayerInfo.minScale !== 0 || this.sublayerInfo.maxScale !== 0) {
                 this._checkboxScaleRange();
                 this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
             }
         },
+
         // add on event to expandClickNode
         _expandClick: function () {
             this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
@@ -74,6 +80,19 @@ define([
                 }
             }));
         },
+
+        // set checkbox based on layer so it's always in sync
+        _setSublayerCheckbox: function (checked, checkNode) {
+            checkNode = checkNode || this.checkNode;
+            if (checked) {
+                domAttr.set(checkNode, 'data-checked', 'checked');
+                domClass.replace(checkNode, 'fa-check-square-o', 'fa-square-o');
+            } else {
+                domAttr.set(checkNode, 'data-checked', 'unchecked');
+                domClass.replace(checkNode, 'fa-square-o', 'fa-check-square-o');
+            }
+        },
+
         // check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function () {
             var node = this.checkNode,
@@ -86,4 +105,6 @@ define([
             }
         }
     });
+
+    return _DynamicSublayer;
 });

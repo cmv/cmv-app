@@ -159,15 +159,21 @@ define([
                 // create legend table
                 var table = domConst.create('table');
                 domClass.add(table, 'layerControlLegendTable');
+                
+                // created unwanted group label
+                //   if solves https://github.com/cmv/cmv-app/issues/226
+                //   remove for 1.3.2-patch or later 
+
                 // label if legend group
-                if (_layer.legend.length > 1 && layer.layerInfos.length > 1) {
-                    var labelRow = domConst.create('tr', {}, table, 'last');
-                    domConst.create('td', {
-                        innerHTML: _layer.layerName,
-                        'class': 'layerControlLegendGroup',
-                        colspan: 2
-                    }, labelRow, 'first');
-                }
+                //if (_layer.legend.length > 1 && layer.layerInfos.length > 1) {
+                //    var labelRow = domConst.create('tr', {}, table, 'last');
+                //    domConst.create('td', {
+                //        innerHTML: _layer.layerName,
+                //        'class': 'layerControlLegendGroup',
+                //        colspan: 2
+                //    }, labelRow, 'first');
+                //}
+
                 // iterate through legends
                 array.forEach(_layer.legend, function (legend) {
                     // create a table row and symbol td
