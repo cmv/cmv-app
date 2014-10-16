@@ -124,6 +124,7 @@ body, html {
     cursor: pointer;
     color: #666666;
     font-size: 1.3em;
+    font-family: FontAwesome;
 }
 .sidebarCollapseButtonHorz {
     width: 16px;
