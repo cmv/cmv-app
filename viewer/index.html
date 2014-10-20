@@ -9,7 +9,7 @@
         <title>Configurable Map Viewer</title>
         <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.10compact/js/esri/css/esri.css">
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="js/dbootstrap/theme/dbootstrap/dbootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/theme/dbootstrap/dbootstrap.css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
     </head>
     <body class="dbootstrap">
@@ -46,9 +46,6 @@
                 },{
                     name: 'gis',
                     location: location.pathname.replace(/[^\/]+$/, '') + 'js/gis'
-                },{
-                    name: 'dbootstrap',
-                    location: location.pathname.replace(/[^\/]+$/, '') + 'js/dbootstrap'
                 }]
             };
         </script>
@@ -65,7 +62,7 @@
                     file = 'config/' + file;
                 }
             }
-            require(['dbootstrap','viewer/Controller', file], function(dbootstrap, Controller, config){
+            require(['viewer/Controller', file], function(Controller, config){
                 Controller.startup(config);
             });
         </script>
