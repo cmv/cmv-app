@@ -10,6 +10,7 @@ define([
     'dojox/lang/functional',
     'dojo/text!./Basemaps/templates/Basemaps.html',
     'esri/dijit/BasemapGallery',
+    'dijit/form/DropDownButton',
     'xstyle/css!./Basemaps/css/Basemaps.css'
 ], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownMenu, MenuItem, array, functional, template, BasemapGallery) {
 
