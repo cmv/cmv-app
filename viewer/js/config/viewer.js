@@ -402,7 +402,6 @@ define([
 				options: {
 					map: true,
 					mapClickMode: true,
-					openOnStartup: true,
 					mapRightClickMenu: true
 				}
 			},
