@@ -9,7 +9,8 @@ define([
     'dojo/html',
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
-    'dojo/text!./templates/Sublayer.html'
+    'dojo/text!./templates/Sublayer.html',
+    'dojo/i18n!./../nls/resource'
 ], function (
     declare,
     lang,
@@ -21,7 +22,8 @@ define([
     html,
     WidgetBase,
     TemplatedMixin,
-    sublayerTemplate
+    sublayerTemplate,
+    i18n
 ) {
     var _DynamicSublayer = declare([WidgetBase, TemplatedMixin], {
         control: null,
@@ -29,6 +31,7 @@ define([
         // ^args
 
         templateString: sublayerTemplate,
+        i18n: i18n,
         _expandClickHandler: null,
 
         postCreate: function () {

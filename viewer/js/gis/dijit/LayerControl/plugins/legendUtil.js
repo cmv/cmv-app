@@ -12,7 +12,8 @@ define([
     'esri/request',
     // temp
     'esri/dijit/Legend',
-    'dojo/i18n!esri/nls/jsapi'
+    'dojo/i18n!esri/nls/jsapi',
+    'dojo/i18n!./../nls/resource'
 ], function (
     array,
     lang,
@@ -26,10 +27,11 @@ define([
     gfx,
     esriRequest,
     Legend,
-    esriBundle
+    esriBundle,
+    i18n
 ) {
     'use strict';
-    esriBundle.widgets.legend.NLS_noLegend = 'No Legend';
+    esriBundle.widgets.legend.NLS_noLegend = i18n.noLegend;
     return {
         /////////////////////
         // utility methods //

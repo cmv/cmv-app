@@ -4,14 +4,16 @@ define([
     'dijit/MenuItem',
     'dijit/PopupMenuItem',
     'dijit/MenuSeparator',
-    './Transparency'
+    './Transparency',
+    'dojo/i18n!./../nls/resource'
 ], function (
     declare,
     Menu,
     MenuItem,
     PopupMenuItem,
     MenuSeparator,
-    Transparency
+    Transparency,
+    i18n
 ) {
     return declare(Menu, {
         control: null,
@@ -29,14 +31,14 @@ define([
             //reorder menu items
             if ((layerType === 'vector' && controller.vectorReorder) || (layerType === 'overlay' && controller.overlayReorder)) {
                 control._reorderUp = new MenuItem({
-                    label: 'Move Up',
+                    label: i18n.moveUp,
                     onClick: function () {
                         controller._moveUp(control);
                     }
                 });
                 menu.addChild(control._reorderUp);
                 control._reorderDown = new MenuItem({
-                    label: 'Move Down',
+                    label: i18n.moveDown,
                     onClick: function () {
                         controller._moveDown(control);
                     }
@@ -53,7 +55,7 @@ define([
             //zoom to layer
             if ((controlOptions.noZoom !== true && controller.noZoom !== true) || (controller.noZoom === true && controlOptions.noZoom === false)) {
                 menu.addChild(new MenuItem({
-                    label: 'Zoom to Layer',
+                    label: i18n.zoomTo,
                     onClick: function () {
                         controller._zoomToLayer(layer);
                     }
@@ -63,7 +65,7 @@ define([
             //transparency
             if ((controlOptions.noTransparency !== true && controller.noTransparency !== true) || (controller.noTransparency === true && controlOptions.noTransparency === false)) {
                 menu.addChild(new Transparency({
-                    label: 'Transparency',
+                    label: i18n.transparency,
                     layer: layer
                 }));
             }
@@ -72,27 +74,27 @@ define([
             if (controlOptions.swipe === true || (controller.swipe === true && controlOptions.swipe !== false)) {
                 var swipeMenu = new Menu();
                 swipeMenu.addChild(new MenuItem({
-                    label: 'Vertical',
+                    label: i18n.layerSwipeVertical,
                     onClick: function () {
                         controller._swipeLayer(layer, 'vertical');
                     }
                 }));
                 swipeMenu.addChild(new MenuItem({
-                    label: 'Horizontal',
+                    label: i18n.layerSwipeHorizontal,
                     onClick: function () {
                         controller._swipeLayer(layer, 'horizontal');
                     }
                 }));
                 if (controlOptions.swipeScope === true) {
                     swipeMenu.addChild(new MenuItem({
-                        label: 'Scope',
+                        label: i18n.layerSwipeScope,
                         onClick: function () {
                             controller._swipeLayer(layer, 'scope');
                         }
                     }));
                 }
                 menu.addChild(new PopupMenuItem({
-                    label: 'Layer Swipe',
+                    label: i18n.layerSwipe,
                     popup: swipeMenu
                 }));
             }
@@ -102,7 +104,7 @@ define([
             if (controlOptions.metadataUrl === true && layer.url) {
                 menu.addChild(new MenuSeparator());
                 menu.addChild(new MenuItem({
-                    label: 'Metadata',
+                    label: i18n.metadata,
                     onClick: function () {
                         window.open(layer.url, '_blank');
                     }
@@ -112,7 +114,7 @@ define([
             if (controlOptions.metadataUrl && typeof controlOptions.metadataUrl === 'string') {
                 menu.addChild(new MenuSeparator());
                 menu.addChild(new MenuItem({
-                    label: 'Metadata',
+                    label: i18n.metadata,
                     onClick: function () {
                         window.open(controlOptions.metadataUrl, '_blank');
                     }

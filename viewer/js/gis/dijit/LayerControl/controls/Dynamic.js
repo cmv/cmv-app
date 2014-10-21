@@ -16,7 +16,8 @@ define([
     './_Control', // layer control base class
     './_DynamicSublayer',
     './_DynamicFolder',
-    './../plugins/legendUtil'
+    './../plugins/legendUtil',
+    'dojo/i18n!./../nls/resource'
 ], function (
     declare,
     lang,
@@ -35,7 +36,8 @@ define([
     _Control, // most everything happens here
     DynamicSublayer,
     DynamicFolder,
-    legendUtil
+    legendUtil,
+    i18n
 ) {
     var DynamicControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
@@ -74,11 +76,11 @@ define([
         _dynamicToggleMenuItems: function (menu) {
             if (this._hasSublayers) {
                 menu.addChild(new MenuItem({
-                    label: 'Turn On All Sublayers',
+                    label: i18n.dynamicSublayersOn,
                     onClick: lang.hitch(this, '_toggleAllSublayers', true)
                 }));
                 menu.addChild(new MenuItem({
-                    label: 'Turn Off All Sublayers',
+                    label: i18n.dynamicSublayersOff,
                     onClick: lang.hitch(this, '_toggleAllSublayers', false)
                 }));
                 menu.addChild(new MenuSeparator());
