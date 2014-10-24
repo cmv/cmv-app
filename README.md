@@ -65,7 +65,7 @@ There are many ways to contribute to CMV:
 
 2. __Submit an Issue__ - If you find a possible bug, please submit an issue in the [issues log](https://github.com/cmv/cmv-app/issues?state=open).
 
-3. __User contributed widgets__ - Users can submit widgets to the [cmv-contrib-widgets](https://github.com/cmv/cmv-contrib-widgets) repo. These widgets are created and submitted by users. Head on over and read the details.
+3. __User contributed widgets__ - For general information on how to build a CMV widget read [Builiding Custom Widgets] (https://github.com/cmv/cmv-app/wiki/building-custom-widgets). Users can submit widgets to the [cmv-contrib-widgets](https://github.com/cmv/cmv-contrib-widgets) repo. These widgets are created and submitted by users. Head on over and read the details.
 
 4. __Create documentation__ Please make constructive in [the wiki](https://github.com/cmv/cmv-app/wiki).
 
