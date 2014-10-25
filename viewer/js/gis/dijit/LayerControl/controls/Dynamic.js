@@ -42,21 +42,17 @@ define([
     var DynamicControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
         _esriLayerType: 'dynamic', // constant
-
         //_sublayerControls: [], // sublayer/folder controls
         _hasSublayers: false, // true when sublayers created
-
         constructor: function () {
             this._sublayerControls = [];
         },
-
         _layerTypePreInit: function () {
             if (this.layer.layerInfos.length > 1 && this.controlOptions.sublayers) {
                 // we have sublayer controls
                 this._hasSublayers = true;
             }
         },
-
         // create sublayers and legend
         _layerTypeInit: function () {
             if (legendUtil.isLegend(this.controlOptions.noLegend, this.controller.noLegend) && this.controlOptions.sublayers) {
@@ -71,7 +67,6 @@ define([
                 this._expandRemove();
             }
         },
-
         // called from LayerMenu plugin
         _dynamicToggleMenuItems: function (menu) {
             if (this._hasSublayers) {
@@ -86,7 +81,6 @@ define([
                 menu.addChild(new MenuSeparator());
             }
         },
-
         // toggle all sublayers on/off
         _toggleAllSublayers: function (state) {
             array.forEach(this._sublayerControls, function (control) {
@@ -94,7 +88,6 @@ define([
             });
             this._setVisibleLayers();
         },
-
         // add folder/sublayer controls per layer.layerInfos
         _createSublayers: function (layer) {
             // check for single sublayer - if so no sublayer/folder controls
@@ -109,7 +102,8 @@ define([
                         control = new DynamicSublayer({
                             id: controlId,
                             control: this,
-                            sublayerInfo: info
+                            sublayerInfo: info,
+                            icons: this.icons
                         });
                         domConst.place(control.domNode, this.expandNode, 'last');
                     } else if (pid === -1 && slids !== null) {
@@ -117,7 +111,8 @@ define([
                         control = new DynamicFolder({
                             id: controlId,
                             control: this,
-                            sublayerInfo: info
+                            sublayerInfo: info,
+                            icons: this.icons
                         });
                         domConst.place(control.domNode, this.expandNode, 'last');
                     } else if (pid !== -1 && slids !== null) {
@@ -125,7 +120,8 @@ define([
                         control = new DynamicFolder({
                             id: controlId,
                             control: this,
-                            sublayerInfo: info
+                            sublayerInfo: info,
+                            icons: this.icons
                         });
                         domConst.place(control.domNode, registry.byId(layer.id + '-' + info.parentLayerId + '-sublayer-control').expandNode, 'last');
                     } else if (pid !== -1 && slids === null) {
@@ -133,7 +129,8 @@ define([
                         control = new DynamicSublayer({
                             id: controlId,
                             control: this,
-                            sublayerInfo: info
+                            sublayerInfo: info,
+                            icons: this.icons
                         });
                         domConst.place(control.domNode, registry.byId(layer.id + '-' + info.parentLayerId + '-sublayer-control').expandNode, 'last');
                     }
@@ -142,7 +139,6 @@ define([
                 }));
             }
         },
-
         // set dynamic layer visible layers
         _setVisibleLayers: function () {
             // because ags doesn't respect a layer group's visibility
@@ -177,6 +173,5 @@ define([
             });
         }
     });
-
     return DynamicControl;
 });

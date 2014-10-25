@@ -1,14 +1,8 @@
-.layerControlDijit .vectorLayerContainer {
+.layerControlDijit .vectorLayerContainer {}
 
-}
+.layerControlDijit .vectorLabelContainer {}
 
-.layerControlDijit .vectorLabelContainer {
-    
-}
-
-.layerControlDijit .overlayLayerContainer {
-
-}
+.layerControlDijit .overlayLayerContainer {}
 
 .layerControlDijit .overlayLabelContainer {
     padding-bottom: 4px;
@@ -25,7 +19,6 @@
 .layerControlDijit .layerControlExpand {
     border-bottom: solid 1px #DDD;
 }
-
 
 .layerControlDijit .layerControlTable {
     width: 100%;
@@ -46,7 +39,8 @@
     line-height: 15px;
 }
 
-.layerControlDijit .layerControlTableCheck {
+.layerControlDijit .layerControlTableCheck,
+.layerControlDijit .layerControlTableMenu {
     cursor: pointer;
     width: 19px;
     height: 16px;
@@ -57,10 +51,10 @@
     font-size: 15px;
     height: 16px;
     line-height: 16px;
+    cursor: default;
 }
 
-.layerControlDijit .layerControlTableUpdate,
-.layerControlDijit .layerControlTableMenu {
+.layerControlDijit .layerControlTableUpdate {
     width: 21px;
     height: 16px;
     line-height: 16px;
@@ -76,13 +70,23 @@
 }
 
 .layerControlDijit .layerControlUpdateIcon {
-    font-size: 12px
+    font-size: 12px;
+}
+
+.layerControlDijit .layerControlMenuIcon {
+    font-size: 15px;
+    color: #666;
+}
+
+.layerControlDijit .layerControlMenuIcon:hover {
+    color: #111;
 }
 
 .layerControlDijit .layerControlCheckIconOutScale {
     color: #BBB;
 }
 
+/* not in use - retain for links */
 .layerControlDijit .layerControlClick {
     cursor: pointer;
     color: #1f78af;
