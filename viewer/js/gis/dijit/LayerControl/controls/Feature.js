@@ -16,7 +16,6 @@ define([
     var FeatureControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'vector', // constant
         _esriLayerType: 'feature', // constant
-
         // create and legend
         _layerTypeInit: function () {
             if (legendUtil.isLegend(this.controlOptions.noLegend, this.controller.noLegend)) {
@@ -27,6 +26,5 @@ define([
             }
         }
     });
-
     return FeatureControl;
 });

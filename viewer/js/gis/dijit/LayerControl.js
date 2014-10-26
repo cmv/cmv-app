@@ -26,10 +26,19 @@ define([
     ProjectParameters,
     esriConfig
 ) {
-    
     var LayerControl = declare([WidgetBase, Container], {
         map: null,
         layerInfos: [],
+        icons: {
+            expand: 'fa-plus-square-o',
+            collapse: 'fa-minus-square-o',
+            checked: 'fa-check-square-o',
+            unchecked: 'fa-square-o',
+            update: 'fa-refresh',
+            menu: 'fa-bars',
+            folder: 'fa-folder-o',
+            folderOpen: 'fa-folder-open-o'
+        },
         separated: false,
         overlayReorder: false,
         overlayLabel: false,
@@ -298,7 +307,6 @@ define([
             }
             domAttr.set(this._swiper.disableBtn.domNode, 'style', 'display:none;');
         },
-
         // turn all layers on/off
         //   no arguments
         //   b/c controls are self aware of layer visibility change simply show/hide layers
@@ -331,6 +339,5 @@ define([
             }
         }
     });
-
     return LayerControl;
 });

@@ -26,27 +26,20 @@ define([
     var _DynamicFolder =  declare([WidgetBase, TemplatedMixin], {
         control: null,
         sublayerInfo: null,
+        icons: null,
         // ^args
-
         templateString: folderTemplate,
         _expandClickHandler: null,
-
         postCreate: function () {
             this.inherited(arguments);
-
             var checkNode = this.checkNode;
-
             domAttr.set(checkNode, 'data-sublayer-id', this.sublayerInfo.id);
-            
             domClass.add(checkNode, this.control.layer.id + '-layerControlSublayerCheck');
-
             if (array.indexOf(this.control.layer.visibleLayers, this.sublayerInfo.id) !== -1) {
                 this._setSublayerCheckbox(true, checkNode);
             } else {
-
                 this._setSublayerCheckbox(false, checkNode);
             }
-                        
             on(checkNode, 'click', lang.hitch(this, function () {
                 if (domAttr.get(checkNode, 'data-checked') === 'checked') {
                     this._setSublayerCheckbox(false, checkNode);
@@ -56,44 +49,40 @@ define([
                 this.control._setVisibleLayers();
                 this._checkboxScaleRange();
             }));
-            
             html.set(this.labelNode, this.sublayerInfo.name);
-            
             this._expandClick();
-            
             if (this.sublayerInfo.minScale !== 0 || this.sublayerInfo.maxScale !== 0) {
                 this._checkboxScaleRange();
                 this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
             }
         },
-
         // add on event to expandClickNode
         _expandClick: function () {
+            var i = this.icons;
             this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
                 var expandNode = this.expandNode,
                     iconNode = this.expandIconNode;
                 if (domStyle.get(expandNode, 'display') === 'none') {
                     domStyle.set(expandNode, 'display', 'block');
-                    domClass.replace(iconNode, 'fa-folder-open-o', 'fa-folder-o');
+                    domClass.replace(iconNode, i.folderOpen, i.folder);
                 } else {
                     domStyle.set(expandNode, 'display', 'none');
-                    domClass.replace(iconNode, 'fa-folder-o', 'fa-folder-open-o');
+                    domClass.replace(iconNode, i.folder, i.folderOpen);
                 }
             }));
         },
-
         // set checkbox based on layer so it's always in sync
         _setSublayerCheckbox: function (checked, checkNode) {
             checkNode = checkNode || this.checkNode;
+            var i = this.icons;
             if (checked) {
                 domAttr.set(checkNode, 'data-checked', 'checked');
-                domClass.replace(checkNode, 'fa-check-square-o', 'fa-square-o');
+                domClass.replace(checkNode, i.checked, i.unchecked);
             } else {
                 domAttr.set(checkNode, 'data-checked', 'unchecked');
-                domClass.replace(checkNode, 'fa-square-o', 'fa-check-square-o');
+                domClass.replace(checkNode, i.unchecked, i.checked);
             }
         },
-
         // check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function () {
             var node = this.checkNode,
@@ -106,6 +95,5 @@ define([
             }
         }
     });
-
     return _DynamicFolder;
 });
