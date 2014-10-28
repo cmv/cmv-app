@@ -89,10 +89,6 @@ define([
 			type: 'dynamic',
 			url: 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
 			title: 'Louisville Public Safety',
-			slider: true,
-			noLegend: false,
-			collapsed: false,
-			sublayerToggle: false, //true to automatically turn on sublayers
 			options: {
 				id: 'louisvillePubSafety',
 				opacity: 1.0,
@@ -106,9 +102,6 @@ define([
 			type: 'dynamic',
 			url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer',
 			title: 'Damage Assessment',
-			slider: true,
-			noLegend: false,
-			collapsed: false,
 			options: {
 				id: 'DamageAssessment',
 				opacity: 1.0,
