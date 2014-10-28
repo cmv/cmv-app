@@ -69,7 +69,7 @@ define([
         },
         // called from LayerMenu plugin
         _dynamicToggleMenuItems: function (menu) {
-            if (this._hasSublayers) {
+            if (this._hasSublayers && this.controlOptions.allSublayerToggles !== false) {
                 menu.addChild(new MenuItem({
                     label: i18n.dynamicSublayersOn,
                     onClick: lang.hitch(this, '_toggleAllSublayers', true)

@@ -154,6 +154,7 @@ All layer types have common options while some options are specific to certain l
 | `expanded` | When `true` expands top level exposing sublayers or legend. | dynamic, feature & tiled |
 | `sublayers` | When `false` dynamic folder/sublayer structure is not created. | dynamic |
 | `metadataUrl` | When `true` and layer has `url` property (ArcGIS layers) links to service URL. When a URL links to said URL. | all layers |
+| `allSublayerToggles` | When `false` toggle all sublayers on/off layer menu items will not be included. | dynamic |
 
 ### Topics
 
