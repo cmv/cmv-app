@@ -129,6 +129,10 @@ body, html {
 .sidebarCollapseButtonHorz {
     width: 16px;
     height: 25px;
+    top: 48%;
+    top: -webkit-calc(50% - 12px);
+    top: -moz-calc(50% - 12px);
+    top: -o-calc(50% - 12px);
     top: calc(50% - 12px);
     border-bottom: 1px solid #B5BCC7;
     border-top: 1px solid #B5BCC7;
@@ -136,6 +140,10 @@ body, html {
 .sidebarCollapseButtonVert {
     width: 25px;
     height: 18px;
+    left: 48%;
+    left: -webkit-calc(50% - 12px);
+    left: -moz-calc(50% - 12px);
+    left: -o-calc(50% - 12px);
     left: calc(50% - 12px);
     border-left: 1px solid #B5BCC7;
     border-right: 1px solid #B5BCC7;

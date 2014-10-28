@@ -35,11 +35,13 @@ define([
 				on(help, 'click', lang.hitch(this.parentWidget, 'show'));
 			}
 		},
-		onShow: function () {
+		onOpen: function () {
 			//  Make sure the content is visible when the dialog
 			//  is shown/opened. Something like this may be needed
 			//  for all floating windows that don't open on startup?
-			this.containerNode.resize();
+			if (!this.openOnStartup) {
+				this.containerNode.resize();
+			}
 		},
 		close: function () {
 			if (this.parentWidget.hide) {
