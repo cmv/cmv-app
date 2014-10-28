@@ -126,3 +126,21 @@
 .layerControlDijit .esriLegendServiceLabel {
     display: none;
 }
+/*
+    media queries bootstrap style
+    http://getbootstrap.com/css/#grid-media-queries
+*/
+@media screen and (max-width: 991px) {
+    /* adjust .layerControlIcon on small and extra-small devices. */
+.layerControlDijit .layerControlIcon {
+    font-size: 34px;
+}
+}
+@media screen and (max-width: 767px) {
+    /* adjust .layerControlIcon on extra-small devices (phones) */
+ .layerControlDijit .layerControlIcon {
+    font-size: 52px;
+}
+}
+
+/* end media queries bootstrap style */
