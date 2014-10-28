@@ -25,7 +25,6 @@ define([
 		legendLayerInfos: [],
 		editorLayerInfos: [],
 		identifyLayerInfos: [],
-		tocLayerInfos: [],
 		layerControlLayerInfos: [],
 		panes: {
 			left: {
@@ -270,15 +269,6 @@ define([
 				layer: l,
 				title: layer.title || null
 			});
-			//TOC LayerInfos array
-			this.tocLayerInfos.push({ //push because TOC needs the layers in the opposite order
-				layer: l,
-				title: layer.title || null,
-				slider: (layer.slider === false) ? false : true,
-				noLegend: layer.noLegend || false,
-				collapsed: layer.collapsed || false,
-				sublayerToggle: layer.sublayerToggle || false
-			});
 			//LayerControl LayerInfos array
 			this.layerControlLayerInfos.unshift({ //unshift instead of push to keep layer ordering in LayerControl intact
 				layer: l,
@@ -520,9 +510,6 @@ define([
 			}
 			if (options.legendLayerInfos) {
 				options.layerInfos = this.legendLayerInfos;
-			}
-			if (options.tocLayerInfos) {
-				options.layerInfos = this.tocLayerInfos;
 			}
 			if (options.layerControlLayerInfos) {
 				options.layerInfos = this.layerControlLayerInfos;
