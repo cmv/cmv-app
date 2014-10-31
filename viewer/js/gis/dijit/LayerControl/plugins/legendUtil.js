@@ -12,7 +12,8 @@ define([
     'esri/request',
     // temp
     'esri/dijit/Legend',
-    'dojo/i18n!esri/nls/jsapi'
+    'dojo/i18n!esri/nls/jsapi',
+    'dojo/i18n!./../nls/resource'
 ], function (
     array,
     lang,
@@ -26,10 +27,11 @@ define([
     gfx,
     esriRequest,
     Legend,
-    esriBundle
+    esriBundle,
+    i18n
 ) {
     'use strict';
-    esriBundle.widgets.legend.NLS_noLegend = 'No Legend';
+    esriBundle.widgets.legend.NLS_noLegend = i18n.noLegend;
     return {
         /////////////////////
         // utility methods //
@@ -51,7 +53,6 @@ define([
                 }
             }
         },
-
         // request legend json
         _legendRequest: function (layer, expandNode, callback, errback) {
             esriRequest({
@@ -66,7 +67,6 @@ define([
                 lang.hitch(this, errback, layer, expandNode)
             );
         },
-
         // request arcgis.com legend json
         _arcgisLegendRequest: function (layer, expandNode, callback, errback) {
             var index = layer.url.toLowerCase().indexOf('/rest/');
@@ -86,7 +86,6 @@ define([
                 lang.hitch(this, errback, layer, expandNode)
             );
         },
-
         // create a legend image from json
         _image: function (legend, layerId, layer) {
             var src = legend.url;
@@ -111,7 +110,6 @@ define([
             });
             return img;
         },
-
         ////////////////////////////////////////
         // layer legend for dynamic and tiled //
         ////////////////////////////////////////
@@ -128,7 +126,6 @@ define([
             setTimeout(function () {
                 legend.startup();
             }, 1);
-
             // check version and handle accordingly
             //if (layer.version >= 10.01) {
             //    this._legendRequest(layer, expandNode, '_createLayerLegend', '_layerLegendError');
@@ -136,7 +133,6 @@ define([
             //    this._arcgisLegendRequest(layer, expandNode, '_createLayerLegend', '_layerLegendError');
             //}
         },
-
         /////////////////////////////
         // dynamic sublayer legend //
         /////////////////////////////
@@ -159,15 +155,6 @@ define([
                 // create legend table
                 var table = domConst.create('table');
                 domClass.add(table, 'layerControlLegendTable');
-                // label if legend group
-                if (_layer.legend.length > 1 && layer.layerInfos.length > 1) {
-                    var labelRow = domConst.create('tr', {}, table, 'last');
-                    domConst.create('td', {
-                        innerHTML: _layer.layerName,
-                        'class': 'layerControlLegendGroup',
-                        colspan: 2
-                    }, labelRow, 'first');
-                }
                 // iterate through legends
                 array.forEach(_layer.legend, function (legend) {
                     // create a table row and symbol td
@@ -204,7 +191,6 @@ define([
                 error: e
             });
         },
-
         /////////////////////////
         // vector layer legend //
         /////////////////////////

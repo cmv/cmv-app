@@ -7,7 +7,9 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <title>Configurable Map Viewer</title>
-        <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.10compact/js/esri/css/esri.css">
+        <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.11compact/esri/css/esri.css">
+        <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="css/theme/dbootstrap/dbootstrap.css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
     </head>
     <body class="dbootstrap">
@@ -44,13 +46,13 @@
                 },{
                     name: 'gis',
                     location: location.pathname.replace(/[^\/]+$/, '') + 'js/gis'
-                },{
-                    name: 'dbootstrap',
-                    location: location.pathname.replace(/[^\/]+$/, '') + 'js/dbootstrap'
                 }]
             };
         </script>
-        <script type="text/javascript" src="//js.arcgis.com/3.10compact/"></script>
+        <!--[if lt IE 9]>
+            <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.3/es5-shim.min.js"></script>
+        <![endif]-->
+        <script type="text/javascript" src="//js.arcgis.com/3.11compact/"></script>
         <script type="text/javascript">
             // get the config file from the url if present
             var file = 'config/viewer', s = window.location.search, q = s.match(/config=([^&]*)/i);
@@ -60,7 +62,7 @@
                     file = 'config/' + file;
                 }
             }
-            require(['dbootstrap','viewer/Controller', file], function(dbootstrap, Controller, config){
+            require(['viewer/Controller', file], function(Controller, config){
                 Controller.startup(config);
             });
         </script>
