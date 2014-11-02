@@ -56,7 +56,7 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 See [releases](https://github.com/cmv/cmv-app/releases) for change logs.
 
 # Community
-We have a gitter.im chat room. Come on by if you have questions. The comunity is very helpful. [https://gitter.im/cmv/cmv-app](https://gitter.im/cmv/cmv-app) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+We have a gitter.im chat room. Come on by if you have questions. The community is very helpful. [https://gitter.im/cmv/cmv-app](https://gitter.im/cmv/cmv-app) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # Contributing to the Project
 There are many ways to contribute to CMV:
