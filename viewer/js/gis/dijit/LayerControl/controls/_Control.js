@@ -44,7 +44,6 @@ define([
         },
         postCreate: function () {
             this.inherited(arguments);
-
             if (!this.controller) {
                 topic.publish('viewer/handleError', {
                     source: 'LayerControl/_Control',
@@ -90,13 +89,18 @@ define([
                 domStyle.set(this.layerUpdateNode, 'display', 'none');
             }));
             // create layer menu
-            this.layerMenu = new LayerMenu({
-                control: this,
-                contextMenuForWindow: false,
-                targetNodeIds: [this.menuNode],
-                leftClickToOpen: true
-            });
-            this.layerMenu.startup();
+            if ((controlOptions.noMenu !== true && this.controller.noMenu !== true) || (this.controller.noMenu === true && controlOptions.noMenu === false)) {
+                this.layerMenu = new LayerMenu({
+                    control: this,
+                    contextMenuForWindow: false,
+                    targetNodeIds: [this.menuNode],
+                    leftClickToOpen: true
+                });
+                this.layerMenu.startup();
+            } else {
+                domClass.remove(this.menuNode, 'fa, layerControlMenuIcon, ' + this.icons.menu);
+                domStyle.set(this.menuClickNode, 'cursor', 'default');
+            }
             // if layer has scales set
             if (layer.minScale !== 0 || layer.maxScale !== 0) {
                 this._checkboxScaleRange();
@@ -202,7 +206,7 @@ define([
             });
         },
         // anything the widget may need to do after update
-        _updateEnd: function () { 
+        _updateEnd: function () {
             // how to handle external layer.setVisibleLayers() ???
             //
             // without topics to get/set sublayer state this will be challenging
