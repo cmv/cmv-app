@@ -101,6 +101,7 @@ require(['gis/dijit/LayerControl'], function (LayerControl) {
 | `vectorLabel` | Mixed | Label for vector layers. Default is `false`. Pass the label or html for quick easy custom styling of label text. |
 | `overlayReorder` | Boolean | Enable reordering of overlay layers in map and Layer Control. Default is `false`. |
 | `overlayLabel` | Mixed | Label for overlay layers. Default is `false`. Pass the label or html for quick easy custom styling of label text. |
+| `noMenu` | Boolean | When `true` no layer menu is created for all layers. Can be overridden for specific layer(s) with `noMenu' layer option. Note: menu related widget and layer control options, i.e. `noLegend`, have no effect when the layer menu is not created. |
 | `noLegend` | Boolean | When `true` no legend is created for all layers. Can be overridden for specific layer(s) with `noLegend' layer option. |
 | `noZoom` | Boolean | When `true` removes "Zoom to Layer" menu item for all layers. Can be overridden for specific layer(s) with `noZoom' layer option. |
 | `noTransparency` | Boolean | When `true` removes "Transparency" menu item for all layers. Can be overridden for specific layer(s) with `noTransparency' layer option. |
@@ -146,6 +147,7 @@ All layer types have common options while some options are specific to certain l
 | Option | Description | Affects |
 | :----: | ----------- | ------- |
 | `exclude` | When `true` a layer control will not be added to the widget. Using `exclude` for a layer with layer reordering enabled which is not above or below all included layers will result in layer reordering issues. | all layers |
+| `noMenu` |  When `true` no layer menu is created. Set to `false` to override `noMenu: true` widget parameter. | all layers |
 | `noLegend` |  When `true` no legend is created. Set to `false` to override `noLegend: true` widget parameter. | dynamic, feature and tiled |
 | `noZoom` | When `true` removes "Zoom to Layer" menu item. Set to `false` to override `noZoom: true` widget parameter. | all layers |
 | `noTransparency` | When `true` removes "Transparency" menu item. Set to `false` to override `noTransparency: true` widget parameter. | all layers |

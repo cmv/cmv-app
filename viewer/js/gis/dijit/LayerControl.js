@@ -44,6 +44,7 @@ define([
         overlayLabel: false,
         vectorReorder: false,
         vectorLabel: false,
+        noMenu: null,
         noLegend: null,
         noZoom: null,
         noTransparency: null,
