@@ -54,7 +54,7 @@ module.exports = function(grunt) {
       build: {
         expand: true,
         cwd: 'dist/viewer',
-        src: ['**/*.css', '!**/dbootstrap/**'],
+        src: ['**/*.css'],
         dest: 'dist/viewer'
       }
     },
@@ -62,13 +62,13 @@ module.exports = function(grunt) {
       build: {
         expand: true,
         cwd: 'dist/viewer',
-        src: ['**/*.css', '!**/dbootstrap/**'],
+        src: ['**/*.css'],
         dest: 'dist/viewer'
       }
     },
     jshint: {
       build: {
-        src: ['viewer/**/*.js', '!**/dbootstrap/**', '!**/TOC.js'],
+        src: ['viewer/**/*.js'],
         options: {
           jshintrc: '.jshintrc',
           reporter: require('jshint-stylish')
@@ -138,7 +138,7 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           cwd: 'dist/viewer',
-          src: ['**']
+          src: ['**', '!**/dijit.css']
         }]
       }
     }

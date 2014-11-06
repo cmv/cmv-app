@@ -1,6 +1,6 @@
 # Configurable Map Viewer (CMV)
 
-[![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app)
+[![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for modular design and OOP via classes in JS using dojo's great [declare](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html) system.
 
@@ -56,7 +56,7 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 See [releases](https://github.com/cmv/cmv-app/releases) for change logs.
 
 # Community
-We have an IRC channel: `#cmv` on freenode for the project. If you have questions, stop on by. We recommend [HexChat](http://hexchat.github.io) as an IRC client or you can use freenode's [webchat](http://webchat.freenode.net) client.
+We have a gitter.im chat room. Come on by if you have questions. The community is very helpful. [https://gitter.im/cmv/cmv-app](https://gitter.im/cmv/cmv-app) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # Contributing to the Project
 There are many ways to contribute to CMV:
@@ -65,7 +65,7 @@ There are many ways to contribute to CMV:
 
 2. __Submit an Issue__ - If you find a possible bug, please submit an issue in the [issues log](https://github.com/cmv/cmv-app/issues?state=open).
 
-3. __User contributed widgets__ - Users can submit widgets to the [cmv-contrib-widgets](https://github.com/cmv/cmv-contrib-widgets) repo. These widgets are created and submitted by users. Head on over and read the details.
+3. __User contributed widgets__ - For general information on how to build a CMV widget read [Builiding Custom Widgets] (https://github.com/cmv/cmv-app/wiki/building-custom-widgets). Users can submit widgets to the [cmv-contrib-widgets](https://github.com/cmv/cmv-contrib-widgets) repo. These widgets are created and submitted by users. Head on over and read the details.
 
 4. __Create documentation__ Please make constructive in [the wiki](https://github.com/cmv/cmv-app/wiki).
 
@@ -88,13 +88,13 @@ This project uses grunt to automate tasks like minifying css and js as well as j
 
 - Clone your fork and in cloned directory:
 
-- Install the local dev dependencies for the project in the repo from the command line: `npm install`, this only needs to be done once per dev machine.
+  - Install the local dev dependencies for the project in the repo from the command line: `npm install`, this only needs to be done once per dev machine.
 
-- Run grunt from the repo with: `grunt` this will launch a mini dev server and lint your js as you code.
+  - Run grunt from the repo with: `grunt` this will launch a mini dev server and lint your js as you code.
 
-- Run grunt from the repo with: `grunt build` this will create a `dist` folder with minified code ready for deployment.
+  - Run grunt from the repo with: `grunt build` this will create a `dist` folder with minified code ready for deployment.
 
-- There are other grunt tasks, use: `grunt -h` to see a list.
+  - There are other grunt tasks, use: `grunt -h` to see a list.
 
 # License
 

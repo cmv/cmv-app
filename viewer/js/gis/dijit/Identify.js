@@ -51,7 +51,7 @@ define([
 						// it only if one does not already exist.
 						if (layer.capabilities && layer.capabilities.toLowerCase().indexOf('data') < 0) {
 							if (!layer.infoTemplate) {
-								var infoTemplate = this.getInfoTemplate(layer);
+								var infoTemplate = this.getInfoTemplate(layer, layer.layerId);
 								if (infoTemplate) {
 									layer.setInfoTemplate(infoTemplate);
 									return;

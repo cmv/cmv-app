@@ -1,51 +1,14 @@
-/*.gis_Basemaps_Dijit  .gis_Basemaps_Button {
-    background-color: #FFFFFF;
-    border: 2px solid #666666;
-    border-radius: 5px 5px 5px 5px;
-    cursor: pointer;
-    padding: 7px;
-}
-
-.gis_Basemaps_MenuPopup {
-    margin-top: -4px;
-    background-color: #FFFFFF;
-    border: 2px solid #666666;
-    border-radius: 0 0 5px 5px;
-    padding: 2px;
-}
-
-.gis_Basemaps_MenuPopup.dijitPopup {
-    box-shadow: none;
-}
-
-.gis_Basemaps_MenuPopup table {
-    border: none !important;
-}
-
-.gis_Basemaps_MenuPopup .selectedIcon {
-    background-image: url(../images/check.png);
-    width: 16px;
-    height: 16px;
-}
-
-.gis_Basemaps_MenuPopup .clearIcon {
-    background-image: url(../images/clear.png);
-    width: 16px;
-    height: 16px;
-}
-
-.gis_Basemaps_Dijit .gis_Basemaps_Button .dijitButtonNode {
-    border: none;
-}*/
-
 .selectedIcon:before {
+    font-family: FontAwesome;
     content: "\f046";
 }
 
 .emptyIcon:before {
+    font-family: FontAwesome;
     content: "\f096";
 }
 
 .basemapsIcon:before {
+    font-family: FontAwesome;
     content: "\f009";
 }
