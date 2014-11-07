@@ -6,7 +6,7 @@ A layer control widget for CMV. Just don't call it a TOC.
 
 * Toggle layer visibility
 * Layer menu with Zoom To Layer, Transparency and Layer Swipe
-* Legends for ArcGIS layers
+* Legends for ArcGIS service layers and csv
 * Sublayer/folder structure and toggling for ArcGIS dynamic layers
   * can be disabled
   * single layer map services display legend in expand area
@@ -17,6 +17,8 @@ A layer control widget for CMV. Just don't call it a TOC.
   * feature
   * tiled
   * image
+  * csv
+  * georss
 
 #### LayerControl in CMV
 
@@ -180,13 +182,15 @@ topic.subscribe('layerControl/setVisibleLayers', function (r) {
 });
 ```
 
+**GeoRSSLayer Bug**
+
+GeoRSSLayer `visible` property initially `true` whether the layer is visible or not. The result is the layer checkbox is checked with layer option `visible: false`. It's been reported and is what it is until fixed.
+
 #### Layer Control TODO
 
-Do not include this section in docs outside this file.
+Do not include this section in docs outside this file. May not reflect all issues and enhancements in the repo.
 
-1. Support all layer types CMV supports (csv, kml, stream, wms)
-2. Create a base class for layer controls
+1. Support all layer types CMV supports (kml, stream, wms)
 2. Method by which to add custom layer menu items
 3. Integrate with new layer options for widgets system
 4. Optional plugins for leveraging layer manipulation capabilities, e.g. ui for user to change rendering on image layer, change renderer for user added shape file or CSV, etc.
-5. Users' suggestions for improvements
