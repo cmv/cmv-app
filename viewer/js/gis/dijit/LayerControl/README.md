@@ -6,7 +6,7 @@ A layer control widget for CMV. Just don't call it a TOC.
 
 * Toggle layer visibility
 * Layer menu with Zoom To Layer, Transparency and Layer Swipe
-* Legends for ArcGIS layers
+* Legends for ArcGIS service layers and csv
 * Sublayer/folder structure and toggling for ArcGIS dynamic layers
   * can be disabled
   * single layer map services display legend in expand area
@@ -17,6 +17,8 @@ A layer control widget for CMV. Just don't call it a TOC.
   * feature
   * tiled
   * image
+  * csv
+  * georss
 
 #### LayerControl in CMV
 
@@ -101,6 +103,7 @@ require(['gis/dijit/LayerControl'], function (LayerControl) {
 | `vectorLabel` | Mixed | Label for vector layers. Default is `false`. Pass the label or html for quick easy custom styling of label text. |
 | `overlayReorder` | Boolean | Enable reordering of overlay layers in map and Layer Control. Default is `false`. |
 | `overlayLabel` | Mixed | Label for overlay layers. Default is `false`. Pass the label or html for quick easy custom styling of label text. |
+| `noMenu` | Boolean | When `true` no layer menu is created for all layers. Can be overridden for specific layer(s) with `noMenu` layer option. Note: menu related widget and layer control options, i.e. `noLegend`, have no effect when the layer menu is not created. |
 | `noLegend` | Boolean | When `true` no legend is created for all layers. Can be overridden for specific layer(s) with `noLegend' layer option. |
 | `noZoom` | Boolean | When `true` removes "Zoom to Layer" menu item for all layers. Can be overridden for specific layer(s) with `noZoom' layer option. |
 | `noTransparency` | Boolean | When `true` removes "Transparency" menu item for all layers. Can be overridden for specific layer(s) with `noTransparency' layer option. |
@@ -146,6 +149,7 @@ All layer types have common options while some options are specific to certain l
 | Option | Description | Affects |
 | :----: | ----------- | ------- |
 | `exclude` | When `true` a layer control will not be added to the widget. Using `exclude` for a layer with layer reordering enabled which is not above or below all included layers will result in layer reordering issues. | all layers |
+| `noMenu` |  When `true` no layer menu is created. Set to `false` to override `noMenu: true` widget parameter. | all layers |
 | `noLegend` |  When `true` no legend is created. Set to `false` to override `noLegend: true` widget parameter. | dynamic, feature and tiled |
 | `noZoom` | When `true` removes "Zoom to Layer" menu item. Set to `false` to override `noZoom: true` widget parameter. | all layers |
 | `noTransparency` | When `true` removes "Transparency" menu item. Set to `false` to override `noTransparency: true` widget parameter. | all layers |
@@ -178,13 +182,15 @@ topic.subscribe('layerControl/setVisibleLayers', function (r) {
 });
 ```
 
+**GeoRSSLayer Bug**
+
+GeoRSSLayer `visible` property initially `true` whether the layer is visible or not. The result is the layer checkbox is checked with layer option `visible: false`. It's been reported and is what it is until fixed.
+
 #### Layer Control TODO
 
-Do not include this section in docs outside this file.
+Do not include this section in docs outside this file. May not reflect all issues and enhancements in the repo.
 
-1. Support all layer types CMV supports (csv, kml, stream, wms)
-2. Create a base class for layer controls
+1. Support all layer types CMV supports (kml, stream, wms)
 2. Method by which to add custom layer menu items
 3. Integrate with new layer options for widgets system
 4. Optional plugins for leveraging layer manipulation capabilities, e.g. ui for user to change rendering on image layer, change renderer for user added shape file or CSV, etc.
-5. Users' suggestions for improvements
