@@ -132,6 +132,7 @@ define([
 				var layerIds = this.getLayerIds(layer, selectedLayer);
 				if (layerIds.length > 0) {
 					var params = lang.clone(identifyParams);
+					params.layerDefinitions = layer.ref.layerDefinitions;
 					params.layerIds = layerIds;
 					identifies.push(layer.identifyTask.execute(params));
 					identifiedlayers.push(layer);
