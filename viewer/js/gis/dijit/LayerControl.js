@@ -64,7 +64,8 @@ define([
             image: './LayerControl/controls/Image',
             tiled: './LayerControl/controls/Tiled',
             csv: './LayerControl/controls/CSV',
-            georss: './LayerControl/controls/GeoRSS'
+            georss: './LayerControl/controls/GeoRSS',
+            wms: './LayerControl/controls/WMS'
         },
         constructor: function (options) {
             options = options || {};
