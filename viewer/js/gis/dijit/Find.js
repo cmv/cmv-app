@@ -209,7 +209,7 @@ define([
 			findParams.returnGeometry = true;
 			findParams.layerIds = query.layerIds;
 			findParams.searchFields = query.searchFields;
-			findParams.layerDefs = query.layerDefs;
+			findParams.layerDefinitions = query.layerDefs;
 
 			findParams.searchText = searchText;
 			findParams.contains = !this.containsSearchText.checked;
