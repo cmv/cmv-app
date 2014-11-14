@@ -1,10 +1,16 @@
 .layerControlDijit .vectorLayerContainer {}
 
-.layerControlDijit .vectorLabelContainer {}
+.layerControlDijit .vectorLabelContainer {
+    font-size: 15px;
+    font-weight: 600;
+    padding-bottom: 4px;
+}
 
 .layerControlDijit .overlayLayerContainer {}
 
 .layerControlDijit .overlayLabelContainer {
+    font-size: 15px;
+    font-weight: 600;
     padding-bottom: 4px;
 }
 

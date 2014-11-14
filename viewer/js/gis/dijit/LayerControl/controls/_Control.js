@@ -8,6 +8,7 @@ define([
     'dojo/dom-style',
     'dojo/dom-class',
     'dojo/dom-attr',
+    'dojo/fx',
     'dojo/html',
     './../plugins/LayerMenu',
     'dojo/text!./templates/Control.html'
@@ -21,6 +22,7 @@ define([
     domStyle,
     domClass,
     domAttr,
+    fx,
     html,
     LayerMenu,
     template
@@ -139,10 +141,16 @@ define([
                 var expandNode = this.expandNode,
                     iconNode = this.expandIconNode;
                 if (domStyle.get(expandNode, 'display') === 'none') {
-                    domStyle.set(expandNode, 'display', 'block');
+                    fx.wipeIn({
+                        node: expandNode,
+                        duration: 300
+                    }).play();
                     domClass.replace(iconNode, i.collapse, i.expand);
                 } else {
-                    domStyle.set(expandNode, 'display', 'none');
+                    fx.wipeOut({
+                        node: expandNode,
+                        duration: 300
+                    }).play();
                     domClass.replace(iconNode, i.expand, i.collapse);
                 }
             }));
