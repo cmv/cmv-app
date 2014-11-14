@@ -49,7 +49,6 @@ define([
         printTask: null,
         postCreate: function () {
             this.inherited(arguments);
-            this.printTask = new PrintTask(this.printTaskURL);
             this.printparams = new PrintParameters();
             this.printparams.map = this.map;
             this.printparams.outSpatialReference = this.map.spatialReference;
@@ -88,6 +87,9 @@ define([
             });
         },
         _handlePrintInfo: function (data) {
+            this.printTask = new PrintTask(this.printTaskURL, {
+                async: data.executionType === 'esriExecutionTypeAsynchronous'
+            });
             var Layout_Template = array.filter(data.parameters, function (param) {
                 return param.name === 'Layout_Template';
             });
