@@ -16,6 +16,7 @@ define([
     'esri/tasks/PrintTemplate',
     'esri/tasks/PrintParameters',
     'esri/request',
+    'dojo/i18n!./Print/nls/resource',
 
     'dijit/form/Form',
     'dijit/form/FilteringSelect',
@@ -28,12 +29,13 @@ define([
     'dijit/TooltipDialog',
     'dijit/form/RadioButton',
     'xstyle/css!./Print/css/Print.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, PrintTemplate, PrintParameters, esriRequest) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, PrintTemplate, PrintParameters, esriRequest, i18n) {
 
     // Main print dijit
     var PrintDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
         templateString: printTemplate,
+        i18n: i18n,
         map: null,
         count: 1,
         results: [],
@@ -49,7 +51,6 @@ define([
         printTask: null,
         postCreate: function () {
             this.inherited(arguments);
-            this.printTask = new PrintTask(this.printTaskURL);
             this.printparams = new PrintParameters();
             this.printparams.map = this.map;
             this.printparams.outSpatialReference = this.map.spatialReference;
@@ -88,6 +89,9 @@ define([
             });
         },
         _handlePrintInfo: function (data) {
+            this.printTask = new PrintTask(this.printTaskURL, {
+                async: data.executionType === 'esriExecutionTypeAsynchronous'
+            });
             var Layout_Template = array.filter(data.parameters, function (param) {
                 return param.name === 'Layout_Template';
             });
@@ -200,6 +204,7 @@ define([
     var PrintResultDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
         templateString: printResultTemplate,
+        i18n: i18n,
         url: null,
         postCreate: function () {
             this.inherited(arguments);
@@ -211,7 +216,7 @@ define([
                 this.nameNode.innerHTML = '<span class="bold">' + this.docName + '</span>';
                 domClass.add(this.resultNode, 'printResultHover');
             } else {
-                this._onPrintError('Error, try again');
+                this._onPrintError( i18n.printResults.errorMessage );
             }
         },
         _onPrintError: function (err) {
@@ -219,7 +224,7 @@ define([
                 source: 'Print',
                 error: err
             });
-            this.nameNode.innerHTML = '<span class="bold">Error, try again</span>';
+            this.nameNode.innerHTML = '<span class="bold">' + i18n.printResults.errorMessage + '</span>';
             domClass.add(this.resultNode, 'printResultError');
         },
         _openPrint: function () {
