@@ -37,7 +37,7 @@
             <div data-dojo-type="dijit/TooltipDialog">
                 <div style="width:260px;">
                     <div style="font-weight:bold;">
-                        ${i18n.map_scale_extent}:
+                        ${i18n.mapScaleExtent}:
                     </div>
                     <div data-dojo-type="dijit/form/Form" data-dojo-attach-point="preserveFormDijit">
                         <table cellspacing="5">
@@ -47,21 +47,21 @@
                                 </td>
                                 <td>
                                     <input type="radio" data-dojo-type="dijit/form/RadioButton" data-dojo-props="name:'preserveScale',checked:true,value:'true'" />
-                                    ${i18n.map_scale}&nbsp;&nbsp;
+                                    ${i18n.mapScale}&nbsp;&nbsp;
                                     <input type="radio" data-dojo-type="dijit/form/RadioButton" data-dojo-props="name:'preserveScale',value:'false'" />
-                                    ${i18n.map_extent}
+                                    ${i18n.mapExtent}
                                 </td>
                             </tr>
                         </table>
                     </div>
                     <div style="font-weight:bold;">
-                        ${i18n.full_layout_options}:
+                        ${i18n.fullLayoutOptions}:
                     </div>
                     <div data-dojo-type="dijit/form/Form" data-dojo-attach-point="layoutFormDijit">
                         <table cellspacing="5">
                             <tr>
                                 <td>
-                                    ${i18n.scale_bar_units}:
+                                    ${i18n.scaleBarUnits}:
                                 </td>
                                 <td>
                                     <select data-dojo-type="dijit/form/FilteringSelect" data-dojo-props="name:'scalebarUnit',style:'width:100px;'">
@@ -82,7 +82,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    ${i18n.include_legend}:
+                                    ${i18n.includeLegend}:
                                 </td>
                                 <td>
                                     <input type="checkbox" data-dojo-type="dijit/form/CheckBox" data-dojo-props="name:'legend',value:true,checked:true" />
@@ -91,22 +91,22 @@
                         </table>
                     </div>
                     <div style="font-weight:bold;">
-                        ${i18n.print_quality_options}:
+                        ${i18n.printQualityOptions}:
                     </div>
                     <div data-dojo-type="dijit/form/Form" data-dojo-attach-point="mapQualityFormDijit">
                         <table cellspacing="5">
                             <tr>
                                 <td>
-                                    ${i18n.dpi_input.label}:
+                                    ${i18n.dpiInput.label}:
                                 </td>
                                 <td>
-                                    <input type="text" data-dojo-type="dijit/form/NumberTextBox" data-dojo-props="name:'dpi',required:true,value:150,constraints:{min:100,max:300,places:0},invalidMessage:'${i18n.dpi_input.invalid_message}',rangeMessage:'${i18n.dpi_input.range_message}',style:'width:100px;'" />
+                                    <input type="text" data-dojo-type="dijit/form/NumberTextBox" data-dojo-props="name:'dpi',required:true,value:150,constraints:{min:100,max:300,places:0},invalidMessage:'${i18n.dpiInput.invalidMessage}',rangeMessage:'${i18n.dpiInput.rangeMessage}',style:'width:100px;'" />
                                 </td>
                             </tr>
                         </table>
                     </div>
                     <div style="font-weight:bold;">
-                        ${i18n.map_only_options}:
+                        ${i18n.mapOnlyOptions}:
                     </div>
                     <div data-dojo-type="dijit/form/Form" data-dojo-attach-point="mapOnlyFormDijit">
                         <table cellspacing="5">
@@ -131,15 +131,15 @@
                 </div>
             </div>
         </div>
-        <div data-dojo-type="dijit/form/Button" data-dojo-props="busyLabel:'${i18n.print_button.busy_label}',iconClass:'fa fa-print fa-fw'" data-dojo-attach-event="onClick:print" data-dojo-attach-point="printButtonDijit">
-            ${i18n.print_button.label}
+        <div data-dojo-type="dijit/form/Button" data-dojo-props="busyLabel:'${i18n.printButton.busyLabel}',iconClass:'fa fa-print fa-fw'" data-dojo-attach-event="onClick:print" data-dojo-attach-point="printButtonDijit">
+            ${i18n.printButton.label}
         </div>
     </div>
     <div data-dojo-attach-point="printResultsNode" class="resultsContainer">
     </div>
     <div data-dojo-attach-point="clearActionBarNode" class="buttonActionBar" style="display:none;padding:0;">
         <div data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'fa fa-history fa-fw'" data-dojo-attach-event="onClick:clearResults">
-            ${i18n.clear_history_button.label}
+            ${i18n.clearHistoryButton.label}
         </div>
     </div>
 </div>

@@ -5,38 +5,38 @@ define({
         format: 'Format',
         layout: 'Layout',
         settings: 'Settings',
-        map_scale_extent: 'Map scale/extent',
+        mapScaleExtent: 'Map scale/extent',
         preserve: 'Preserve',
-        map_scale: 'map scale',
-        map_extent: 'map extent',
-        full_layout_options: 'Full layout options',
-        scale_bar_units: 'Scale bar units',
+        mapScale: 'map scale',
+        mapExtent: 'map extent',
+        fullLayoutOptions: 'Full layout options',
+        scaleBarUnits: 'Scale bar units',
         miles: 'Miles',
         kilometers: 'Kilometers',
         meters: 'Meters',
         feet: 'Feet',
-        include_legend: 'Include legend',
-        print_quality_options: 'Print quality options',
-        dpi_input: {
+        includeLegend: 'Include legend',
+        printQualityOptions: 'Print quality options',
+        dpiInput: {
             label: 'DPI',
-            invalid_message: 'Please enter a numeric value.',
-            range_message: 'Please enter a value between 100 and 300.'
+            invalidMessage: 'Please enter a numeric value.',
+            rangeMessage: 'Please enter a value between 100 and 300.'
         },
-        map_only_options: 'MAP_ONLY options',
+        mapOnlyOptions: 'MAP_ONLY options',
         width: 'Width',
         height: 'Height',
-        print_button: {
-            busy_label: 'printing',
+        printButton: {
+            busyLabel: 'printing',
             label: 'Print'
         },
-        clear_history_button: {
+        clearHistoryButton: {
             label: 'Clear Print History'
         },
-        print_results: {
-            progress_bar: {
+        printResults: {
+            progressBar: {
                 label: 'Creating Print'
             },
-            error_message: 'Error, try again'
+            errorMessage: 'Error, try again'
         }
     }
 });

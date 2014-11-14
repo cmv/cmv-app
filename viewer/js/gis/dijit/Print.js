@@ -216,7 +216,7 @@ define([
                 this.nameNode.innerHTML = '<span class="bold">' + this.docName + '</span>';
                 domClass.add(this.resultNode, 'printResultHover');
             } else {
-                this._onPrintError( i18n.print_results.error_message );
+                this._onPrintError( i18n.printResults.errorMessage );
             }
         },
         _onPrintError: function (err) {
@@ -224,7 +224,7 @@ define([
                 source: 'Print',
                 error: err
             });
-            this.nameNode.innerHTML = '<span class="bold">' + i18n.print_results.error_message + '</span>';
+            this.nameNode.innerHTML = '<span class="bold">' + i18n.printResults.errorMessage + '</span>';
             domClass.add(this.resultNode, 'printResultError');
         },
         _openPrint: function () {
