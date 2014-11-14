@@ -15,18 +15,6 @@
 	float: right;
 }
 
-.gis_FindDijit .searchIcon {
-    background-image: url(../images/search.png);
-    width: 16px;
-    height: 16px;
-}
-
-.gis_FindDijit .clearIcon {
-    background-image: url(../images/clear.png);
-    width: 16px;
-    height: 16px;
-}
-
 .gis_FindDijit label {
 	font-weight:bold;
 	margin-left: 5px;

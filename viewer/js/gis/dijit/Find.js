@@ -23,16 +23,19 @@ define([
 	'esri/tasks/FindParameters',
 	'esri/geometry/Extent',
 	'dojo/text!./Find/templates/Find.html',
+	'dojo/i18n!./Find/nls/resource',
+
 	'dijit/form/Form',
 	'dijit/form/FilteringSelect',
 	'dijit/form/ValidationTextBox',
 	'dijit/form/CheckBox',
 	'xstyle/css!./Find/css/Find.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct, lang, array, on, keys, Memory, OnDemandGrid, Selection, Keyboard, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, graphicsUtils, FindTask, FindParameters, Extent, FindTemplate) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct, lang, array, on, keys, Memory, OnDemandGrid, Selection, Keyboard, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, graphicsUtils, FindTask, FindParameters, Extent, FindTemplate, i18n) {
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		widgetsInTemplate: true,
 		templateString: FindTemplate,
 		baseClass: 'gis_FindDijit',
+		i18n: i18n,
 
 		// Spatial Reference. uses the map's spatial reference if none provided
 		spatialReference: null,
@@ -218,7 +221,7 @@ define([
 				wkid: this.spatialReference
 			};
 
-			this.findResultsNode.innerHTML = 'Searching...';
+			this.findResultsNode.innerHTML = this.i18n.searching;
 			this.findResultsNode.style.display = 'block';
 
 			var findTask = new FindTask(query.url);
@@ -264,8 +267,10 @@ define([
 			this.results = results;
 
 			if (this.results.length > 0) {
-				var s = (this.results.length === 1) ? '' : 's';
-				resultText = this.results.length + ' Result' + s + ' Found';
+				//var s = (this.results.length === 1) ? '' : 's';
+				var s = (this.results.length === 1) ? '' : this.i18n.results_label.multiple_suffix;
+				//resultText = this.results.length + ' Result' + s + ' Found';
+				resultText = this.results.length + ' ' + this.i18n.results_label.label_prefix + s + ' ' + this.i18n.results_label.label_suffix;
 				this.highlightFeatures();
 				this.showResultsGrid();
 			} else {
