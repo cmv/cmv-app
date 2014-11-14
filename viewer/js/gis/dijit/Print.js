@@ -16,6 +16,7 @@ define([
     'esri/tasks/PrintTemplate',
     'esri/tasks/PrintParameters',
     'esri/request',
+    'dojo/i18n!./Print/nls/resource',
 
     'dijit/form/Form',
     'dijit/form/FilteringSelect',
@@ -28,12 +29,13 @@ define([
     'dijit/TooltipDialog',
     'dijit/form/RadioButton',
     'xstyle/css!./Print/css/Print.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, PrintTemplate, PrintParameters, esriRequest) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, PrintTemplate, PrintParameters, esriRequest, i18n) {
 
     // Main print dijit
     var PrintDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
         templateString: printTemplate,
+        i18n: i18n,
         map: null,
         count: 1,
         results: [],
@@ -202,6 +204,7 @@ define([
     var PrintResultDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
         templateString: printResultTemplate,
+        i18n: i18n,
         url: null,
         postCreate: function () {
             this.inherited(arguments);
@@ -213,7 +216,7 @@ define([
                 this.nameNode.innerHTML = '<span class="bold">' + this.docName + '</span>';
                 domClass.add(this.resultNode, 'printResultHover');
             } else {
-                this._onPrintError('Error, try again');
+                this._onPrintError( i18n.print_results.error_message );
             }
         },
         _onPrintError: function (err) {
@@ -221,7 +224,7 @@ define([
                 source: 'Print',
                 error: err
             });
-            this.nameNode.innerHTML = '<span class="bold">Error, try again</span>';
+            this.nameNode.innerHTML = '<span class="bold">' + i18n.print_results.error_message + '</span>';
             domClass.add(this.resultNode, 'printResultError');
         },
         _openPrint: function () {
