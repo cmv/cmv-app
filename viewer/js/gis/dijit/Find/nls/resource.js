@@ -1,24 +1,24 @@
 // http://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
 define({
    root: {
-       select_query: 'Select query',
-       search_text: {
+       selectQuery: 'Select query',
+       searchText: {
            label: 'Search for',
            placeholder: 'Enter the text you want to search for.'
        },
-       exact_matches: 'Find exact matches only',
-       search_button: {
+       exactMatches: 'Find exact matches only',
+       searchButton: {
            label: 'Search',
-           busy_label: 'searching'
+           busyLabel: 'searching'
        },
-       clear_button: {
+       clearButton: {
            label: 'Clear'
        },
        searching: 'Searching...',
-       results_label: {
-           multiple_suffix: 's',
-           label_prefix: 'Result',
-           label_suffix: 'found'
+       resultsLabel: {
+           multipleResultsSuffix: 's',
+           labelPrefix: 'Result',
+           labelSuffix: 'found'
        }
    }
 });

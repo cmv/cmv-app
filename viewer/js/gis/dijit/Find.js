@@ -268,9 +268,9 @@ define([
 
 			if (this.results.length > 0) {
 				//var s = (this.results.length === 1) ? '' : 's';
-				var s = (this.results.length === 1) ? '' : this.i18n.results_label.multiple_suffix;
+				var s = (this.results.length === 1) ? '' : this.i18n.resultsLabel.multipleResultsSuffix;
 				//resultText = this.results.length + ' Result' + s + ' Found';
-				resultText = this.results.length + ' ' + this.i18n.results_label.label_prefix + s + ' ' + this.i18n.results_label.label_suffix;
+				resultText = this.results.length + ' ' + this.i18n.resultsLabel.labelPrefix + s + ' ' + this.i18n.resultsLabel.labelSuffix;
 				this.highlightFeatures();
 				this.showResultsGrid();
 			} else {
