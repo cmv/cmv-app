@@ -69,25 +69,25 @@ define([
             this.map.addLayer(this.polylineGraphics);
 
             this.polygonGraphics = new FeatureLayer({
-                layerDefinition: {
-                    geometryType: 'esriGeometryPolygon',
-                    fields: [{
-                        name: 'OBJECTID',
-                        type: 'esriFieldTypeOID',
-                        alias: 'OBJECTID',
-                        domain: null,
-                        editable: false,
-                        nullable: false
-                    }, {
-                        name: 'ren',
-                        type: 'esriFieldTypeInteger',
-                        alias: 'ren',
-                        domain: null,
-                        editable: true,
-                        nullable: false
-                    }]
-                },
-                featureSet: null
+            layerDefinition: {
+                geometryType: 'esriGeometryPolygon',
+                fields: [{
+                    name: 'OBJECTID',
+                    type: 'esriFieldTypeOID',
+                    alias: 'OBJECTID',
+                    domain: null,
+                    editable: false,
+                    nullable: false
+                }, {
+                    name: 'ren',
+                    type: 'esriFieldTypeInteger',
+                    alias: 'ren',
+                    domain: null,
+                    editable: true,
+                    nullable: false
+                }]
+            },
+            featureSet: null
             }, {
                 id: 'drawGraphics_poly',
                 title: 'Draw Graphics',
