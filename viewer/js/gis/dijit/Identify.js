@@ -13,14 +13,17 @@ define([
 	'esri/tasks/IdentifyParameters',
 	'esri/dijit/PopupTemplate',
 	'dojo/text!./Identify/templates/Identify.html',
+	'dojo/i18n!./Identify/nls/resource',
+
 	'dijit/form/Form',
 	'dijit/form/FilteringSelect',
 	'xstyle/css!./Identify/css/Identify.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, IdentifyTemplate) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, IdentifyTemplate, i18n) {
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		widgetsInTemplate: true,
 		templateString: IdentifyTemplate,
 		baseClass: 'gis_IdentifyDijit',
+		i18n: i18n,
 
 		mapClickMode: null,
 		identifies: {},
@@ -110,7 +113,7 @@ define([
 				this.mapRightClick = evt;
 			}));
 			this.mapRightClickMenu.addChild(new MenuItem({
-				label: 'Identify here',
+				label: this.i18n.rightClickMenuItem.label,
 				onClick: lang.hitch(this, 'handleRightClick')
 			}));
 		},
@@ -140,7 +143,7 @@ define([
 			}));
 
 			if (identifies.length > 0) {
-				this.map.infoWindow.setTitle('Identifying...');
+				this.map.infoWindow.setTitle( this.i18n.mapInfoWindow.identifyingTitle );
 				this.map.infoWindow.setContent('<div class="loading"></div>');
 				this.map.infoWindow.show(mapPoint);
 				all(identifies).then(lang.hitch(this, 'identifyCallback', identifiedlayers), lang.hitch(this, 'identifyError'));
@@ -408,7 +411,7 @@ define([
 			this.identifyLayerDijit.set('disabled', (identifyItems.length < 1));
 			if (identifyItems.length > 0) {
 				identifyItems.unshift({
-					name: '*** All Visible Layers ***',
+					name: this.i18n.labels.allVisibleLayers,
 					id: '***'
 				});
 				if (!id) {
