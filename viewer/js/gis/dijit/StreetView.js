@@ -18,14 +18,17 @@ define([
 	'esri/SpatialReference',
 	'dijit/MenuItem',
 	'//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.2/proj4.js',
+	'dojo/i18n!./StreetView/nls/resource',
+
 	'dijit/form/Button',
 	'xstyle/css!./StreetView/css/StreetView.css',
 	'gis/plugins/async!//maps.google.com/maps/api/js?v=3&sensor=false'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, Point, SpatialReference, MenuItem, proj4) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, Point, SpatialReference, MenuItem, proj4, i18n) {
 
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		widgetsInTemplate: true,
 		templateString: template,
+		i18n: i18n,
 		mapClickMode: null,
 
 		panoOptions: {
@@ -98,7 +101,7 @@ define([
 				this.mapRightClickPoint = evt.mapPoint;
 			}));
 			this.mapRightClickMenu.addChild(new MenuItem({
-				label: 'See Street View here',
+				label: this.i18n.rightClickMenuItem.label,
 				onClick: lang.hitch(this, 'streetViewFromMapRightClick')
 			}));
 		},
