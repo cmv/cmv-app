@@ -26,7 +26,7 @@ define([
 		editorLayerInfos: [],
 		identifyLayerInfos: [],
 		layerControlLayerInfos: [],
-		mapRightClickMenu: null, //map right click (long tap) context menu
+		mapRightClickMenu: null, // map right-click (long tap) menu
 		panes: {
 			left: {
 				id: 'sidebarLeft',
@@ -94,6 +94,23 @@ define([
 			topic.subscribe('mapClickMode/setDefault', lang.hitch(this, function () {
 				topic.publish('mapClickMode/setCurrent', this.mapClickMode.defaultMode);
 			}));
+
+			// get viewer config
+			topic.subscribe('viewer/getConfig', lang.hitch(this, function () {
+				topic.publish('viewer/configGet', this.config);
+			}));
+
+			// get operational layers config
+			topic.subscribe('viewer/getLayerConfig', lang.hitch(this, function () {
+				topic.publish('viewer/layerConfigGet', this.config.operationalLayers || []);
+			}));
+
+			// example usage of config getters
+			//var handle = topic.subscribe('viewer/layerConfigGet', function (layerConfig) {
+			//	handle.remove();
+			//	// do stuff
+			//});
+			//topic.publish('viewer/getLayerConfig');
 		},
 		// set titles (if any)
 		addTitles: function () {
