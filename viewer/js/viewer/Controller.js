@@ -26,6 +26,7 @@ define([
 		editorLayerInfos: [],
 		identifyLayerInfos: [],
 		layerControlLayerInfos: [],
+		mapRightClickMenu: null, // map right-click (long tap) menu
 		panes: {
 			left: {
 				id: 'sidebarLeft',
@@ -94,6 +95,22 @@ define([
 				topic.publish('mapClickMode/setCurrent', this.mapClickMode.defaultMode);
 			}));
 
+			// get viewer config
+			topic.subscribe('viewer/getConfig', lang.hitch(this, function () {
+				topic.publish('viewer/configGet', this.config);
+			}));
+
+			// get operational layers config
+			topic.subscribe('viewer/getLayerConfig', lang.hitch(this, function () {
+				topic.publish('viewer/layerConfigGet', this.config.operationalLayers || []);
+			}));
+
+			// example usage of config getters
+			//var handle = topic.subscribe('viewer/layerConfigGet', function (layerConfig) {
+			//	handle.remove();
+			//	// do stuff
+			//});
+			//topic.publish('viewer/getLayerConfig');
 		},
 		// set titles (if any)
 		addTitles: function () {
@@ -297,6 +314,8 @@ define([
 					this.identifyLayerInfos.push(idOptions);
 				}
 			}
+			// extend operational layer configs with layer
+			layer.layer = l;
 		},
 		initWidgets: function () {
 			var widgets = [],
@@ -489,13 +508,22 @@ define([
 			// set any additional options
 			options.id = widgetConfig.id + '_widget';
 			options.parentWidget = widgetConfig.parentWidget;
-
-			//replace config map, layerInfos arrays, etc
-			if (options.map) {
+			// replace options.map with map instance
+			if (options.map === true) {
 				options.map = this.map;
 			}
-			if (options.mapRightClickMenu) {
-				// create right-click menu
+			// replace options.viewerConfig with complete viewer options
+			if (options.viewerConfig === true) {
+				options.viewerConfig = this.config;
+			}
+			// replace options.layersConfig with operationLayers array
+			// each operationalLayers config object has been extended with layer instance
+			if (options.layersConfig === true) {
+				options.layersConfig = this.config.operationalLayers || [];
+			}
+			// replace options.mapRightClickMenu with map's right-click menu
+			if (options.mapRightClickMenu === true) {
+				// doesn't exist? create right-click menu
 				if (!this.mapRightClickMenu) {
 					this.mapRightClickMenu = new Menu({
 						targetNodeIds: [this.map.root],
@@ -503,21 +531,31 @@ define([
 					});
 					this.mapRightClickMenu.startup();
 				}
+				// replace
 				options.mapRightClickMenu = this.mapRightClickMenu;
 			}
-			if (options.mapClickMode) {
+			// replace options.mapClickMode with the current mode
+			if (options.mapClickMode === true) {
 				options.mapClickMode = this.mapClickMode.current;
 			}
-			if (options.legendLayerInfos) {
+			// replace options.legendLayerInfos with array of LayerInfos
+			// for Legend widget
+			if (options.legendLayerInfos === true) {
 				options.layerInfos = this.legendLayerInfos;
 			}
-			if (options.layerControlLayerInfos) {
+			// replace options.layerControlLayerInfos
+			// for LayerControl widget - will be removed
+			if (options.layerControlLayerInfos === true) {
 				options.layerInfos = this.layerControlLayerInfos;
 			}
-			if (options.editorLayerInfos) {
+			// replace options.editorLayerInfos with array of LayerInfos
+			// for Editor widget
+			if (options.editorLayerInfos === true) {
 				options.layerInfos = this.editorLayerInfos;
 			}
-			if (options.identifyLayerInfos) {
+			// replace options.identifyLayerInfos with array of LayerInfos
+			// for Identify widget
+			if (options.identifyLayerInfos === true) {
 				options.layerInfos = this.identifyLayerInfos;
 			}
 
