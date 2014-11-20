@@ -297,6 +297,8 @@ define([
 					this.identifyLayerInfos.push(idOptions);
 				}
 			}
+			// extend layer with config object
+			l.cmvConfig = layer;
 		},
 		initWidgets: function () {
 			var widgets = [],
