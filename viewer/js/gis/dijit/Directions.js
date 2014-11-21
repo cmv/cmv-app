@@ -11,11 +11,13 @@ define([
 	'dijit/MenuSeparator',
 	'esri/geometry/Point',
 	'esri/SpatialReference',
-	'dojo/topic'
-], function (declare, _WidgetBase, _TemplatedMixin, Directions, template, lang, Menu, MenuItem, PopupMenuItem, MenuSeparator, Point, SpatialReference, topic) {
+	'dojo/topic',
+	'dojo/i18n!./Directions/nls/resource'
+], function (declare, _WidgetBase, _TemplatedMixin, Directions, template, lang, Menu, MenuItem, PopupMenuItem, MenuSeparator, Point, SpatialReference, topic, i18n) {
 
 	return declare([_WidgetBase, _TemplatedMixin], {
 		templateString: template,
+		i18n: i18n,
 		postCreate: function () {
 			this.inherited(arguments);
 			this.directions = new Directions(lang.mixin({
@@ -35,31 +37,31 @@ define([
 
 			this.menu = new Menu();
 			this.menu.addChild(new MenuItem({
-				label: 'Directions from here',
+				label: this.i18n.labels.directionsFromHere,
 				onClick: lang.hitch(this, 'directionsFrom')
 			}));
 			this.menu.addChild(new MenuItem({
-				label: 'Directions to here',
+				label: this.i18n.labels.directionsToHere,
 				onClick: lang.hitch(this, 'directionsTo')
 			}));
 			this.menu.addChild(new MenuSeparator());
 			this.menu.addChild(new MenuItem({
-				label: 'Add stop',
+				label: this.i18n.labels.addStop,
 				onClick: lang.hitch(this, 'addStop')
 			}));
 			this.menu.addChild(new MenuSeparator());
 			this.menu.addChild(new MenuItem({
-				label: 'Use my location as start point',
+				label: this.i18n.labels.useMyLocationAsStart,
 				onClick: lang.hitch(this, 'getGeoLocation', 'directionsFrom')
 			}));
 			this.menu.addChild(new MenuItem({
-				label: 'Use my location as end point',
+				label: this.i18n.labels.useMyLocationAsEnd,
 				onClick: lang.hitch(this, 'getGeoLocation', 'directionsTo')
 			}));
 
 			// add this widgets menu as a sub menu to the map right click menu
 			this.mapRightClickMenu.addChild(new PopupMenuItem({
-				label: 'Directions',
+				label: this.i18n.labels.directions,
 				popup: this.menu
 			}));
 		},
@@ -94,8 +96,8 @@ define([
 				navigator.geolocation.getCurrentPosition(lang.hitch(this, 'locationSuccess', leg), lang.hitch(this, 'locationError'));
 			} else {
 				topic.publish('growler/growl', {
-					title: 'Error',
-					message: 'Geolocation not supported by your browser.',
+					title: this.i18n.errors.geoLocation.title,
+					message: this.i18n.errors.geoLocation.message,
 					level: 'default',
 					timeout: 10000,
 					opacity: 1.0
@@ -110,8 +112,8 @@ define([
 		},
 		locationError: function (error) {
 			topic.publish('growler/growl', {
-				title: 'Error',
-				message: 'There was a problem with getting your location: ' + error.message,
+				title: this.i18n.errors.location.title,
+				message: this.i18n.errors.location.message + error.message,
 				level: 'default',
 				timeout: 10000,
 				opacity: 1.0
