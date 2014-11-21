@@ -1,4 +1,5 @@
 define([
+	'dojo/_base/declare',
 	'esri/map',
 	'dojo/dom',
 	'dojo/dom-style',
@@ -19,9 +20,9 @@ define([
 	'esri/dijit/PopupMobile',
 	'dijit/Menu',
 	'esri/IdentityManager'
-], function (Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
+], function (declare, Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
 
-	return {
+	return declare( null, {
 		legendLayerInfos: [],
 		editorLayerInfos: [],
 		identifyLayerInfos: [],
@@ -551,5 +552,5 @@ define([
 				return;
 			}
 		}
-	};
+	} );
 });
