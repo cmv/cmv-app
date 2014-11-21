@@ -177,16 +177,21 @@ define([
                     scalebarUnit: layoutForm.scalebarUnit
                 };
                 this.printparams.template = template;
-                var fileHandel = this.printTask.execute(this.printparams);
 
+                var fileHandle = this.printTask.execute(this.printparams);
                 var result = new PrintResultDijit({
                     count: this.count.toString(),
                     icon: (form.format === 'PDF') ? this.pdfIcon : this.imageIcon,
                     docName: form.title,
                     title: form.format + ', ' + form.layout,
-                    fileHandle: fileHandel
+                    fileHandle: fileHandle
                 }).placeAt(this.printResultsNode, 'last');
-                result.startup();
+
+                if ( this.printTask.async ) {
+                    result.own( this.printTask.printGp.on( 'status-update', lang.hitch( result, '_handleStatusUpdate' ) ) );
+                }
+
+
                 Style.set(this.clearActionBarNode, 'display', 'block');
                 this.count++;
             } else {
@@ -206,6 +211,7 @@ define([
         templateString: printResultTemplate,
         i18n: i18n,
         url: null,
+        fileHandle: null,
         postCreate: function () {
             this.inherited(arguments);
             this.fileHandle.then(lang.hitch(this, '_onPrintComplete'), lang.hitch(this, '_onPrintError'));
@@ -216,7 +222,7 @@ define([
                 this.nameNode.innerHTML = '<span class="bold">' + this.docName + '</span>';
                 domClass.add(this.resultNode, 'printResultHover');
             } else {
-                this._onPrintError( i18n.printResults.errorMessage );
+                this._onPrintError( this.i18n.printResults.errorMessage );
             }
         },
         _onPrintError: function (err) {
@@ -230,6 +236,12 @@ define([
         _openPrint: function () {
             if (this.url !== null) {
                 window.open(this.url);
+            }
+        },
+        _handleStatusUpdate: function ( event ) {
+            var jobStatus = event.jobInfo.jobStatus;
+            if ( jobStatus === 'esriJobFailed' ){
+                this._onPrintError( this.i18n.printResults.errorMessage )
             }
         }
     });
