@@ -241,7 +241,7 @@ define([
         _handleStatusUpdate: function ( event ) {
             var jobStatus = event.jobInfo.jobStatus;
             if ( jobStatus === 'esriJobFailed' ){
-                this._onPrintError( this.i18n.printResults.errorMessage )
+                this._onPrintError( this.i18n.printResults.errorMessage );
             }
         }
     });
