@@ -10,16 +10,19 @@ define([
     'dojox/lang/functional',
     'dojo/text!./Basemaps/templates/Basemaps.html',
     'esri/dijit/BasemapGallery',
+    'dojo/i18n!./Basemaps/nls/resource',
+
     'dijit/form/DropDownButton',
     'xstyle/css!./Basemaps/css/Basemaps.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownMenu, MenuItem, array, functional, template, BasemapGallery) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownMenu, MenuItem, array, functional, template, BasemapGallery, i18n) {
 
     // main basemap widget
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         widgetsInTemplate: true,
+        i18n: i18n,
         mode: 'agol',
-        title: 'Basemaps',
+        title: i18n.title,
         //baseClass: 'gis_Basemaps_Dijit',
         //buttonClass: 'gis_Basemaps_Button',
         //menuClass: 'gis_Basemaps_Menu',
