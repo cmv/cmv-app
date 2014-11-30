@@ -116,7 +116,7 @@ define([
 		}],
 		// set include:true to load. For titlePane type set position the the desired order in the sidebar
 		widgets: {
-			/*growler: {
+			growler: {
 				include: true,
 				id: 'growler',
 				type: 'domNode',
@@ -252,7 +252,7 @@ define([
 					map: true,
 					legendLayerInfos: true
 				}
-			},*/
+			},
 			layerControl: {
 				include: true,
 				id: 'layerControl',
@@ -270,7 +270,7 @@ define([
 					overlayLabel: 'Map Layers',
 					overlayReorder: true
 				}
-			}/*,
+			},
 			bookmarks: {
 				include: true,
 				id: 'bookmarks',
@@ -409,7 +409,7 @@ define([
 				path: 'gis/dijit/Help',
 				title: 'Help',
 				options: {}
-			}*/
+			}
 
 		}
 	};
