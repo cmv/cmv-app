@@ -15,10 +15,13 @@ define([
     'esri/InfoTemplate',
     'esri/layers/GraphicsLayer',
     'dojo/text!./Geocoder/templates/Geocoder.html',
+    'dojo/i18n!./Geocoder/nls/resource',
+
     'xstyle/css!./Geocoder/css/Geocoder.css'
-], function (declare, _WidgetBase, _TemplatedMixin, a11yclick, lang, on, domClass, domStyle, Geocoder, MenuItem, SimpleMarkerSymbol, Graphic, InfoTemplate, GraphicsLayer, template) {
+], function (declare, _WidgetBase, _TemplatedMixin, a11yclick, lang, on, domClass, domStyle, Geocoder, MenuItem, SimpleMarkerSymbol, Graphic, InfoTemplate, GraphicsLayer, template, i18n) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
+        i18n: i18n,
         baseClass: 'gis_GeocoderDijit',
         expanded: true,
         collapsible: false,
@@ -27,14 +30,14 @@ define([
         },
         reverseGeocodeTemplate: [
             '<table class="attrTable">',
-            '<tr valign="top">', '<td class="attrName">Address</td>', '<td class="attrValue">${Address}</td>', '</tr>',
-            '<tr valign="top">', '<td class="attrName">Neighborhood</td>', '<td class="attrValue">${Neighborhood}</td>', '</tr>',
-            '<tr valign="top">', '<td class="attrName">City</td>', '<td class="attrValue">${City}</td>', '</tr>',
-            '<tr valign="top">', '<td class="attrName">Subregion</td>', '<td class="attrValue">${SubRegion}</td>', '</tr>',
-            '<tr valign="top">', '<td class="attrName">Region</td>', '<td class="attrValue">${Region}</td>', '</tr>',
-            '<tr valign="top">', '<td class="attrName">Postal Code</td>', '<td class="attrValue">${Postal}&nbsp;${PostalExt}</td>', '</tr>',
-            '<tr valign="top">', '<td class="attrName">Country Code</td>', '<td class="attrValue">${CountryCode}</td>', '</tr>',
-            '<tr valign="top">', '<td class="attrName">Locator Name</td>', '<td class="attrValue">${Loc_name}</td>', '</tr>',
+            '<tr valign="top">', '<td class="attrName">${i18n.labels.address}</td>', '<td class="attrValue">${Address}</td>', '</tr>',
+            '<tr valign="top">', '<td class="attrName">${i18n.labels.neighborhood}</td>', '<td class="attrValue">${Neighborhood}</td>', '</tr>',
+            '<tr valign="top">', '<td class="attrName">${i18n.labels.city}</td>', '<td class="attrValue">${City}</td>', '</tr>',
+            '<tr valign="top">', '<td class="attrName">${i18n.labels.subregion}</td>', '<td class="attrValue">${SubRegion}</td>', '</tr>',
+            '<tr valign="top">', '<td class="attrName">${i18n.labels.region}</td>', '<td class="attrValue">${Region}</td>', '</tr>',
+            '<tr valign="top">', '<td class="attrName">${i18n.labels.postalCode}</td>', '<td class="attrValue">${Postal}&nbsp;${PostalExt}</td>', '</tr>',
+            '<tr valign="top">', '<td class="attrName">${i18n.labels.countryCode}</td>', '<td class="attrValue">${CountryCode}</td>', '</tr>',
+            '<tr valign="top">', '<td class="attrName">${i18n.labels.locatorName}</td>', '<td class="attrValue">${Loc_name}</td>', '</tr>',
             '</table>'
         ].join(''),
 
@@ -76,7 +79,7 @@ define([
                 this.mapRightClickPoint = evt.mapPoint;
             }));
             this.mapRightClickMenu.addChild(new MenuItem({
-                label: 'Get address here',
+                label: this.i18n.labels.getAddressHere,
                 onClick: lang.hitch(this, 'reverseGeocode')
             }));
             this.symbol = new SimpleMarkerSymbol();
