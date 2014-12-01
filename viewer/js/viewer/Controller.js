@@ -101,13 +101,13 @@ define([
 			if (titles.header) {
 				var headerTitleNode = dom.byId('headerTitleSpan');
 				if (headerTitleNode) {
-					headerTitleNode.innerText = titles.header;
+					headerTitleNode.innerHTML = titles.header;
 				}
 			}
 			if (titles.subHeader) {
 				var subHeaderTitle = dom.byId('subHeaderTitleSpan');
 				if (subHeaderTitle) {
-					subHeaderTitle.innerText = titles.subHeader;
+					subHeaderTitle.innerHTML = titles.subHeader;
 				}
 			}
 			if (titles.pageTitle) {
