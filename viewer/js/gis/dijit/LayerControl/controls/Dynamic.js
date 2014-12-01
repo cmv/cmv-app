@@ -55,14 +55,18 @@ define([
         },
         // create sublayers and legend
         _layerTypeInit: function () {
-            if (legendUtil.isLegend(this.controlOptions.noLegend, this.controller.noLegend) && this.controlOptions.sublayers) {
+            var isLegend = legendUtil.isLegend(this.controlOptions.noLegend, this.controller.noLegend);
+            if (isLegend && this.controlOptions.sublayers === true) {
                 this._expandClick();
                 this._createSublayers(this.layer);
-                // create legends after sublayers created
                 aspect.after(this, '_createSublayers', lang.hitch(this, legendUtil.dynamicSublayerLegend(this.layer, this.expandNode)));
-            } else if (this.controlOptions.sublayers === false) {
+            } else if (this.controlOptions.sublayers === false && isLegend) {
                 this._expandClick();
                 legendUtil.layerLegend(this.layer, this.expandNode);
+            } else if (this.controlOptions.sublayers === true && !isLegend) {
+                this._expandClick();
+                aspect.after(this, '_createSublayers', lang.hitch(this, '_removeSublayerLegends'));
+                this._createSublayers(this.layer);
             } else {
                 this._expandRemove();
             }
@@ -138,6 +142,14 @@ define([
                     this._sublayerControls.push(control);
                 }));
             }
+        },
+        // simply remove expandClickNode
+        _removeSublayerLegends: function () {
+            array.forEach(this._sublayerControls, function (control) {
+                if (!control.sublayerInfo.subLayerIds) {
+                    domConst.destroy(control.expandClickNode);
+                }
+            });
         },
         // set dynamic layer visible layers
         _setVisibleLayers: function () {
