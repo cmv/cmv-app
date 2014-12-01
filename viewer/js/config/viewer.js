@@ -265,9 +265,7 @@ define([
 					map: true,
 					layerControlLayerInfos: true,
 					separated: true,
-					vectorLabel: 'Feature Layers',
 					vectorReorder: true,
-					overlayLabel: 'Map Layers',
 					overlayReorder: true
 				}
 			},

@@ -44,6 +44,7 @@ define([
         _esriLayerType: 'dynamic', // constant
         //_sublayerControls: [], // sublayer/folder controls
         _hasSublayers: false, // true when sublayers created
+        _visLayersHandler: null,
         constructor: function () {
             this._sublayerControls = [];
         },
@@ -51,6 +52,7 @@ define([
             if (this.layer.layerInfos.length > 1 && this.controlOptions.sublayers) {
                 // we have sublayer controls
                 this._hasSublayers = true;
+                this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);
             }
         },
         // create sublayers and legend
@@ -153,6 +155,8 @@ define([
         },
         // set dynamic layer visible layers
         _setVisibleLayers: function () {
+            // remove aspect handler
+            this._visLayersHandler.remove();
             // because ags doesn't respect a layer group's visibility
             //   i.e. layer 3 (the group) is not in array but it's sublayers are; sublayers will show
             //   so check and if group is off also remove the sublayers
@@ -182,6 +186,26 @@ define([
             topic.publish('layerControl/setVisibleLayers', {
                 id: layer.id,
                 visibleLayers: setLayers
+            });
+            // set aspect handler
+            this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);
+        },
+        _onSetVisibleLayers: function (visLayers) {
+            var visibleIds = [];
+            array.forEach(this.layer.layerInfos, function (info) {
+                if (array.indexOf(visLayers, info.id) !== -1) {
+                    visibleIds.push(info.id);
+                }
+                if (info.parentLayerId !== -1 && array.indexOf(visibleIds, info.parentLayerId) === -1) {
+                    visibleIds.push(info.parentLayerId);
+                }
+            });
+            array.forEach(this._sublayerControls, function (control) {
+                if (array.indexOf(visibleIds, control.sublayerInfo.id) !== -1) {
+                    control._setSublayerCheckbox(true);
+                } else {
+                    control._setSublayerCheckbox(false);
+                }
             });
         }
     });
