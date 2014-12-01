@@ -44,6 +44,7 @@ define([
         _esriLayerType: 'dynamic', // constant
         //_sublayerControls: [], // sublayer/folder controls
         _hasSublayers: false, // true when sublayers created
+        _visLayersHandler: null,
         constructor: function () {
             this._sublayerControls = [];
         },
@@ -51,18 +52,23 @@ define([
             if (this.layer.layerInfos.length > 1 && this.controlOptions.sublayers) {
                 // we have sublayer controls
                 this._hasSublayers = true;
+                this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);
             }
         },
         // create sublayers and legend
         _layerTypeInit: function () {
-            if (legendUtil.isLegend(this.controlOptions.noLegend, this.controller.noLegend) && this.controlOptions.sublayers) {
+            var isLegend = legendUtil.isLegend(this.controlOptions.noLegend, this.controller.noLegend);
+            if (isLegend && this.controlOptions.sublayers === true) {
                 this._expandClick();
                 this._createSublayers(this.layer);
-                // create legends after sublayers created
                 aspect.after(this, '_createSublayers', lang.hitch(this, legendUtil.dynamicSublayerLegend(this.layer, this.expandNode)));
-            } else if (this.controlOptions.sublayers === false) {
+            } else if (this.controlOptions.sublayers === false && isLegend) {
                 this._expandClick();
                 legendUtil.layerLegend(this.layer, this.expandNode);
+            } else if (this.controlOptions.sublayers === true && !isLegend) {
+                this._expandClick();
+                aspect.after(this, '_createSublayers', lang.hitch(this, '_removeSublayerLegends'));
+                this._createSublayers(this.layer);
             } else {
                 this._expandRemove();
             }
@@ -139,8 +145,18 @@ define([
                 }));
             }
         },
+        // simply remove expandClickNode
+        _removeSublayerLegends: function () {
+            array.forEach(this._sublayerControls, function (control) {
+                if (!control.sublayerInfo.subLayerIds) {
+                    domConst.destroy(control.expandClickNode);
+                }
+            });
+        },
         // set dynamic layer visible layers
         _setVisibleLayers: function () {
+            // remove aspect handler
+            this._visLayersHandler.remove();
             // because ags doesn't respect a layer group's visibility
             //   i.e. layer 3 (the group) is not in array but it's sublayers are; sublayers will show
             //   so check and if group is off also remove the sublayers
@@ -170,6 +186,26 @@ define([
             topic.publish('layerControl/setVisibleLayers', {
                 id: layer.id,
                 visibleLayers: setLayers
+            });
+            // set aspect handler
+            this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);
+        },
+        _onSetVisibleLayers: function (visLayers) {
+            var visibleIds = [];
+            array.forEach(this.layer.layerInfos, function (info) {
+                if (array.indexOf(visLayers, info.id) !== -1) {
+                    visibleIds.push(info.id);
+                }
+                if (info.parentLayerId !== -1 && array.indexOf(visibleIds, info.parentLayerId) === -1) {
+                    visibleIds.push(info.parentLayerId);
+                }
+            });
+            array.forEach(this._sublayerControls, function (control) {
+                if (array.indexOf(visibleIds, control.sublayerInfo.id) !== -1) {
+                    control._setSublayerCheckbox(true);
+                } else {
+                    control._setSublayerCheckbox(false);
+                }
             });
         }
     });
