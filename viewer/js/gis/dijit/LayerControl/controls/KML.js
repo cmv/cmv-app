@@ -10,14 +10,18 @@ define([
     _WidgetBase,
     _TemplatedMixin,
     _Contained,
-    _Control
+    _Control,
+    legendUtil
 ) {
     var KMLControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'vector', // constant
         _esriLayerType: 'kml', // constant
         // create and legend
         _layerTypeInit: function () {
-            this._expandRemove();
+            this._expandClick();
+            if (legendUtil.isLegend(this.controlOptions.noLegend, this.controller.noLegend)) {
+                legendUtil.layerLegend(this.layer, this.expandNode);
+            }
         }
     });
     return KMLControl;
