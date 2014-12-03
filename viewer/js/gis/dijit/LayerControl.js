@@ -248,6 +248,12 @@ define([
         },
         // zoom to layer
         _zoomToLayer: function (layer) {
+            if (layer.declaredClass === 'esri.layers.KMLLayer') {
+                return;
+            }
+
+            // need to "merge" each kml layers fullExtent for project geometries
+
             var map = this.map;
             if (layer.spatialReference === map.spatialReference) {
                 map.setExtent(layer.fullExtent, true);
