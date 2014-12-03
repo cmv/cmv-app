@@ -903,7 +903,7 @@ body .dijitAlignClient { position: absolute; }
 }
 
 /* #6945: stop mouse events */
-.dj_ie .dijitSplitterCover {
+.dj_ie8 .dijitSplitterCover {
     background: white;
     filter: alpha(opacity=0);
 }
