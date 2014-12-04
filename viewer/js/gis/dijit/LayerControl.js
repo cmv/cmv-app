@@ -11,6 +11,7 @@ define([
     'dijit/form/Button',
     'esri/tasks/ProjectParameters',
     'esri/config',
+    'require',
     'xstyle/css!./LayerControl/css/LayerControl.css'
 ], function (
     declare,
@@ -24,7 +25,8 @@ define([
     ContentPane,
     Button,
     ProjectParameters,
-    esriConfig
+    esriConfig,
+    require
 ) {
     var LayerControl = declare([WidgetBase, Container], {
         map: null,
@@ -44,6 +46,7 @@ define([
         overlayLabel: false,
         vectorReorder: false,
         vectorLabel: false,
+        noMenu: null,
         noLegend: null,
         noZoom: null,
         noTransparency: null,
@@ -56,10 +59,14 @@ define([
         _swiper: null,
         _swipeLayerToggleHandle: null,
         _controls: {
-            dynamic: 'gis/dijit/LayerControl/controls/Dynamic',
-            feature: 'gis/dijit/LayerControl/controls/Feature',
-            image: 'gis/dijit/LayerControl/controls/Image',
-            tiled: 'gis/dijit/LayerControl/controls/Tiled'
+            dynamic: './LayerControl/controls/Dynamic',
+            feature: './LayerControl/controls/Feature',
+            image: './LayerControl/controls/Image',
+            tiled: './LayerControl/controls/Tiled',
+            csv: './LayerControl/controls/CSV',
+            georss: './LayerControl/controls/GeoRSS',
+            wms: './LayerControl/controls/WMS',
+            kml: './LayerControl/controls/KML'
         },
         constructor: function (options) {
             options = options || {};
@@ -241,6 +248,12 @@ define([
         },
         // zoom to layer
         _zoomToLayer: function (layer) {
+            if (layer.declaredClass === 'esri.layers.KMLLayer') {
+                return;
+            }
+
+            // need to "merge" each kml layers fullExtent for project geometries
+
             var map = this.map;
             if (layer.spatialReference === map.spatialReference) {
                 map.setExtent(layer.fullExtent, true);

@@ -1,6 +1,6 @@
 # Configurable Map Viewer (CMV)
 
-[![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app)
+[![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for modular design and OOP via classes in JS using dojo's great [declare](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html) system.
 
@@ -56,7 +56,7 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 See [releases](https://github.com/cmv/cmv-app/releases) for change logs.
 
 # Community
-We have an IRC channel: `#cmv` on freenode for the project. If you have questions, stop on by. We recommend [HexChat](http://hexchat.github.io) as an IRC client or you can use freenode's [webchat](http://webchat.freenode.net) client.
+We have a gitter.im chat room. Come on by if you have questions. The community is very helpful. [https://gitter.im/cmv/cmv-app](https://gitter.im/cmv/cmv-app) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # Contributing to the Project
 There are many ways to contribute to CMV:

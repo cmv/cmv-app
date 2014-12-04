@@ -8,6 +8,7 @@ define([
     'dojo/dom-style',
     'dojo/dom-class',
     'dojo/dom-attr',
+    'dojo/fx',
     'dojo/html',
     './../plugins/LayerMenu',
     'dojo/text!./templates/Control.html'
@@ -21,6 +22,7 @@ define([
     domStyle,
     domClass,
     domAttr,
+    fx,
     html,
     LayerMenu,
     template
@@ -44,7 +46,6 @@ define([
         },
         postCreate: function () {
             this.inherited(arguments);
-
             if (!this.controller) {
                 topic.publish('viewer/handleError', {
                     source: 'LayerControl/_Control',
@@ -90,13 +91,18 @@ define([
                 domStyle.set(this.layerUpdateNode, 'display', 'none');
             }));
             // create layer menu
-            this.layerMenu = new LayerMenu({
-                control: this,
-                contextMenuForWindow: false,
-                targetNodeIds: [this.menuNode],
-                leftClickToOpen: true
-            });
-            this.layerMenu.startup();
+            if ((controlOptions.noMenu !== true && this.controller.noMenu !== true) || (this.controller.noMenu === true && controlOptions.noMenu === false)) {
+                this.layerMenu = new LayerMenu({
+                    control: this,
+                    contextMenuForWindow: false,
+                    targetNodeIds: [this.menuNode],
+                    leftClickToOpen: true
+                });
+                this.layerMenu.startup();
+            } else {
+                domClass.remove(this.menuNode, 'fa, layerControlMenuIcon, ' + this.icons.menu);
+                domStyle.set(this.menuClickNode, 'cursor', 'default');
+            }
             // if layer has scales set
             if (layer.minScale !== 0 || layer.maxScale !== 0) {
                 this._checkboxScaleRange();
@@ -135,10 +141,16 @@ define([
                 var expandNode = this.expandNode,
                     iconNode = this.expandIconNode;
                 if (domStyle.get(expandNode, 'display') === 'none') {
-                    domStyle.set(expandNode, 'display', 'block');
+                    fx.wipeIn({
+                        node: expandNode,
+                        duration: 300
+                    }).play();
                     domClass.replace(iconNode, i.collapse, i.expand);
                 } else {
-                    domStyle.set(expandNode, 'display', 'none');
+                    fx.wipeOut({
+                        node: expandNode,
+                        duration: 300
+                    }).play();
                     domClass.replace(iconNode, i.expand, i.collapse);
                 }
             }));
@@ -202,7 +214,7 @@ define([
             });
         },
         // anything the widget may need to do after update
-        _updateEnd: function () { 
+        _updateEnd: function () {
             // how to handle external layer.setVisibleLayers() ???
             //
             // without topics to get/set sublayer state this will be challenging

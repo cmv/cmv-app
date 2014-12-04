@@ -110,7 +110,8 @@ define([
 			},
 			layerControlLayerInfos: {
 				swipe: true,
-				metadataUrl: true
+				metadataUrl: true,
+				expanded: true
 			}
 		}],
 		// set include:true to load. For titlePane type set position the the desired order in the sidebar

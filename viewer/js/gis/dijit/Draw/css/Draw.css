@@ -1,6 +1,39 @@
 .gis_DrawDijit {
 }
 
+.gis_DrawDijit .outerList>li {
+    margin-bottom: 1em;
+}
+.gis_DrawDijit .list-unstyled {
+    padding-left: 0px;
+    list-style-type: none;
+    list-style-position: outside;
+    list-style-image: none;
+}
+
+.gis_DrawDijit .list-inline {
+    padding-left: 0px;
+    margin-left: -5px;
+    list-style-type: none;
+    list-style-position: outside;
+    list-style-image: none;
+}
+
+.gis_DrawDijit .list-inline > li {
+    display: inline-block;
+}
+
+.gis_DrawDijit .drawButton {
+    width: 50px;
+}
+
+.gis_DrawDijit .stopIcon {
+    color: red;
+}
+
+.gis_DrawDijit .drawButton .dijitButtonText {
+    /*display: none;*/
+}
 .gis_DrawDijit .polyIcon {
     background-image: url(../images/toolbar_icons.png);
     background-position: -68px 0;
@@ -32,6 +65,13 @@
 .gis_DrawDijit .freehandDrawIcon {
     background-image: url(../images/toolbar_icons.png);
     background-position: -102px 0;
+    width: 16px;
+    height: 16px;
+}
+
+.gis_DrawDijit .freehandPolygonDrawIcon {
+    background-image: url(../images/toolbar_icons_2.png);
+    background-position: -473px 0;
     width: 16px;
     height: 16px;
 }

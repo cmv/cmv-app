@@ -6,11 +6,16 @@ define([
     'dojo/_base/lang',
     'dojo/dom-construct',
     'dojo/topic',
-    'dojo/aspect'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, domConstruct, topic, aspect) {
+    'dojo/aspect',
+    'dojo/text!./Editor/templates/Editor.html',
+    'dojo/i18n!./Editor/nls/resource',
+
+    'dijit/form/Button'
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, domConstruct, topic, aspect, template, i18n) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
-        templateString: '<div><div style="text-align:center;"><button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:toggleEditing" data-dojo-props="label:\'Start Editing\',\'class\':\'success\'" data-dojo-attach-point="toggleBTN"></button></div><div class="editDijit" style="margin-top:5px;" data-dojo-attach-point="containerNode"></div></div>',
+        templateString: template,
+        i18n: i18n,
         widgetsInTemplate: true,
         editor: null,
         isEdit: false,
@@ -42,7 +47,7 @@ define([
                     this.editor.startup();
                 }));
 
-                this.toggleBTN.set('label', 'Stop Editing');
+                this.toggleBTN.set('label', this.i18n.labels.stopEditing);
                 this.toggleBTN.set('class', 'danger');
                 this.isEdit = true;
                 topic.publish('mapClickMode/setCurrent', 'editor');
@@ -55,7 +60,7 @@ define([
             if (this.editor && this.editor.destroyRecursive) {
                 this.editor.destroyRecursive();
             }
-            this.toggleBTN.set('label', 'Start Editing');
+            this.toggleBTN.set('label', this.i18n.labels.startEditing);
             this.toggleBTN.set('class', 'success');
             this.isEdit = false;
             this.editor = null;
