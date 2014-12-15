@@ -2,6 +2,7 @@ define([
 	'dojo/_base/declare',
 	'dijit/TitlePane',
 	'dojo/on',
+	'dojo/_base/array',
 	'dojo/_base/lang',
 	'dojo/dnd/Moveable',
 	'dojo/aspect',
@@ -14,13 +15,14 @@ define([
 	'dojo/dom-attr',
 	'dojo/dom-class',
 	'xstyle/css!./FloatingTitlePane/css/FloatingTitlePane.css'
-], function (declare, TitlePane, on, lang, Moveable, aspect, topic, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass) {
+], function (declare, TitlePane, on, array, lang, Moveable, aspect, topic, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass) {
 	return declare([TitlePane], {
 		postCreate: function () {
 			if (this.canFloat) {
 				this.createDomNodes();
 				this.own(on(window, 'resize', lang.hitch(this, '_endDrag')));
 			}
+			this.own(topic.subscribe('titlePane/event', lang.hitch(this, '_updateWidgetPosition')));
 			this.own(aspect.after(this, 'toggle', lang.hitch(this, '_afterToggle')));
 			this.inherited(arguments);
 		},
@@ -63,8 +65,13 @@ define([
 		_dockWidget: function () {
 			domAttr.remove(this.domNode, 'style');
 			domStyle.set(this.dockHandleNode, 'display', 'none');
+
 			var dockedWidgets = this.sidebar.getChildren();
-			this.placeAt(this.sidebar, dockedWidgets.length);
+			if (this.position > dockedWidgets.length) {
+				this.position = dockedWidgets.length;
+			}
+			this.placeAt(this.sidebar, this.position);
+
 			domClass.remove(this.moveHandleNode, 'floatingWidgetMove');
 			domClass.add(this.moveHandleNode, 'floatingWidgetPopout');
 			this.isFloating = false;
@@ -72,6 +79,16 @@ define([
 		},
 		_moveDom: function () {
 			if (!this.isFloating) {
+				var dockedWidgets = this.sidebar.getChildren();
+				this.position = dockedWidgets.length;
+				var k = 0;
+				array.forEach(dockedWidgets, lang.hitch(this, function (widget) {
+					if (widget === this) {
+						this.position = k;
+					}
+					k++;
+				}));
+
 				domStyle.set(this.dockHandleNode, 'display', 'inline');
 				domStyle.set(this.domNode, 'z-index', '40');
 				domClass.add(this.moveHandleNode, 'floatingWidgetMove');
@@ -119,11 +136,40 @@ define([
 				});
 			}
 		},
+		_updateWidgetPosition: function (msg) {
+			var id = msg.widgetID,
+				pos = msg.position,
+				action = msg.action;
+			var dockedWidgets = this.sidebar.getChildren();
+
+			// do nothing if the topic is from the same widget
+			// or this widget is not currently floating
+			if (id === this.id || !this.isFloating) {
+				return;
+			}
+
+			// increment the position if the other widget is docked
+			// above this widget's position
+			if (action === 'dock') {
+				if (pos < this.position && this.position < dockedWidgets.length) {
+					this.position++;
+				}
+
+			// decrement the position if the other widget is undocked
+			// above this widget's position
+			} else if (action === 'undock') {
+				if (pos < this.position && this.position > 0) {
+					this.position--;
+				}
+			}
+		},
 		_updateTopic: function (msg) {
 			topic.publish('titlePane/event', {
 				category: 'Titlepane Event',
 				action: msg,
 				label: this.title,
+				widgetID: this.id,
+				position: this.position,
 				value: msg
 			});
 
