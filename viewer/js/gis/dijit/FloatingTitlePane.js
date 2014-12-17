@@ -2,7 +2,6 @@ define([
 	'dojo/_base/declare',
 	'dijit/TitlePane',
 	'dojo/on',
-	'dojo/_base/array',
 	'dojo/_base/lang',
 	'dojo/dnd/Moveable',
 	'dojo/aspect',
@@ -15,97 +14,94 @@ define([
 	'dojo/dom-attr',
 	'dojo/dom-class',
 	'xstyle/css!./FloatingTitlePane/css/FloatingTitlePane.css'
-], function (declare, TitlePane, on, array, lang, Moveable, aspect, topic, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass) {
+], function (declare, TitlePane, on, lang, Moveable, aspect, topic, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass) {
 	return declare([TitlePane], {
+        sidebarPosition: null,
 		postCreate: function () {
 			if (this.canFloat) {
 				this.createDomNodes();
 				this.own(on(window, 'resize', lang.hitch(this, '_endDrag')));
 			}
-			this.own(topic.subscribe('titlePane/event', lang.hitch(this, '_updateWidgetPosition')));
+            this.own(topic.subscribe('titlePane/event', lang.hitch(this, '_updateWidgetSidebarPosition')));
 			this.own(aspect.after(this, 'toggle', lang.hitch(this, '_afterToggle')));
 			this.inherited(arguments);
 		},
 		startup: function () {
 			if (this.titleBarNode && this.canFloat) {
 				this._moveable = new Moveable(this.domNode, {
-					handle: this.moveHandleNode
+                    delay: 5,
+					handle: this.titleBarNode
 				});
+                aspect.after(this._moveable, 'onMove', lang.hitch(this, '_dragging'), true);
 				aspect.after(this._moveable, 'onMoveStop', lang.hitch(this, '_endDrag'), true);
-				aspect.after(this._moveable, 'onFirstMove', lang.hitch(this, '_moveDom'), true);
+                aspect.after(this._moveable, 'onMoveStart', lang.hitch(this, '_startDrag'), true);
 			}
 			this.inherited(arguments);
 		},
 		createDomNodes: function () {
-			this.dockHandleNode = domConstruct.create('span', {
-				title: 'Dock widget'
-			}, this.titleNode, 'after');
-			domStyle.set(this.dockHandleNode, 'display', 'none');
-			domClass.add(this.dockHandleNode, 'floatingWidgetDock');
-			this.own(on(this.dockHandleNode, 'click', lang.hitch(this, function (evt) {
-				this._dockWidget();
-				evt.stopImmediatePropagation();
-			})));
+            this.moveHandleNode = domConstruct.create('span', {
+                title: 'Move widget',
+                'class': 'floatingWidgetPopout'
+            }, this.titleNode, 'after');
 
-			this.moveHandleNode = domConstruct.create('span', {
-				title: 'Move widget'
-			}, this.titleNode, 'after');
-			domClass.add(this.moveHandleNode, 'floatingWidgetPopout');
-			this.own(on(this.moveHandleNode, 'click', lang.hitch(this, function (evt) {
-				this._undockWidget();
-				evt.stopImmediatePropagation();
-			})));
+            this.dockHandleNode = domConstruct.create('span', {
+                title: 'Dock widget',
+                style: 'display:none',
+                'class': 'floatingWidgetDock'
+            }, this.titleNode, 'after');
+            this.own(on(this.dockHandleNode, 'click', lang.hitch(this, function (evt) {
+                this._dockWidget();
+                evt.stopImmediatePropagation();
+            })));
 		},
-		_undockWidget: function () {
-			if (!this.isFloating) {
-				domClass.add(this.moveHandleNode, 'floatingWidgetMove');
-				domClass.remove(this.moveHandleNode, 'floatingWidgetPopout');
-			}
-		},
+        toggle: function () {
+            if (this.isFloating && this.isDragging) {
+                return;
+            }
+            this.inherited(arguments);
+        },
 		_dockWidget: function () {
-			domAttr.remove(this.domNode, 'style');
-			domStyle.set(this.dockHandleNode, 'display', 'none');
-
-			var dockedWidgets = this.sidebar.getChildren();
-			if (this.position > dockedWidgets.length) {
-				this.position = dockedWidgets.length;
-			}
-			this.placeAt(this.sidebar, this.position);
-
-			domClass.remove(this.moveHandleNode, 'floatingWidgetMove');
-			domClass.add(this.moveHandleNode, 'floatingWidgetPopout');
-			this.isFloating = false;
-			this._updateTopic('dock');
+            if (!this.isDragging) {
+                domAttr.remove(this.domNode, 'style');
+                domStyle.set(this.dockHandleNode, 'display', 'none');
+                domStyle.set(this.moveHandleNode, 'display', 'inline');
+                var dockedWidgets = this.sidebar.getChildren();
+                if (this.sidebarPosition > dockedWidgets.length || this.sidebarPosition < 0) {
+                    this.sidebarPosition = dockedWidgets.length;
+                }
+                this.placeAt(this.sidebar, this.sidebarPosition);
+                this.isFloating = false;
+                this._updateTopic('dock');
+            }
 		},
-		_moveDom: function () {
-			if (!this.isFloating) {
-				var dockedWidgets = this.sidebar.getChildren();
-				this.position = dockedWidgets.length;
-				var k = 0;
-				array.forEach(dockedWidgets, lang.hitch(this, function (widget) {
-					if (widget === this) {
-						this.position = k;
-					}
-					k++;
-				}));
+        _dragging: function () {
+            this.isDragging = true;
+        },
+        _startDrag: function (mover) {
+            if (!this.titleCursor) {
+                this.titleCursor = domStyle.get(this.titleBarNode, 'cursor');
+            }
+            domStyle.set(this.titleBarNode, 'cursor', 'move');
 
-				domStyle.set(this.dockHandleNode, 'display', 'inline');
-				domStyle.set(this.domNode, 'z-index', '40');
-				domClass.add(this.moveHandleNode, 'floatingWidgetMove');
-				domClass.remove(this.moveHandleNode, 'floatingWidgetPopout');
-				var computedStyle = domStyle.getComputedStyle(this.containerNode);
-				var width = parseInt(domStyle.getComputedStyle(this.sidebar.containerNode).width, 10);
-				domGeom.setContentSize(this.domNode, {
-					w: (width - 2)
-				}, computedStyle);
-				// domGeom.setContentSize(this.titleBarNode, {
-				// 	w: (width - 32)
-				// }, computedStyle);
-				this.isFloating = true;
-				this.placeAt(win.body());
-				this._updateTopic('undock');
-			}
-		},
+            if (!this.isFloating) {
+            	this._checkSidebarPosition();
+                domStyle.set(this.dockHandleNode, 'display', 'inline');
+                domStyle.set(this.moveHandleNode, 'display', 'none');
+                domStyle.set(this.domNode, 'z-index', '40');
+                var computedStyle = domStyle.getComputedStyle(this.containerNode);
+                var width = parseInt(domStyle.getComputedStyle(this.sidebar.containerNode).width, 10);
+                domGeom.setContentSize(this.domNode, {
+                    w: (width - 2)
+                }, computedStyle);
+                this.isFloating = true;
+                this.placeAt(win.body());
+                var titleHeight = domStyle.get(this.titleBarNode, 'height');
+                domStyle.set(this.domNode, {
+                    top: (mover.marginBox.t - titleHeight) + 'px'
+                });
+                this._updateTopic('undock');
+            }
+        },
 		_endDrag: function () {
 			// summary:
 			//		Called after dragging the Dialog. Saves the position of the dialog in the viewport,
@@ -116,6 +112,12 @@ define([
 			nodePosition.x = Math.min(Math.max(nodePosition.x, 0), (viewport.w - nodePosition.w));
 			this._relativePosition = nodePosition;
 			this._position();
+            domStyle.set(this.titleBarNode, 'cursor', this.titleCursor);
+
+            //delayed slightly so the titlebar does not toggle
+            window.setTimeout(lang.hitch(this, function () {
+                this.isDragging = false;
+            }), 50);
 		},
 		_position: function () {
 			// summary:
@@ -136,44 +138,60 @@ define([
 				});
 			}
 		},
-		_updateWidgetPosition: function (msg) {
-			var id = msg.widgetID,
-				pos = msg.position,
-				action = msg.action;
-			var dockedWidgets = this.sidebar.getChildren();
+        _updateWidgetSidebarPosition: function (msg) {
+            var id = msg.widgetID, pos = msg.sidebarPosition, action = msg.action;
 
-			// do nothing if the topic is from the same widget
-			// or this widget is not currently floating
-			if (id === this.id || !this.isFloating) {
-				return;
-			}
+            // do nothing if the topic is from the same widget
+            // or this widget cannot float
+            // or if the action is not dock/undock
+            if (id === this.id || !this.canFloat || (action !== 'dock' && action !== 'undock')) {
+                return;
+            }
 
-			// increment the position if the other widget is docked
-			// above this widget's position
-			if (action === 'dock') {
-				if (pos < this.position && this.position < dockedWidgets.length) {
-					this.position++;
-				}
+        	this._checkSidebarPosition();
 
-			// decrement the position if the other widget is undocked
-			// above this widget's position
-			} else if (action === 'undock') {
-				if (pos < this.position && this.position > 0) {
-					this.position--;
-				}
-			}
-		},
-		_updateTopic: function (msg) {
-			topic.publish('titlePane/event', {
-				category: 'Titlepane Event',
-				action: msg,
-				label: this.title,
-				widgetID: this.id,
-				position: this.position,
-				value: msg
-			});
+            // increment the position if the other widget is docked
+            // above this widget's position
+            if (action === 'dock') {
+                var dockedWidgets = this.sidebar.getChildren();
+                if (pos < this.sidebarPosition && this.sidebarPosition < dockedWidgets.length) {
+                    this.sidebarPosition++;
+                }
 
-		},
+            // decrement the position if the other widget is undocked
+            // above this widget's position
+            } else if (action === 'undock') {
+                if (pos < this.sidebarPosition && this.sidebarPosition > 0) {
+                    this.sidebarPosition--;
+                }
+            }
+        },
+        _checkSidebarPosition: function () {
+            // set the initial sidebar positions for all floating
+            // widgets in this same sidebar. This is done
+            // only once when the first widget is undocked.
+            var dockedWidgets = this.sidebar.getChildren();
+            if (this.sidebarPosition === null) {
+                var k = 0, len = dockedWidgets.length;
+                for (k = 0; k < len; k++) {
+                	var widget = dockedWidgets[k];
+                    if (widget.canFloat) {
+                    	widget.sidebarPosition = k;
+                    }
+                }
+            }
+        },
+
+        _updateTopic: function (msg) {
+            topic.publish('titlePane/event', {
+                category: 'Titlepane Event',
+                action: msg,
+                label: this.title,
+                widgetID: this.id,
+                sidebarPosition: this.sidebarPosition,
+                value: msg
+            });
+        },
 		_afterToggle: function () {
 			var evt = this.open ? 'open' : 'close';
 			this._updateTopic(evt);
