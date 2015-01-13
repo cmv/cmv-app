@@ -9,7 +9,7 @@ define([
 	'dojo/topic'
 ], function (declare, lang, LocateButton, SimpleRenderer, PictureMarkerSymbol, GraphicsLayer, InfoTemplate, topic) {
 	return declare(null, {
-		growlTemplate: 'latitude: {latitude}<br/>longitude: {longitude}<br/>accuracy: {accuracy}<br/>altitude: {altitude}<br/>altitudeAccuracy: {altitudeAccuracy}<br/>heading: {heading}<br/>speed: {speed}',
+		growlTemplate: 'latitude: {latitude}<br/>longitude: {longitude}<br/>accuracy: {accuracy}<br/>altitude: {altitude}<br/>altitude accuracy: {altitudeAccuracy}<br/>heading: {heading}<br/>speed: {speed}',
 		constructor: function (options, node) {
 			this.options = options;
 			this.parentNode = node;
