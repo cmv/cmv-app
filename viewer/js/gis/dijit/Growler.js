@@ -30,7 +30,7 @@ define([
 
     // the growl itself
     var Growl = declare([_WidgetBase, _TemplatedMixin], {
-        templateString: '<div class="growl ${level}" data-dojo-attach-event="onmouseover:hoverOver,onmouseout:hoverOut,onclick:close"><h3>${title}</h3>${message}</div>',
+        templateString: '<div class="growl ${level}" data-dojo-attach-event="onmouseover:hoverOver,onmouseout:hoverOut,onclick:close"><h3>${title}</h3><span data-dojo-attach-point="growlMessageNode"></span></div>',
         title: 'Title',
         message: 'Message',
         level: 'default',
@@ -43,6 +43,7 @@ define([
             if (this._container) {
                 Style.set(this.domNode, 'opacity', 0);
                 domConstruct.place(this.domNode, this._container);
+                this.growlMessageNode.innerHTML = this.message;
                 fx.anim(this.domNode, {
                     opacity: this.opacity
                 }, 250);
