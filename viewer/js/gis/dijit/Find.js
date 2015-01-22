@@ -257,7 +257,8 @@ define([
 				}, this.findResultsGrid);
 
 				this.resultsGrid.startup();
-				this.resultsGrid.on('.dgrid-row:click', lang.hitch(this, 'zoomToClickedFeature'));
+				this.resultsGrid.on('.dgrid-row:click', lang.hitch(this, 'zoomOnRowClick'));
+				this.resultsGrid.on('.dgrid-row:keyup', lang.hitch(this, 'zoomOnKeyboardNavigation'));
 			}
 		},
 
@@ -360,13 +361,35 @@ define([
 			}
 		},
 
+		zoomOnRowClick: function (event) {
+			var feature = this.getFeatureFromRowEvent(event);
+			this.getFeatureExtentAndZoom(feature);
+		},
 
-		zoomToClickedFeature: function (event) {
-			var row = this.resultsGrid.row(event );
+		zoomOnKeyboardNavigation: function (event){
+			var keyCode = event.keyCode;
+			if ( keyCode === 38 || keyCode === 40 ) {
+				var feature = this.getFeatureFromRowEvent(event);
+				this.getFeatureExtentAndZoom(feature);
+			}
+		},
+
+		getFeatureFromRowEvent: function (rowEvent) {
+			var row = this.resultsGrid.row(event);
+			if (!row){
+				return null;
+			}
+
 			var data = row.data;
+			if (!data) {
+				return null;
+			}
 
-			var feature = data.feature;
-			if ( !feature ) {
+			return data.feature;
+		},
+
+		getFeatureExtentAndZoom: function (feature){
+			if (!feature){
 				return;
 			}
 
