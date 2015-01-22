@@ -374,7 +374,7 @@ define([
 			}
 		},
 
-		getFeatureFromRowEvent: function (rowEvent) {
+		getFeatureFromRowEvent: function (event) {
 			var row = this.resultsGrid.row(event);
 			if (!row){
 				return null;
