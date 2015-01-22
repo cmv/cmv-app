@@ -257,7 +257,7 @@ define([
 				}, this.findResultsGrid);
 
 				this.resultsGrid.startup();
-				this.resultsGrid.on('dgrid-select', lang.hitch(this, 'selectFeature'));
+				this.resultsGrid.on('.dgrid-row:click', lang.hitch(this, 'zoomToClickedFeature'));
 			}
 		},
 
@@ -360,24 +360,23 @@ define([
 			}
 		},
 
-		selectFeature: function (event) {
-			var result = event.rows;
 
-			// zoom to feature
-			if (result.length) {
-				var data = result[0].data;
-				if (data) {
-					var feature = data.feature;
-					if (feature) {
-						var extent = feature.geometry.getExtent();
-						if (!extent && feature.geometry.type === 'point') {
-							extent = this.getExtentFromPoint(feature);
-						}
-						if (extent) {
-							this.zoomToExtent(extent);
-						}
-					}
-				}
+		zoomToClickedFeature: function (event) {
+			var row = this.resultsGrid.row(event );
+			var data = row.data;
+
+			var feature = data.feature;
+			if ( !feature ) {
+				return;
+			}
+
+			var extent = feature.geometry.getExtent();
+			if (!extent && feature.geometry.type === 'point') {
+				extent = this.getExtentFromPoint(feature);
+			}
+
+			if (extent) {
+				this.zoomToExtent(extent);
 			}
 		},
 
