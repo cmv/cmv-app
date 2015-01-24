@@ -257,7 +257,8 @@ define([
 				}, this.findResultsGrid);
 
 				this.resultsGrid.startup();
-				this.resultsGrid.on('dgrid-select', lang.hitch(this, 'selectFeature'));
+				this.resultsGrid.on('.dgrid-row:click', lang.hitch(this, 'zoomOnRowClick'));
+				this.resultsGrid.on('.dgrid-row:keyup', lang.hitch(this, 'zoomOnKeyboardNavigation'));
 			}
 		},
 
@@ -360,24 +361,45 @@ define([
 			}
 		},
 
-		selectFeature: function (event) {
-			var result = event.rows;
+		zoomOnRowClick: function (event) {
+			var feature = this.getFeatureFromRowEvent(event);
+			this.getFeatureExtentAndZoom(feature);
+		},
 
-			// zoom to feature
-			if (result.length) {
-				var data = result[0].data;
-				if (data) {
-					var feature = data.feature;
-					if (feature) {
-						var extent = feature.geometry.getExtent();
-						if (!extent && feature.geometry.type === 'point') {
-							extent = this.getExtentFromPoint(feature);
-						}
-						if (extent) {
-							this.zoomToExtent(extent);
-						}
-					}
-				}
+		zoomOnKeyboardNavigation: function (event){
+			var keyCode = event.keyCode;
+			if ( keyCode === 38 || keyCode === 40 ) {
+				var feature = this.getFeatureFromRowEvent(event);
+				this.getFeatureExtentAndZoom(feature);
+			}
+		},
+
+		getFeatureFromRowEvent: function (event) {
+			var row = this.resultsGrid.row(event);
+			if (!row){
+				return null;
+			}
+
+			var data = row.data;
+			if (!data) {
+				return null;
+			}
+
+			return data.feature;
+		},
+
+		getFeatureExtentAndZoom: function (feature){
+			if (!feature){
+				return;
+			}
+
+			var extent = feature.geometry.getExtent();
+			if (!extent && feature.geometry.type === 'point') {
+				extent = this.getExtentFromPoint(feature);
+			}
+
+			if (extent) {
+				this.zoomToExtent(extent);
 			}
 		},
 
