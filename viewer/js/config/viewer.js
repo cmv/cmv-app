@@ -4,7 +4,7 @@ define([
 	'esri/config',
 	'esri/tasks/GeometryService',
 	'esri/layers/ImageParameters'
-], function (units, Extent, esriConfig, GeometryService, ImageParameters) {
+], function(units, Extent, esriConfig, GeometryService, ImageParameters) {
 
 	// url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
 	esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
@@ -18,7 +18,7 @@ define([
 
 	return {
 		// used for debugging your app
-		isDebug: false,
+		isDebug: true,
 
 		//default mapClick mode, mapClickMode lets widgets know what mode the map is in to avoid multipult map click actions from taking place (ie identify while drawing).
 		defaultMapClickMode: 'identify',
@@ -355,7 +355,8 @@ define([
 						routeParams: {
 							directionsLanguage: 'en-US',
 							directionsLengthUnits: units.MILES
-						}
+						},
+						active: false //for 3.12, starts active by default, which we dont want as it interfears with mapClickMode
 					}
 				}
 			},
