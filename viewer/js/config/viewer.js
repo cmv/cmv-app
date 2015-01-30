@@ -1,10 +1,10 @@
 define([
-   'esri/units',
-   'esri/geometry/Extent',
-   'esri/config',
-   'esri/tasks/GeometryService',
-   'esri/layers/ImageParameters'
-], function (units, Extent, esriConfig, GeometryService, ImageParameters) {
+    'esri/units',
+    'esri/geometry/Extent',
+    'esri/config',
+    'esri/tasks/GeometryService',
+    'esri/layers/ImageParameters'
+], function(units, Extent, esriConfig, GeometryService, ImageParameters) {
 
     // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
     esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
@@ -74,7 +74,7 @@ define([
             editorLayerInfos: {
                 disableGeometryUpdate: false
             }
-  }, {
+        }, {
             type: 'feature',
             url: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
             title: 'San Francisco 311 Incidents',
@@ -85,7 +85,7 @@ define([
                 outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
                 mode: 0
             }
-  }, {
+        }, {
             type: 'dynamic',
             url: 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
             title: 'Louisville Public Safety',
@@ -98,7 +98,7 @@ define([
             identifyLayerInfos: {
                 layerIds: [2, 4, 5, 8, 12, 21]
             }
-  }, {
+        }, {
             type: 'dynamic',
             url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer',
             title: 'Damage Assessment',
@@ -108,12 +108,12 @@ define([
                 visible: true,
                 imageParameters: imageParameters
             },
-            layerControlLayerInfos: {
+            controlOptions: {
                 swipe: true,
                 metadataUrl: true,
                 expanded: true
             }
-  }],
+        }],
         // set include:true to load. For titlePane type set position the the desired order in the sidebar
         widgets: {
             growler: {
@@ -250,7 +250,8 @@ define([
                 position: 0,
                 options: {
                     map: true,
-                    legendLayerInfos: true
+                    //legendLayerInfos: true
+                    layerInfos: true
                 }
             },
             layerControl: {
@@ -263,7 +264,7 @@ define([
                 position: 0,
                 options: {
                     map: true,
-                    layerControlLayerInfos: true,
+                    layerInfos: true,
                     separated: true,
                     vectorReorder: true,
                     overlayReorder: true
