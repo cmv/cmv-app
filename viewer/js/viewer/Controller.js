@@ -1,4 +1,7 @@
 define([
+	'viewer/models/appModel',
+	'viewer/models/layerModel',
+	'viewer/models/widgetModel',
 	'esri/map',
 	'dojo/dom',
 	'dojo/dom-style',
@@ -19,7 +22,7 @@ define([
 	'esri/dijit/PopupMobile',
 	'dijit/Menu',
 	'esri/IdentityManager'
-], function (Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
+], function (appModel, LayerModel, WidgetModel, Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
 
 	return {
 		legendLayerInfos: [],
@@ -64,6 +67,8 @@ define([
 
 			if (config.isDebug) {
 				window.app = this; //dev only
+				appModel.set('debug', true);
+				this.model = appModel;
 			}
 		},
 		// add topics for subscribing and publishing
@@ -203,7 +208,19 @@ define([
 			if (has('phone') && !this.config.mapOptions.infoWindow) {
 				this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
 			}
+
+			//model
+			////clone map config
+			appModel.set('mapConfig', lang.clone(this.config.mapOptions));
+
 			this.map = new Map('mapCenter', this.config.mapOptions);
+
+			//model
+			//sets model's `map` property
+			appModel.set('map', this.map);
+			//appModel map on load wires up model map events
+			this.map.on('load', lang.hitch(appModel, 'mapLoad'));
+
 			if (this.config.mapOptions.basemap) {
 				this.map.on('load', lang.hitch(this, 'initLayers'));
 			} else {
@@ -252,17 +269,38 @@ define([
 				}
 			}, this);
 			require(modules, lang.hitch(this, function () {
-				array.forEach(this.config.operationalLayers, function (layer) {
+				array.forEach(this.config.operationalLayers, function (layer, i) {
 					var type = layerTypes[layer.type];
 					if (type) {
-						require(['esri/layers/' + type + 'Layer'], lang.hitch(this, 'initLayer', layer));
+						require(['esri/layers/' + type + 'Layer'], lang.hitch(this, 'initLayer', layer, i));
 					}
 				}, this);
 				this.map.addLayers(this.layers);
 			}));
 		},
-		initLayer: function (layer, Layer) {
+		initLayer: function (layer, i, Layer) {
+			//model
+			//create layer Model
+			layer = new LayerModel(layer);
+
+			//create layer
 			var l = new Layer(layer.url, layer.options);
+
+			//model
+			//pre and on load methods
+			if (layer.preLoad) {
+				layer.preLoad(l);
+			}
+			if (layer.onLoad) {
+				l.on('load', lang.hitch(l, layer.onLoad));
+			}
+			//set as `layer` property
+			layer.set('layer', l);
+			//set layer info `id` property same as layer id
+			layer.set('id', l.id);
+			//layer model back to array at i
+			appModel.layerInfos[i] = layer;
+
 			this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
 			//Legend LayerInfos array
 			this.legendLayerInfos.unshift({ //unshift instead of push to keep layer ordering in legend intact
@@ -399,10 +437,10 @@ define([
 
 		_createTitlePaneWidget: function (parentId, title, position, open, canFloat, placeAt) {
 			var tp, options = {
-					title: title || 'Widget',
-					open: open || false,
-					canFloat: canFloat || false
-				};
+				title: title || 'Widget',
+				open: open || false,
+				canFloat: canFloat || false
+			};
 			if (parentId) {
 				options.id = parentId;
 			}
@@ -432,9 +470,9 @@ define([
 		},
 		_createContentPaneWidget: function (parentId, title, className, region, placeAt) {
 			var cp, options = {
-					title: title,
-					region: region || 'center'
-				};
+				title: title,
+				region: region || 'center'
+			};
 			if (className) {
 				options.className = className;
 			}
@@ -486,14 +524,40 @@ define([
 			}
 		},
 		createWidget: function (widgetConfig, options, WidgetClass) {
-			// set any additional options
+			//
+			widgetConfig.options = options;
+
+			//set any additional options
 			options.id = widgetConfig.id + '_widget';
 			options.parentWidget = widgetConfig.parentWidget;
 
-			//replace config map, layerInfos arrays, etc
-			if (options.map) {
-				options.map = this.map;
+			//model
+			//replace model properties in config if true
+			if (options.model === true) { //better to require 'core/models/appModel'
+				options.model = appModel;
 			}
+			if (options.map === true) {
+				options.map = appModel.map;
+			}
+			//layerInfos in the sytle of esri
+			//replace with appModel layerInfos array
+			// OR
+			// pass custom layerInfos array for say esri/dijit/Legend
+			if (options.layerInfos === true) {
+				options.layerInfos = appModel.layerInfos;
+			} else if (options.layerInfos && options.layerInfos.length) {
+				//replace layer ids with layers if custom layerInfos
+				array.forEach(options.layerInfos, function (info) {
+					if (info.layer && appModel.map.getLayer(info.layer)) {
+						info.layer = appModel.map.getLayer(info.layer);
+					}
+				}, this);
+			}
+			if (options.widgetInfos === true) {
+				options.widgetInfos = appModel.widgetInfos;
+			}
+
+			// should map right-click menu and mapClickMode be moved to appModel?
 			if (options.mapRightClickMenu) {
 				// create right-click menu
 				if (!this.mapRightClickMenu) {
@@ -508,6 +572,10 @@ define([
 			if (options.mapClickMode) {
 				options.mapClickMode = this.mapClickMode.current;
 			}
+
+			//widget specific minxins
+			//future widgets should require appModel or mixin layerInfos above
+			//current widgets need to be updated
 			if (options.legendLayerInfos) {
 				options.layerInfos = this.legendLayerInfos;
 			}
@@ -520,6 +588,10 @@ define([
 			if (options.identifyLayerInfos) {
 				options.layerInfos = this.identifyLayerInfos;
 			}
+
+			//model
+			//create widget model
+			var widget = new WidgetModel(widgetConfig);
 
 			// create the widget
 			var pnl = options.parentWidget;
@@ -535,6 +607,16 @@ define([
 			if (this[widgetConfig.id] && this[widgetConfig.id].startup && !this[widgetConfig.id]._started) {
 				this[widgetConfig.id].startup();
 			}
+
+			//model
+			var w = this[widgetConfig.id];
+			//set as `widget` property
+			widget.set('widget', w);
+			//set widget info `id` property same as widget id
+			widget.set('id', w.id);
+			//widget model back to array at i
+			//appModel.widgetInfos[i] = widget;
+			appModel.widgetInfos.push(widget);
 		},
 		//centralized error handler
 		handleError: function (options) {

@@ -250,7 +250,8 @@ define([
                 position: 0,
                 options: {
                     map: true,
-                    legendLayerInfos: true
+                    //legendLayerInfos: true
+                    layerInfos: true
                 }
             },
             layerControl: {
