@@ -1,5 +1,5 @@
 define({
-    resultsSymbols: {
+    graphicSymbols: {
         point: {
             type: 'esriSMS',
             style: 'esriSMSCircle',
@@ -33,7 +33,7 @@ define({
             }
         }
     },
-    selectionSymbols: {
+    selectedGraphicSymbols: {
         point: {
             type: 'esriSMS',
             style: 'esriSMSCircle',

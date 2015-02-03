@@ -23,14 +23,14 @@ define([
 	'esri/tasks/FindParameters',
 	'esri/geometry/Extent',
 	'dojo/text!./Find/templates/Find.html',
-	'js/gis/dijit/Find/symbology/symbols.js',
+	'js/gis/dijit/Find/symbology/DefaultGraphicSymbols.js',
 	'dojo/i18n!./Find/nls/resource',
 	'dijit/form/Form',
 	'dijit/form/FilteringSelect',
 	'dijit/form/ValidationTextBox',
 	'dijit/form/CheckBox',
 	'xstyle/css!./Find/css/Find.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct, lang, array, on, keys, Memory, OnDemandGrid, Selection, Keyboard, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, graphicsUtils, FindTask, FindParameters, Extent, FindTemplate, symbols, i18n) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct, lang, array, on, keys, Memory, OnDemandGrid, Selection, Keyboard, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, graphicsUtils, FindTask, FindParameters, Extent, FindTemplate, DefaultGraphicSymbols, i18n) {
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		widgetsInTemplate: true,
 		templateString: FindTemplate,
@@ -44,15 +44,7 @@ define([
 		// or 500 for meters/feet
 		pointExtentSize: null,
 
-		symbols: symbols,
-		resultsSymbols: null,
-		selectionSymbols: null,
-
-
-
-
-
-
+		defaultGraphicSymbols: DefaultGraphicSymbols,
 
 
 		postCreate: function () {
@@ -102,8 +94,9 @@ define([
 		createGraphicLayers: function () {
 
 			// handle each property to preserve as much of the object heirarchy as possible
-			resultsSymbols = lang.mixin(symbols.resultsSymbols, this.resultsSymbols);
-			selectionSymbols = lang.mixin(symbols.selectionSymbols, this.selectionSymbols);
+			var graphicSymbols =  this._createGraphicSymbols();
+			var selectedGraphicSymbols = this._createSelectedGraphicSymbols();
+
 
 			// points
 			this.pointResultsGraphics = new GraphicsLayer({
@@ -111,21 +104,23 @@ define([
 				title: 'Find'
 			});
 
-			if (resultsSymbols.point) {
-				pointResultsSymbol = new SimpleMarkerSymbol(resultsSymbols.point);
+			if (graphicSymbols.point) {
+				pointResultsSymbol = new SimpleMarkerSymbol(graphicSymbols.point);
 				pointResultsRenderer = new SimpleRenderer(pointResultsSymbol);
 				pointResultsRenderer.label = 'Find Results (Points)';
 				pointResultsRenderer.description = 'Find results (Points)';
 				this.pointResultsGraphics.setRenderer(pointResultsRenderer);
 			}
 
+
+
 			this.pointSelectionGraphics = new GraphicsLayer({
 				id: this.id + '_findSelectionGraphics_point',
 				title: 'Selection'
 			});
 
-			if (selectionSymbols.point) {
-				pointSelectionSymbol = new SimpleMarkerSymbol(selectionSymbols.point);
+			if (selectedGraphicSymbols.point) {
+				pointSelectionSymbol = new SimpleMarkerSymbol(selectedGraphicSymbols.point);
 				pointSelectionRenderer = new SimpleRenderer(pointSelectionSymbol);
 				pointSelectionRenderer.label = 'Selection (Points)';
 				pointSelectionRenderer.description = 'Selection (Points)';
@@ -138,8 +133,8 @@ define([
 				title: 'Find Graphics'
 			});
 
-			if (resultsSymbols.polyline) {
-				polylineResultsSymbol = new SimpleLineSymbol(resultsSymbols.polyline);
+			if (graphicSymbols.polyline) {
+				polylineResultsSymbol = new SimpleLineSymbol(graphicSymbols.polyline);
 				polylineResultsRenderer = new SimpleRenderer(polylineResultsSymbol);
 				polylineResultsRenderer.label = 'Find Results (Lines)';
 				polylineResultsRenderer.description = 'Find Results (Lines)';
@@ -151,8 +146,8 @@ define([
 				title: 'Selection'
 			});
 
-			if (selectionSymbols.polyline) {
-				polylineSelectionSymbol = new SimpleLineSymbol(selectionSymbols.polyline);
+			if (selectedGraphicSymbols.polyline) {
+				polylineSelectionSymbol = new SimpleLineSymbol(selectedGraphicSymbols.polyline);
 				polylineSelectionRenderer = new SimpleRenderer(polylineSelectionSymbol);
 				polylineSelectionRenderer.label = 'Selection + (Lines)';
 				polylineSelectionRenderer.description = 'Selection (Lines)';
@@ -165,8 +160,8 @@ define([
 				title: 'Find Graphics'
 			});
 
-			if (resultsSymbols.polygon) {
-				polygonSymbol = new SimpleFillSymbol(resultsSymbols.polygon);
+			if (graphicSymbols.polygon) {
+				polygonSymbol = new SimpleFillSymbol(graphicSymbols.polygon);
 				polygonRenderer = new SimpleRenderer(polygonSymbol);
 				polygonRenderer.label = 'Find Results (Polygons)';
 				polygonRenderer.description = 'Find Results (Polygons)';
@@ -178,8 +173,8 @@ define([
 				title: 'Selection'
 			});
 
-			if (selectionSymbols.polygon) {
-				polygonSelectionSymbol = new SimpleFillSymbol(selectionSymbols.polygon);
+			if (selectedGraphicSymbols.polygon) {
+				polygonSelectionSymbol = new SimpleFillSymbol(selectedGraphicSymbols.polygon);
 				polygonSelectionRenderer = new SimpleRenderer(polygonSelectionSymbol);
 				polygonSelectionRenderer.label = 'Selection (Polygons)';
 				polygonSelectionRenderer.description = 'Selection (Polygons)';
@@ -193,6 +188,26 @@ define([
 			this.map.addLayer(this.polylineSelectionGraphics);
 			this.map.addLayer(this.pointSelectionGraphics);
 		},
+
+		_createGraphicSymbols: function () {
+
+			var symbols = lang.mixin({}, this.defaultGraphicSymbols.graphicSymbols /* declared as dependancy on Find/DefaultGraphicSymbols.js */,
+				this.graphicSymbols /* from config */
+			);
+			return symbols;
+
+		},
+
+		_createSelectedGraphicSymbols: function () {
+
+			var symbols = lang.mixin({}, this.defaultGraphicSymbols.selectedGraphicSymbols /* declared as dependancy on Find/DefaultGraphicSymbols.js */,
+				this.selectedGraphicSymbols /* from config */
+
+			);
+			return symbols;
+
+		},
+
 		search: function () {
 			var query = this.queries[this.queryIdx];
 			var searchText = this.searchTextDijit.get('value');
