@@ -1,5 +1,5 @@
 define({
-    defaultSymbols: {
+    resultsSymbols: {
         point: {
             type: 'esriSMS',
             style: 'esriSMSCircle',

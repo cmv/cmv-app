@@ -45,8 +45,9 @@ define([
 		pointExtentSize: null,
 
 		symbols: symbols,
-		defaultSymbols: symbols.defaultSymbols,
-		selectionSymbols: symbols.selectionSymbols,
+		resultsSymbols: null,
+		selectionSymbols: null,
+
 
 
 
@@ -99,120 +100,98 @@ define([
 		},
 
 		createGraphicLayers: function () {
-			var pointSymbol = null,
-				polylineSymbol = null,
-				polygonSymbol = null;
-			var pointRenderer = null,
-				polylineRenderer = null,
-				polygonRenderer = null;
-			var pointSymbolSel = null,
-				polylineSymbolSel = null,
-				polygonSymbolSel = null;
-			var pointRendererSel = null,
-				polylineRendererSel = null,
-				polygonRendererSel = null;
 
-			var symbols = lang.mixin({}, this.symbols),
-				symbolsSel = lang.mixin({}, this.symbols);
 			// handle each property to preserve as much of the object heirarchy as possible
-			symbols = {
-				point: lang.mixin(this.defaultSymbols.point, symbols.point),
-				polyline: lang.mixin(this.defaultSymbols.polyline, symbols.polyline),
-				polygon: lang.mixin(this.defaultSymbols.polygon, symbols.polygon)
-			};
-			symbolsSel = {
-				point: lang.mixin(this.selectionSymbols.point, symbolsSel.point),
-				polyline: lang.mixin(this.selectionSymbols.polyline, symbolsSel.polyline),
-				polygon: lang.mixin(this.selectionSymbols.polygon, symbolsSel.polygon)
-			};
+			resultsSymbols = lang.mixin(this.resultsSymbols, symbols.resultsSymbols);
+			selectionSymbols = lang.mixin(this.selectionSymbols, symbols.selectionSymbols);
 
 			// points
-			this.pointGraphics = new GraphicsLayer({
-				id: 'findGraphics_point',
+			this.pointResultsGraphics = new GraphicsLayer({
+				id: 'findResultsGraphics_point',
 				title: 'Find'
 			});
 
-			if (symbols.point) {
-				pointSymbol = new SimpleMarkerSymbol(symbols.point);
-				pointRenderer = new SimpleRenderer(pointSymbol);
-				pointRenderer.label = 'Find Results (Points)';
-				pointRenderer.description = 'Find results (Points)';
-				this.pointGraphics.setRenderer(pointRenderer);
+			if (resultsSymbols.point) {
+				pointResultsSymbol = new SimpleMarkerSymbol(resultsSymbols.point);
+				pointResultsRenderer = new SimpleRenderer(pointResultsSymbol);
+				pointResultsRenderer.label = 'Find Results (Points)';
+				pointResultsRenderer.description = 'Find results (Points)';
+				this.pointResultsGraphics.setRenderer(pointResultsRenderer);
 			}
 
-			this.pointGraphicsSel = new GraphicsLayer({
-				id: this.id + '_findGraphics_pointSel',
+			this.pointSelectionGraphics = new GraphicsLayer({
+				id: this.id + '_findSelectionGraphics_point',
 				title: 'Selection'
 			});
 
-			if (symbolsSel.point) {
-				pointSymbolSel = new SimpleMarkerSymbol(symbolsSel.point);
-				pointRendererSel = new SimpleRenderer(pointSymbolSel);
-				pointRendererSel.label = 'Selection (Points)';
-				pointRendererSel.description = 'Selection (Points)';
-				this.pointGraphicsSel.setRenderer(pointRendererSel);
+			if (selectionSymbols.point) {
+				pointSelectionSymbol = new SimpleMarkerSymbol(selectionSymbols.point);
+				pointSelectionRenderer = new SimpleRenderer(pointSelectionSymbol);
+				pointSelectionRenderer.label = 'Selection (Points)';
+				pointSelectionRenderer.description = 'Selection (Points)';
+				this.pointSelectionGraphics.setRenderer(pointSelectionRenderer);
 			}
 
 			// poly line
-			this.polylineGraphics = new GraphicsLayer({
-				id: 'findGraphics_line',
+			this.polylineResultsGraphics = new GraphicsLayer({
+				id: 'findResultsGraphics_line',
 				title: 'Find Graphics'
 			});
 
-			if (symbols.polyline) {
-				polylineSymbol = new SimpleLineSymbol(symbols.polyline);
-				polylineRenderer = new SimpleRenderer(polylineSymbol);
-				polylineRenderer.label = 'Find Results (Lines)';
-				polylineRenderer.description = 'Find Results (Lines)';
-				this.polylineGraphics.setRenderer(polylineRenderer);
+			if (resultsSymbols.polyline) {
+				polylineResultsSymbol = new SimpleLineSymbol(resultsSymbols.polyline);
+				polylineResultsRenderer = new SimpleRenderer(polylineResultsSymbol);
+				polylineResultsRenderer.label = 'Find Results (Lines)';
+				polylineResultsRenderer.description = 'Find Results (Lines)';
+				this.polylineResultsGraphics.setRenderer(polylineResultsRenderer);
 			}
 
-			this.polylineGraphicsSel = new GraphicsLayer({
-				id: this.id + '_findGraphics_lineSel',
+			this.polylineSelectionGraphics = new GraphicsLayer({
+				id: this.id + '_findSelectionGraphics_line',
 				title: 'Selection'
 			});
 
-			if (symbolsSel.polyline) {
-				polylineSymbolSel = new SimpleLineSymbol(symbolsSel.polyline);
-				polylineRendererSel = new SimpleRenderer(polylineSymbolSel);
-				polylineRendererSel.label = 'Selection + (Lines)';
-				polylineRendererSel.description = 'Selection (Lines)';
-				this.polylineGraphicsSel.setRenderer(polylineRendererSel);
+			if (selectionSymbols.polyline) {
+				polylineSelectionSymbol = new SimpleLineSymbol(selectionSymbols.polyline);
+				polylineSelectionRenderer = new SimpleRenderer(polylineSelectionSymbol);
+				polylineSelectionRenderer.label = 'Selection + (Lines)';
+				polylineSelectionRenderer.description = 'Selection (Lines)';
+				this.polylineSelectionGraphics.setRenderer(polylineSelectionRenderer);
 			}
 
 			// polygons
-			this.polygonGraphics = new GraphicsLayer({
-				id: 'findGraphics_polygon',
+			this.polygonResultsGraphics = new GraphicsLayer({
+				id: 'findResultsGraphics_polygon',
 				title: 'Find Graphics'
 			});
 
-			if (symbols.polygon) {
-				polygonSymbol = new SimpleFillSymbol(symbols.polygon);
+			if (resultsSymbols.polygon) {
+				polygonSymbol = new SimpleFillSymbol(resultsSymbols.polygon);
 				polygonRenderer = new SimpleRenderer(polygonSymbol);
 				polygonRenderer.label = 'Find Results (Polygons)';
 				polygonRenderer.description = 'Find Results (Polygons)';
-				this.polygonGraphics.setRenderer(polygonRenderer);
+				this.polygonResultsGraphics.setRenderer(polygonRenderer);
 			}
 
-			this.polygonGraphicsSel = new GraphicsLayer({
-				id: this.id + '_findGraphics_polygonSel',
+			this.polygonSelectionGraphics = new GraphicsLayer({
+				id: this.id + '_findSelectionGraphics_polygon',
 				title: 'Selection'
 			});
 
-			if (symbolsSel.polygon) {
-				polygonSymbolSel = new SimpleFillSymbol(symbolsSel.polygon);
-				polygonRendererSel = new SimpleRenderer(polygonSymbolSel);
-				polygonRendererSel.label = 'Selection (Polygons)';
-				polygonRendererSel.description = 'Selection (Polygons)';
-				this.polygonGraphicsSel.setRenderer(polygonRendererSel);
+			if (selectionSymbols.polygon) {
+				polygonSelectionSymbol = new SimpleFillSymbol(selectionSymbols.polygon);
+				polygonSelectionRenderer = new SimpleRenderer(polygonSelectionSymbol);
+				polygonSelectionRenderer.label = 'Selection (Polygons)';
+				polygonSelectionRenderer.description = 'Selection (Polygons)';
+				this.polygonSelectionGraphics.setRenderer(polygonSelectionRenderer);
 			}
 
-			this.map.addLayer(this.polygonGraphics);
-			this.map.addLayer(this.polylineGraphics);
-			this.map.addLayer(this.pointGraphics);
-			this.map.addLayer(this.polygonGraphicsSel);
-			this.map.addLayer(this.polylineGraphicsSel);
-			this.map.addLayer(this.pointGraphicsSel);
+			this.map.addLayer(this.polygonResultsGraphics);
+			this.map.addLayer(this.polylineResultsGraphics);
+			this.map.addLayer(this.pointResultsGraphics);
+			this.map.addLayer(this.polygonSelectionGraphics);
+			this.map.addLayer(this.polylineSelectionGraphics);
+			this.map.addLayer(this.pointSelectionGraphics);
 		},
 		search: function () {
 			var query = this.queries[this.queryIdx];
@@ -337,14 +316,14 @@ define([
 						// only add points to the map that have an X/Y
 						if (feature.geometry.x && feature.geometry.y) {
 							graphic = new Graphic(feature.geometry);
-							this.pointGraphics.add(graphic);
+							this.pointResultsGraphics.add(graphic);
 						}
 						break;
 					case 'polyline':
 						// only add polylines to the map that have paths
 						if (feature.geometry.paths && feature.geometry.paths.length > 0) {
 							graphic = new Graphic(feature.geometry);
-							this.polylineGraphics.add(graphic);
+							this.polylineResultsGraphics.add(graphic);
 						}
 						break;
 					case 'polygon':
@@ -353,7 +332,7 @@ define([
 							graphic = new Graphic(feature.geometry, null, {
 								ren: 1
 							});
-							this.polygonGraphics.add(graphic);
+							this.polygonResultsGraphics.add(graphic);
 						}
 						break;
 					default:
@@ -366,21 +345,21 @@ define([
 			// if there are no features in the layer then extents are null
 			// the result of union() to null extents is null
 
-			if (this.pointGraphics.graphics.length > 0) {
-				zoomExtent = this.getPointFeaturesExtent(this.pointGraphics.graphics);
+			if (this.pointResultsGraphics.graphics.length > 0) {
+				zoomExtent = this.getPointFeaturesExtent(this.pointResultsGraphics.graphics);
 			}
-			if (this.polylineGraphics.graphics.length > 0) {
+			if (this.polylineResultsGraphics.graphics.length > 0) {
 				if (zoomExtent === null) {
-					zoomExtent = graphicsUtils.graphicsExtent(this.polylineGraphics.graphics);
+					zoomExtent = graphicsUtils.graphicsExtent(this.polylineResultsGraphics.graphics);
 				} else {
-					zoomExtent = zoomExtent.union(graphicsUtils.graphicsExtent(this.polylineGraphics.graphics));
+					zoomExtent = zoomExtent.union(graphicsUtils.graphicsExtent(this.polylineResultsGraphics.graphics));
 				}
 			}
-			if (this.polygonGraphics.graphics.length > 0) {
+			if (this.polygonResultsGraphics.graphics.length > 0) {
 				if (zoomExtent === null) {
-					zoomExtent = graphicsUtils.graphicsExtent(this.polygonGraphics.graphics);
+					zoomExtent = graphicsUtils.graphicsExtent(this.polygonResultsGraphics.graphics);
 				} else {
-					zoomExtent = zoomExtent.union(graphicsUtils.graphicsExtent(this.polygonGraphics.graphics));
+					zoomExtent = zoomExtent.union(graphicsUtils.graphicsExtent(this.polygonResultsGraphics.graphics));
 				}
 			}
 
@@ -421,14 +400,14 @@ define([
 					// only add points to the map that have an X/Y
 					if (feature.geometry.x && feature.geometry.y) {
 						graphic = new Graphic(feature.geometry);
-						this.pointGraphicsSel.add(graphic);
+						this.pointSelectionGraphics.add(graphic);
 					}
 					break;
 				case 'polyline':
 					// only add polylines to the map that have paths
 					if (feature.geometry.paths && feature.geometry.paths.length > 0) {
 						graphic = new Graphic(feature.geometry);
-						this.polylineGraphicsSel.add(graphic);
+						this.polylineSelectionGraphics.add(graphic);
 					}
 					break;
 				case 'polygon':
@@ -437,7 +416,7 @@ define([
 						graphic = new Graphic(feature.geometry, null, {
 							ren: 1
 						});
-						this.polygonGraphicsSel.add(graphic);
+						this.polygonSelectionGraphics.add(graphic);
 					}
 					break;
 				default:
@@ -487,16 +466,16 @@ define([
 		},
 
 		clearFeatures: function () {
-			this.pointGraphics.clear();
-			this.polylineGraphics.clear();
-			this.polygonGraphics.clear();
+			this.pointResultsGraphics.clear();
+			this.polylineResultsGraphics.clear();
+			this.polygonResultsGraphics.clear();
 			this.clearSelectionFeatures();
 		},
 
 		clearSelectionFeatures: function () {
-			this.pointGraphicsSel.clear();
-			this.polylineGraphicsSel.clear();
-			this.polygonGraphicsSel.clear();
+			this.pointSelectionGraphics.clear();
+			this.polylineSelectionGraphics.clear();
+			this.polygonSelectionGraphics.clear();
 		},
 
 		getPointFeaturesExtent: function (pointFeatures) {
