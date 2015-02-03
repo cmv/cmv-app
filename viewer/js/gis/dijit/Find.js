@@ -23,7 +23,7 @@ define([
 	'esri/tasks/FindParameters',
 	'esri/geometry/Extent',
 	'dojo/text!./Find/templates/Find.html',
-	'viewer/js/gis/dijit/Find/symbology/symbols.js',
+	'js/gis/dijit/Find/symbology/symbols.js',
 	'dojo/i18n!./Find/nls/resource',
 	'dijit/form/Form',
 	'dijit/form/FilteringSelect',
@@ -67,9 +67,6 @@ define([
 					this.pointExtentSize = 500; // could be feet or meters
 				}
 			}
-			//console.log("selectionSymbols", this.selectionSymbols);
-			//console.log("defaultSymbols", this.defaultSymbols);
-			//console.log("point", this.defaultSymbols.point);
 
 			this.createGraphicLayers();
 
