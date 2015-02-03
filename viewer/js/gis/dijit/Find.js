@@ -102,8 +102,8 @@ define([
 		createGraphicLayers: function () {
 
 			// handle each property to preserve as much of the object heirarchy as possible
-			resultsSymbols = lang.mixin(this.resultsSymbols, symbols.resultsSymbols);
-			selectionSymbols = lang.mixin(this.selectionSymbols, symbols.selectionSymbols);
+			resultsSymbols = lang.mixin(symbols.resultsSymbols, this.resultsSymbols);
+			selectionSymbols = lang.mixin(symbols.selectionSymbols, this.selectionSymbols);
 
 			// points
 			this.pointResultsGraphics = new GraphicsLayer({
