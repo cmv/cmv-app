@@ -23,14 +23,14 @@ define([
 	'esri/tasks/FindParameters',
 	'esri/geometry/Extent',
 	'dojo/text!./Find/templates/Find.html',
+	'viewer/js/gis/dijit/Find/symbology/symbols.js',
 	'dojo/i18n!./Find/nls/resource',
-
 	'dijit/form/Form',
 	'dijit/form/FilteringSelect',
 	'dijit/form/ValidationTextBox',
 	'dijit/form/CheckBox',
 	'xstyle/css!./Find/css/Find.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct, lang, array, on, keys, Memory, OnDemandGrid, Selection, Keyboard, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, graphicsUtils, FindTask, FindParameters, Extent, FindTemplate, i18n) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct, lang, array, on, keys, Memory, OnDemandGrid, Selection, Keyboard, GraphicsLayer, Graphic, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, graphicsUtils, FindTask, FindParameters, Extent, FindTemplate, symbols, i18n) {
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		widgetsInTemplate: true,
 		templateString: FindTemplate,
@@ -44,41 +44,15 @@ define([
 		// or 500 for meters/feet
 		pointExtentSize: null,
 
-		// default symbology for found features
-		defaultSymbols: {
-			point: {
-				type: 'esriSMS',
-				style: 'esriSMSCircle',
-				size: 25,
-				color: [0, 255, 255, 32],
-				angle: 0,
-				xoffset: 0,
-				yoffset: 0,
-				outline: {
-					type: 'esriSLS',
-					style: 'esriSLSSolid',
-					color: [0, 255, 255, 255],
-					width: 2
-				}
-			},
-			polyline: {
-				type: 'esriSLS',
-				style: 'esriSLSSolid',
-				color: [0, 255, 255, 255],
-				width: 3
-			},
-			polygon: {
-				type: 'esriSFS',
-				style: 'esriSFSSolid',
-				color: [0, 255, 255, 32],
-				outline: {
-					type: 'esriSLS',
-					style: 'esriSLSSolid',
-					color: [0, 255, 255, 255],
-					width: 3
-				}
-			}
-		},
+		symbols: symbols,
+		defaultSymbols: symbols.defaultSymbols,
+		selectionSymbols: symbols.selectionSymbols,
+
+
+
+
+
+
 
 		postCreate: function () {
 			this.inherited(arguments);
@@ -93,6 +67,9 @@ define([
 					this.pointExtentSize = 500; // could be feet or meters
 				}
 			}
+			//console.log("selectionSymbols", this.selectionSymbols);
+			//console.log("defaultSymbols", this.defaultSymbols);
+			//console.log("point", this.defaultSymbols.point);
 
 			this.createGraphicLayers();
 
@@ -131,13 +108,25 @@ define([
 			var pointRenderer = null,
 				polylineRenderer = null,
 				polygonRenderer = null;
+			var pointSymbolSel = null,
+				polylineSymbolSel = null,
+				polygonSymbolSel = null;
+			var pointRendererSel = null,
+				polylineRendererSel = null,
+				polygonRendererSel = null;
 
-			var symbols = lang.mixin({}, this.symbols);
+			var symbols = lang.mixin({}, this.symbols),
+				symbolsSel = lang.mixin({}, this.symbols);
 			// handle each property to preserve as much of the object heirarchy as possible
 			symbols = {
 				point: lang.mixin(this.defaultSymbols.point, symbols.point),
 				polyline: lang.mixin(this.defaultSymbols.polyline, symbols.polyline),
 				polygon: lang.mixin(this.defaultSymbols.polygon, symbols.polygon)
+			};
+			symbolsSel = {
+				point: lang.mixin(this.selectionSymbols.point, symbolsSel.point),
+				polyline: lang.mixin(this.selectionSymbols.polyline, symbolsSel.polyline),
+				polygon: lang.mixin(this.selectionSymbols.polygon, symbolsSel.polygon)
 			};
 
 			// points
@@ -154,6 +143,19 @@ define([
 				this.pointGraphics.setRenderer(pointRenderer);
 			}
 
+			this.pointGraphicsSel = new GraphicsLayer({
+				id: this.id + '_findGraphics_pointSel',
+				title: 'Selection'
+			});
+
+			if (symbolsSel.point) {
+				pointSymbolSel = new SimpleMarkerSymbol(symbolsSel.point);
+				pointRendererSel = new SimpleRenderer(pointSymbolSel);
+				pointRendererSel.label = 'Selection (Points)';
+				pointRendererSel.description = 'Selection (Points)';
+				this.pointGraphicsSel.setRenderer(pointRendererSel);
+			}
+
 			// poly line
 			this.polylineGraphics = new GraphicsLayer({
 				id: 'findGraphics_line',
@@ -166,6 +168,19 @@ define([
 				polylineRenderer.label = 'Find Results (Lines)';
 				polylineRenderer.description = 'Find Results (Lines)';
 				this.polylineGraphics.setRenderer(polylineRenderer);
+			}
+
+			this.polylineGraphicsSel = new GraphicsLayer({
+				id: this.id + '_findGraphics_lineSel',
+				title: 'Selection'
+			});
+
+			if (symbolsSel.polyline) {
+				polylineSymbolSel = new SimpleLineSymbol(symbolsSel.polyline);
+				polylineRendererSel = new SimpleRenderer(polylineSymbolSel);
+				polylineRendererSel.label = 'Selection + (Lines)';
+				polylineRendererSel.description = 'Selection (Lines)';
+				this.polylineGraphicsSel.setRenderer(polylineRendererSel);
 			}
 
 			// polygons
@@ -182,9 +197,25 @@ define([
 				this.polygonGraphics.setRenderer(polygonRenderer);
 			}
 
+			this.polygonGraphicsSel = new GraphicsLayer({
+				id: this.id + '_findGraphics_polygonSel',
+				title: 'Selection'
+			});
+
+			if (symbolsSel.polygon) {
+				polygonSymbolSel = new SimpleFillSymbol(symbolsSel.polygon);
+				polygonRendererSel = new SimpleRenderer(polygonSymbolSel);
+				polygonRendererSel.label = 'Selection (Polygons)';
+				polygonRendererSel.description = 'Selection (Polygons)';
+				this.polygonGraphicsSel.setRenderer(polygonRendererSel);
+			}
+
 			this.map.addLayer(this.polygonGraphics);
 			this.map.addLayer(this.polylineGraphics);
 			this.map.addLayer(this.pointGraphics);
+			this.map.addLayer(this.polygonGraphicsSel);
+			this.map.addLayer(this.polylineGraphicsSel);
+			this.map.addLayer(this.pointGraphicsSel);
 		},
 		search: function () {
 			var query = this.queries[this.queryIdx];
@@ -305,30 +336,30 @@ define([
 				unique++;
 				var graphic, feature = result.feature;
 				switch (feature.geometry.type) {
-				case 'point':
-					// only add points to the map that have an X/Y
-					if (feature.geometry.x && feature.geometry.y) {
-						graphic = new Graphic(feature.geometry);
-						this.pointGraphics.add(graphic);
-					}
-					break;
-				case 'polyline':
-					// only add polylines to the map that have paths
-					if (feature.geometry.paths && feature.geometry.paths.length > 0) {
-						graphic = new Graphic(feature.geometry);
-						this.polylineGraphics.add(graphic);
-					}
-					break;
-				case 'polygon':
-					// only add polygons to the map that have rings
-					if (feature.geometry.rings && feature.geometry.rings.length > 0) {
-						graphic = new Graphic(feature.geometry, null, {
-							ren: 1
-						});
-						this.polygonGraphics.add(graphic);
-					}
-					break;
-				default:
+					case 'point':
+						// only add points to the map that have an X/Y
+						if (feature.geometry.x && feature.geometry.y) {
+							graphic = new Graphic(feature.geometry);
+							this.pointGraphics.add(graphic);
+						}
+						break;
+					case 'polyline':
+						// only add polylines to the map that have paths
+						if (feature.geometry.paths && feature.geometry.paths.length > 0) {
+							graphic = new Graphic(feature.geometry);
+							this.polylineGraphics.add(graphic);
+						}
+						break;
+					case 'polygon':
+						// only add polygons to the map that have rings
+						if (feature.geometry.rings && feature.geometry.rings.length > 0) {
+							graphic = new Graphic(feature.geometry, null, {
+								ren: 1
+							});
+							this.polygonGraphics.add(graphic);
+						}
+						break;
+					default:
 				}
 			}, this);
 
@@ -385,6 +416,37 @@ define([
 				return null;
 			}
 
+			this.clearSelectionFeatures();
+
+			var graphic, feature = data.feature;
+			switch (feature.geometry.type) {
+				case 'point':
+					// only add points to the map that have an X/Y
+					if (feature.geometry.x && feature.geometry.y) {
+						graphic = new Graphic(feature.geometry);
+						this.pointGraphicsSel.add(graphic);
+					}
+					break;
+				case 'polyline':
+					// only add polylines to the map that have paths
+					if (feature.geometry.paths && feature.geometry.paths.length > 0) {
+						graphic = new Graphic(feature.geometry);
+						this.polylineGraphicsSel.add(graphic);
+					}
+					break;
+				case 'polygon':
+					// only add polygons to the map that have rings
+					if (feature.geometry.rings && feature.geometry.rings.length > 0) {
+						graphic = new Graphic(feature.geometry, null, {
+							ren: 1
+						});
+						this.polygonGraphicsSel.add(graphic);
+					}
+					break;
+				default:
+			}
+
+
 			return data.feature;
 		},
 
@@ -431,6 +493,13 @@ define([
 			this.pointGraphics.clear();
 			this.polylineGraphics.clear();
 			this.polygonGraphics.clear();
+			this.clearSelectionFeatures();
+		},
+
+		clearSelectionFeatures: function () {
+			this.pointGraphicsSel.clear();
+			this.polylineGraphicsSel.clear();
+			this.polygonGraphicsSel.clear();
 		},
 
 		getPointFeaturesExtent: function (pointFeatures) {
