@@ -15,5 +15,15 @@ define({
 			searchFields: ['FCODE', 'DESCRIPTION'],
 			minChars: 4
 		}
-	]
+	],
+	graphicSymbols: {
+		//point:{},
+		//polyline:{},
+		//polygon:{}
+	},
+	selectedGraphicSymbols: {
+		//point:{},
+		//polyline:{},
+		//polygon:{}
+	}
 });
