@@ -23,7 +23,7 @@ define([
 	'esri/tasks/FindParameters',
 	'esri/geometry/Extent',
 	'dojo/text!./Find/templates/Find.html',
-	'js/gis/dijit/Find/symbology/DefaultGraphicSymbols.js',
+	'./Find/symbology/DefaultGraphicSymbols',
 	'dojo/i18n!./Find/nls/resource',
 	'dijit/form/Form',
 	'dijit/form/FilteringSelect',
@@ -191,19 +191,30 @@ define([
 
 		_createGraphicSymbols: function () {
 
-			var symbols = lang.mixin({}, this.defaultGraphicSymbols.graphicSymbols /* declared as dependancy on Find/DefaultGraphicSymbols.js */,
-				this.graphicSymbols /* from config */
-			);
+			var symbols = lang.mixin({}, this.defaultGraphicSymbols.graphicSymbols /* declared dependancy */);
+
+			for (geometryType in symbols /* from config */){
+
+				if (this.graphicSymbols.hasOwnProperty( geometryType )){
+					symbols[ geometryType ] = this.graphicSymbols[ geometryType];
+ 				}
+			}
+
 			return symbols;
 
 		},
 
 		_createSelectedGraphicSymbols: function () {
 
-			var symbols = lang.mixin({}, this.defaultGraphicSymbols.selectedGraphicSymbols /* declared as dependancy on Find/DefaultGraphicSymbols.js */,
-				this.selectedGraphicSymbols /* from config */
+			var symbols = lang.mixin({}, this.defaultGraphicSymbols.selectedGraphicSymbols /* declared dependancy */);
 
-			);
+			for (geometryType in symbols /* from config */ ){
+
+				if ( this.selectedGraphicSymbols.hasOwnProperty( geometryType )){
+					symbols[ geometryType ] = this.selectedGraphicSymbols[ geometryType ]
+				}
+			}
+
 			return symbols;
 
 		},

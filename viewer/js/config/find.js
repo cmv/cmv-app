@@ -17,13 +17,13 @@ define({
 		}
 	],
 	graphicSymbols: {
-		point:{},
-		polyline:{},
-		polygon:{}
+		//point:{},
+		//polyline:{},
+		//polygon:{}
 	},
 	selectedGraphicSymbols: {
-		point:{},
-		polyline:{},
-		polygon:{}
+		//point:{},
+		//polyline:{},
+		//polygon:{}
 	}
 });
