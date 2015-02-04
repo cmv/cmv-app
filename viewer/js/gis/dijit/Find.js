@@ -191,7 +191,7 @@ define([
 
 		_createGraphicSymbols: function () {
 
-			var symbols = lang.mixin({}, this.defaultGraphicSymbols.graphicSymbols /* declared dependancy */);
+			var symbols = lang.mixin({}, this.defaultGraphicSymbols.graphicSymbols /* declared dependency */);
 
 			for (geometryType in symbols /* from config */){
 
@@ -206,7 +206,7 @@ define([
 
 		_createSelectedGraphicSymbols: function () {
 
-			var symbols = lang.mixin({}, this.defaultGraphicSymbols.selectedGraphicSymbols /* declared dependancy */);
+			var symbols = lang.mixin({}, this.defaultGraphicSymbols.selectedGraphicSymbols /* declared dependency */);
 
 			for (geometryType in symbols /* from config */ ){
 
