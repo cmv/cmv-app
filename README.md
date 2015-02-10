@@ -1,6 +1,10 @@
-# Configurable Map Viewer (CMV)
+# CMV - The Configurable Map Viewer
 
+<<<<<<< HEAD
+[![Read The Docs](https://readthedocs.org/projects/cmv/badge/?version=1.3.3)](http://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app) 
+=======
 [![Read The Docs](https://readthedocs.org/projects/cmv/badge/?version=latest)](http://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app) 
+>>>>>>> 1ea3d46791dbacc66c35f7f8a355441b24968f23
 
 ## Introduction
 [CMV](http://cmv.io/) is a community-supported open source mapping framework. CMV works with the [Esri JavaScript API](http://docs.cmv.io/en/latest/developers.arcgis.com/javascript/jsapi/), [ArcGIS Server](http://www.esri.com/software/arcgis/arcgisserver), [ArcGIS Online](https://arcgis.com/) and more.
@@ -40,13 +44,24 @@ This JavaScript web app can be easily configured or used as a boilerplate/starti
 Read more about the [core widgets](http://docs.cmv.io/en/latest/widgets/). In addition, there is a growing number of [widgets contributed by the CMV developer community](https://github.com/cmv/cmv-contrib-widgets).
 
 ## Documentation:
+<<<<<<< HEAD
+Use the [documentation](http://docs.cmv.io/) for getting started and guidance on configuring individual widgets. The initial documentation is sparse. Please help make it better by contributing over at the [cmv documentation repo](https://github.com/cmv/cmv-docs).
+
+[![Read The Docs](https://readthedocs.org/projects/cmv/badge/?version=1.3.3)](http://docs.cmv.io/)
+
+## Community
+We have a gitter.im chat room. Come on by if you have questions. The community is very helpful. [https://gitter.im/cmv/cmv-app](https://gitter.im/cmv/cmv-app)
+
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+=======
 Use the [documentation](https://docs.cmv.io/) for getting started and guidance on configuring individual widgets. The initial documentation is sparse. Please help make it better by contributing over at the [cmv documentation repo](https://github.com/cmv/cmv-docs).
 
 ## Community
 We have a gitter.im chat room. Come on by if you have questions. The community is very helpful. [https://gitter.im/cmv/cmv-app](https://gitter.im/cmv/cmv-app) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+>>>>>>> 1ea3d46791dbacc66c35f7f8a355441b24968f23
 
 ## Change log:
-See [releases](https://github.com/cmv/cmv-app/releases) for change logs.
+See the [GitHub Releases](https://github.com/cmv/cmv-app/releases) for change logs for all versions of CMV.
 
 ## Contributing to the Project
 
