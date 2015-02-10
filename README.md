@@ -1,13 +1,17 @@
 # Configurable Map Viewer (CMV)
 
-[![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Read The Docs](https://readthedocs.org/projects/cmv/badge/?version=latest)](http://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app) 
 
-This JS web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for modular design and OOP via classes in JS using dojo's great [declare](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html) system.
+## Introduction
+[CMV](http://cmv.io/) is a community-supported open source mapping framework. CMV works with the [Esri JavaScript API](http://docs.cmv.io/en/latest/developers.arcgis.com/javascript/jsapi/), [ArcGIS Server](http://www.esri.com/software/arcgis/arcgisserver), [ArcGIS Online](https://arcgis.com/) and more.
+
+## Make It Your Own!
+This JavaScript web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for modular design and OOP via classes in JS using dojo's great [declare](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html) system.
+
+## Try The Demo:
+[http://demo.cmv.io/viewer/](http://demo.cmv.io/viewer/)
 
 ![screen shot 2014-08-20 at 9 59 48 pm](https://cloud.githubusercontent.com/assets/661156/3991302/5aa2e0f2-28df-11e4-94d0-9c813937d933.png)
-
-## Demo Site:
-[http://demo.cmv.io/viewer/](http://demo.cmv.io/viewer/)
 
 ## Widgets Included:
 - Base Maps
@@ -33,69 +37,38 @@ This JS web app can be easily configured or used as a boilerplate/starting point
 - Map Right click menu with various widget functions.
 - Highly configurable UI, right or left sidebars with widgets in both, top and bottom regions for other content.
 
+Read more about the [core widgets](http://docs.cmv.io/en/latest/widgets/). In addition, there is a growing number of [widgets contributed by the CMV developer community](https://github.com/cmv/cmv-contrib-widgets).
 
-## Installation:
+## Documentation:
+Use the [documentation](https://docs.cmv.io/) for getting started and guidance on configuring individual widgets. The initial documentation is sparse. Please help make it better by contributing over at the [cmv documentation repo](https://github.com/cmv/cmv-docs).
 
-- Download the latest release [here](https://github.com/cmv/cmv-app/releases).
-
-- Move to your web server
-
-- configure the proper proxy page. Should work out of the box if using IIS.
-
-- Edit the config.js file to include your services and desired widgets.
-
-- Enjoy!
-
-## Customization:
-
-- Use the configuration files in the `/js/config` folder to customize your own map layers, task urls and widgets.
-
-- Use the [documentation](https://github.com/cmv/cmv-app/wiki) for getting started and guidance on configuring individual widgets.
+## Community
+We have a gitter.im chat room. Come on by if you have questions. The community is very helpful. [https://gitter.im/cmv/cmv-app](https://gitter.im/cmv/cmv-app) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Change log:
 See [releases](https://github.com/cmv/cmv-app/releases) for change logs.
 
-# Community
-We have a gitter.im chat room. Come on by if you have questions. The community is very helpful. [https://gitter.im/cmv/cmv-app](https://gitter.im/cmv/cmv-app) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+## Contributing to the Project
 
-# Contributing to the Project
 There are many ways to contribute to CMV:
 
-1. __Propose a Feature__ - If there is a feature you would like to request, add it to the [issues list](https://github.com/cmv/cmv-app/issues) for consideration.
+1. __Tell your friends and colleagues__ - We are a community of developers. Help spread the CMV love and help the community grow.
 
-2. __Submit an Issue__ - If you find a possible bug, please submit an issue in the [issues log](https://github.com/cmv/cmv-app/issues?state=open).
+2. __Create documentation__ Please contribute to the [cmv documentation repo](https://github.com/cmv/cmv-docs).
 
-3. __User contributed widgets__ - For general information on how to build a CMV widget read [Builiding Custom Widgets] (https://github.com/cmv/cmv-app/wiki/building-custom-widgets). Users can submit widgets to the [cmv-contrib-widgets](https://github.com/cmv/cmv-contrib-widgets) repo. These widgets are created and submitted by users. Head on over and read the details.
+3. __Answer Questions at Stack Exchange__ - [gis.stackexchange.com](https://gis.stackexchange.com/tag/cmv) is the prime destination for our Frequently Asked Questions (FAQs). Please answer questions and help new developers get more comfortable with CMV.
 
-4. __Create documentation__ Please make constructive in [the wiki](https://github.com/cmv/cmv-app/wiki).
+4. __Join the Chat Room__ - Lots of us in CMV community hang out in the chat room on [Gitter](https://gitter.im/cmv/cmv-app/). Feel free to hangout with us, answer questions and throw out ideas.
 
-5. __Submit a Pull Request__ - If you are developer and have an enhancement or bug fix you would like to submit, pull requests are welcome. Please review the [CONTRIBUTING.md](CONTRIBUTING.md) documentation before submitting any Pull Requests.
+5. __Submit a Pull Request__ - If you are developer and have an enhancement or bug fix you would like to submit, pull requests are welcome. Please review the [Contributing on GitHub](http://docs.cmv.io/en/latest/contribute/ContributingOnGitHub) documentation before submitting any Pull Requests.
 
-# Grunt tasks
-This project uses grunt to automate tasks like minifying css and js as well as js linting and css prefixing.
+6. __User contributed widgets__ - For general information on how to build a CMV widget [read the docs](https://docs.cmv.io/en/latest). Users can submit widgets to the [cmv-contrib-widgets](https://github.com/cmv/cmv-contrib-widgets) repo. These widgets are created and submitted by users. Head on over and read the details.
 
-## To get started setup you dev machine:
+7. __Propose a Feature__ - If there is a feature you would like to request, add it to the [issues list](https://github.com/cmv/cmv-app/issues) for consideration.
 
-- Install [node](http://nodejs.org).
+8. __Submit an Issue__ - If you find a possible bug, please submit an issue in the [issues log](https://github.com/cmv/cmv-app/issues?state=open).
 
-- Install the grunt cli (command line interface) globally from the command line with : `npm install -g grunt-cli`, this only needs to be done once per dev machine.
 
-- Install jshint globally from the command line with : `npm install -g jshint`, this only needs to be done once per dev machine.
+## License
 
-## Get the code and install dev dependencies:
-
-- Fork the repo into your own github account.
-
-- Clone your fork and in cloned directory:
-
-  - Install the local dev dependencies for the project in the repo from the command line: `npm install`, this only needs to be done once per dev machine.
-
-  - Run grunt from the repo with: `grunt` this will launch a mini dev server and lint your js as you code.
-
-  - Run grunt from the repo with: `grunt build` this will create a `dist` folder with minified code ready for deployment.
-
-  - There are other grunt tasks, use: `grunt -h` to see a list.
-
-# License
-
-MIT
+[MIT](https://raw.githubusercontent.com/cmv/cmv-app/master/LICENSE)
