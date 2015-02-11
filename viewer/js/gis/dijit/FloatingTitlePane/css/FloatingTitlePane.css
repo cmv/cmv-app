@@ -1,9 +1,3 @@
-.floatingWidgetMove:before {
-    float: right;
-    margin-left: 10px;
-    content: "\f047";
-    font-family: FontAwesome;
-}
 .floatingWidgetDock:before {
     float: right;
     content: "\f112";
