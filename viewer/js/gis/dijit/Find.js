@@ -152,7 +152,7 @@ define([
 
 		},
 
-		createGraphicLayers: function () {
+		createGraphicsLayer: function () {
 			var graphicsLayer = new GraphicsLayer({
 				id: 'findGraphics',
 				title: 'Find'
@@ -270,7 +270,7 @@ define([
 				resultText = this.results.length + ' ' + this.i18n.resultsLabel.labelPrefix + s + ' ' + this.i18n.resultsLabel.labelSuffix;
 
 				if ( !this.graphicsLayer ) {
-					this.graphicsLayer = this.createGraphicLayers();
+					this.graphicsLayer = this.createGraphicsLayer();
 				}
 				if ( !this.graphicsSymbols ){
 					this.graphicsSymbols = this.createGraphicsSymbols();
@@ -355,15 +355,14 @@ define([
 				}
 			}
 
-			if ( selectedGraphics.length === 0 ) {
-				return;
-			}
-
 			return selectedGraphics;
 		},
 
 		zoomToGraphicsExtent: function ( graphics ) {
 			var zoomExtent = null;
+			if ( graphics === null ) {
+				return;
+			}
 
 			if ( graphics.length > 1 ) {
 				zoomExtent = graphicsUtils.graphicsExtent(graphics);
@@ -388,20 +387,6 @@ define([
 					break;
 			}
 			return extent;
-		},
-
-		getFeatureFromRowEvent: function (event) {
-			var row = this.resultsGrid.row(event);
-			if (!row){
-				return null;
-			}
-
-			var data = row.data;
-			if (!data) {
-				return null;
-			}
-
-			return data.feature;
 		},
 
 		zoomToExtent: function (extent) {
