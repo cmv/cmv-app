@@ -40,7 +40,7 @@ define([
 		pointExtentSize: null,
 
 		// default symbology for found features
-		defaultSymbols: {
+		defaultResultsSymbols: {
 			point: {
 				type: 'esriSMS',
 				style: 'esriSMSCircle',
@@ -70,6 +70,41 @@ define([
 					type: 'esriSLS',
 					style: 'esriSLSSolid',
 					color: [0, 255, 255, 255],
+					width: 3
+				}
+			}
+		},
+
+		defaultSelectionSymbols: {
+			point: {
+				type: 'esriSMS',
+				style: 'esriSMSCircle',
+				size: 25,
+				color: [4, 156, 219, 32],
+				angle: 0,
+				xoffset: 0,
+				yoffset: 0,
+				outline: {
+					type: 'esriSLS',
+					style: 'esriSLSSolid',
+					color: [4, 156, 219, 255],
+					width: 2
+				}
+			},
+			polyline: {
+				type: 'esriSLS',
+				style: 'esriSLSSolid',
+				color: [4, 156, 219, 255],
+				width: 3
+			},
+			polygon: {
+				type: 'esriSFS',
+				style: 'esriSFSSolid',
+				color: [4, 156, 219, 32],
+				outline: {
+					type: 'esriSLS',
+					style: 'esriSLSSolid',
+					color: [4, 156, 219, 255],
 					width: 3
 				}
 			}
@@ -127,20 +162,21 @@ define([
 		},
 
 		createGraphicsSymbols: function () {
-			var symbols, symbolDefinitions;
+			var graphicSymbols = {}, resultSymbolDefinitions, selectionSymbolDefinitions;
 
-			symbolDefinitions = lang.mixin( this.defaultSymbols, this.symbols || {});
-			var pointSymbol = symbolUtils.fromJson( symbolDefinitions.point );
-			var polylineSymbol = symbolUtils.fromJson( symbolDefinitions.polyline );
-			var polygonSymbol = symbolUtils.fromJson( symbolDefinitions.polygon );
+			resultSymbolDefinitions = lang.mixin( this.defaultResultsSymbols, this.resultsSymbols || {});
+			graphicSymbols.resultsSymbols = {};
+			graphicSymbols.resultsSymbols.point = symbolUtils.fromJson( resultSymbolDefinitions.point );
+			graphicSymbols.resultsSymbols.polyline = symbolUtils.fromJson( resultSymbolDefinitions.polyline );
+			graphicSymbols.resultsSymbols.polygon = symbolUtils.fromJson( resultSymbolDefinitions.polygon );
 
-			symbols = {
-				point: pointSymbol,
-				polyline: polylineSymbol,
-				polygon: polygonSymbol
-			};
+			selectionSymbolDefinitions = lang.mixin( this.defaultSelectionSymbols, this.selectionSymbols || {} );
+			graphicSymbols.selectionSymbols = {};
+			graphicSymbols.selectionSymbols.point = symbolUtils.fromJson( selectionSymbolDefinitions.point );
+			graphicSymbols.selectionSymbols.polyline = symbolUtils.fromJson( selectionSymbolDefinitions.polyline );
+			graphicSymbols.selectionSymbols.polygon = symbolUtils.fromJson( selectionSymbolDefinitions.polygon );
 
-			return symbols;
+			return graphicSymbols;
 		},
 
 		search: function () {
@@ -214,8 +250,11 @@ define([
 				}, this.findResultsGrid);
 
 				this.resultsGrid.startup();
-				this.resultsGrid.on('.dgrid-row:click', lang.hitch(this, 'zoomOnRowClick'));
-				this.resultsGrid.on('.dgrid-row:keyup', lang.hitch(this, 'zoomOnKeyboardNavigation'));
+				this.resultsGrid.on('dgrid-select', lang.hitch(this, 'onResultsGridSelect'));
+				this.resultsGrid.on('dgrid-deselect', lang.hitch(this, 'onResultsGridDeselect'));
+				if ( this.resultsGrid.selectionMode === 'single' ) {
+					this.resultsGrid.on('.dgrid-row:click', lang.hitch(this, 'onResultsGridRowClick'));
+				}
 			}
 		},
 
@@ -268,15 +307,59 @@ define([
 				result.id = unique;
 				unique++;
 
-				this.setGraphicSymbol(result.feature);
+				this.updateGraphicSymbol(result.feature, false);
 				this.graphicsLayer.add(result.feature);
 
 			}, this);
 		},
 
-		setGraphicSymbol: function ( graphic ) {
-			var symbol = this.graphicsSymbols[graphic.geometry.type];
+		onResultsGridSelect: function ( event ) {
+			array.forEach( event.rows, lang.hitch( this, function ( row ){
+				var feature = row.data.feature;
+				this.updateGraphicSymbol( feature, true );
+				if ( feature && feature.getDojoShape() ){
+					feature.getDojoShape().moveToFront();
+				}
+			} ) );
+			this.graphicsLayer.redraw();
+			this.zoomToGraphicsExtent(this.getSelectedGraphics());
+		},
+
+		onResultsGridDeselect: function ( event ) {
+			array.forEach( event.rows, lang.hitch( this, function ( row ) {
+				var feature = row.data.feature;
+				this.updateGraphicSymbol( feature, false );
+			} ) );
+			this.graphicsLayer.redraw();
+		},
+
+		onResultsGridRowClick: function ( event ) {
+			var row = this.resultsGrid.row( event );
+			var feature = row.data.feature;
+
+			this.zoomToGraphicsExtent( [feature] );
+		},
+
+		updateGraphicSymbol: function ( graphic, isSelected ) {
+			var symbol = isSelected ? this.graphicsSymbols.selectionSymbols[ graphic.geometry.type ] : this.graphicsSymbols.resultsSymbols[ graphic.geometry.type ];
 			graphic.setSymbol(symbol);
+		},
+
+		getSelectedGraphics: function () {
+			var selectedGraphics = [];
+			var selection = this.resultsGrid.selection;
+
+			for ( var id in selection ) {
+				if ( selection.hasOwnProperty( id ) ) {
+					selectedGraphics.push( this.resultsGrid.row( id).data.feature );
+				}
+			}
+
+			if ( selectedGraphics.length === 0 ) {
+				return;
+			}
+
+			return selectedGraphics;
 		},
 
 		zoomToGraphicsExtent: function ( graphics ) {
@@ -305,19 +388,6 @@ define([
 					break;
 			}
 			return extent;
-		},
-
-		zoomOnRowClick: function (event) {
-			var feature = this.getFeatureFromRowEvent(event);
-			this.zoomToGraphicsExtent( [ feature ]);
-		},
-
-		zoomOnKeyboardNavigation: function (event){
-			var keyCode = event.keyCode;
-			if ( keyCode === 38 || keyCode === 40 ) {
-				var feature = this.getFeatureFromRowEvent(event);
-				this.zoomToGraphicsExtent( [ feature ] );
-			}
 		},
 
 		getFeatureFromRowEvent: function (event) {
