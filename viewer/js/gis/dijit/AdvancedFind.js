@@ -191,8 +191,13 @@ define (
 
                 search: function () {
 
-                    if ( !this.queryInputIsValid() ) {
-                        this.displayInvalidQueryInputMessage();
+                    if ( this.userInputIsInvalid() ) {
+                        this.displayInvalidUserInputMessage();
+                        return;
+                    }
+
+                    if ( this.queryConfigurationIsInvalid() ) {
+                        this.displayInvalidQueryConfigurationMessage();
                         return;
                     }
 
@@ -204,10 +209,6 @@ define (
 
                 executeFindTask: function () {
 
-                    if ( !this.queryInputIsValid() ) {
-                        return;
-                    }
-
                     var url = this.getQueryInput().query.url;
                     var findParams = this.getFindParams();
                     var findTask = new FindTask ( url );
@@ -217,31 +218,57 @@ define (
 
                 getQueryInput: function () {
                     return {
-                        query: this.queries[ this.queryIdx ],
+                        query: this.queries[ this.queryIdx ] || {},
                         searchText: this.searchTextDijit.get ( 'value' )
                     };
                 },
 
-                queryInputIsValid: function () {
+                queryConfigurationIsInvalid: function () {
 
-                    var queryInput = this.getQueryInput();
+                    var query = this.getQueryInput().query;
 
-                    if ( !queryInput.query || !queryInput.query.url || !queryInput.query.layerIds || !queryInput.query.searchFields || !queryInput.searchText || queryInput.searchText.length === 0 ) {
-                        return false;
+                    if ( !query.url || !query.searchFields || !query.layerIds ) {
+                        return true;
                     }
-                    return true;
+                    return false;
+
                 },
 
-                displayInvalidQueryInputMessage: function () {
+                userInputIsInvalid: function () {
+
+                    var userInput = this.getQueryInput().searchText;
+
+                    if ( userInput.length === 0 || this.userInputLessThanMinLength() ) {
+                        return true;
+                    }
+                    return false;
+                },
+
+                userInputLessThanMinLength: function () {
 
                     var queryInput = this.getQueryInput();
 
-                    if ( queryInput.query.minChars && (
-                            queryInput.searchText.length < queryInput.query.minChars
-                        ) ) {
-                            this.displayFindMessage ( 'You must enter at least ' + queryInput.query.minChars + ' characters.' );
-                            return;
+                    if ( queryInput.query.minChars && ( queryInput.searchText.length < queryInput.query.minChars ) ) {
+                        return true;
                     }
+
+                    return false;
+
+                },
+
+                displayInvalidQueryConfigurationMessage: function () {
+
+                    this.displayFindMessage ( 'There is a problem with the query configuration.' );
+                    return;
+
+                },
+
+                displayInvalidUserInputMessage: function () {
+
+                    var minChars = this.getQueryInput().query.minChars;
+
+                    this.displayFindMessage ( 'You must enter at least ' + minChars + ' characters.' );
+                    return;
 
                 },
 
@@ -254,10 +281,6 @@ define (
                 },
 
                 getFindParams: function () {
-
-                    if ( !this.queryInputIsValid() ) {
-                        return null;
-                    }
 
                     var queryInput = this.getQueryInput();
 
