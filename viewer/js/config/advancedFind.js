@@ -46,6 +46,7 @@ define({
 					event: '.dgrid-row:click',
 					handler: function ( event ) {
 						alert( 'You clicked a row!' );
+						console.log( event );
 					}
 				}
 			]
