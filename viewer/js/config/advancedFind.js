@@ -31,7 +31,7 @@ define({
 				{ field: 'Fcode', label: 'Fcode', width: 100 },
 				{ field: 'Description', label: 'Descr' },
 				{ field: 'SORT_VALUE', visible: false, get: function (findResult){
-					return findResult.layerName + ' ' + findResult.feature.attributes[ 'Fcode' ];
+					return findResult.layerName + ' ' + findResult.feature.attributes.Fcode;  //seems better to use attributes[ 'Fcode' ] but fails build.  Attribute names will be aliases and may contain spaces and mixed cases.
 				} }
 			],
 			sort: [
