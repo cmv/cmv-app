@@ -290,6 +290,17 @@ define([
                 position: 3,
                 options: 'config/find'
             },
+            advancedFind: {
+                include: true,
+                id: 'advancedFind',
+                type: 'titlePane',
+                canFloat: true,
+                path: 'gis/dijit/AdvancedFind',
+                title: 'Advanced Find',
+                open: true,
+                position: 3,
+                options: 'config/advancedFind'
+            },
             draw: {
                 include: true,
                 id: 'draw',
