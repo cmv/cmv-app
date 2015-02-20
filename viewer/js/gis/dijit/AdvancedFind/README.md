@@ -102,5 +102,17 @@ Each is an object with
 properties.  Each of which must be a fully formed JSON symbol definition appropriate to the geometry type.  Check viewer.js for examples.
 
 
+## Custom grid event functions
+
+You can add custom handlers for dgrid events by adding a **customGridHandlers** property which should be an array of objects:
+
+```
+[
+  {
+    event: '.dgrid-row:click',
+    handler: function ( event ) {}
+  }
+]
+```
 
 

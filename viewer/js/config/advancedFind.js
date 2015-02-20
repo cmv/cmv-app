@@ -40,7 +40,15 @@ define({
 					descending: false
 				}
 			],
-			prompt: 'fdname, pdname, name or resname'
+			prompt: 'fdname, pdname, name or resname',
+			customGridEventHandlers: [
+				{
+					event: '.dgrid-row:click',
+					handler: function ( event ) {
+						alert( 'You clicked a row!' );
+					}
+				}
+			]
 		}
 	],
 	selectionSymbols: {
