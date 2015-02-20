@@ -1,5 +1,6 @@
 define({
 	map: true,
+    zoomExtentFactor: 2,
 	queries: [
 		{
 			description: 'Find A Public Safety Location By Name',

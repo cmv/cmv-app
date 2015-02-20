@@ -40,7 +40,6 @@ define (
                 baseClass: 'gis_FindDijit',
                 i18n: i18n,
                 spatialReference: null,
-                pointExtentSize: null,
                 defaultResultsSymbols: {
                     point: {
                         type: 'esriSMS',
@@ -117,21 +116,25 @@ define (
                     this.updateSearchPrompt ();
                 },
                 initializeGlobalVariables: function () {
+                    this.queryIdx = 0;
                     this.currentQueryEventHandlers = [];
-                    this.selectionMode = this.selectionMode || 'single';
-                    this.pointExtentSize = null;
                     this.gridColumns = null;
                     this.zoomOptions = {
                         select: true,
                         deselect: false
                     };
-                    if ( this.spatialReference === null ) {
+                    if (!this.selectionMode){
+                        this.selectionMode = 'single';
+                    }
+                    if (!this.zoomExtentFactor){
+                        this.zoomExtentFactor = 1.5;
+                    }
+                    if (!this.spatialReference) {
                         this.spatialReference = this.map.spatialReference.wkid;
                     }
-                    if (this.pointExtentSize === null) {
+                    if (!this.pointExtentSize) {
                         this.pointExtentSize = this.spatialReference === 4326 ? 0.0001 : 25;
                     }
-                    this.queryIdx = 0;
                 },
                 addKeyUpHandlerToSearchInput: function () {
                     this.own (
@@ -547,7 +550,7 @@ define (
                     );
                 },
                 setMapExtent: function (extent) {
-                    this.map.setExtent (extent.expand (1.5)); //scale factor should be configurable!
+                    this.map.setExtent (extent.expand (this.zoomExtentFactor));
                 },
                 clearResults: function () {
                     this.results = null;
