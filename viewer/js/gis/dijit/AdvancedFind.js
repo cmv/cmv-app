@@ -465,7 +465,7 @@ define (
                     );
                     this.graphicsLayer.redraw ();
                     if (this.zoomOptions.select) {
-                        this.zoomToSelection ();
+                        this.zoomToSelectedGraphics ();
                     }
                 },
                 onResultsGridDeselect: function (event) {
@@ -479,7 +479,7 @@ define (
                     );
                     this.graphicsLayer.redraw ();
                     if (this.zoomOptions.deselect) {
-                        this.zoomToSelection ();
+                        this.zoomToSelectedGraphics ();
                     }
                 },
                 onResultsGridRowClick: function (event) {
@@ -495,7 +495,7 @@ define (
                     var symbol = isSelected ? this.graphicsSymbols.selectionSymbols[graphic.geometry.type] : this.graphicsSymbols.resultsSymbols[graphic.geometry.type];
                     graphic.setSymbol (symbol);
                 },
-                zoomToSelection: function () {
+                zoomToSelectedGraphics: function () {
                     var selectedGraphics = [];
                     var selection = this.resultsGrid.selection;
                     for (var id in selection) {
