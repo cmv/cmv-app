@@ -1,0 +1,67 @@
+.gis_AdvancedFindDijit {
+    width: 100%;
+}
+.gis_AdvancedFindDijit .querySelect, .gis_AdvancedFindDijit .searchText {
+	width:100%;
+	margin-bottom: 10px;
+}
+
+.gis_AdvancedFindDijit .optionsCheckBox {
+	margin-bottom: 10px;
+	margin-left: 10px;
+}
+
+.gis_AdvancedFindDijit .clearButton {
+
+}
+
+.gis_AdvancedFindDijit label {
+	font-weight:bold;
+	margin-left: 5px;
+}
+
+.gis_AdvancedFindDijit .resultsContainer {
+	font-weight: bold;
+	margin: 10px;
+	display: none;
+}
+
+.gis_AdvancedFindDijit .dgrid {
+	height: 240px !important;
+	width:100%;
+	display: none;
+}
+
+.gis_AdvancedFindDijit .dgrid .dgrid-scroller {
+	margin-top: 35px !important;
+}
+
+.gis_AdvancedFindDijit .dgrid .dgrid-header th {
+	font-weight: bold;
+}
+
+.gis_AdvancedFindDijit .dgrid .dgrid-cell {
+	font-size: 11px;
+	padding: 8px !important;
+	cursor: pointer;
+}
+
+.gis_AdvancedFindDijit .dgrid .field-value {
+	width: 70%;
+}
+
+.gis_AdvancedFindDijit .dgrid .field-foundFieldName {
+	display: none;
+}
+
+.gis_AdvancedFindDijit .buttonActionBar {
+	/*background-color: #F2F2F2;
+    border: 1px solid #CDCDCD;*/
+	padding: 3px 0px 2px 0px;
+	text-align: right;
+	width: 100%;
+}
+
+.gis_AdvancedFindDijit .buttonActionBar .actionBarButton {
+	width: 115px;
+}

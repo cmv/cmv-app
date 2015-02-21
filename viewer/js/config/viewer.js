@@ -29,6 +29,11 @@ define([
             zoom: 5,
             sliderStyle: 'small'
         },
+        panes: {
+            left: {
+                splitter: true
+            }
+        },
         // panes: {
         // 	left: {
         // 		splitter: true
@@ -280,7 +285,7 @@ define([
                 options: 'config/bookmarks'
             },
             find: {
-                include: true,
+                include: false,
                 id: 'find',
                 type: 'titlePane',
                 canFloat: true,
@@ -289,6 +294,17 @@ define([
                 open: false,
                 position: 3,
                 options: 'config/find'
+            },
+            advancedFind: {
+                include: true,
+                id: 'advancedFind',
+                type: 'titlePane',
+                canFloat: true,
+                path: 'gis/dijit/AdvancedFind',
+                title: 'Advanced Find',
+                open: true,
+                position: 3,
+                options: 'config/advancedFind'
             },
             draw: {
                 include: true,
