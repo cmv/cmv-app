@@ -29,6 +29,11 @@ define([
             zoom: 5,
             sliderStyle: 'small'
         },
+        panes: {
+            left: {
+                splitter: true
+            }
+        },
         // panes: {
         // 	left: {
         // 		splitter: true
@@ -280,7 +285,7 @@ define([
                 options: 'config/bookmarks'
             },
             find: {
-                include: true,
+                include: false,
                 id: 'find',
                 type: 'titlePane',
                 canFloat: true,

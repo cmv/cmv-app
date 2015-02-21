@@ -20,7 +20,10 @@ define({
            labelPrefix: 'Result',
            labelSuffix: 'found'
        },
-       noResultsLabel: 'No results found.'
+       noResultsLabel: 'No results found.',
+       optionsLabel: 'Settings',
+       zoomOnSelect: 'Zoom on select',
+       zoomOnDeselect: 'Zoom on deselect'
    }
 });
 

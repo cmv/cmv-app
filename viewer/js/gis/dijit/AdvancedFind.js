@@ -24,6 +24,8 @@ define (
         'dojo/i18n!./AdvancedFind/nls/resource',
 
         'dijit/form/Form',
+        'dijit/form/DropDownButton',
+        'dijit/TooltipDialog',
         'dijit/form/FilteringSelect',
         'dijit/form/ValidationTextBox',
         'dijit/form/CheckBox',
@@ -37,9 +39,13 @@ define (
             [ _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin ], {
                 widgetsInTemplate: true,
                 templateString: FindTemplate,
-                baseClass: 'gis_FindDijit',
+                baseClass: 'gis_AdvancedFindDijit',
                 i18n: i18n,
                 spatialReference: null,
+                zoomOptions: {
+                    select: true,
+                    deselect: false
+                },
                 defaultResultsSymbols: {
                     point: {
                         type: 'esriSMS',
@@ -119,10 +125,6 @@ define (
                     this.queryIdx = 0;
                     this.currentQueryEventHandlers = [];
                     this.gridColumns = null;
-                    this.zoomOptions = {
-                        select: true,
-                        deselect: false
-                    };
                     if (!this.selectionMode){
                         this.selectionMode = 'single';
                     }
@@ -585,6 +587,12 @@ define (
                     var prompt = this.queries[this.queryIdx].prompt || i18n.searchText.placeholder;
                     this.searchTextDijit.set ('placeholder', prompt);
                     this.searchTextDijit.set ('value', null);
+                },
+                onZoomOptionsSelectChange: function(value){
+                    this.zoomOptions.select = value;
+                },
+                onZoomOptionsDeselectChange: function(value){
+                    this.zoomOptions.deselect = value;
                 }
             }
         );
