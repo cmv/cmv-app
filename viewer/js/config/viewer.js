@@ -284,16 +284,16 @@ define([
                 position: 2,
                 options: 'config/bookmarks'
             },
-            advancedFind: {
+            find: {
                 include: true,
-                id: 'advancedFind',
+                id: 'find',
                 type: 'titlePane',
                 canFloat: true,
-                path: 'gis/dijit/AdvancedFind',
+                path: 'gis/dijit/Find',
                 title: 'Advanced Find',
                 open: true,
                 position: 3,
-                options: 'config/advancedFind'
+                options: 'config/find'
             },
             draw: {
                 include: true,

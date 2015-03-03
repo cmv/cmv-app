@@ -20,8 +20,8 @@ define (
         'esri/tasks/FindTask',
         'esri/tasks/FindParameters',
         'esri/geometry/Extent',
-        'dojo/text!./AdvancedFind/templates/AdvancedFind.html',
-        'dojo/i18n!./AdvancedFind/nls/resource',
+        'dojo/text!./Find/templates/Find.html',
+        'dojo/i18n!./Find/nls/resource',
 
         'dijit/form/Form',
         'dijit/form/DropDownButton',
@@ -29,7 +29,7 @@ define (
         'dijit/form/FilteringSelect',
         'dijit/form/ValidationTextBox',
         'dijit/form/CheckBox',
-        'xstyle/css!./AdvancedFind/css/AdvancedFind.css'
+        'xstyle/css!./Find/css/Find.css'
     ], function (
         declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct, lang, array, on, keys, Memory,
         OnDemandGrid, Selection, Keyboard, ColumnResizer, GraphicsLayer, symbolUtils, graphicsUtils, FindTask, FindParameters, Extent,
