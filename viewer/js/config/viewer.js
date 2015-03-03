@@ -284,17 +284,6 @@ define([
                 position: 2,
                 options: 'config/bookmarks'
             },
-            find: {
-                include: false,
-                id: 'find',
-                type: 'titlePane',
-                canFloat: true,
-                path: 'gis/dijit/Find',
-                title: 'Find',
-                open: false,
-                position: 3,
-                options: 'config/find'
-            },
             advancedFind: {
                 include: true,
                 id: 'advancedFind',
