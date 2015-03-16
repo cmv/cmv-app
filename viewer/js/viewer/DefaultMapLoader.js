@@ -1,11 +1,12 @@
 define([
+	'dojo/on',
 	'dojo/_base/declare',
 	'esri/map',
 	'dojo/_base/array',
 	'dojo/Deferred',
 	'dojo/_base/lang',
 	'dojo/aspect'
-], function (declare, Map, array, Deferred, lang) {
+], function (on, declare, Map, array, Deferred, lang) {
 
 	return declare([], {
 
@@ -60,6 +61,26 @@ define([
 				wms: 'WMS',
 				wmts: 'WMTS' //untested
 			};
+
+
+			on.once(this.map, 'layers-add-result', lang.hitch(this, function(lyrsResult) {
+				var loadingError = null;
+				var isLoadingError = array.some(lyrsResult.layers, function (addedLayer) {
+					if (addedLayer.success !== true) {
+						loadingError = addedLayer.error;
+						return true;
+					}
+				});
+				if (isLoadingError === true) {
+					this._loadMapDeferred.reject(loadingError);
+				}
+				else {
+					this._loadMapDeferred.resolve();
+				}
+
+			}));
+
+
 			// loading all the required modules first ensures the layer order is maintained
 			var modules = [];
 			array.forEach(this._config.operationalLayers, function (layer) {
@@ -71,15 +92,16 @@ define([
 				}
 			}, this);
 			require(modules, lang.hitch(this, function () {
-				array.forEach(this._operationalLayers, function (layer) {
+				array.forEach(this._config.operationalLayers, function (layer) {
 					var type = layerTypes[layer.type];
 					if (type) {
-						require(['esri/layers/' + type + 'Layer'], lang.hitch(this, 'initLayer', layer));
+						require(['esri/layers/' + type + 'Layer'], lang.hitch(this, function(Layer) {
+							this.initLayer(layer, Layer);
+						}));
 					}
 				}, this);
 				this.map.addLayers(this.layers);
 			}));
-			this._loadMapDeferred.resolve();
 		},
 		initLayer: function (layer, Layer) {
 			var l = new Layer(layer.url, layer.options);
