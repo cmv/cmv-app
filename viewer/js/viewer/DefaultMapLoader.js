@@ -1,12 +1,11 @@
 define([
 	'dojo/_base/declare',
 	'esri/map',
-	'dojo/on',
 	'dojo/_base/array',
 	'dojo/Deferred',
 	'dojo/_base/lang',
 	'dojo/aspect'
-], function (declare, Map, on, array, Deferred, lang) {
+], function (declare, Map, array, Deferred, lang) {
 
 	return declare([], {
 
@@ -30,29 +29,16 @@ define([
 			this._loadMapDeferred = new Deferred();
 
 			this.map = new Map(domId, this._config.mapOptions);
-			if (this._config.mapOptions.basemap) {
-				this.map.on('load', lang.hitch(this, '_initLayers'));
-			} else {
-				this._initLayers();
-			}
 
 			if (this._config.operationalLayers && this._config.operationalLayers.length > 0) {
-				on.once(this.map, 'layers-add-result', lang.hitch(this, function(lyrsResult) { 
-					var loadingError = null;
-					var isLoadingError = array.some(lyrsResult.layers, function (addedLayer) {
-						if (addedLayer.success !== true) {
-							loadingError = addedLayer.error;
-							return true;
-						}
-					});
-					if (isLoadingError === true) {
-						this._loadMapDeferred.reject(loadingError);
-					}
-					else {
-						this._loadMapDeferred.resolve();
-					}
-				}));
+				if (this._config.mapOptions.basemap) {
+					this.map.on('load', lang.hitch(this, '_initLayers'));
+				} else {
+					this._initLayers();
+				}
+
 			} else {
+
 				this._loadMapDeferred.resolve();
 			}
 			return this._loadMapDeferred;
@@ -93,6 +79,7 @@ define([
 				}, this);
 				this.map.addLayers(this.layers);
 			}));
+			this._loadMapDeferred.resolve();
 		},
 		initLayer: function (layer, Layer) {
 			var l = new Layer(layer.url, layer.options);

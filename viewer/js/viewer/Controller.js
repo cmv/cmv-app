@@ -19,6 +19,7 @@ define([
 	'esri/dijit/PopupMobile',
 	'dijit/Menu',
 	'esri/IdentityManager'
+	
 ], function (MapLoader, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
 
 	return {
@@ -204,8 +205,8 @@ define([
 				this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
 			}
 
-			var mapLoader = new MapLoader('mapCenter', this.config);
-			mapLoader.LoadMapAsync().then(
+			var mapLoader = new MapLoader();
+			mapLoader.LoadMapAsync('mapCenter', this.config).then(
 				lang.hitch(this, function() {
 					this.layers = mapLoader.layers;
 					this.legendLayerInfos = mapLoader.legendLayerInfos;
