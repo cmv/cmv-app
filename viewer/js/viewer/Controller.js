@@ -1,5 +1,5 @@
 define([
-	'esri/map',
+	'viewer/DefaultMapLoader',
 	'dojo/dom',
 	'dojo/dom-style',
 	'dojo/dom-geometry',
@@ -19,7 +19,8 @@ define([
 	'esri/dijit/PopupMobile',
 	'dijit/Menu',
 	'esri/IdentityManager'
-], function (Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
+	
+], function (MapLoader, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
 
 	return {
 		legendLayerInfos: [],
@@ -203,100 +204,34 @@ define([
 			if (has('phone') && !this.config.mapOptions.infoWindow) {
 				this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
 			}
-			this.map = new Map('mapCenter', this.config.mapOptions);
-			if (this.config.mapOptions.basemap) {
-				this.map.on('load', lang.hitch(this, 'initLayers'));
-			} else {
-				this.initLayers();
-			}
-			if (this.config.operationalLayers && this.config.operationalLayers.length > 0) {
-				on.once(this.map, 'layers-add-result', lang.hitch(this, 'initWidgets'));
-			} else {
-				this.initWidgets();
-			}
-		},
-		initLayers: function () {
-			this.map.on('resize', function (evt) {
-				var pnt = evt.target.extent.getCenter();
-				setTimeout(function () {
-					evt.target.centerAt(pnt);
-				}, 100);
-			});
 
-			this.layers = [];
-			var layerTypes = {
-				csv: 'CSV',
-				dynamic: 'ArcGISDynamicMapService',
-				feature: 'Feature',
-				georss: 'GeoRSS',
-				image: 'ArcGISImageService',
-				kml: 'KML',
-				label: 'Label', //untested
-				mapimage: 'MapImage', //untested
-				osm: 'OpenStreetMap',
-				tiled: 'ArcGISTiledMapService',
-				wms: 'WMS',
-				wmts: 'WMTS' //untested
-			};
-			// loading all the required modules first ensures the layer order is maintained
-			var modules = [];
-			array.forEach(this.config.operationalLayers, function (layer) {
-				var type = layerTypes[layer.type];
-				if (type) {
-					modules.push('esri/layers/' + type + 'Layer');
-				} else {
+			var mapLoader = new MapLoader();
+			mapLoader.LoadMapAsync('mapCenter', this.config).then(
+				lang.hitch(this, function() {
+					this.layers = mapLoader.layers;
+					this.legendLayerInfos = mapLoader.legendLayerInfos;
+					this.editorLayerInfos = mapLoader.editorLayerInfos;
+					this.identifyLayerInfos = mapLoader.identifyLayerInfos;
+					this.layerControlLayerInfos = mapLoader.layerControlLayerInfos;
+					this.map = mapLoader.map;
+
+					this.map.on('resize', function (evt) {
+						var pnt = evt.target.extent.getCenter();
+						setTimeout(function () {
+							evt.target.centerAt(pnt);
+						}, 100);
+					});
+
+					this.initWidgets();
+				}),
+				lang.hitch(this, function(err) {
 					this.handleError({
 						source: 'Controller',
-						error: 'Layer type "' + layer.type + '"" isnot supported: '
+						error: err
 					});
-				}
-			}, this);
-			require(modules, lang.hitch(this, function () {
-				array.forEach(this.config.operationalLayers, function (layer) {
-					var type = layerTypes[layer.type];
-					if (type) {
-						require(['esri/layers/' + type + 'Layer'], lang.hitch(this, 'initLayer', layer));
-					}
-				}, this);
-				this.map.addLayers(this.layers);
-			}));
-		},
-		initLayer: function (layer, Layer) {
-			var l = new Layer(layer.url, layer.options);
-			this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
-			//Legend LayerInfos array
-			this.legendLayerInfos.unshift({ //unshift instead of push to keep layer ordering in legend intact
-				layer: l,
-				title: layer.title || null
-			});
-			//LayerControl LayerInfos array
-			this.layerControlLayerInfos.unshift({ //unshift instead of push to keep layer ordering in LayerControl intact
-				layer: l,
-				type: layer.type,
-				title: layer.title,
-				controlOptions: layer.layerControlLayerInfos
-			});
-			if (layer.type === 'feature') {
-				var options = {
-					featureLayer: l
-				};
-				if (layer.editorLayerInfos) {
-					lang.mixin(options, layer.editorLayerInfos);
-				}
-				this.editorLayerInfos.push(options);
-			}
-			if (layer.type === 'dynamic' || layer.type === 'feature') {
-				var idOptions = {
-					layer: l,
-					title: layer.title
-				};
-				if (layer.identifyLayerInfos) {
-					lang.mixin(idOptions, layer.identifyLayerInfos);
-				}
-				if (idOptions.exclude !== true) {
-					this.identifyLayerInfos.push(idOptions);
-				}
-			}
+				})
+			);
+
 		},
 		initWidgets: function () {
 			var widgets = [],
