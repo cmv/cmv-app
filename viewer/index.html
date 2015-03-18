@@ -63,7 +63,7 @@
                 }
             }
             require(['viewer/Controller', file], function(Controller, config){
-                Controller.startup(config);
+                new Controller(config);
             });
         </script>
     </body>
