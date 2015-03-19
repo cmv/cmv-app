@@ -1,0 +1,30 @@
+.CmvMenu {
+  font-size: 16px;
+}
+
+.CmvMenu .menu-item {
+    float: left;
+    cursor: pointer;
+    margin-right: 10px;
+    opacity: 0.8;
+    padding-top: 2px;
+}
+.CmvMenu .open {
+  border-top: 2px solid #fff;
+  padding-top: 0;
+  opacity: 1;
+}
+
+.CmvMenu .menu-item:hover {
+  border-top: 2px solid #fff;
+  padding-top: 0;
+}
+
+.CmvMenu .menu-item .menu-item-text {
+  float: left;
+  vertical-align: middle;
+}
+.CmvMenu .menu-item .menu-item-icon {
+  float: left;
+  vertical-align: middle;
+}

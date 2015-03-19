@@ -116,6 +116,108 @@ define([
   }],
         // set include:true to load. For titlePane type set position the the desired order in the sidebar
         widgets: {
+            cmvmenu: {
+                include: true,
+                id: 'cmvmenu',
+                type: 'domNode',
+                srcNodeRef: 'cmvMenu',
+                path: 'gis/dijit/CmvMenuWidget',
+                options: {
+                    // iconHeight
+                    // height
+                    widgets: [
+                        {
+                            id: 'identify',
+                            title: 'Identify',
+                            icon: '/js/gis/dijit/Identify/images/identify.png',
+                            group: 'group1'
+                        },
+                        {
+                            id: 'legend',
+                            title: 'Legend',
+                            icon: null,
+                            group: 'group2'
+                        }, 
+                        {
+                            id: 'layerControl',
+                            title: 'Layers',
+                            icon: null,
+                            group: 'group2'
+                        }, 
+                        {
+                            id: 'bookmarks',
+                            title: 'Bookmarks',
+                            icon: null,
+                            group: 'group3'
+                        },
+                        {
+                            id: 'measurement',
+                            title: 'Measure',
+                            open: false,
+                            group: 'group3'
+                        }
+                    ]
+                }
+            },
+            identify: {
+                include: true,
+                id: 'identify',
+                type: 'gis/dijit/FloatingWidgetPanel',
+                srcNodeRef: 'cmvMenuNode',
+                path: 'gis/dijit/Identify',
+                title: 'Identify',
+                options: 'config/identify'
+            },
+            legend: {
+                include: true,
+                id: 'legend',
+                type: 'gis/dijit/FloatingWidgetPanel',
+                srcNodeRef: 'cmvMenuNode',
+                path: 'esri/dijit/Legend',
+                title: 'Legend',
+                options: {
+                    map: true,
+                    legendLayerInfos: true
+                }
+            }, 
+            layers: {
+                include: true,
+                id: 'layerControl',
+                type: 'gis/dijit/FloatingWidgetPanel',
+                srcNodeRef: 'cmvMenuNode',
+                path: 'gis/dijit/LayerControl',
+                title: 'Layers',
+                options: {
+                    map: true,
+                    layerControlLayerInfos: true,
+                    separated: true,
+                    vectorReorder: true,
+                    overlayReorder: true
+                }
+            }, 
+            bookmarks: {
+                include: true,
+                id: 'bookmarks',
+                type: 'gis/dijit/FloatingWidgetPanel',
+                srcNodeRef: 'cmvMenuNode',
+                path: 'gis/dijit/Bookmarks',
+                title: 'Bookmarks',
+                options: 'config/bookmarks'
+            },
+            measure: {
+                include: true,
+                id: 'measurement',
+                type: 'gis/dijit/FloatingWidgetPanel',
+                srcNodeRef: 'cmvMenuNode',
+                path: 'gis/dijit/Measurement',
+                title: 'Measurement',
+                options: {
+                    map: true,
+                    mapClickMode: true,
+                    defaultAreaUnit: units.SQUARE_MILES,
+                    defaultLengthUnit: units.MILES
+                }
+            },
             growler: {
                 include: true,
                 id: 'growler',
@@ -140,16 +242,6 @@ define([
                         }
                     }
                 }
-            },
-            identify: {
-                include: true,
-                id: 'identify',
-                type: 'titlePane',
-                path: 'gis/dijit/Identify',
-                title: 'Identify',
-                open: false,
-                position: 3,
-                options: 'config/identify'
             },
             basemaps: {
                 include: true,
@@ -240,45 +332,6 @@ define([
                     })
                 }
             },
-            legend: {
-                include: true,
-                id: 'legend',
-                type: 'titlePane',
-                path: 'esri/dijit/Legend',
-                title: 'Legend',
-                open: false,
-                position: 0,
-                options: {
-                    map: true,
-                    legendLayerInfos: true
-                }
-            },
-            layerControl: {
-                include: true,
-                id: 'layerControl',
-                type: 'titlePane',
-                path: 'gis/dijit/LayerControl',
-                title: 'Layers',
-                open: false,
-                position: 0,
-                options: {
-                    map: true,
-                    layerControlLayerInfos: true,
-                    separated: true,
-                    vectorReorder: true,
-                    overlayReorder: true
-                }
-            },
-            bookmarks: {
-                include: true,
-                id: 'bookmarks',
-                type: 'titlePane',
-                path: 'gis/dijit/Bookmarks',
-                title: 'Bookmarks',
-                open: false,
-                position: 2,
-                options: 'config/bookmarks'
-            },
             find: {
                 include: true,
                 id: 'find',
@@ -302,22 +355,6 @@ define([
                 options: {
                     map: true,
                     mapClickMode: true
-                }
-            },
-            measure: {
-                include: true,
-                id: 'measurement',
-                type: 'titlePane',
-                canFloat: true,
-                path: 'gis/dijit/Measurement',
-                title: 'Measurement',
-                open: false,
-                position: 5,
-                options: {
-                    map: true,
-                    mapClickMode: true,
-                    defaultAreaUnit: units.SQUARE_MILES,
-                    defaultLengthUnit: units.MILES
                 }
             },
             print: {

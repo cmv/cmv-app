@@ -4,6 +4,7 @@ define([
 	'dojo/dom-style',
 	'dojo/dom-geometry',
 	'dojo/dom-class',
+	'dojo/dom-construct',
 	'dojo/on',
 	'dojo/_base/array',
 	'dijit/layout/BorderContainer',
@@ -12,6 +13,7 @@ define([
 	'dojo/_base/lang',
 	'dojo/text!./templates/mapOverlay.html',
 	'gis/dijit/FloatingWidgetDialog',
+	'gis/dijit/FloatingWidgetPanel',
 	'put-selector',
 	'dojo/aspect',
 	'dojo/has',
@@ -19,7 +21,7 @@ define([
 	'esri/dijit/PopupMobile',
 	'dijit/Menu',
 	'esri/IdentityManager'
-], function (Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
+], function (Map, dom, domStyle, domGeom, domClass, domConstruct, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, FloatingWidgetPanel, put, aspect, has, topic, PopupMobile, Menu) {
 
 	return {
 		legendLayerInfos: [],
@@ -430,6 +432,17 @@ define([
 			fw.startup();
 			return fw;
 		},
+		_createFloatingPanelWidget: function(parentId, title, srcNodeRef) {
+			if(!srcNodeRef) {
+	        	 srcNodeRef = domConstruct.create('div', {}, this.map.root, 'first');
+	    	}
+			var pnl = new FloatingWidgetPanel({
+				id: parentId,
+				title: title
+			});
+			pnl.placeAt(srcNodeRef);
+			return pnl;
+		},
 		_createContentPaneWidget: function (parentId, title, className, region, placeAt) {
 			var cp, options = {
 					title: title,
@@ -456,7 +469,7 @@ define([
 			var parentId, pnl;
 
 			// only proceed for valid widget types
-			var widgetTypes = ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map'];
+			var widgetTypes = ['titlePane', 'contentPane', 'floating', 'gis/dijit/FloatingWidgetPanel', 'domNode', 'invisible', 'map'];
 			if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
 				this.handleError({
 					source: 'Controller',
@@ -464,9 +477,9 @@ define([
 				});
 				return;
 			}
-
+			
 			// build a titlePane or floating widget as the parent
-			if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
+			if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating' || widgetConfig.type === 'gis/dijit/FloatingWidgetPanel') && (widgetConfig.id && widgetConfig.id.length > 0)) {
 				parentId = widgetConfig.id + '_parent';
 				if (widgetConfig.type === 'titlePane') {
 					pnl = this._createTitlePaneWidget(parentId, widgetConfig.title, position, widgetConfig.open, widgetConfig.canFloat, widgetConfig.placeAt);
@@ -474,6 +487,8 @@ define([
 					pnl = this._createContentPaneWidget(parentId, widgetConfig.title, widgetConfig.className, widgetConfig.region, widgetConfig.placeAt);
 				} else if (widgetConfig.type === 'floating') {
 					pnl = this._createFloatingWidget(parentId, widgetConfig.title);
+				} else if (widgetConfig.type === 'gis/dijit/FloatingWidgetPanel') {
+					pnl = this._createFloatingPanelWidget(parentId, widgetConfig.title, widgetConfig.srcNodeRef);
 				}
 				widgetConfig.parentWidget = pnl;
 			}
@@ -523,7 +538,7 @@ define([
 
 			// create the widget
 			var pnl = options.parentWidget;
-			if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
+			if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating' || widgetConfig.type === 'gis/dijit/FloatingWidgetPanel')) {
 				this[widgetConfig.id] = new WidgetClass(options, put('div')).placeAt(pnl.containerNode);
 			} else if (widgetConfig.type === 'domNode') {
 				this[widgetConfig.id] = new WidgetClass(options, widgetConfig.srcNodeRef);

@@ -1,0 +1,18 @@
+.FloatingWigetPanelContainer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  left: auto;
+  bottom: 10px;
+  width: auto;
+  height: auto;
+  z-index: 1;
+  overflow: auto;
+}
+
+.FloatingWigetPanel {
+  border: solid 1px #000;
+  background-color: #fff;
+  padding: 20px;
+  display: none;
+}
