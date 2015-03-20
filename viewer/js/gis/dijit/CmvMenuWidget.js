@@ -3,13 +3,14 @@ define([
   'dijit/_WidgetBase',
   'dijit/_WidgetsInTemplateMixin',
   'dijit/registry',
+
   'dojo/_base/array',
   'dojo/_base/declare',
   'dojo/_base/html',
   'dojo/_base/lang',
+  'dojo/aspect',
   'dojo/dom-class',
   'dojo/on',
-  'dojo/query',
   'dojo/text!./CmvMenuWidget/templates/template.html',
 
   'xstyle/css!./CmvMenuWidget/css/style.css'
@@ -19,13 +20,14 @@ define([
   _WidgetBase,
   _WidgetsInTemplateMixin,
   registry,
-array,
+
+  array,
   declare,
   html,
   lang,
+  aspect,
   domClass,
   on,
-  query,
   template
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -39,22 +41,11 @@ array,
       height: 20,
       widgets: {},
 
-      postCreate: function() {
-        this.inherited(arguments);
-
-        if (this.position && this.position.height) {
-          this.height = this.position.height;
-        }
-
-      },
-
       startup: function() {
         this.inherited(arguments);
-        this._createMenuItems();
-      },
 
-      _createMenuItems: function() {
-        html.empty(this.containerNode);
+        // do not empty the container node because their may be other widgets in there
+        //html.empty(this.containerNode);
 
         var openMenuItem = null;
         array.forEach(this.widgets, function(aWidgetConfig) {
@@ -63,7 +54,7 @@ array,
             openMenuItem = node;
           }
         }, this);
-        // note that all this widgets might not be loaded yet so this may fail
+        // Since  the dependant widgets are probably not loaded, this call will likely fail. Need a topic for 'widgetLoaded'.
         /*
         if (openMenuItem) {
           this._onMenuClick(openMenuItem);
@@ -74,8 +65,7 @@ array,
       _createMenuItem: function(aWidgetConfig) {
 
         var menuItemNode = html.create('div', {
-          'class': 'menu-item',
-          'data-cmvmenu-id': aWidgetConfig.id
+          'class': 'menu-item'
         }, this.containerNode);
 
         if(aWidgetConfig.icon) {
@@ -101,93 +91,94 @@ array,
           innerHTML: aWidgetConfig.title
         }, menuItemNode);
 
-        on(menuItemNode, 'click', lang.hitch(this, function () {
-          this._onMenuClick(aWidgetConfig);
-        }));
+        aWidgetConfig.menuItem = menuItemNode;
 
-        //menuItemNode.config = aWidgetConfig;
+        on(menuItemNode, 'click', lang.hitch(this, '_onMenuClick', aWidgetConfig));
 
-        return menuItemNode;
       },
 
       _onMenuClick: function(aWidgetConfig) {
-        var parentWidget = registry.byId(aWidgetConfig.id + '_parent');
-        if(parentWidget) {
-          if(parentWidget.open) {
-            this._closeMenuItem(aWidgetConfig.id);
-            this._closeWidget(aWidgetConfig.id);
+        var isOpen = this._isWidgetOpen(aWidgetConfig);
+        if(isOpen != null)  {
+          if(isOpen === true) {
+            this._closeWidget(aWidgetConfig);
           }
           else {
-            // close others 
-            array.forEach(this.widgets, function(aWidgetConfigToClose) {
-              if(aWidgetConfigToClose.id !== aWidgetConfig.id && aWidgetConfig.group && aWidgetConfigToClose.group == aWidgetConfig.group)
-              //if(aWidgetConfigToClose.id != aWidgetConfig.id)
-              {
-                this._closeMenuItem(aWidgetConfigToClose.id);
-                this._closeWidget(aWidgetConfigToClose.id);
-              }
-            }, this);
-            // open this one
-            this._openMenuItem(aWidgetConfig.id); 
-            this._openWidget(aWidgetConfig.id);
+            this._closeWidgetsInSameGroup(aWidgetConfig);
+            // open this widget
+            this._openWidget(aWidgetConfig);
           }
         }
       },
 
-      _openWidget: function(id) {
-        var widget = registry.byId(id + '_widget');
-        if(widget) {
-          var parentWidget = widget.parentWidget;
-          if(parentWidget) {
+      _closeWidgetsInSameGroup: function(aWidgetConfig) {
+        // close other widgets that are in the same group
+        array.forEach(this.widgets, function(aWidgetConfigToClose) {
+          if(this._widgetsAreInSameGroup(aWidgetConfig, aWidgetConfigToClose))
+          {
+            this._closeWidget(aWidgetConfigToClose);
+          }
+        }, this);
+      },
 
-            on(parentWidget, 'toggle', lang.hitch(this, '_toggleMenuItem', id));
+      _widgetsAreInSameGroup: function(aWidgetConfig, bWidgetConfig) {
+        if(aWidgetConfig.id !== bWidgetConfig.id && aWidgetConfig.group && bWidgetConfig.group &&  aWidgetConfig.group == bWidgetConfig.group)
+        {
+          return true;
+        }
+        else {
+          return false;
+        }
+      },
 
-            parentWidget.show();
+      _findAndStoreParentWidget: function(aWidgetConfig) {
+        // so we do not do a dom query every time, cache the widget in the config object
+        if(aWidgetConfig.widget == null ||  aWidgetConfig.widget.parentWidget == null)
+        {
+          var widget = registry.byId(aWidgetConfig.id + '_widget');
+          if(widget && widget.parentWidget)
+          {
+            aWidgetConfig.widget = widget;
           }
         }
-      },
-      _closeWidget: function(id) {
-        var widget = registry.byId(id + '_widget');
-        if(widget) {
-          var parentWidget = widget.parentWidget;
-          if(parentWidget) {
-            parentWidget.hide();
-          }
+        if(aWidgetConfig.widget && aWidgetConfig.widget.parentWidget) {
+          return true;
+        }
+        else {
+          return false;
         }
       },
 
-      _getMenuItemById: function(id) {
-        var node = query('.menu-item[data-cmvmenu-id="' + id + '"]', this.domNode);
-        if (node.length === 0) {
-          return;
+      _isWidgetOpen: function(aWidgetConfig) {
+        if(this._findAndStoreParentWidget(aWidgetConfig) === true) {
+          return aWidgetConfig.widget.parentWidget.open;
         }
-        return node[0];
+        else {
+          return null;
+        }
       },
 
-      _toggleMenuItem: function(id, isOpen) {
+      _openWidget: function(aWidgetConfig) {
+        // toggle will also capture if the user toggles the widget using the x-button or some unknown means
+        aspect.after(aWidgetConfig.widget.parentWidget, 'toggle', lang.hitch(this, '_toggleMenuItem', aWidgetConfig.menuItem), true);
+        if(this._findAndStoreParentWidget(aWidgetConfig) === true) {
+          aWidgetConfig.widget.parentWidget.show();
+        }
+      },
+
+      _closeWidget: function(aWidgetConfig) {
+        if(this._findAndStoreParentWidget(aWidgetConfig) === true) {
+          aWidgetConfig.widget.parentWidget.hide();
+        }
+      },
+
+      _toggleMenuItem: function(aMenuItem, isOpen) {
         if(isOpen) {
-          this._closeMenuItem(id);
+          domClass.add(aMenuItem, 'open');
         }
         else {
-          this._openMenuItem(id);
+          domClass.remove(aMenuItem, 'open');
         }
-        /*
-        var node = this._getMenuItemById(id);
-        if(parentWidget.open) {
-          this._closeMenuItem(node);
-        }
-        else {
-          this._openMenuItem(node);
-        }
-        */
-      },
-      _openMenuItem: function(id) {
-        var node = this._getMenuItemById(id);
-        domClass.add(node, 'open');
-      },
-      _closeMenuItem: function(id) {
-        var node = this._getMenuItemById(id);
-        domClass.remove(node, 'open');
       }
 
     });
