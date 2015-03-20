@@ -10,9 +10,9 @@ define([
 		draggable: true,
 		toggleable: true,
 		'class': 'floatingWidget',
-		close: function() {
+		close: function () {
 			this.hide();
-		}
+		},
 		focus: function () {},
 		startup: function() {
 			this.inherited(arguments);

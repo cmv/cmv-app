@@ -319,7 +319,6 @@ define([
                 position: 3,
                 options: 'config/find'
             },
-            
             draw: {
                 include: true,
                 id: 'draw',
@@ -334,6 +333,7 @@ define([
                     mapClickMode: true
                 }
             },
+
             measure: {
                 include: true,
                 id: 'measurement',
