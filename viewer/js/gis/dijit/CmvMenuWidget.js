@@ -8,30 +8,18 @@ define([
   'dojo/_base/declare',
   'dojo/_base/html',
   'dojo/_base/lang',
-  'dojo/aspect',
   'dojo/dom-class',
   'dojo/on',
+  'dojo/aspect',
   'dojo/text!./CmvMenuWidget/templates/template.html',
 
   'xstyle/css!./CmvMenuWidget/css/style.css'
 ],
-  function(
-  _TemplatedMixin,
-  _WidgetBase,
-  _WidgetsInTemplateMixin,
-  registry,
-
-  array,
-  declare,
-  html,
-  lang,
-  aspect,
-  domClass,
-  on,
-  template
-) {
+  function(_TemplatedMixin, _WidgetBase, _WidgetsInTemplateMixin, registry, array, declare, html, lang, domClass, on, aspect, template) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
+      // NOTE: CmvMenuWidget requires that the widget implement the open and toggleable properties, and also the toggle method
+      
       widgetsInTemplate: true,
       templateString: template,
       baseClass: 'CmvMenu',
@@ -94,7 +82,6 @@ define([
         aWidgetConfig.menuItem = menuItemNode;
 
         on(menuItemNode, 'click', lang.hitch(this, '_onMenuClick', aWidgetConfig));
-
       },
 
       _onMenuClick: function(aWidgetConfig) {
@@ -159,21 +146,20 @@ define([
       },
 
       _openWidget: function(aWidgetConfig) {
-        // toggle will also capture if the user toggles the widget using the x-button or some unknown means
-        aspect.after(aWidgetConfig.widget.parentWidget, 'toggle', lang.hitch(this, '_toggleMenuItem', aWidgetConfig.menuItem), true);
         if(this._findAndStoreParentWidget(aWidgetConfig) === true) {
-          aWidgetConfig.widget.parentWidget.show();
+          aspect.after(aWidgetConfig.widget.parentWidget, 'toggle', lang.hitch(this, '_onToggle', aWidgetConfig.menuItem), true);
+          aWidgetConfig.widget.parentWidget.toggle(true);
         }
       },
 
       _closeWidget: function(aWidgetConfig) {
         if(this._findAndStoreParentWidget(aWidgetConfig) === true) {
-          aWidgetConfig.widget.parentWidget.hide();
+          aWidgetConfig.widget.parentWidget.toggle(false);
         }
       },
 
-      _toggleMenuItem: function(aMenuItem, isOpen) {
-        if(isOpen) {
+      _onToggle: function(aMenuItem, open) {
+        if(open) {
           domClass.add(aMenuItem, 'open');
         }
         else {

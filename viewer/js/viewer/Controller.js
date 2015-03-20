@@ -433,13 +433,16 @@ define([
 			return fw;
 		},
 		_createFloatingPanelWidget: function(parentId, title, srcNodeRef) {
+			var options = {
+				title: title
+			};
+			if (parentId) {
+				options.id = parentId;
+			}
 			if(!srcNodeRef) {
 	        	 srcNodeRef = domConstruct.create('div', {}, this.map.root, 'first');
 	    	}
-			var pnl = new FloatingWidgetPanel({
-				id: parentId,
-				title: title
-			});
+			var pnl = new FloatingWidgetPanel(options);
 			pnl.placeAt(srcNodeRef);
 			return pnl;
 		},
