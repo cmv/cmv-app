@@ -10,6 +10,9 @@ define([
 		draggable: true,
 		toggleable: true,
 		'class': 'floatingWidget',
+		close: function() {
+			this.hide();
+		}
 		focus: function () {},
 		startup: function() {
 			this.inherited(arguments);
@@ -21,7 +24,7 @@ define([
 			if(arguments.length < 2) {
 				doToggle = true;
 			}
-			// we do not execute the toggle if it was already done by this widget
+			// we do not execute the toggle if we are handling an event that was executed by the  widget
 			if(doToggle) {
 				if(open) {
 					this.show();

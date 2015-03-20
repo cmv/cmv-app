@@ -480,7 +480,7 @@ define([
 				});
 				return;
 			}
-			
+
 			// build a titlePane or floating widget as the parent
 			if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating' || widgetConfig.type === 'gis/dijit/FloatingWidgetPanel') && (widgetConfig.id && widgetConfig.id.length > 0)) {
 				parentId = widgetConfig.id + '_parent';

@@ -278,13 +278,11 @@ define([
                 srcNodeRef: 'cmvMenuNode',
                 path: 'esri/dijit/Legend',
                 title: 'Legend',
-                //open: false,
-                //position: 0,
                 options: {
                     map: true,
                     legendLayerInfos: true
                 }
-            }, 
+            },
             layerControl: {
                 include: true,
                 id: 'layerControl',
@@ -300,7 +298,7 @@ define([
                     vectorReorder: true,
                     overlayReorder: true
                 }
-            }, 
+            },
             bookmarks: {
                 include: true,
                 id: 'bookmarks',
@@ -308,8 +306,6 @@ define([
                 srcNodeRef: 'cmvMenuNode',
                 path: 'gis/dijit/Bookmarks',
                 title: 'Bookmarks',
-                //open: false,
-                //position: 2,
                 options: 'config/bookmarks'
             },
             find: {
@@ -323,6 +319,7 @@ define([
                 position: 3,
                 options: 'config/find'
             },
+            
             draw: {
                 include: true,
                 id: 'draw',
