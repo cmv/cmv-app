@@ -1,10 +1,8 @@
 define([
 	'dojo/_base/declare',
-	'dojo/_base/lang',
-	'dojo/Deferred',
-	'dojo/on'
+	'dojo/Deferred'
 ], function (
-	declare, lang, Deferred, on
+	declare, Deferred
 ) {
 
 	return declare(null, {
@@ -19,16 +17,10 @@ define([
 					file = 'config/' + file;
 				}
 			}
-			on(require, 'error', lang.hitch(this, '_requireError', file, returnDeferred));
 			require([file], function(config){
 				returnDeferred.resolve(config);
 			});
-
 			return returnDeferred;
-		},
-
-		_requireError: function(file, returnDeferred) {
-			returnDeferred.reject('unable to load config: ' + file);
 		}
 
 	});
