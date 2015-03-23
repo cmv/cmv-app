@@ -32,9 +32,6 @@ define([
       startup: function() {
         this.inherited(arguments);
 
-        // do not empty the container node because their may be other widgets in there
-        //html.empty(this.containerNode);
-
         var openMenuItem = null;
         array.forEach(this.widgets, function(aWidgetConfig) {
           var node = this._createMenuItem(aWidgetConfig);

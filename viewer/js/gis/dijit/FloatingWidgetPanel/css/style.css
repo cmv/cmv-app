@@ -1,12 +1,4 @@
 .FloatingWigetPanelContainer {
-  position: absolute;
-  top: 70px;
-  right: 10px;
-  left: auto;
-  bottom: 10px;
-  width: auto;
-  height: auto;
-  z-index: 1;
   overflow: auto;
 }
 
