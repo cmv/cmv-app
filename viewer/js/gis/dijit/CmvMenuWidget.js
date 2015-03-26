@@ -8,14 +8,18 @@ define([
   'dojo/_base/declare',
   'dojo/_base/html',
   'dojo/_base/lang',
+  'dojo/aspect',
   'dojo/dom-class',
   'dojo/on',
-  'dojo/aspect',
   'dojo/text!./CmvMenuWidget/templates/template.html',
+  'dojo/topic',
 
   'xstyle/css!./CmvMenuWidget/css/style.css'
 ],
-  function(_TemplatedMixin, _WidgetBase, _WidgetsInTemplateMixin, registry, array, declare, html, lang, domClass, on, aspect, template) {
+  function(
+  _TemplatedMixin, _WidgetBase, _WidgetsInTemplateMixin, registry,
+  array, declare, html, lang, aspect, domClass, on, template, topic
+) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
       // NOTE: CmvMenuWidget requires that the widget implement the open and toggleable properties, and also the toggle method
@@ -39,12 +43,36 @@ define([
             openMenuItem = node;
           }
         }, this);
+        
         // Since  the dependant widgets are probably not loaded, this call will likely fail. Need a topic for 'widgetLoaded'.
         /*
         if (openMenuItem) {
           this._onMenuClick(openMenuItem);
         }
         */
+
+        this.own(topic.subscribe('cmvmenu/open', lang.hitch(this, '_onTopicOpen')));
+
+      },
+
+      _onTopicOpen: function(data) {
+        var widgetFound = array.some(this.widgets, function(aWidgetConfig) {
+          if(aWidgetConfig.id == data.id) {
+            var isOpen = this._isWidgetOpen(aWidgetConfig);
+            if(isOpen != null)  {
+              if(isOpen !== true) {
+                this._closeWidgetsInSameGroup(aWidgetConfig);
+                // open this widget
+                this._openWidget(aWidgetConfig);
+              }
+            }
+            return true;
+          }
+          return false;
+        }, this);
+        if(widgetFound === false) {
+          console.warn('CMVMenu: requested widget ' + data.id + ' was not found');
+        }
       },
 
       _createMenuItem: function(aWidgetConfig) {
