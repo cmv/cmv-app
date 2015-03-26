@@ -116,6 +116,37 @@ define([
   }],
         // set include:true to load. For titlePane type set position the the desired order in the sidebar
         widgets: {
+            cmvmenu: {
+                include: true,
+                id: 'cmvmenu',
+                type: 'domNode',
+                srcNodeRef: 'cmvMenu',
+                path: 'gis/dijit/CmvMenuWidget',
+                options: {
+                    // iconHeight
+                    // height
+                    widgets: [
+                        {
+                            id: 'legend',
+                            title: 'Legend',
+                            icon: null,
+                            group: 'group1'
+                        }, 
+                        {
+                            id: 'bookmarks',
+                            title: 'Bookmarks',
+                            icon: null,
+                            group: 'group1'
+                        },
+                        {
+                            id: 'help',
+                            title: 'Help',
+                            open: false,
+                            group: null
+                        }
+                    ]
+                }
+            },
             growler: {
                 include: true,
                 id: 'growler',
@@ -243,11 +274,10 @@ define([
             legend: {
                 include: true,
                 id: 'legend',
-                type: 'titlePane',
+                type: 'gis/dijit/FloatingWidgetPanel',
+                srcNodeRef: 'cmvMenuNode',
                 path: 'esri/dijit/Legend',
                 title: 'Legend',
-                open: false,
-                position: 0,
                 options: {
                     map: true,
                     legendLayerInfos: true
@@ -272,11 +302,10 @@ define([
             bookmarks: {
                 include: true,
                 id: 'bookmarks',
-                type: 'titlePane',
+                type: 'gis/dijit/FloatingWidgetPanel',
+                srcNodeRef: 'cmvMenuNode',
                 path: 'gis/dijit/Bookmarks',
                 title: 'Bookmarks',
-                open: false,
-                position: 2,
                 options: 'config/bookmarks'
             },
             find: {
@@ -304,6 +333,7 @@ define([
                     mapClickMode: true
                 }
             },
+
             measure: {
                 include: true,
                 id: 'measurement',
@@ -409,7 +439,6 @@ define([
                 title: 'Help',
                 options: {}
             }
-
         }
     };
 });
