@@ -132,3 +132,14 @@
 .layerControlDijit .esriLegendServiceLabel {
     display: none;
 }
+
+.layerControlDijit .menuLink {
+    color: #369;
+    text-decoration: none;
+}
+
+.layerControlDijit .menuLink:hover {
+    color: #5196DB;
+    text-decoration: underline;
+    cursor: pointer;
+}
