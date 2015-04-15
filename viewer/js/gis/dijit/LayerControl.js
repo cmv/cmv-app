@@ -157,7 +157,8 @@ define([
                     noTransparency: null,
                     swipe: null,
                     expanded: false,
-                    sublayers: true
+                    sublayers: true,
+                    menu: this.subLayerMenu[layerInfo.type]
                 }, layerInfo.controlOptions)
             });
             layerControl.startup();
