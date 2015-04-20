@@ -109,6 +109,9 @@ define([
                 imageParameters: imageParameters,
                 showInLegend: false
             },
+            legendLayerInfos: {
+                exclude: true
+            },
             layerControlLayerInfos: {
                 swipe: true,
                 metadataUrl: true,

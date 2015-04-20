@@ -265,11 +265,11 @@ define([
 			var l = new Layer(layer.url, layer.options);
 			this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
 			//Legend LayerInfos array
-			var showInLegend = true;
-			if ( typeof layer.options.showInLegend !== 'undefined' ) {
-				showInLegend = layer.options.showInLegend;
-			}
-			if ( showInLegend ) {
+			var excludeLayerFromLegend = false;
+            if ( typeof layer.legendLayerInfos !== 'undefined' && typeof layer.legendLayerInfos.exclude !== 'undefined' ) {
+                excludeLayerFromLegend = layer.legendLayerInfos.exclude;
+            }
+			if ( !excludeLayerFromLegend ) {
 				this.legendLayerInfos.unshift (
 					{ //unshift instead of push to keep layer ordering in legend intact
 						layer: l,
