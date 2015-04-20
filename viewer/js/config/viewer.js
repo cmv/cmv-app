@@ -117,8 +117,7 @@ define([
                 id: 'DamageAssessment',
                 opacity: 1.0,
                 visible: true,
-                imageParameters: imageParameters,
-                showInLegend: false
+                imageParameters: imageParameters
             },
             legendLayerInfos: {
                 exclude: true
