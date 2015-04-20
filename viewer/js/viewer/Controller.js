@@ -265,10 +265,18 @@ define([
 			var l = new Layer(layer.url, layer.options);
 			this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
 			//Legend LayerInfos array
-			this.legendLayerInfos.unshift({ //unshift instead of push to keep layer ordering in legend intact
-				layer: l,
-				title: layer.title || null
-			});
+			var showInLegend = true;
+			if ( typeof layer.options.showInLegend !== 'undefined' ) {
+				showInLegend = layer.options.showInLegend;
+			}
+			if ( showInLegend ) {
+				this.legendLayerInfos.unshift (
+					{ //unshift instead of push to keep layer ordering in legend intact
+						layer: l,
+						title: layer.title || null
+					}
+				);
+			}
 			//LayerControl LayerInfos array
 			this.layerControlLayerInfos.unshift({ //unshift instead of push to keep layer ordering in LayerControl intact
 				layer: l,

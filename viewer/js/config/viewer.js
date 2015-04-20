@@ -106,7 +106,8 @@ define([
                 id: 'DamageAssessment',
                 opacity: 1.0,
                 visible: true,
-                imageParameters: imageParameters
+                imageParameters: imageParameters,
+                showInLegend: false
             },
             layerControlLayerInfos: {
                 swipe: true,
