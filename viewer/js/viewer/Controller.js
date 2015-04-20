@@ -270,12 +270,15 @@ define([
                 excludeLayerFromLegend = layer.legendLayerInfos.exclude;
             }
 			if ( !excludeLayerFromLegend ) {
-				this.legendLayerInfos.unshift (
-					{ //unshift instead of push to keep layer ordering in legend intact
-						layer: l,
-						title: layer.title || null
-					}
-				);
+                var configuredLayerInfo = {};
+                if ( typeof layer.legendLayerInfos !== 'undefined' && typeof layer.legendLayerInfos.layerInfo !== 'undefined' ) {
+                    configuredLayerInfo = layer.legendLayerInfos.layerInfo;
+                }
+                var layerInfo = lang.mixin( {
+                    layer: l,
+                    title: layer.title || null
+                }, configuredLayerInfo );
+				this.legendLayerInfos.unshift ( layerInfo ); //unshift instead of push to keep layer ordering in legend intact
 			}
 			//LayerControl LayerInfos array
 			this.layerControlLayerInfos.unshift({ //unshift instead of push to keep layer ordering in LayerControl intact
