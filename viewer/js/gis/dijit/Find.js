@@ -1,4 +1,4 @@
-define (
+define(
     [
         'dojo/_base/declare',
         'dijit/_WidgetBase',
@@ -35,8 +35,8 @@ define (
         OnDemandGrid, Selection, Keyboard, ColumnResizer, GraphicsLayer, symbolUtils, graphicsUtils, FindTask, FindParameters, Extent,
         FindTemplate, i18n
     ) {
-        return declare (
-            [ _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin ], {
+        return declare(
+            [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
                 widgetsInTemplate: true,
                 templateString: FindTemplate,
                 baseClass: 'gis_AdvancedFindDijit',
@@ -51,31 +51,31 @@ define (
                         type: 'esriSMS',
                         style: 'esriSMSCircle',
                         size: 25,
-                        color: [ 0, 255, 255, 32 ],
+                        color: [0, 255, 255, 32],
                         angle: 0,
                         xoffset: 0,
                         yoffset: 0,
                         outline: {
                             type: 'esriSLS',
                             style: 'esriSLSSolid',
-                            color: [ 0, 255, 255, 255 ],
+                            color: [0, 255, 255, 255],
                             width: 2
                         }
                     },
                     polyline: {
                         type: 'esriSLS',
                         style: 'esriSLSSolid',
-                        color: [ 0, 255, 255, 255 ],
+                        color: [0, 255, 255, 255],
                         width: 3
                     },
                     polygon: {
                         type: 'esriSFS',
                         style: 'esriSFSSolid',
-                        color: [ 0, 255, 255, 32 ],
+                        color: [0, 255, 255, 32],
                         outline: {
                             type: 'esriSLS',
                             style: 'esriSLSSolid',
-                            color: [ 0, 255, 255, 255 ],
+                            color: [0, 255, 255, 255],
                             width: 3
                         }
                     }
@@ -85,50 +85,50 @@ define (
                         type: 'esriSMS',
                         style: 'esriSMSCircle',
                         size: 25,
-                        color: [ 4, 156, 219, 32 ],
+                        color: [4, 156, 219, 32],
                         angle: 0,
                         xoffset: 0,
                         yoffset: 0,
                         outline: {
                             type: 'esriSLS',
                             style: 'esriSLSSolid',
-                            color: [ 4, 156, 219, 255 ],
+                            color: [4, 156, 219, 255],
                             width: 2
                         }
                     },
                     polyline: {
                         type: 'esriSLS',
                         style: 'esriSLSSolid',
-                        color: [ 4, 156, 219, 255 ],
+                        color: [4, 156, 219, 255],
                         width: 3
                     },
                     polygon: {
                         type: 'esriSFS',
                         style: 'esriSFSSolid',
-                        color: [ 4, 156, 219, 32 ],
+                        color: [4, 156, 219, 32],
                         outline: {
                             type: 'esriSLS',
                             style: 'esriSLSSolid',
-                            color: [ 4, 156, 219, 255 ],
+                            color: [4, 156, 219, 255],
                             width: 3
                         }
                     }
                 },
                 postCreate: function () {
-                    this.inherited (arguments);
-                    this.initializeGlobalVariables ();
-                    this.addKeyUpHandlerToSearchInput ();
+                    this.inherited(arguments);
+                    this.initializeGlobalVariables();
+                    this.addKeyUpHandlerToSearchInput();
                     this.initializeQueries();
-                    this.updateSearchPrompt ();
+                    this.updateSearchPrompt();
                 },
                 initializeGlobalVariables: function () {
                     this.queryIdx = 0;
                     this.currentQueryEventHandlers = [];
                     this.gridColumns = null;
-                    if (!this.selectionMode){
+                    if (!this.selectionMode) {
                         this.selectionMode = 'single';
                     }
-                    if (!this.zoomExtentFactor){
+                    if (!this.zoomExtentFactor) {
                         this.zoomExtentFactor = 1.5;
                     }
                     if (!this.spatialReference) {
@@ -139,12 +139,12 @@ define (
                     }
                 },
                 addKeyUpHandlerToSearchInput: function () {
-                    this.own (
-                        on (
-                            this.searchTextDijit, 'keyup', lang.hitch (
+                    this.own(
+                        on(
+                            this.searchTextDijit, 'keyup', lang.hitch(
                                 this, function (evt) {
                                     if (evt.keyCode === keys.ENTER) {
-                                        this.search ();
+                                        this.search();
                                     }
                                 }
                             )
@@ -152,19 +152,18 @@ define (
                     );
                 },
                 initializeQueries: function () {
-                    var k = 0, queryLen = this.queries.length;
+                    var k = 0,
+                        queryLen = this.queries.length;
                     for (k = 0; k < queryLen; k++) {
                         this.queries[k].id = k;
                     }
                     this.querySelectDom.style.display = 'none';
                     if (queryLen > 1) {
-                        var queryStore = new Memory (
-                            {
-                                data: this.queries
-                            }
-                        );
-                        this.querySelectDijit.set ('store', queryStore);
-                        this.querySelectDijit.set ('value', this.queryIdx);
+                        var queryStore = new Memory({
+                            data: this.queries
+                        });
+                        this.querySelectDijit.set('store', queryStore);
+                        this.querySelectDijit.set('value', this.queryIdx);
                         this.querySelectDom.style.display = 'block';
                     }
                 },
@@ -184,13 +183,13 @@ define (
                 executeFindTask: function () {
                     var url = this.getQueryInput().query.url;
                     var findParams = this.getFindParams();
-                    var findTask = new FindTask (url);
-                    findTask.execute (findParams,lang.hitch (this,this.showResults));
+                    var findTask = new FindTask(url);
+                    findTask.execute(findParams, lang.hitch(this, this.showResults));
                 },
                 getQueryInput: function () {
                     return {
                         query: this.queries[this.queryIdx] || {},
-                        searchText: this.searchTextDijit.get ('value')
+                        searchText: this.searchTextDijit.get('value')
                     };
                 },
                 queryConfigurationIsInvalid: function () {
@@ -215,22 +214,22 @@ define (
                     return false;
                 },
                 displayInvalidQueryConfigurationMessage: function () {
-                    this.displayFindMessage ('There is a problem with the query configuration.');
+                    this.displayFindMessage('There is a problem with the query configuration.');
                     return;
                 },
                 displayInvalidUserInputMessage: function () {
                     var minChars = this.getQueryInput().query.minChars;
-                    this.displayFindMessage ('You must enter at least ' + minChars + ' characters.');
+                    this.displayFindMessage('You must enter at least ' + minChars + ' characters.');
                     return;
                 },
                 displayFindMessage: function (message) {
-                    domConstruct.empty (this.findResultsNode);
+                    domConstruct.empty(this.findResultsNode);
                     this.findResultsNode.innerHTML = message;
                     this.findResultsNode.style.display = 'block';
                 },
                 getFindParams: function () {
                     var queryInput = this.getQueryInput();
-                    var findParams = new FindParameters ();
+                    var findParams = new FindParameters();
                     findParams.returnGeometry = true;
                     findParams.layerIds = queryInput.query.layerIds;
                     findParams.searchFields = queryInput.query.searchFields;
@@ -244,50 +243,46 @@ define (
                 },
                 createOrResetResultsGrid: function () {
                     if (!this.resultsGrid) {
-                        this.createResultsStore ();
-                        this.createResultsGrid ();
-                        this.attachStandardEventHandlersToResultsGrid ();
+                        this.createResultsStore();
+                        this.createResultsGrid();
+                        this.attachStandardEventHandlersToResultsGrid();
                     }
-                    this.clearResultsGrid ();
-                    this.clearFeatures ();
-                    this.resetResultsGridColumns ();
-                    this.resetResultsGridSort ();
+                    this.clearResultsGrid();
+                    this.clearFeatures();
+                    this.resetResultsGridColumns();
+                    this.resetResultsGridSort();
                     this.resetGridSelectionMode();
                     this.attachCustomEventHandlersToResultsGrid();
                 },
                 createResultsStore: function () {
                     if (!this.resultsStore) {
-                        this.resultsStore = new Memory (
-                            {
-                                idProperty: 'id',
-                                data: []
-                            }
-                        );
+                        this.resultsStore = new Memory({
+                            idProperty: 'id',
+                            data: []
+                        });
                     }
                 },
                 createResultsGrid: function () {
-                    var Grid = declare ([ OnDemandGrid, Keyboard, Selection, ColumnResizer ]);
-                    this.resultsGrid = new Grid (
-                        {
-                            selectionMode: this.selectionMode,
-                            cellNavigation: false,
-                            showHeader: true,
-                            store: this.resultsStore
-                        }, this.findResultsGrid
-                    );
-                    this.resultsGrid.startup ();
+                    var Grid = declare([OnDemandGrid, Keyboard, Selection, ColumnResizer]);
+                    this.resultsGrid = new Grid({
+                        selectionMode: this.selectionMode,
+                        cellNavigation: false,
+                        showHeader: true,
+                        store: this.resultsStore
+                    }, this.findResultsGrid);
+                    this.resultsGrid.startup();
                 },
                 resetResultsGridColumns: function () {
                     if (!this.resultsGrid) {
                         return;
                     }
-                    var columns = this.queries[ this.queryIdx ].gridColumns || {
+                    var columns = this.queries[this.queryIdx].gridColumns || {
                         layerName: 'Layer',
                         foundFieldName: 'Field',
                         value: 'Result'
                     };
                     if (columns instanceof Array) {
-                        columns = array.filter (
+                        columns = array.filter(
                             columns, function (column) {
                                 if (typeof column.visible === 'undefined') {
                                     column.visible = true;
@@ -296,52 +291,52 @@ define (
                             }
                         );
                     }
-                    this.resultsGrid.setColumns (columns);
+                    this.resultsGrid.setColumns(columns);
                 },
                 resetResultsGridSort: function () {
                     if (!this.resultsGrid) {
                         return;
                     }
                     var sort = this.queries[this.queryIdx].sort || [
-                            {
-                                attribute: 'value',
-                                descending: false
+                        {
+                            attribute: 'value',
+                            descending: false
                             }
                         ];
-                    this.resultsGrid.set ('sort', sort);
+                    this.resultsGrid.set('sort', sort);
                 },
                 resetGridSelectionMode: function () {
                     if (!this.resultsGrid) {
                         return;
                     }
-                    var selectionMode = this.queries[ this.queryIdx ].selectionMode || this.selectionMode;
-                    this.resultsGrid.set( 'selectionMode', selectionMode );
+                    var selectionMode = this.queries[this.queryIdx].selectionMode || this.selectionMode;
+                    this.resultsGrid.set('selectionMode', selectionMode);
                 },
                 attachStandardEventHandlersToResultsGrid: function () {
                     if (!this.resultsGrid) {
                         return;
                     }
-                    this.own (
-                        this.resultsGrid.on ('dgrid-select', lang.hitch (this, 'onResultsGridSelect'))
+                    this.own(
+                        this.resultsGrid.on('dgrid-select', lang.hitch(this, 'onResultsGridSelect'))
                     );
-                    this.own (
-                        this.resultsGrid.on ('dgrid-deselect', lang.hitch (this, 'onResultsGridDeselect'))
+                    this.own(
+                        this.resultsGrid.on('dgrid-deselect', lang.hitch(this, 'onResultsGridDeselect'))
                     );
-                    this.own (
-                        this.resultsGrid.on ('.dgrid-row:dblclick', lang.hitch (this, 'onResultsGridRowClick'))
+                    this.own(
+                        this.resultsGrid.on('.dgrid-row:dblclick', lang.hitch(this, 'onResultsGridRowClick'))
                     );
                 },
                 attachCustomEventHandlersToResultsGrid: function () {
                     if (!this.resultsGrid) {
                         return;
                     }
-                    array.forEach(this.currentQueryEventHandlers, function(handler) {
+                    array.forEach(this.currentQueryEventHandlers, function (handler) {
                         handler.handle.remove();
-                    } );
+                    });
                     var queryEventHandlers = this.queries[this.queryIdx].customGridEventHandlers || [];
-                    array.forEach(queryEventHandlers, lang.hitch(this, function(handler) {
+                    array.forEach(queryEventHandlers, lang.hitch(this, function (handler) {
                         handler.handle = this.resultsGrid.on(handler.event, lang.hitch(this, handler.handler));
-                    } ) );
+                    }));
                     this.currentQueryEventHandlers = queryEventHandlers;
                 },
                 showResults: function (results) {
@@ -352,29 +347,27 @@ define (
                         resultText = this.results.length + ' ' + this.i18n.resultsLabel.labelPrefix + s + ' ' + this.i18n.resultsLabel.labelSuffix;
                         this.createGraphicsLayerAndSymbols();
                         this.parseGridColumnProperties();
-                        this.addResultsToGraphicsLayer ();
-                        this.zoomToGraphics (this.graphicsLayer.graphics);
-                        this.showResultsGrid ();
+                        this.addResultsToGraphicsLayer();
+                        this.zoomToGraphics(this.graphicsLayer.graphics);
+                        this.showResultsGrid();
                     }
                     this.displayFindMessage(resultText);
                 },
                 createGraphicsLayerAndSymbols: function () {
                     if (!this.graphicsLayer) {
-                        this.graphicsLayer = this.createGraphicsLayer ();
+                        this.graphicsLayer = this.createGraphicsLayer();
                     }
                     if (!this.graphicsSymbols) {
-                        this.graphicsSymbols = this.createGraphicsSymbols ();
+                        this.graphicsSymbols = this.createGraphicsSymbols();
                     }
                 },
                 createGraphicsLayer: function () {
-                    var graphicsLayer = new GraphicsLayer (
-                        {
-                            id: this.id + '_findGraphics',
-                            title: 'Find'
-                        }
-                    );
-                    graphicsLayer.on( 'click', lang.hitch( this, 'onGraphicsLayerClick' ) );
-                    this.map.addLayer ( graphicsLayer );
+                    var graphicsLayer = new GraphicsLayer({
+                        id: this.id + '_findGraphics',
+                        title: 'Find'
+                    });
+                    graphicsLayer.on('click', lang.hitch(this, 'onGraphicsLayerClick'));
+                    this.map.addLayer(graphicsLayer);
                     return graphicsLayer;
                 },
                 onGraphicsLayerClick: function (event) {
@@ -388,25 +381,25 @@ define (
                 },
                 createGraphicsSymbols: function () {
                     var graphicSymbols = {}, resultSymbolDefinitions, selectionSymbolDefinitions;
-                    resultSymbolDefinitions = lang.mixin (this.defaultResultsSymbols, this.resultsSymbols || {});
+                    resultSymbolDefinitions = lang.mixin(this.defaultResultsSymbols, this.resultsSymbols || {});
                     graphicSymbols.resultsSymbols = {};
-                    graphicSymbols.resultsSymbols.point = symbolUtils.fromJson (resultSymbolDefinitions.point);
-                    graphicSymbols.resultsSymbols.polyline = symbolUtils.fromJson (resultSymbolDefinitions.polyline);
-                    graphicSymbols.resultsSymbols.polygon = symbolUtils.fromJson (resultSymbolDefinitions.polygon);
-                    selectionSymbolDefinitions = lang.mixin (
+                    graphicSymbols.resultsSymbols.point = symbolUtils.fromJson(resultSymbolDefinitions.point);
+                    graphicSymbols.resultsSymbols.polyline = symbolUtils.fromJson(resultSymbolDefinitions.polyline);
+                    graphicSymbols.resultsSymbols.polygon = symbolUtils.fromJson(resultSymbolDefinitions.polygon);
+                    selectionSymbolDefinitions = lang.mixin(
                         this.defaultSelectionSymbols, this.selectionSymbols || {}
                     );
                     graphicSymbols.selectionSymbols = {};
-                    graphicSymbols.selectionSymbols.point = symbolUtils.fromJson (selectionSymbolDefinitions.point);
-                    graphicSymbols.selectionSymbols.polyline = symbolUtils.fromJson (selectionSymbolDefinitions.polyline);
-                    graphicSymbols.selectionSymbols.polygon = symbolUtils.fromJson (selectionSymbolDefinitions.polygon);
+                    graphicSymbols.selectionSymbols.point = symbolUtils.fromJson(selectionSymbolDefinitions.point);
+                    graphicSymbols.selectionSymbols.polyline = symbolUtils.fromJson(selectionSymbolDefinitions.polyline);
+                    graphicSymbols.selectionSymbols.polygon = symbolUtils.fromJson(selectionSymbolDefinitions.polygon);
                     return graphicSymbols;
                 },
                 parseGridColumnProperties: function () {
                     if (this.queries[this.queryIdx].gridColumns) {
-                        array.forEach (
+                        array.forEach(
                             this.results, function (result) {
-                                array.forEach (
+                                array.forEach(
                                     this.queries[this.queryIdx].gridColumns, function (column) {
                                         var shouldGetValueFromAttributes = function (column, result) {
                                             if (column.field && !result.hasOwnProperty(column.field) && result.feature.attributes.hasOwnProperty(column.field)) {
@@ -420,7 +413,7 @@ define (
                                             }
                                             return false;
                                         };
-                                        if (shouldGetValueFromAttributes(column, this) ) {
+                                        if (shouldGetValueFromAttributes(column, this)) {
                                             this[column.field] = this.feature.attributes[column.field];
                                         } else if (shouldGetValueFromGetFunction(column, this)) {
                                             this[column.field] = column.get(this);
@@ -433,165 +426,163 @@ define (
                 },
                 addResultsToGraphicsLayer: function () {
                     var unique = 0;
-                    array.forEach (
+                    array.forEach(
                         this.results, function (result) {
                             result.id = unique;
                             result.feature.storeid = result.id;
                             unique++;
-                            this.setGraphicSymbol (result.feature, false);
-                            this.graphicsLayer.add (result.feature);
+                            this.setGraphicSymbol(result.feature, false);
+                            this.graphicsLayer.add(result.feature);
                         }, this
                     );
                 },
                 showResultsGrid: function () {
                     var queryInput = this.getQueryInput();
-                    this.resultsGrid.store.setData (this.results);
-                    this.resultsGrid.refresh ();
+                    this.resultsGrid.store.setData(this.results);
+                    this.resultsGrid.refresh();
                     var lyrDisplay = 'block';
                     if (queryInput.query.layerIds.length === 1) {
                         lyrDisplay = 'none';
                     }
-                    this.resultsGrid.styleColumn ('layerName', 'display:' + lyrDisplay);
+                    this.resultsGrid.styleColumn('layerName', 'display:' + lyrDisplay);
                     if (queryInput.query && queryInput.query.hideGrid !== true) {
                         this.findResultsGrid.style.display = 'block';
                     }
                 },
                 onResultsGridSelect: function (event) {
-                    array.forEach (
-                        event.rows, lang.hitch (
+                    array.forEach(
+                        event.rows, lang.hitch(
                             this, function (row) {
                                 var feature = row.data.feature;
-                                this.setGraphicSymbol (feature, true);
-                                if (feature && feature.getDojoShape ()) {
-                                    feature.getDojoShape ().moveToFront ();
+                                this.setGraphicSymbol(feature, true);
+                                if (feature && feature.getDojoShape()) {
+                                    feature.getDojoShape().moveToFront();
                                 }
                             }
                         )
                     );
-                    this.graphicsLayer.redraw ();
+                    this.graphicsLayer.redraw();
                     if (this.zoomOptions.select) {
-                        this.zoomToSelectedGraphics ();
+                        this.zoomToSelectedGraphics();
                     }
                 },
                 onResultsGridDeselect: function (event) {
-                    array.forEach (
-                        event.rows, lang.hitch (
+                    array.forEach(
+                        event.rows, lang.hitch(
                             this, function (row) {
                                 var feature = row.data.feature;
-                                this.setGraphicSymbol (feature, false);
+                                this.setGraphicSymbol(feature, false);
                             }
                         )
                     );
-                    this.graphicsLayer.redraw ();
+                    this.graphicsLayer.redraw();
                     if (this.zoomOptions.deselect) {
-                        this.zoomToSelectedGraphics ();
+                        this.zoomToSelectedGraphics();
                     }
                 },
                 onResultsGridRowClick: function (event) {
-                    var row = this.resultsGrid.row ( event );
+                    var row = this.resultsGrid.row(event);
                     var feature = row.data.feature;
                     setTimeout(lang.hitch(this, function () {
                         if (this.resultsGrid.selection.hasOwnProperty(row.id)) {
-                            this.zoomToGraphics([ feature ]);
+                            this.zoomToGraphics([feature]);
                         }
                     }), 100);
                 },
                 setGraphicSymbol: function (graphic, isSelected) {
                     var symbol = isSelected ? this.graphicsSymbols.selectionSymbols[graphic.geometry.type] : this.graphicsSymbols.resultsSymbols[graphic.geometry.type];
-                    graphic.setSymbol (symbol);
+                    graphic.setSymbol(symbol);
                 },
                 zoomToSelectedGraphics: function () {
                     var selectedGraphics = [];
                     var selection = this.resultsGrid.selection;
                     for (var id in selection) {
-                        if (selection.hasOwnProperty (id)) {
-                            selectedGraphics.push (this.resultsGrid.row (id).data.feature);
+                        if (selection.hasOwnProperty(id)) {
+                            selectedGraphics.push(this.resultsGrid.row(id).data.feature);
                         }
                     }
                     if (selectedGraphics.length === 0) {
                         return;
                     }
-                    this.zoomToGraphics (selectedGraphics);
+                    this.zoomToGraphics(selectedGraphics);
                 },
                 zoomToGraphics: function (graphics) {
                     var zoomExtent = null;
                     if (graphics.length > 1) {
-                        zoomExtent = graphicsUtils.graphicsExtent (graphics);
+                        zoomExtent = graphicsUtils.graphicsExtent(graphics);
                     } else if (graphics.length === 1) {
-                        zoomExtent = this.getExtentFromGraphic (graphics[ 0 ]);
+                        zoomExtent = this.getExtentFromGraphic(graphics[0]);
                     }
                     if (zoomExtent) {
-                        this.setMapExtent (zoomExtent);
+                        this.setMapExtent(zoomExtent);
                     }
                 },
                 getExtentFromGraphic: function (graphic) {
                     var extent = null;
                     switch (graphic.geometry.type) {
-                        case 'point':
-                            extent = this.getExtentFromPoint (graphic);
-                            break;
-                        default:
-                            extent = graphicsUtils.graphicsExtent ([graphic]);
-                            break;
+                    case 'point':
+                        extent = this.getExtentFromPoint(graphic);
+                        break;
+                    default:
+                        extent = graphicsUtils.graphicsExtent([graphic]);
+                        break;
                     }
                     return extent;
                 },
                 getExtentFromPoint: function (point) {
                     var sz = this.pointExtentSize; // hack
                     var pointGeometry = point.geometry;
-                    return new Extent (
-                        {
-                            'xmin': pointGeometry.x - sz,
-                            'ymin': pointGeometry.y - sz,
-                            'xmax': pointGeometry.x + sz,
-                            'ymax': pointGeometry.y + sz,
-                            'spatialReference': {
-                                wkid: this.spatialReference
-                            }
+                    return new Extent({
+                        'xmin': pointGeometry.x - sz,
+                        'ymin': pointGeometry.y - sz,
+                        'xmax': pointGeometry.x + sz,
+                        'ymax': pointGeometry.y + sz,
+                        'spatialReference': {
+                            wkid: this.spatialReference
                         }
-                    );
+                    });
                 },
                 setMapExtent: function (extent) {
-                    this.map.setExtent (extent.expand (this.zoomExtentFactor));
+                    this.map.setExtent(extent.expand(this.zoomExtentFactor));
                 },
                 clearResults: function () {
                     this.results = null;
-                    this.clearResultsGrid ();
-                    this.clearFeatures ();
-                    this.searchFormDijit.reset ();
-                    this.querySelectDijit.setValue (this.queryIdx);
-                    domConstruct.empty (this.findResultsNode);
+                    this.clearResultsGrid();
+                    this.clearFeatures();
+                    this.searchFormDijit.reset();
+                    this.querySelectDijit.setValue(this.queryIdx);
+                    domConstruct.empty(this.findResultsNode);
                 },
                 clearResultsGrid: function () {
                     if (this.resultStore) {
-                        this.resultsStore.setData ([]);
+                        this.resultsStore.setData([]);
                     }
                     if (this.resultsGrid) {
-                        this.resultsGrid.refresh ();
+                        this.resultsGrid.refresh();
                     }
                     this.findResultsNode.style.display = 'none';
                     this.findResultsGrid.style.display = 'none';
                 },
                 clearFeatures: function () {
                     if (this.graphicsLayer) {
-                        this.graphicsLayer.clear ();
+                        this.graphicsLayer.clear();
                     }
                 },
                 _onQueryChange: function (queryIdx) {
                     if (queryIdx >= 0 && queryIdx < this.queries.length) {
                         this.queryIdx = queryIdx;
-                        this.updateSearchPrompt ();
+                        this.updateSearchPrompt();
                     }
                 },
                 updateSearchPrompt: function () {
                     var prompt = this.queries[this.queryIdx].prompt || i18n.searchText.placeholder;
-                    this.searchTextDijit.set ('placeholder', prompt);
-                    this.searchTextDijit.set ('value', null);
+                    this.searchTextDijit.set('placeholder', prompt);
+                    this.searchTextDijit.set('value', null);
                 },
-                onZoomOptionsSelectChange: function(value){
+                onZoomOptionsSelectChange: function (value) {
                     this.zoomOptions.select = value;
                 },
-                onZoomOptionsDeselectChange: function(value){
+                onZoomOptionsDeselectChange: function (value) {
                     this.zoomOptions.deselect = value;
                 }
             }
