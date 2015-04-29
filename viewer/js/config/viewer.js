@@ -29,11 +29,6 @@ define([
             zoom: 5,
             sliderStyle: 'small'
         },
-        panes: {
-            left: {
-                splitter: true
-            }
-        },
         // panes: {
         // 	left: {
         // 		splitter: true
