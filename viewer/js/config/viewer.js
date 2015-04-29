@@ -290,8 +290,8 @@ define([
                 type: 'titlePane',
                 canFloat: true,
                 path: 'gis/dijit/Find',
-                title: 'Advanced Find',
-                open: true,
+                title: 'Find',
+                open: false,
                 position: 3,
                 options: 'config/find'
             },
