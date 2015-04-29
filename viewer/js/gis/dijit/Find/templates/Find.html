@@ -9,6 +9,10 @@
                 <label>${i18n.searchText.label}:</label><br/>
     			<input type="text" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-attach-point="searchTextDijit" data-dojo-props="name:'searchText',trim:true,required:true,value:'',placeholder:'${i18n.searchText.placeholder}','class':'searchText'" /><br/>
             </div>
+            <div data-dojo-attach-point="queryContainsDom">
+                <input type="checkbox" data-dojo-attach-point="containsSearchText" data-dojo-type="dijit/form/CheckBox" data-dojo-props="'class':'optionsCheckBox'"/>
+                <label>${i18n.exactMatches}</label>
+            </div>
 
             <div class="buttonActionBar">
 
@@ -20,16 +24,12 @@
                     ${i18n.searchButton.label}
                 </div>
 
-                <div data-dojo-type="dijit/form/DropDownButton" data-dojo-props="iconClass:'fa fa-cog fa-fw',showLabel:true,'class':'actionBarButton'" data-dojo-attach-point="layoutDropDownDijit">
+                <div data-dojo-type="dijit/form/DropDownButton" data-dojo-props="iconClass:'fa fa-cog fa-fw',showLabel:true,'class':'actionBarButton',style:'display:none;'" data-dojo-attach-point="optionsDropDownDijit">
                     <span>
                         ${i18n.optionsLabel}
                     </span>
                     <div data-dojo-type="dijit/TooltipDialog">
                         <div style="width:260px;">
-                            <div data-dojo-attach-point="queryContainsDom">
-                                <input type="checkbox" data-dojo-attach-point="containsSearchText" data-dojo-type="dijit/form/CheckBox" data-dojo-props="'class':'optionsCheckBox'"/>
-                                <label>${i18n.exactMatches}</label>
-                            </div>
                             <div data-dojo-attach-point="zoomOptionsSelectDom">
                                 <input type="checkbox" data-dojo-attach-point="zoomOptionsSelect" data-dojo-type="dijit/form/CheckBox" data-dojo-props="'class':'optionsCheckBox','checked':${zoomOptions.select}" data-dojo-attach-event="onChange:onZoomOptionsSelectChange"/>
                                 <label>${i18n.zoomOnSelect}</label>

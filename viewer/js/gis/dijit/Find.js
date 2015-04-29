@@ -9,6 +9,7 @@ define(
         'dojo/_base/array',
         'dojo/on',
         'dojo/keys',
+        'dojo/dom-style',
         'dojo/store/Memory',
         'dgrid/OnDemandGrid',
         'dgrid/Selection',
@@ -31,7 +32,7 @@ define(
         'dijit/form/CheckBox',
         'xstyle/css!./Find/css/Find.css'
     ], function (
-        declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct, lang, array, on, keys, Memory,
+        declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct, lang, array, on, keys, domStyle, Memory,
         OnDemandGrid, Selection, Keyboard, ColumnResizer, GraphicsLayer, symbolUtils, graphicsUtils, FindTask, FindParameters, Extent,
         FindTemplate, i18n
     ) {
@@ -42,6 +43,7 @@ define(
                 baseClass: 'gis_AdvancedFindDijit',
                 i18n: i18n,
                 spatialReference: null,
+                showOptionsButton: false,
                 zoomOptions: {
                     select: true,
                     deselect: false
@@ -116,6 +118,9 @@ define(
                 },
                 postCreate: function () {
                     this.inherited(arguments);
+                    if (this.showOptionsButton) {
+                        domStyle.set(this.optionsDropDownDijit.domNode, 'display', 'inline-block');
+                    }
                     this.initializeGlobalVariables();
                     this.addKeyUpHandlerToSearchInput();
                     this.initializeQueries();

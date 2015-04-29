@@ -21,7 +21,7 @@ define({
            labelSuffix: 'found'
        },
        noResultsLabel: 'No results found.',
-       optionsLabel: 'Settings',
+       optionsLabel: 'Options',
        zoomOnSelect: 'Zoom on select',
        zoomOnDeselect: 'Zoom on deselect'
    }
