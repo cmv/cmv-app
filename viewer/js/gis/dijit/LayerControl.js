@@ -66,7 +66,11 @@ define([
             csv: './LayerControl/controls/CSV',
             georss: './LayerControl/controls/GeoRSS',
             wms: './LayerControl/controls/WMS',
-            kml: './LayerControl/controls/KML'
+            kml: './LayerControl/controls/KML',
+            webtiled: './LayerControl/controls/WebTiled',
+            imagevector: './LayerControl/controls/ImageVector',
+            raster: './LayerControl/controls/Raster',
+            stream: './LayerControl/controls/Stream'
         },
         constructor: function (options) {
             options = options || {};

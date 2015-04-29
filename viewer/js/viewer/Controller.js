@@ -226,15 +226,20 @@ define([
 			this.layers = [];
 			var layerTypes = {
 				csv: 'CSV',
+				dataadapter: 'DataAdapterFeature', //untested
 				dynamic: 'ArcGISDynamicMapService',
 				feature: 'Feature',
 				georss: 'GeoRSS',
 				image: 'ArcGISImageService',
+				imagevector: 'ArcGISImageServiceVector',
 				kml: 'KML',
 				label: 'Label', //untested
 				mapimage: 'MapImage', //untested
 				osm: 'OpenStreetMap',
+				raster: 'Raster',
+				stream: 'Stream',
 				tiled: 'ArcGISTiledMapService',
+				webtiled: 'WebTiled',
 				wms: 'WMS',
 				wmts: 'WMTS' //untested
 			};
