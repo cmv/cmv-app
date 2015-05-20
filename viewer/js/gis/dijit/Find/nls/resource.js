@@ -19,7 +19,11 @@ define({
            multipleResultsSuffix: 's',
            labelPrefix: 'Result',
            labelSuffix: 'found'
-       }
+       },
+       noResultsLabel: 'No results found.',
+       optionsLabel: 'Options',
+       zoomOnSelect: 'Zoom on select',
+       zoomOnDeselect: 'Zoom on deselect'
    }
 });
 
