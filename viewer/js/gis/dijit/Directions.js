@@ -24,7 +24,16 @@ define([
                 map: this.map
             }, this.options), this.directionsNode);
             this.directions.startup();
-            this.directions._activateButton.style.display = 'none'; //temp fix for 3.12 map click button.
+
+             //temp fix for 3.12 and 3.13 map click button.
+            if (this.directions._activateButton) {
+                this.directions._activateButton.style.display = 'none';
+            } else if (this.directions._activateButtonNode) {
+                this.directions._activateButtonNode.style.display = 'none';
+                this.directions._addDestinationNode.style['float'] = 'inherit';
+                this.directions._optionsButtonNode.style['float'] = 'inherit';
+                this.directions._optionsButtonNode.style.marginRight = '5px';
+            }
 
             if (this.mapRightClickMenu) {
                 this.addRightClickMenu();
