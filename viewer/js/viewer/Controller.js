@@ -1,4 +1,6 @@
 define([
+	'./core/_ConfigMixin',
+	'dojo/_base/declare',
 	'esri/map',
 	'dojo/dom',
 	'dojo/dom-style',
@@ -19,9 +21,9 @@ define([
 	'esri/dijit/PopupMobile',
 	'dijit/Menu',
 	'esri/IdentityManager'
-], function (Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
+], function (_ConfigMixin, declare, Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
 
-	return {
+	return declare([_ConfigMixin], {
 		legendLayerInfos: [],
 		editorLayerInfos: [],
 		identifyLayerInfos: [],
@@ -41,7 +43,17 @@ define([
 			}
 		},
 		collapseButtons: {},
-		startup: function (config) {
+		startup: function () {
+			this.inherited(arguments);
+
+			// from ConfigMixin
+			this.initConfigAsync().then(
+				lang.hitch(this, 'initConfigSuccess'),
+				lang.hitch(this, 'initConfigError')
+			);
+		},
+
+		initConfigSuccess: function(config) {
 			this.config = config;
 			this.mapClickMode = {
 				current: config.defaultMapClickMode,
@@ -66,6 +78,14 @@ define([
 				window.app = this; //dev only
 			}
 		},
+
+		initConfigError: function(err) {
+			this.handleError({
+				source: 'Controller',
+				error: err
+			});
+		},
+
 		// add topics for subscribing and publishing
 		addTopics: function () {
 			// toggle a sidebar pane
@@ -554,7 +574,7 @@ define([
 		},
 		//centralized error handler
 		handleError: function (options) {
-			if (this.config.isDebug) {
+			if (this.config && this.config.isDebug) {
 				if (typeof (console) === 'object') {
 					for (var option in options) {
 						if (options.hasOwnProperty(option)) {
@@ -567,5 +587,5 @@ define([
 				return;
 			}
 		}
-	};
+	});
 });
