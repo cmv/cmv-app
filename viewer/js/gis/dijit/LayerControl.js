@@ -50,6 +50,7 @@ define([
         noLegend: null,
         noZoom: null,
         noTransparency: null,
+        subLayerMenu: {},
         swipe: null,
         swiperButtonStyle: 'position:absolute;top:20px;left:120px;z-index:50;',
         // ^args
@@ -161,7 +162,8 @@ define([
                     noTransparency: null,
                     swipe: null,
                     expanded: false,
-                    sublayers: true
+                    sublayers: true,
+                    menu: this.subLayerMenu[layerInfo.type]
                 }, layerInfo.controlOptions)
             });
             layerControl.startup();

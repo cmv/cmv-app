@@ -321,7 +321,14 @@ define([
                     popup = this.identifies[layer.id][layerId];
                     if (popup) {
                         if (typeof (popup.declaredClass) !== 'string') { // has it been created already?
+                            var content;
+                            if(popup.content){
+                                content = popup.content;
+                            }
                             popup = new PopupTemplate(popup);
+                            if(content) {
+                                popup.setContent(content);
+                            }
                             this.identifies[layer.id][layerId] = popup;
                         }
                     }
