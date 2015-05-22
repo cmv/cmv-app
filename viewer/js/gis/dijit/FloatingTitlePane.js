@@ -35,6 +35,10 @@ define([
                 aspect.after(this._moveable, 'onMove', lang.hitch(this, '_dragging'), true);
                 aspect.after(this._moveable, 'onMoveStop', lang.hitch(this, '_endDrag'), true);
                 aspect.after(this._moveable, 'onMoveStart', lang.hitch(this, '_startDrag'), true);
+                
+                // ensure that dragging the movable stops no matter
+                // when/where the mouse is released or a touch is completed
+                on(document, 'mouseup, touchend', lang.hitch(this, '_endDrag'));
             }
             this.inherited(arguments);
         },

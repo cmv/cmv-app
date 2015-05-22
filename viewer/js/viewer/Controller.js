@@ -226,15 +226,20 @@ define([
 			this.layers = [];
 			var layerTypes = {
 				csv: 'CSV',
+				dataadapter: 'DataAdapterFeature', //untested
 				dynamic: 'ArcGISDynamicMapService',
 				feature: 'Feature',
 				georss: 'GeoRSS',
 				image: 'ArcGISImageService',
+				imagevector: 'ArcGISImageServiceVector',
 				kml: 'KML',
 				label: 'Label', //untested
 				mapimage: 'MapImage', //untested
 				osm: 'OpenStreetMap',
+				raster: 'Raster',
+				stream: 'Stream',
 				tiled: 'ArcGISTiledMapService',
+				webtiled: 'WebTiled',
 				wms: 'WMS',
 				wmts: 'WMTS' //untested
 			};
@@ -265,10 +270,21 @@ define([
 			var l = new Layer(layer.url, layer.options);
 			this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
 			//Legend LayerInfos array
-			this.legendLayerInfos.unshift({ //unshift instead of push to keep layer ordering in legend intact
-				layer: l,
-				title: layer.title || null
-			});
+			var excludeLayerFromLegend = false;
+            if ( typeof layer.legendLayerInfos !== 'undefined' && typeof layer.legendLayerInfos.exclude !== 'undefined' ) {
+                excludeLayerFromLegend = layer.legendLayerInfos.exclude;
+            }
+			if ( !excludeLayerFromLegend ) {
+                var configuredLayerInfo = {};
+                if ( typeof layer.legendLayerInfos !== 'undefined' && typeof layer.legendLayerInfos.layerInfo !== 'undefined' ) {
+                    configuredLayerInfo = layer.legendLayerInfos.layerInfo;
+                }
+                var layerInfo = lang.mixin( {
+                    layer: l,
+                    title: layer.title || null
+                }, configuredLayerInfo );
+				this.legendLayerInfos.unshift ( layerInfo ); //unshift instead of push to keep layer ordering in legend intact
+			}
 			//LayerControl LayerInfos array
 			this.layerControlLayerInfos.unshift({ //unshift instead of push to keep layer ordering in LayerControl intact
 				layer: l,
