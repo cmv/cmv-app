@@ -73,6 +73,12 @@ define([
             if (this.mapRightClickMenu) {
                 this.addRightClickMenu();
             }
+            if (this.mapExtentSearch) {
+                this.geocoder.arcgisGeocoder.searchExtent = this.map.extent.getExtent();
+                this.map.on('extent-change', lang.hitch(this, function (evt) {
+                    this.geocoder.arcgisGeocoder.searchExtent = evt.extent;
+                }));
+            }
         },
         addRightClickMenu: function () {
             this.map.on('MouseDown', lang.hitch(this, function (evt) {
