@@ -36,7 +36,7 @@ define([
     var _DynamicSublayer = declare([WidgetBase, TemplatedMixin], {
         control: null,
         sublayerInfo: null,
-        subMenus: [],
+        menu: null,
         icons: null,
         // ^args
         templateString: sublayerTemplate,
