@@ -10,6 +10,7 @@ define([
     'dojo/html',
     'dijit/Menu',
     'dijit/MenuItem',
+    'dijit/PopupMenuItem',
     'dojo/topic',
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
@@ -27,6 +28,7 @@ define([
         html,
         Menu,
         MenuItem,
+        PopupMenuItem,
         topic,
         WidgetBase,
         TemplatedMixin,
@@ -36,6 +38,7 @@ define([
     var _DynamicSublayer = declare([WidgetBase, TemplatedMixin], {
         control: null,
         sublayerInfo: null,
+        subMenus: [],
         icons: null,
         // ^args
         templateString: sublayerTemplate,
@@ -68,9 +71,10 @@ define([
                 this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
             }
             //set up menu
-            if (this.control.controlOptions.menu && 
+            if (this.control.controlOptions.menu &&
                     this.control.controlOptions.menu.length) {
                 domClass.add(this.labelNode, 'menuLink');
+                domClass.add(this.iconNode, 'menuLink');
                 this.menu = new Menu({
                     contextMenuForWindow: false,
                     targetNodeIds: [this.labelNode],
@@ -81,14 +85,17 @@ define([
             }
         },
         _addMenuItem: function (menuItem) {
-            this.menu.addChild(new MenuItem(lang.mixin(menuItem, {
-                onClick: lang.hitch(this, function () {
+            //create the menu item
+            var item  = new MenuItem(menuItem);
+            item.set('onClick', lang.hitch(this, function () {
                     topic.publish('LayerControl/' + menuItem.topic, {
                         layer: this.control.layer,
-                        subLayer: this.sublayerInfo
+                        subLayer: this.sublayerInfo,
+                        iconNode: this.iconNode,
+                        menuItem: item
                     });
-                })
-            })));
+                }));
+            this.menu.addChild(item);
         },
         // add on event to expandClickNode
         _expandClick: function () {
