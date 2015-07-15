@@ -182,7 +182,11 @@ define([
             }
         },
         _setScale: function () {
-            html.set(this.scaleNode, String(number.format(number.round(this.map.getScale(), 0))));
+            var scale = this.map.getScale();
+            if (scale === null || isNaN(scale)) {
+                return;
+            }
+            html.set(this.scaleNode, String(number.format(number.round(scale, 0))));
         },
         _setZoom: function () {
             html.set(this.zoomNode, String(this.map.getLevel()));
