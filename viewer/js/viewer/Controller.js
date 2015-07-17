@@ -299,7 +299,9 @@ define([
 				if (layer.editorLayerInfos) {
 					lang.mixin(options, layer.editorLayerInfos);
 				}
-				this.editorLayerInfos.push(options);
+				if (options.exclude !== true) {
+					this.editorLayerInfos.push(options);
+				}
 			}
 			if (layer.type === 'dynamic' || layer.type === 'feature') {
 				var idOptions = {
