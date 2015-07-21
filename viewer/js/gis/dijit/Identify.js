@@ -308,7 +308,8 @@ define([
         },
 
         getInfoTemplate: function (layer, layerId, result) {
-            var popup = null;
+            var popup = null, 
+                content = null;
             if (result) {
                 layerId = result.layerId;
             } else if (layerId === null) {
@@ -321,7 +322,13 @@ define([
                     popup = this.identifies[layer.id][layerId];
                     if (popup) {
                         if (typeof (popup.declaredClass) !== 'string') { // has it been created already?
+                            if (popup.content) {
+                                content = popup.content;
+                            }
                             popup = new PopupTemplate(popup);
+                            if (content) {
+                                popup.setContent(content);
+                            }
                             this.identifies[layer.id][layerId] = popup;
                         }
                     }

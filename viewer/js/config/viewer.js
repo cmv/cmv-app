@@ -73,6 +73,12 @@ define([
             },
             editorLayerInfos: {
                 disableGeometryUpdate: false
+            },
+            legendLayerInfos: {
+                exclude: false,
+                layerInfo: {
+                    title: 'My layer'
+                }
             }
   }, {
             type: 'feature',
@@ -97,6 +103,11 @@ define([
             },
             identifyLayerInfos: {
                 layerIds: [2, 4, 5, 8, 12, 21]
+            },
+            legendLayerInfos: {
+                layerInfo: {
+                    hideLayers: [21]
+                }
             }
   }, {
             type: 'dynamic',
@@ -107,6 +118,9 @@ define([
                 opacity: 1.0,
                 visible: true,
                 imageParameters: imageParameters
+            },
+            legendLayerInfos: {
+                exclude: true
             },
             layerControlLayerInfos: {
                 swipe: true,

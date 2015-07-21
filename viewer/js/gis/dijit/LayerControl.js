@@ -50,6 +50,7 @@ define([
         noLegend: null,
         noZoom: null,
         noTransparency: null,
+        subLayerMenu: {},
         swipe: null,
         swiperButtonStyle: 'position:absolute;top:20px;left:120px;z-index:50;',
         // ^args
@@ -66,7 +67,11 @@ define([
             csv: './LayerControl/controls/CSV',
             georss: './LayerControl/controls/GeoRSS',
             wms: './LayerControl/controls/WMS',
-            kml: './LayerControl/controls/KML'
+            kml: './LayerControl/controls/KML',
+            webtiled: './LayerControl/controls/WebTiled',
+            imagevector: './LayerControl/controls/ImageVector',
+            raster: './LayerControl/controls/Raster',
+            stream: './LayerControl/controls/Stream'
         },
         constructor: function (options) {
             options = options || {};
@@ -157,7 +162,8 @@ define([
                     noTransparency: null,
                     swipe: null,
                     expanded: false,
-                    sublayers: true
+                    sublayers: true,
+                    menu: this.subLayerMenu[layerInfo.type]
                 }, layerInfo.controlOptions)
             });
             layerControl.startup();
