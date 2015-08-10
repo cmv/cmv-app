@@ -1,9 +1,9 @@
 define([
-   'esri/units',
-   'esri/geometry/Extent',
-   'esri/config',
-   'esri/tasks/GeometryService',
-   'esri/layers/ImageParameters'
+    'esri/units',
+    'esri/geometry/Extent',
+    'esri/config',
+    'esri/tasks/GeometryService',
+    'esri/layers/ImageParameters'
 ], function (units, Extent, esriConfig, GeometryService, ImageParameters) {
 
     // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
@@ -29,32 +29,34 @@ define([
             zoom: 5,
             sliderStyle: 'small'
         },
-        // panes: {
-        // 	left: {
-        // 		splitter: true
-        // 	},
-        // 	right: {
-        // 		id: 'sidebarRight',
-        // 		placeAt: 'outer',
-        // 		region: 'right',
-        // 		splitter: true,
-        // 		collapsible: true
-        // 	},
-        // 	bottom: {
-        // 		id: 'sidebarBottom',
-        // 		placeAt: 'outer',
-        // 		splitter: true,
-        // 		collapsible: true,
-        // 		region: 'bottom'
-        // 	},
-        // 	top: {
-        // 		id: 'sidebarTop',
-        // 		placeAt: 'outer',
-        // 		collapsible: true,
-        // 		splitter: true,
-        // 		region: 'top'
-        // 	}
-        // },
+         panes: {
+         	left: {
+         		splitter: true
+         	},
+         	//right: {
+         	//	id: 'sidebarRight',
+         	//	placeAt: 'outer',
+         	//	region: 'right',
+         	//	splitter: true,
+         	//	collapsible: true
+         	//},
+         	bottom: {
+         		id: 'sidebarBottom',
+         		placeAt: 'outer',
+         		splitter: true,
+         		collapsible: true,
+         		region: 'bottom',
+                style: 'height: 300px',
+                content: '<div id="attributesContainer"></div>'
+         	}
+         	//top: {
+         	//	id: 'sidebarTop',
+         	//	placeAt: 'outer',
+         	//	collapsible: true,
+         	//	splitter: true,
+         	//	region: 'top'
+         	//}
+         },
         // collapseButtonsPane: 'center', //center or outer
 
         // operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: 'dynamic', 'tiled', 'feature'.
@@ -80,7 +82,7 @@ define([
                     title: 'My layer'
                 }
             }
-  }, {
+        }, {
             type: 'feature',
             url: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
             title: 'San Francisco 311 Incidents',
@@ -91,7 +93,7 @@ define([
                 outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
                 mode: 0
             }
-  }, {
+        }, {
             type: 'dynamic',
             url: 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
             title: 'Louisville Public Safety',
@@ -109,7 +111,7 @@ define([
                     hideLayers: [21]
                 }
             }
-  }, {
+        }, {
             type: 'dynamic',
             url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer',
             title: 'Damage Assessment',
@@ -127,7 +129,7 @@ define([
                 metadataUrl: true,
                 expanded: true
             }
-  }],
+        }],
         // set include:true to load. For titlePane type set position the the desired order in the sidebar
         widgets: {
             growler: {
@@ -422,6 +424,25 @@ define([
                 path: 'gis/dijit/Help',
                 title: 'Help',
                 options: {}
+            },
+            search: {
+                include: true,
+                id: 'search',
+                type: 'titlePane',
+                path: 'widgets/Search',
+                canFloat: true,
+                title: 'Search',
+                open: true,
+                position: 0,
+                options: 'config/searchWidget'
+            },
+            attributesTable: {
+                include: true,
+                id: 'attributesContainer',
+                type: 'domNode',
+                srcNodeRef: 'attributesContainer',
+                path: 'widgets/AttributesTable',
+                options: 'config/table'
             }
 
         }
