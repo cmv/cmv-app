@@ -84,12 +84,34 @@ define([
             }
         }, {
             type: 'feature',
+            url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/arcgis/rest/services/General_Plan_Delivery_v1/FeatureServer/0',
+            title: 'Regional Bikeway Plan 2035 ',
+            options: {
+                id: 'Regional_Bikeway_Plan_2035 ',
+                opacity: 1.0,
+                visible: true,
+                outFields: ['Plan_Name', 'LEAD_ORGANIZATION', 'PLAN_HOU_GOALS', 'PLAN_TIME_FRAME', 'DATE_ADDED_UPDATED', 'PROJECT_STATUS', 'PROJECT_SUMMARY', 'TYPE_OF_PLAN', 'Plan_Link'],
+                mode: 0
+            } 
+        }, {            
+            type: 'feature',
+            url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/arcgis/rest/services/General_Plan_Delivery_v1/FeatureServer/3',
+            title: 'Bacteria Implementation Group Plan 2012',
+            options: {
+                id: 'Bacteria_Implementation_Group_Plan_2012',
+                opacity: 1.0,
+                visible: true,
+                outFields: ['Plan_Name', 'LEAD_ORGANIZATION', 'PLAN_HOU_GOALS', 'PLAN_TIME_FRAME', 'DATE_ADDED_UPDATED', 'PROJECT_STATUS', 'PROJECT_SUMMARY', 'TYPE_OF_PLAN', 'Plan_Link'],
+                mode: 0
+            }                                       
+        }, {   
+            type: 'feature',
             url: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
             title: 'San Francisco 311 Incidents',
             options: {
                 id: 'sf311Incidents',
                 opacity: 1.0,
-                visible: true,
+                visible: false,
                 outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
                 mode: 0
             }
@@ -100,7 +122,7 @@ define([
             options: {
                 id: 'louisvillePubSafety',
                 opacity: 1.0,
-                visible: true,
+                visible: false,
                 imageParameters: imageParameters
             },
             identifyLayerInfos: {
