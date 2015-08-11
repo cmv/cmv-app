@@ -14,79 +14,70 @@ define([
         map: true,
         mapClickMode: true,
 
-        layers: [
-            {
-                name: 'Damage Assessment',
+        layers: [{
+                name: 'allplanstest',
                 expression: '', // additional where expression applied to all queries
-                idProperty: 'objectid',
+                idProperty: 'allplanstest',
                 queryParameters: {
                     type: 'spatial', // spatial, relationship, table or database
-                    layerID: 'DamageAssessment', // from operational layers
+                    layerID: 'allplanstest', // from operational layers
                     sublayerID: 0,
                     outFields: ['*']
                 },
                 attributeSearches: [
                     {
-                        name: 'Search For Assessments',
+                        name: 'Search For Plans',
                         searchFields: [
                             {
-                                name: 'Inspector Name',
-                                label: 'Inspector Name',
-                                expression: '(inspector LIKE \'[value]%\')',
-                                placeholder: 'Enter the name Fred',
+                                name: 'Lead Organization',
+                                label: 'Lead Organization',
+                                expression: '(lead_organization LIKE \'[value]%\')',
+                                placeholder: 'e.g. HGAC',
                                 required: true,
-                                minChars: 3
-                            },
-                            {
-                                name: 'Type of Damage',
-                                label: 'Type of Damage',
-                                expression: '(typdamage LIKE \'[value]%\')',
-                                placeholder: 'Enter the text Destroyed, Major or Minor',
                                 minChars: 3
                             }
                         ],
 
-                        title: 'Assessments',
+                        title: 'Plan Database',
                         topicID: 'assessmentsQuery',
                         gridOptions: {
-                            columns: [
+                            columns: [                          
                                 {
-                                    field: 'incidentnm',
-                                    label: 'Name'
+                                    field: 'Plan_Name',
+                                    label: 'Plan Name'
                                 },
                                 {
-                                    field: 'inspdate',
-                                    label: 'Inspected',
-                                    width: 150,
-                                    get: function (object) { // allow export as a proper date
-                                        return new Date(object.inspdate);
-                                    },
-                                    formatter: formatDateTime
+                                    field: 'LEAD_ORGANIZATION',
+                                    label: 'Lead Organization'
                                 },
                                 {
-                                    field: 'inspector',
-                                    label: 'Inspector'
+                                    field: 'PLAN_HOU_GOALS',
+                                    label: 'Goals'
                                 },
                                 {
-                                    field: 'fulladdr',
-                                    label: 'Address'
+                                    field: 'PLAN_TIME_FRAME',
+                                    label: 'Time Frame'
                                 },
                                 {
-                                    field: 'pstlcity',
-                                    label: 'City'
+                                    field: 'DATE_ADDED_UPDATED',
+                                    label: 'Date Updated'
                                 },
                                 {
-                                    field: 'typdamage',
-                                    label: 'Damage'
+                                    field: 'PROJECT_STATUS',
+                                    label: 'Project Status'
                                 },
                                 {
-                                    field: 'lastupdate',
-                                    label: 'Updated',
-                                    get: function (object) { // allow export as a proper date
-                                        return new Date(object.lastupdate);
-                                    },
-                                    formatter: formatDateTime
-                                }
+                                    field: 'PROJECT_SUMMARY',
+                                    label: 'Project Summary'
+                                },
+                                {
+                                    field: 'TYPE_OF_PLAN',
+                                    label: 'Type of Plan'
+                                },
+                                {
+                                    field: 'Plan_Link',
+                                    label: 'Plan Link'
+                                }                                
                             ],
                             sort: [
                                 {

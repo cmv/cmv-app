@@ -24,38 +24,38 @@ define([
         defaultMapClickMode: 'identify',
         // map options, passed to map constructor. see: https://developers.arcgis.com/javascript/jsapi/map-amd.html#map1
         mapOptions: {
-            basemap: 'streets',
-            center: [-96.59179687497497, 39.09596293629694],
-            zoom: 5,
+            basemap: 'topo',
+            center: [-95.3698, 29.7604],
+            zoom: 10,
             sliderStyle: 'small'
         },
          panes: {
-         	left: {
-         		splitter: true
-         	},
-         	//right: {
-         	//	id: 'sidebarRight',
-         	//	placeAt: 'outer',
-         	//	region: 'right',
-         	//	splitter: true,
-         	//	collapsible: true
-         	//},
-         	bottom: {
-         		id: 'sidebarBottom',
-         		placeAt: 'outer',
-         		splitter: true,
-         		collapsible: true,
-         		region: 'bottom',
-                style: 'height: 300px',
+            left: {
+                splitter: true
+            },
+            //right: {
+            //  id: 'sidebarRight',
+            //  placeAt: 'outer',
+            //  region: 'right',
+            //  splitter: true,
+            //  collapsible: true
+            //},
+            bottom: {
+                id: 'sidebarBottom',
+                placeAt: 'outer',
+                splitter: true,
+                collapsible: true,
+                region: 'bottom',
+                style: 'height: 250px',
                 content: '<div id="attributesContainer"></div>'
-         	}
-         	//top: {
-         	//	id: 'sidebarTop',
-         	//	placeAt: 'outer',
-         	//	collapsible: true,
-         	//	splitter: true,
-         	//	region: 'top'
-         	//}
+            }
+            //top: {
+            //  id: 'sidebarTop',
+            //  placeAt: 'outer',
+            //  collapsible: true,
+            //  splitter: true,
+            //  region: 'top'
+            //}
          },
         // collapseButtonsPane: 'center', //center or outer
 
@@ -64,32 +64,12 @@ define([
         // 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
         operationalLayers: [{
             type: 'feature',
-            url: 'http://services1.arcgis.com/g2TonOxuRkIqSOFx/arcgis/rest/services/MeetUpHomeTowns/FeatureServer/0',
-            title: 'STLJS Meetup Home Towns',
-            options: {
-                id: 'meetupHometowns',
-                opacity: 1.0,
-                visible: true,
-                outFields: ['*'],
-                mode: 0
-            },
-            editorLayerInfos: {
-                disableGeometryUpdate: false
-            },
-            legendLayerInfos: {
-                exclude: false,
-                layerInfo: {
-                    title: 'My layer'
-                }
-            }
-        }, {
-            type: 'feature',
             url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/arcgis/rest/services/General_Plan_Delivery_v1/FeatureServer/0',
             title: 'Regional Bikeway Plan 2035 ',
             options: {
                 id: 'Regional_Bikeway_Plan_2035 ',
                 opacity: 1.0,
-                visible: true,
+                visible: false,
                 outFields: ['Plan_Name', 'LEAD_ORGANIZATION', 'PLAN_HOU_GOALS', 'PLAN_TIME_FRAME', 'DATE_ADDED_UPDATED', 'PROJECT_STATUS', 'PROJECT_SUMMARY', 'TYPE_OF_PLAN', 'Plan_Link'],
                 mode: 0
             } 
@@ -100,56 +80,28 @@ define([
             options: {
                 id: 'Bacteria_Implementation_Group_Plan_2012',
                 opacity: 1.0,
-                visible: true,
+                visible: false,
                 outFields: ['Plan_Name', 'LEAD_ORGANIZATION', 'PLAN_HOU_GOALS', 'PLAN_TIME_FRAME', 'DATE_ADDED_UPDATED', 'PROJECT_STATUS', 'PROJECT_SUMMARY', 'TYPE_OF_PLAN', 'Plan_Link'],
                 mode: 0
-            }                                       
-        }, {   
-            type: 'feature',
-            url: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
-            title: 'San Francisco 311 Incidents',
-            options: {
-                id: 'sf311Incidents',
-                opacity: 1.0,
-                visible: false,
-                outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
-                mode: 0
-            }
+            } 
         }, {
             type: 'dynamic',
-            url: 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
-            title: 'Louisville Public Safety',
+            url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/ArcGIS/rest/services/General_Plan_Delivery_v1/FeatureServer',
+            title: 'all plans test',
+            nolegend: false,
             options: {
-                id: 'louisvillePubSafety',
+                id: 'allplanstest',
                 opacity: 1.0,
-                visible: false,
+                visible: true,
                 imageParameters: imageParameters
             },
             identifyLayerInfos: {
-                layerIds: [2, 4, 5, 8, 12, 21]
+                layerIds: [0, 1, 2, 3, 4, 5, 6]
             },
             legendLayerInfos: {
                 layerInfo: {
                     hideLayers: [21]
                 }
-            }
-        }, {
-            type: 'dynamic',
-            url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer',
-            title: 'Damage Assessment',
-            options: {
-                id: 'DamageAssessment',
-                opacity: 1.0,
-                visible: true,
-                imageParameters: imageParameters
-            },
-            legendLayerInfos: {
-                exclude: true
-            },
-            layerControlLayerInfos: {
-                swipe: true,
-                metadataUrl: true,
-                expanded: true
             }
         }],
         // set include:true to load. For titlePane type set position the the desired order in the sidebar
@@ -279,7 +231,7 @@ define([
                 }
             },
             legend: {
-                include: true,
+                include: false,
                 id: 'legend',
                 type: 'titlePane',
                 path: 'esri/dijit/Legend',
@@ -298,7 +250,7 @@ define([
                 path: 'gis/dijit/LayerControl',
                 title: 'Layers',
                 open: false,
-                position: 0,
+                position: 2,
                 options: {
                     map: true,
                     layerControlLayerInfos: true,
@@ -308,7 +260,7 @@ define([
                 }
             },
             bookmarks: {
-                include: true,
+                include: false,
                 id: 'bookmarks',
                 type: 'titlePane',
                 path: 'gis/dijit/Bookmarks',
@@ -329,7 +281,7 @@ define([
                 options: 'config/find'
             },
             draw: {
-                include: true,
+                include: false,
                 id: 'draw',
                 type: 'titlePane',
                 canFloat: true,
@@ -343,7 +295,7 @@ define([
                 }
             },
             measure: {
-                include: true,
+                include: false,
                 id: 'measurement',
                 type: 'titlePane',
                 canFloat: true,
@@ -359,7 +311,7 @@ define([
                 }
             },
             print: {
-                include: true,
+                include: false,
                 id: 'print',
                 type: 'titlePane',
                 canFloat: true,
@@ -378,7 +330,7 @@ define([
                 }
             },
             directions: {
-                include: true,
+                include: false,
                 id: 'directions',
                 type: 'titlePane',
                 path: 'gis/dijit/Directions',
@@ -453,15 +405,15 @@ define([
                 type: 'titlePane',
                 path: 'widgets/Search',
                 canFloat: true,
-                title: 'Search',
+                title: 'Search for Plans',
                 open: true,
-                position: 0,
+                position: 1,
                 options: 'config/searchWidget'
             },
             attributesTable: {
                 include: true,
                 id: 'attributesContainer',
-                type: 'domNode',
+                type: 'domNode',         
                 srcNodeRef: 'attributesContainer',
                 path: 'widgets/AttributesTable',
                 options: 'config/table'
