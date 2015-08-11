@@ -29,7 +29,7 @@ define([
             zoom: 10,
             sliderStyle: 'small'
         },
-         panes: {
+        panes: {
             left: {
                 splitter: true
             },
@@ -56,54 +56,56 @@ define([
             //  splitter: true,
             //  region: 'top'
             //}
-         },
+        },
         // collapseButtonsPane: 'center', //center or outer
 
         // operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: 'dynamic', 'tiled', 'feature'.
         // The 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
         // 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
-        operationalLayers: [{
-            type: 'feature',
-            url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/arcgis/rest/services/General_Plan_Delivery_v1/FeatureServer/0',
-            title: 'Regional Bikeway Plan 2035 ',
-            options: {
-                id: 'Regional_Bikeway_Plan_2035 ',
-                opacity: 1.0,
-                visible: false,
-                outFields: ['Plan_Name', 'LEAD_ORGANIZATION', 'PLAN_HOU_GOALS', 'PLAN_TIME_FRAME', 'DATE_ADDED_UPDATED', 'PROJECT_STATUS', 'PROJECT_SUMMARY', 'TYPE_OF_PLAN', 'Plan_Link'],
-                mode: 0
-            } 
-        }, {            
-            type: 'feature',
-            url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/arcgis/rest/services/General_Plan_Delivery_v1/FeatureServer/3',
-            title: 'Bacteria Implementation Group Plan 2012',
-            options: {
-                id: 'Bacteria_Implementation_Group_Plan_2012',
-                opacity: 1.0,
-                visible: false,
-                outFields: ['Plan_Name', 'LEAD_ORGANIZATION', 'PLAN_HOU_GOALS', 'PLAN_TIME_FRAME', 'DATE_ADDED_UPDATED', 'PROJECT_STATUS', 'PROJECT_SUMMARY', 'TYPE_OF_PLAN', 'Plan_Link'],
-                mode: 0
-            } 
-        }, {
-            type: 'dynamic',
-            url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/ArcGIS/rest/services/General_Plan_Delivery_v1/FeatureServer',
-            title: 'all plans test',
-            nolegend: false,
-            options: {
-                id: 'allplanstest',
-                opacity: 1.0,
-                visible: true,
-                imageParameters: imageParameters
-            },
-            identifyLayerInfos: {
-                layerIds: [0, 1, 2, 3, 4, 5, 6]
-            },
-            legendLayerInfos: {
-                layerInfo: {
-                    hideLayers: [21]
+        operationalLayers: [
+            {
+                type: 'feature',
+                url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/arcgis/rest/services/General_Plan_Delivery_v1/FeatureServer/0',
+                title: 'Regional Bikeway Plan 2035 ',
+                options: {
+                    id: 'Regional_Bikeway_Plan_2035 ',
+                    opacity: 1.0,
+                    visible: false,
+                    outFields: ['Plan_Name', 'LEAD_ORGANIZATION', 'PLAN_HOU_GOALS', 'PLAN_TIME_FRAME', 'DATE_ADDED_UPDATED', 'PROJECT_STATUS', 'PROJECT_SUMMARY', 'TYPE_OF_PLAN', 'Plan_Link'],
+                    mode: 0
+                }
+            }, {
+                type: 'feature',
+                url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/arcgis/rest/services/General_Plan_Delivery_v1/FeatureServer/3',
+                title: 'Bacteria Implementation Group Plan 2012',
+                options: {
+                    id: 'Bacteria_Implementation_Group_Plan_2012',
+                    opacity: 1.0,
+                    visible: false,
+                    outFields: ['Plan_Name', 'LEAD_ORGANIZATION', 'PLAN_HOU_GOALS', 'PLAN_TIME_FRAME', 'DATE_ADDED_UPDATED', 'PROJECT_STATUS', 'PROJECT_SUMMARY', 'TYPE_OF_PLAN', 'Plan_Link'],
+                    mode: 0
+                }
+            }, {
+                type: 'dynamic',
+                url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/ArcGIS/rest/services/General_Plan_Delivery_v1/FeatureServer',
+                title: 'all plans test',
+                nolegend: false,
+                options: {
+                    id: 'All_Plans',
+                    opacity: 1.0,
+                    visible: true,
+                    imageParameters: imageParameters
+                },
+                identifyLayerInfos: {
+                    layerIds: [0, 1, 2, 3, 4, 5, 6]
+                },
+                legendLayerInfos: {
+                    layerInfo: {
+                        hideLayers: [21]
+                    }
                 }
             }
-        }],
+        ],
         // set include:true to load. For titlePane type set position the the desired order in the sidebar
         widgets: {
             growler: {
@@ -413,7 +415,7 @@ define([
             attributesTable: {
                 include: true,
                 id: 'attributesContainer',
-                type: 'domNode',         
+                type: 'domNode',
                 srcNodeRef: 'attributesContainer',
                 path: 'widgets/AttributesTable',
                 options: 'config/table'

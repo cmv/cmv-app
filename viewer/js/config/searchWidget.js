@@ -14,13 +14,15 @@ define([
         map: true,
         mapClickMode: true,
 
-        layers: [{
-                name: 'allplanstest',
+        layers: [
+            {
+                name: 'All Plans',
                 expression: '', // additional where expression applied to all queries
-                idProperty: 'allplanstest',
+                idProperty: 'OBJECTID',
+                open: false,
                 queryParameters: {
                     type: 'spatial', // spatial, relationship, table or database
-                    layerID: 'allplanstest', // from operational layers
+                    layerID: 'All_Plans', // from operational layers
                     sublayerID: 0,
                     outFields: ['*']
                 },
@@ -31,7 +33,7 @@ define([
                             {
                                 name: 'Lead Organization',
                                 label: 'Lead Organization',
-                                expression: '(lead_organization LIKE \'[value]%\')',
+                                expression: '(LEAD_ORGANIZATION LIKE \'[value]%\')',
                                 placeholder: 'e.g. HGAC',
                                 required: true,
                                 minChars: 3
@@ -39,9 +41,13 @@ define([
                         ],
 
                         title: 'Plan Database',
-                        topicID: 'assessmentsQuery',
+                        topicID: 'allPlansQuery',
                         gridOptions: {
-                            columns: [                          
+                            columns: [
+                                {
+                                    field: 'PLAN_ID',
+                                    label: 'Plan ID'
+                                },
                                 {
                                     field: 'Plan_Name',
                                     label: 'Plan Name'
@@ -81,7 +87,7 @@ define([
                             ],
                             sort: [
                                 {
-                                    attribute: 'incidentnm',
+                                    attribute: 'PLAN_ID',
                                     descending: 'ASC'
                                 }
                             ]
