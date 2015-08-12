@@ -46,6 +46,7 @@ define([
                 splitter: true,
                 collapsible: true,
                 region: 'bottom',
+                open: 'none', // using false doesn't work
                 style: 'height: 250px',
                 content: '<div id="attributesContainer"></div>'
             }
