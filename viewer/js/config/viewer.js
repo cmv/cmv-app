@@ -67,7 +67,7 @@ define([
             {
                 type: 'dynamic',
                 url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/ArcGIS/rest/services/General_Plan_Delivery_v1/FeatureServer',
-                title: 'all plans test',
+                title: 'All Plans',
                 nolegend: false,
                 options: {
                     id: 'All_Plans',
