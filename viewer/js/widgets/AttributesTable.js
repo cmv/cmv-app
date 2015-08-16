@@ -203,7 +203,7 @@ define([
             if (tab) {
                 if (options.queryOptions) {
                     tab.clearAll();
-                    tab.executeQuery(options);
+                    tab.executeIdentify(options);
                 }
             }
             return tab;

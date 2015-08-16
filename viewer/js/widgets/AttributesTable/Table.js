@@ -12,7 +12,7 @@ define([
     'dijit/registry',
 
     // using mixins to make code easier to maintain
-    './_QueryMixin',
+    './_IdentifyMixin',
     './_GridMixin',
     './_FeaturesMixin',
     './_GraphicsMixin',
@@ -48,7 +48,7 @@ define([
     domGeometry,
     registry,
 
-    _QueryMixin,
+    _IdentifyMixin,
     _GridMixin,
     _FeaturesMixin,
     _GraphicsMixin,
@@ -58,7 +58,7 @@ define([
     i18n
 ) {
 
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _GridMixin, _QueryMixin, _FeaturesMixin, _GraphicsMixin, _ToolbarMixin], {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _GridMixin, _IdentifyMixin, _FeaturesMixin, _GraphicsMixin, _ToolbarMixin], {
         widgetsInTemplate: true,
         templateString: template,
         baseClass: 'cmvAttributesTableWidget',
@@ -101,7 +101,7 @@ define([
 
             if (this.queryParameters.url || this.queryParameters.layerID) {
                 this.own(aspect.after(this, 'startup', lang.hitch(this, function () {
-                    this.executeQuery();
+                    this.executeIdentify();
                 })));
             }
         },
@@ -138,7 +138,7 @@ define([
 
         addTopics: function () {
             // execute a query
-            this.own(topic.subscribe(this.topicID + '/executeQuery', lang.hitch(this, 'executeQuery')));
+            this.own(topic.subscribe(this.topicID + '/executeIdentify', lang.hitch(this, 'executeIdentify')));
 
             // get the results of the query
             this.own(topic.subscribe(this.topicID + '/getQueryResults', lang.hitch(this, 'getQueryResults')));
