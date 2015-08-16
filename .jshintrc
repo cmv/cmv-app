@@ -28,7 +28,7 @@
                                 //   "single" : require single quotes
                                 //   "double" : require double quotes
     "undef"         : true,     // true: Require all non-global variables to be declared (prevents global leaks)
-    "unused"        : "vars", //  Warns when you define and never use your variables
+    //"unused"        : "strict", //  Warns when you define and never use your variables
                                 //   true     : allow unused parameters that are followed by a used parameter.
                                 //   "vars"   : to only check for variables, not function parameters
                                 //   "strict" : to check all variables and parameters.
