@@ -64,7 +64,7 @@ define([
         // The 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
         // 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
         operationalLayers: [
-            {
+            /*{
                 type: 'dynamic',
                 url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/ArcGIS/rest/services/General_Plan_Delivery_v1/FeatureServer',
                 title: 'All Plans',
@@ -82,6 +82,17 @@ define([
                     layerInfo: {
                         hideLayers: [21]
                     }
+                }
+            },*/
+            {
+                type: 'dynamic',
+                url: 'http://mycity.houstontx.gov/arcgisweb/rest/services/PD/Government_Boundaries_wm/MapServer',
+                title: 'Houston Government Boundaries',
+                options: {
+                    id: 'Houston_Government_Boundaries',
+                    opacity: 1.0,
+                    visible: true,
+                    imageParameters: imageParameters
                 }
             }
         ],
