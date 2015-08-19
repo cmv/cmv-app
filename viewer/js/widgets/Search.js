@@ -5,7 +5,6 @@ define([
     'dijit/_WidgetsInTemplateMixin',
 
     'esri/toolbars/draw',
-    'esri/tasks/query',
     'esri/tasks/GeometryService',
     'dojo/_base/lang',
     'dojo/on',
@@ -41,7 +40,6 @@ define([
     _WidgetsInTemplateMixin,
 
     Draw,
-    Query,
     GeometryService,
     lang,
     on,
@@ -65,12 +63,13 @@ define([
         // i18n
         i18n: i18n,
 
-        title: 'Search Results',
-        topicID: 'searchResults',
+        title: 'Search Results', // Default title of search
+        topicID: 'searchResults', // Default topic ID of search
         attributesContainerID: 'attributesContainer',
 
-        shapeLayer: 0,
-        attributeLayer: 0,
+        shapeLayer: 0, // ID of layer used for search by shape
+        attributeLayer: 0, // ID of layer used for search by attribute
+        searchIndex: 0, // Index of search option for the layer selected for search
         drawToolbar: null,
 
         drawingOptions: {
@@ -209,23 +208,23 @@ define([
                 }
             }
 
-            var queryOptions = {
+            var identifyOptions = {
                 idProperty: search.idProperty || layer.idProperty || 'FID',
                 linkField: search.linkField || layer.linkField || null,
                 linkedQuery: lang.clone(search.linkedQuery || layer.linkedQuery || null)
             };
 
-            var queryParameters = lang.clone(search.queryParameters || layer.queryParameters || {});
-            queryOptions.queryParameters = lang.mixin(queryParameters, {
+            var identifyParameters = lang.clone(search.identifyParameters || layer.identifyParameters || {});
+            identifyOptions.identifyParameters = lang.mixin(identifyParameters, {
                 //type: search.type || layer.type || 'spatial',
                 geometry: geometry,
                 where: where,
-                outSpatialReference: search.outSpatialReference || this.map.spatialReference,
-                spatialRelationship: search.spatialRelationship || layer.spatialRelationship || Query.SPATIAL_REL_INTERSECTS
+                spatialReference: search.spatialReference || layer.spatialReference || this.map.spatialReference,
+                identifyTolerance: search.identifyTolerance || layer.identifyTolerance || this.identifyTolerance
             });
 
             var bufferParameters = lang.clone(search.bufferParameters || layer.bufferParameters || {});
-            queryOptions.bufferParameters = lang.mixin(bufferParameters, {
+            identifyOptions.bufferParameters = lang.mixin(bufferParameters, {
                 distance: distance,
                 unit: unit,
                 showOnly: showOnly
@@ -235,7 +234,7 @@ define([
             topic.publish(this.attributesContainerID + '/addTable', {
                 title: search.title || layer.title || this.title,
                 topicID: search.topicID || layer.topicID || this.topicID,
-                queryOptions: queryOptions,
+                identifyOptions: identifyOptions,
                 gridOptions: lang.clone(search.gridOptions || layer.gridOptions || {}),
                 featureOptions: lang.clone(search.featureOptions || layer.featureOptions || {}),
                 symbolOptions: lang.clone(search.symbolOptions || layer.symbolOptions || {}),
@@ -301,7 +300,7 @@ define([
                     label: this.layers[i].name
                 };
                 attrOptions.push(lang.clone(option));
-                if (this.layers[i].queryParameters && this.layers[i].queryParameters.type === 'spatial') {
+                if (this.layers[i].identifyParameters && this.layers[i].identifyParameters.type === 'spatial') {
                     option.value = (shapeOptions.length);
                     shapeOptions.push(option);
                 }

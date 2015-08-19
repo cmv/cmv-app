@@ -30,8 +30,8 @@ attributesTable: {
             {
                 title: 'Census',
                 topicID: 'censusQuery',
-                queryOptions: {
-                    queryParameters: {
+                identifyOptions: {
+                    identifyParameters: {
                         url: 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer/4',
                         maxAllowableOffset: 100,
                         where: 'STATE_FIPS = \'06\' OR STATE_FIPS = \'08\''
@@ -98,9 +98,9 @@ define({
             closable: true,
             confirmClose: true,
 
-            queryOptions: {
+            identifyOptions: {
                 // parameters for the query
-                queryParameters: {
+                identifyParameters: {
                     url: 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer/4',
                     maxAllowableOffset: 100,
                     where: 'STATE_FIPS = \'06\' OR STATE_FIPS = \'08\''
@@ -136,9 +136,9 @@ growl: {
 ---
 ##Query Options
 ``` javascript
-queryOptions:
+identifyOptions:
     // parameters for the query
-    queryParameters: {
+    identifyParameters: {
         /*
             What type of query:
 

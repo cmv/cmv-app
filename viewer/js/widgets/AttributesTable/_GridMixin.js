@@ -142,7 +142,7 @@ define([
                 }
             }
 
-            var features = this.getFeaturesFromResults();
+            var features = this.getFeaturesFromQueryResults();
             var rows = [];
             array.forEach(features, lang.hitch(this, function (feature) {
                 // relationship query

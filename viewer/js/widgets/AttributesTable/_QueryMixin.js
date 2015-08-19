@@ -264,7 +264,7 @@ define([
             }
 
             this.results = results;
-            this.getFeaturesFromResults();
+            this.getFeaturesFromQueryResults();
 
             if (!this.idProperty) {
                 this.getIdProperty(results);

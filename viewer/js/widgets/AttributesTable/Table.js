@@ -99,7 +99,7 @@ define([
             this.createGrid();
             this.setToolbarButtons();
 
-            if (this.queryParameters.url || this.queryParameters.layerID) {
+            if (this.identifyParameters.url || this.identifyParameters.layerID) {
                 this.own(aspect.after(this, 'startup', lang.hitch(this, function () {
                     this.executeIdentify();
                 })));
@@ -110,7 +110,7 @@ define([
             // handle any options passed in the initial widget config
             if (!options) {
                 options = {
-                    queryOptions: lang.clone(this.queryOptions),
+                    identifyOptions: lang.clone(this.identifyOptions),
                     gridOptions: lang.clone(this.gridOptions),
                     featureOptions: lang.clone(this.featureOptions),
                     symbolOptions: lang.clone(this.symbolOptions),
@@ -119,8 +119,8 @@ define([
             }
 
             // set the options for each mixin
-            if (options.queryOptions) {
-                this.getQueryConfiguration(options.queryOptions);
+            if (options.identifyOptions) {
+                this.getIdentifyConfiguration(options.identifyOptions);
             }
             if (options.gridOptions) {
                 this.getGridConfiguration(options.gridOptions);
@@ -137,7 +137,7 @@ define([
         },
 
         addTopics: function () {
-            // execute a query
+            // execute identify
             this.own(topic.subscribe(this.topicID + '/executeIdentify', lang.hitch(this, 'executeIdentify')));
 
             // get the results of the query
@@ -237,7 +237,7 @@ define([
 
             this.clearGrid();
 
-            this.queryParameters = {
+            this.identifyParameters = {
                 type: 'spatial'
             };
 

@@ -201,7 +201,7 @@ define([
         getTab: function (options) {
             var tab = registry.byId(options.id);
             if (tab) {
-                if (options.queryOptions) {
+                if (options.identifyOptions) {
                     tab.clearAll();
                     tab.executeIdentify(options);
                 }

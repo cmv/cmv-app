@@ -7,9 +7,9 @@ define([
     'esri/config',
     'esri/units',
     'dojo/number',
-    'esri/tasks/query',
+    'esri/tasks/IdentifyParameters',
     'esri/tasks/RelationshipQuery',
-    'esri/tasks/QueryTask',
+    'esri/tasks/IdentifyTask',
     'esri/tasks/BufferParameters'
 
 ], function (
@@ -21,9 +21,9 @@ define([
     esriConfig,
     units,
     num,
-    Query,
+    IdentifyParameters,
     RelationshipQuery,
-    QueryTask,
+    IdentifyTask,
     BufferParameters
 ) {
 
@@ -31,33 +31,34 @@ define([
 
         results: null,
 
-        queryOptions: {},
+        identifyOptions: {},
 
-        // for all the standard parameters, see for https://developers.arcgis.com/javascript/jsapi/query-amd.html
-        defaultQueryOptions: {
-            queryParameters: {
+        // for all the standard parameters, see for https://developers.arcgis.com/javascript/jsapi/identifyparameters-amd.html
+        defaultIdentifyOptions: {
+            identifyParameters: {
                 type: 'spatial',
-                outputSpatialReference: 4326,
                 url: null,
                 layerID: null,
-                sublayerID: null,
                 objectIDs: null,
                 outFields: ['*'],
                 where: '1=1',
-                geometry: null,
                 distance: null,
                 start: null,
                 num: null,
                 text: null,
                 timeExtent: null,
                 units: 'feet',
-                geometryPrecision: null,
-                groupByFieldsForStatistics: null,
-                orderByFields: null,
-                outStatistics: null,
-                pixelSize: null,
-                relationParam: null,
-                spatialRelationship: Query.SPATIAL_REL_INTERSECTS
+
+                identifyTolerance: 10,
+                returnGeometry: true,
+                layerOption: IdentifyParameters.LAYER_OPTION_VISIBLE,
+                geometry: null,
+                mapExtent: null,
+                width: null,
+                height: null,
+                spatialReference: null,
+                layerIds: null,
+                layerDefinitions: null
 
             },
 
@@ -97,10 +98,10 @@ define([
 
         isLinkedQuery: false,
 
-        getQueryConfiguration: function (options) {
-            options = this.mixinDeep(lang.clone(this.defaultQueryOptions), options);
+        getIdentifyConfiguration: function (options) {
+            options = this.mixinDeep(lang.clone(this.defaultIdentifyOptions), options);
 
-            this.queryParameters = options.queryParameters;
+            this.identifyParameters = options.identifyParameters;
             this.bufferParameters = options.bufferParameters;
             this.idProperty = options.idProperty;
 
@@ -109,14 +110,101 @@ define([
             this.isLinkedQuery = false;
         },
 
+        getLayer: function () {
+            var layer = null;
+            var ip = this.identifyParameters;
+
+            if (ip.layerID) {
+                layer = this.map.getLayer(ip.layerID);
+            }
+
+            return layer;
+        },
+
+        // Filter sublayers of the layer given, which is visible, included and not excluded
+        filterSubLayers: function (layer, selectedIds) {
+            var subLayerIds = [];
+
+            array.forEach(layer.layerInfos, lang.hitch(this, function (layerInfo) {
+                if (!this.includeSubLayer(layerInfo, layer, selectedIds)) {
+                    return;
+                }
+                subLayerIds.push(layerInfo.id);
+            }));
+
+            return subLayerIds;
+        },
+
+        includeSubLayer: function (layerInfo, layer, selectedIds) {
+            // exclude group layers
+            if (layerInfo.subLayerIds !== null) {
+                return false;
+            }
+            // only include sublayers that are currently visible
+            if (array.indexOf(layer.visibleLayers, layerInfo.id) < 0) {
+                return false;
+            }
+            // only include sublayers that are within the current map scale
+            if (!this.layerVisibleAtCurrentScale(layerInfo)) {
+                return false;
+            }
+
+            // restrict which layers are included
+            if (selectedIds) {
+                if (array.indexOf(selectedIds, layerInfo.id) < 0) {
+                    return false;
+                }
+            }
+
+            // all tests pass so include this sublayer
+            return true;
+        },
+
+        layerVisibleAtCurrentScale: function (layer) {
+            var mapScale = this.map.getScale();
+            return !(((layer.maxScale !== 0 && mapScale < layer.maxScale) || (layer.minScale !== 0 && mapScale > layer.minScale)));
+        },
+
+        createIdentifyParams: function () {
+            var identifyParams = new IdentifyParameters();
+            var ip = this.identifyParameters;
+            var layer = this.getLayer();
+            var subLayerIds,
+                layerDefinitions = {};
+
+            if (layer && layer.visible) {
+                subLayerIds = this.filterSubLayers(layer);
+
+                array.forEach(subLayerIds, function (subLayerId) {
+                    layerDefinitions[subLayerId] = ip.where;
+                }, this);
+                layerDefinitions = lang.mixin(layer.layerDefinitions, layerDefinitions);
+            }
+
+            identifyParams.tolerance = ip.identifyTolerance;
+            identifyParams.returnGeometry = this.featureOptions.features;
+            identifyParams.layerOption = ip.layerOption;
+            identifyParams.geometry = ip.bufferGeometry || ip.geometry;
+            identifyParams.mapExtent = ip.mapExtent || this.map.extent;
+            identifyParams.width = ip.width || this.map.width;
+            identifyParams.height = ip.height || this.map.height;
+            identifyParams.spatialReference = ip.spatialReference || this.map.spatialReference;
+
+            identifyParams.layerDefinitions = layerDefinitions;
+            identifyParams.layerIds = subLayerIds;
+
+            return identifyParams;
+        },
+
         executeIdentify: function (options) {
-            if (this.executingQuery === true) {
+            if (this.executingIdentify === true) {
                 return;
             }
             this.getConfiguration(options);
 
             this.clearFeatures();
             this.clearSelectedFeatures();
+
             if ((this.isLinkedQuery !== true || this.type === 'table') && (this.bufferParameters && !this.bufferParameters.showOnly)) {
                 this.clearGrid();
             }
@@ -133,43 +221,7 @@ define([
                 return;
             }
 
-            this.executingQuery = true;
-            var qp = this.queryParameters;
-            var qt = new QueryTask(url);
-            var q = null;
-            if (qp.type === 'relationship') {
-                q = new RelationshipQuery();
-            } else {
-                q = new Query();
-            }
-
-            q.geometryPrecision = qp.geometryPrecision;
-            q.maxAllowableOffset = qp.maxAllowableOffset;
-            q.objectIds = qp.objectIDs;
-            q.outFields = qp.outFields;
-            q.outSpatialReference = qp.outSpatialReference || this.map.spatialReference;
-            q.returnGeometry = this.featureOptions.features;
-            q.where = qp.where;
-
-            if (qp.type === 'spatial') {
-                q.distance = qp.distance;
-                q.geometry = qp.bufferGeometry || qp.geometry;
-                q.groupByFieldsForStatistics = qp.groupByFieldsForStatistics;
-                q.num = qp.num;
-                q.orderByFields = qp.orderByFields;
-                q.outStatistics = qp.outStatistics;
-                q.pixelSize = qp.pixelSize;
-                q.relationParam = qp.relationParam;
-                q.spatialRelationship = qp.spatialRelationship;
-                q.start = qp.start;
-                q.text = qp.text;
-                q.timeExtent = qp.timeExtent;
-                q.units = qp.units;
-
-            } else if (qp.type === 'relationship') {
-                q.definitionExpression = qp.definitionExpression;
-                q.relationshipId = qp.relationshipID;
-            }
+            this.executingIdentify = true;
 
             if (this.growlOptions.loading && !this.isLinkedQuery) {
                 this.growlID = this.topicID + 'Growl-StartSearch';
@@ -181,15 +233,18 @@ define([
                 topic.publish('growler/growl', msg);
             }
 
-            if (qp.type === 'relationship') {
-                qt.executeRelationshipQuery(q, lang.hitch(this, 'processQueryResults'), lang.hitch(this, 'processQueryError'));
+            var it = new IdentifyTask(url);
+            var identifyParams = null;
+            if (this.identifyParameters === 'relationship') {
+
             } else {
-                qt.execute(q, lang.hitch(this, 'processQueryResults'), lang.hitch(this, 'processQueryError'));
+                identifyParams = this.createIdentifyParams();
+                it.execute(identifyParams, lang.hitch(this, 'processIdentifyResults'), lang.hitch(this, 'processIdentifyError'));
             }
         },
 
         executeLinkedQuery: function (lq) {
-            var qp = this.queryParameters;
+            var qp = this.identifyParameters;
             var linkField = lq.linkField || this.linkField;
             var type = lq.type || 'spatial';
             lq.type = type;
@@ -220,8 +275,8 @@ define([
             }
 
             this.executeIdentify({
-                queryOptions: {
-                    queryParameters: lq,
+                identifyOptions: {
+                    identifyParameters: lq,
                     isLinkedQuery: true
                 }
             });
@@ -231,7 +286,7 @@ define([
             this.clearBufferGraphics();
 
             var buffParams = new BufferParameters();
-            buffParams.geometries = [this.queryParameters.geometry];
+            buffParams.geometries = [this.identifyParameters.geometry];
             buffParams.distances = [this.bufferParameters.distance];
             buffParams.unit = this.bufferParameters.unit || units.FEET;
             buffParams.geodesic = this.bufferParameters.geodesic || true;
@@ -241,9 +296,9 @@ define([
             esriConfig.defaults.geometryService.buffer(buffParams, lang.hitch(this, 'processBufferQueryResults'));
         },
 
-        processQueryError: function (error) {
+        processIdentifyError: function (error) {
             this.clearGrowl();
-            this.executingQuery = false;
+            this.executingIdentify = false;
 
             var msg = lang.mixin(this.i18n.messages.searchError, {
                 level: 'error',
@@ -255,16 +310,19 @@ define([
             });
         },
 
-        processQueryResults: function (results) {
+        processIdentifyResults: function (results) {
             this.clearGrowl();
-            this.executingQuery = false;
+            this.executingIdentify = false;
 
             if (!results) {
                 return;
             }
 
+            console.log("identifyResults", results);
+            return;
+
             this.results = results;
-            this.getFeaturesFromResults();
+            this.getFeaturesFromIdentifyResults();
 
             if (!this.idProperty) {
                 this.getIdProperty(results);
@@ -284,8 +342,8 @@ define([
             }
 
             if (recCount > 0) {
-                if (this.featureOptions.source && this.queryParameters.geometry) {
-                    this.addSourceGraphic(this.queryParameters.geometry);
+                if (this.featureOptions.source && this.identifyParameters.geometry) {
+                    this.addSourceGraphic(this.identifyParameters.geometry);
                 }
                 this.populateGrid(results);
             }
@@ -310,7 +368,7 @@ define([
                 this.isLinkedQuery = false;
             }
 
-            this.queryParametersType = 'spatial';
+            this.identifyParametersType = 'spatial';
             this.linkedQuery = {
                 url: null,
                 linkIDs: []
@@ -321,18 +379,18 @@ define([
             var showOnly = this.bufferParameters.showOnly;
 
             // reset the buffer
-            this.bufferParameters = lang.clone(this.defaultQueryOptions.bufferParameters);
+            this.bufferParameters = lang.clone(this.defaultIdentifyOptions.bufferParameters);
 
             if (geometries && geometries.length > 0) {
                 this.addBufferGraphic(geometries[0]);
 
                 if (showOnly !== true) {
-                    var qParams = lang.clone(this.queryParameters);
+                    var qParams = lang.clone(this.identifyParameters);
                     qParams.bufferGeometry = geometries[0];
 
                     this.executeIdentify({
-                        queryOptions: {
-                            queryParameters: qParams,
+                        identifyOptions: {
+                            identifyParameters: qParams,
                             bufferParameters: this.bufferParameters,
                             linkedQuery: this.linkedQuery,
                             linkField: this.linkField,
@@ -342,7 +400,7 @@ define([
 
                 } else {
                     if (this.featureOptions.source) {
-                        this.addSourceGraphic(this.queryParameters.geometry);
+                        this.addSourceGraphic(this.identifyParameters.geometry);
                         this.zoomToBufferGraphics();
                     }
 
@@ -379,22 +437,19 @@ define([
         },
 
         getURL: function () {
-            var qp = this.queryParameters;
-            var url = qp.url;
-            if (!url && qp.layerID) {
-                var layer = this.map.getLayer(qp.layerID);
-                if (layer) {
-                    if (layer.declaredClass === 'esri.layers.FeatureLayer') { // Feature Layer
-                        url = layer.url;
-                    } else if (layer.declaredClass === 'esri.layers.ArcGISDynamicMapServiceLayer') { // Dynamic Layer
-                        if (qp.sublayerID !== null) {
-                            url = layer.url + '/' + qp.sublayerID;
-                        } else if (layer.visibleLayers && layer.visibleLayers.length === 1) {
-                            url = layer.url + '/' + layer.visibleLayers[0];
-                        }
-                    }
+            var layer = this.getLayer();
+            var url = layer.url;
+
+            // handle feature layers
+            if (layer.declaredClass === 'esri.layers.FeatureLayer') {
+                // If it is a feature Layer, we get the base url
+                // for the map service by removing the layerId.
+                var lastSL = url.lastIndexOf('/' + layer.layerId);
+                if (lastSL > 0) {
+                    url = url.substring(0, lastSL);
                 }
             }
+
             return url;
         }
     });

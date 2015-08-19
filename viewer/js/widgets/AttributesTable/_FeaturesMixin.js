@@ -48,12 +48,31 @@ define([
             }
         },
 
-        getFeaturesFromResults: function () {
+        getFeaturesFromQueryResults: function () {
             var results = this.results;
             var features = [];
             if (results.features) {
                 features = results.features;
-            } else if (this.queryParameters.type === 'relationship') {
+            } else if (this.identifyParameters.type === 'relationship') {
+                for (var key in results) {
+                    if (results.hasOwnProperty(key)) {
+                        var item  = results[key];
+                        if (item.features) {
+                            features = features.concat(item.features);
+                        }
+                    }
+                }
+            }
+            this.features = features;
+            return features;
+        },
+
+        getFeaturesFromIdentifyResults: function () {
+            var results = this.results;
+            var features = [];
+            if (results.features) {
+                features = results.features;
+            } else if (this.identifyParameters.type === 'relationship') {
                 for (var key in results) {
                     if (results.hasOwnProperty(key)) {
                         var item  = results[key];
