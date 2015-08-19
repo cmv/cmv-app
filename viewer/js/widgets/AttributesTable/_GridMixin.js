@@ -126,24 +126,10 @@ define([
 
         },
 
-        populateGrid: function (options) {
-            var results = options;
-            if (options.results) {
-                results = options.results;
-            }
-
-            var delim = '', linkField = this.linkField;
-            var filteredFields = array.filter(results.fields, function (field) {
-                return (field.name === linkField);
-            });
-            if (filteredFields.length >0) {
-                if (filteredFields[0].type === 'esriFieldTypeString') {
-                    delim = '\'';
-                }
-            }
-
-            var features = this.getFeaturesFromQueryResults();
+        populateGrid: function () {
+            var features = this.getFeatures();
             var rows = [];
+
             array.forEach(features, lang.hitch(this, function (feature) {
                 // relationship query
                 if (feature.relatedRecords) {
@@ -159,7 +145,7 @@ define([
                 this.zoomToFeatureGraphics();
             }
 
-            this.getColumnsAndSort(results, options);
+            this.getColumnsAndSort();
 
             if (rows && rows.length > 0) {
                 this.grid.set('store', new Memory({
@@ -170,7 +156,6 @@ define([
 
             this.grid.refresh();
             this.setToolbarButtons();
-
         },
 
         getRecordFromFeature: function (feature) {
@@ -224,14 +209,14 @@ define([
             return rows;
         },
 
-        getColumnsAndSort: function (results, options) {
+        getColumnsAndSort: function (options) {
             // reset the columns?
-            if (options.columns) {
+            if (options && options.columns) {
                 this.gridOptions.columns = options.columns;
             }
 
             // reset the sort?
-            if (options.sort) {
+            if (options && options.sort) {
                 this.gridOptions.sort = options.sort;
             }
 
@@ -239,7 +224,7 @@ define([
             var columns = lang.clone(this.gridOptions.columns) || [];
             // no columns? get them from the fields
             if (!columns || columns.length < 1) {
-                columns = this.buildColumns(results);
+                columns = this.buildColumns();
             }
 
             if (columns) {
@@ -267,7 +252,7 @@ define([
             this.grid.set('sort', sort);
         },
 
-        buildColumns: function (results) {
+        buildColumns: function () {
             function formatDateTime (value) {
                 var date = new Date(value);
                 return locale.format(date, {
@@ -283,6 +268,7 @@ define([
                 });
             }
 
+            var results = this.results;
             var excludedFields = ['objectid', 'esri_oid', 'shape', 'shape.len', 'shape.area', 'shape.starea()', 'shape.stlength()', 'st_area(shape)', 'st_length(shape)'];
             var columns = [], col, nameLC = null;
             if (results.fields) {

@@ -1,11 +1,13 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
     'dojo/topic'
 
 ], function (
     declare,
     lang,
+    array,
     topic
 ) {
 
@@ -69,19 +71,10 @@ define([
 
         getFeaturesFromIdentifyResults: function () {
             var results = this.results;
-            var features = [];
-            if (results.features) {
-                features = results.features;
-            } else if (this.identifyParameters.type === 'relationship') {
-                for (var key in results) {
-                    if (results.hasOwnProperty(key)) {
-                        var item  = results[key];
-                        if (item.features) {
-                            features = features.concat(item.features);
-                        }
-                    }
-                }
-            }
+            var features = array.map(results, function (result) {
+                return result.feature;
+            });
+
             this.features = features;
             return features;
         },

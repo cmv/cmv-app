@@ -318,15 +318,8 @@ define([
                 return;
             }
 
-            console.log("identifyResults", results);
-            return;
-
             this.results = results;
             this.getFeaturesFromIdentifyResults();
-
-            if (!this.idProperty) {
-                this.getIdProperty(results);
-            }
 
             var recCount = this.getFeatureCount();
             var msgNls = this.i18n.messages.searchResults;
@@ -345,7 +338,7 @@ define([
                 if (this.featureOptions.source && this.identifyParameters.geometry) {
                     this.addSourceGraphic(this.identifyParameters.geometry);
                 }
-                this.populateGrid(results);
+                this.populateGrid();
             }
 
             if (this.growlOptions.results && !this.isLinkedQuery) {
@@ -368,7 +361,6 @@ define([
                 this.isLinkedQuery = false;
             }
 
-            this.identifyParametersType = 'spatial';
             this.linkedQuery = {
                 url: null,
                 linkIDs: []
@@ -421,19 +413,6 @@ define([
                 return true;
             }
             return false;
-        },
-
-        // get the idProperty from an 'esriFieldTypeOID'
-        // type of field (if available) in the results
-        getIdProperty: function (results) {
-            var fields = results.fields;
-            if (fields && fields.length > 0) {
-                array.forEach(fields, lang.hitch(this, function (field) {
-                    if (field.type === 'esriFieldTypeOID') {
-                        this.idProperty = field.name;
-                    }
-                }));
-            }
         },
 
         getURL: function () {
