@@ -72,7 +72,12 @@ define([
         getFeaturesFromIdentifyResults: function () {
             var results = this.results;
             var features = array.map(results, function (result) {
-                return result.feature;
+                var feature = result.feature;
+
+                //feature.attr('layer_name', result.layerName);
+                feature.attributes.layer_name = result.layerName;
+
+                return feature;
             });
 
             this.features = features;
