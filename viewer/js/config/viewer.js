@@ -66,26 +66,6 @@ define([
         operationalLayers: [
             {
                 type: 'dynamic',
-                url: 'http://services6.arcgis.com/OFl7nP66Wn5cjfY0/ArcGIS/rest/services/General_Plan_Delivery_v1/FeatureServer',
-                title: 'All Plans',
-                nolegend: false,
-                options: {
-                    id: 'All_Plans',
-                    opacity: 1.0,
-                    visible: true,
-                    imageParameters: imageParameters
-                },
-                identifyLayerInfos: {
-                    layerIds: [0, 1, 2, 3, 4, 5, 6]
-                },
-                legendLayerInfos: {
-                    layerInfo: {
-                        hideLayers: [21]
-                    }
-                }
-            },
-            {
-                type: 'dynamic',
                 url: 'http://mycity.houstontx.gov/arcgisweb/rest/services/PD/Government_Boundaries_wm/MapServer',
                 title: 'Houston Government Boundaries',
                 options: {
@@ -93,6 +73,9 @@ define([
                     opacity: 1.0,
                     visible: true,
                     imageParameters: imageParameters
+                },
+                visibleLayerInfos: {
+                    layerIds: [7, 8, 9]
                 }
             }
         ],
