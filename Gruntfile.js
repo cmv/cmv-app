@@ -1,3 +1,4 @@
+/* global module */
 module.exports = function(grunt) {
 
   // middleware for grunt.connect
