@@ -66,16 +66,13 @@ define([
         operationalLayers: [
             {
                 type: 'dynamic',
-                url: 'http://mycity.houstontx.gov/arcgisweb/rest/services/PD/Government_Boundaries_wm/MapServer',
-                title: 'Houston Government Boundaries',
+                url: 'http://mycity.houstontx.gov/arcgisv91/rest/services/PD/New_GP/MapServer',
+                title: 'Houston General Plans',
                 options: {
-                    id: 'Houston_Government_Boundaries',
+                    id: 'Houston_General_Plans',
                     opacity: 1.0,
                     visible: true,
                     imageParameters: imageParameters
-                },
-                visibleLayerInfos: {
-                    layerIds: [7, 8, 9]
                 }
             }
         ],
