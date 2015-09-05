@@ -35,8 +35,14 @@ define([
             // Allow the display of an info window when a feature is selected
             infoWindow: true,
 
-            // Allow StreetView when tehre is a single selected feature
-            streetView: true
+            // Allow StreetView when there is a single selected feature
+            streetView: true,
+
+            // Add layer name to the feature attributes
+            addLayerNameToFeature: false,
+
+            // Convert feature attribute names to lower case
+            convertAttrKeysToLowerCase: false
         },
 
         features: [],
@@ -71,14 +77,27 @@ define([
 
         getFeaturesFromIdentifyResults: function () {
             var results = this.results;
-            var features = array.map(results, function (result) {
+            var features = array.map(results, lang.hitch(this, function (result) {
                 var feature = result.feature;
 
-                //feature.attr('layer_name', result.layerName);
-                feature.attributes.layer_name = result.layerName;
+                if (this.featureOptions.addLayerNameToFeature) {
+                    feature.attributes.layer_name = result.layerName
+                }
+
+                if (this.featureOptions.convertAttrKeysToLowerCase) {
+                    attrs = feature.attributes;
+                    for (key in attrs) {
+                        val = attrs[key];
+                        delete attrs[key];
+                        attrs[key.toLowerCase()] = val;
+                    }
+                }
+                feature.attributes = lang.mixin(feature.attributes, {
+                    layer_name: result.layerName
+                });
 
                 return feature;
-            });
+            }));
 
             this.features = features;
             return features;
