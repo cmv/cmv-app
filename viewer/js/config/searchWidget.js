@@ -1,8 +1,9 @@
 define([
     'dojo/on',
     'dojo/date/locale',
+    'dojo/string',
     'esri/tasks/IdentifyParameters'
-], function (on, locale, IdentifyParameters) {
+], function (on, locale, string, IdentifyParameters) {
 
     return {
         map: true,
@@ -54,7 +55,12 @@ define([
                                 },
                                 {
                                     field: 'plan_link',
-                                    label: 'Plan Link'
+                                    label: 'Plan Link',
+                                    formatter: function (value) {
+                                        return string.substitute('<a target="_blank" href="${link}">Plan details</a>', {
+                                            link: value
+                                        });
+                                    }
                                 }
                             ],
                             sort: [
