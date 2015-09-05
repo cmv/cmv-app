@@ -1,14 +1,8 @@
 define([
     'dojo/on',
-    'dojo/date/locale'
-], function (on, locale) {
-
-    function formatDateTime (value) {
-        var date = new Date(value);
-        return locale.format(date, {
-            formatLength: 'short'
-        });
-    }
+    'dojo/date/locale',
+    'esri/tasks/IdentifyParameters'
+], function (on, locale, IdentifyParameters) {
 
     return {
         map: true,
@@ -18,27 +12,28 @@ define([
 
         layers: [
             {
-                name: 'Houston Government Boundaries',
+                name: 'Houston General Plans',
                 expression: '', // additional where expression applied to all queries
                 idProperty: 'OBJECTID',
                 open: false,
                 identifyParameters: {
                     type: 'spatial', // spatial, relationship, table or database
-                    layerID: 'Houston_Government_Boundaries', // from operational layers
+                    layerID: 'Houston_General_Plans', // from operational layers
+                    layerOption: IdentifyParameters.LAYER_OPTION_ALL,
                     outFields: ['*']
                 },
                 attributeSearches: [
                     {
-                        name: 'Houston Government Boundaries',
+                        name: 'Houston General Plans',
                         searchFields: [
-                            {
-                                name: 'Lead Organization',
-                                label: 'Lead Organization',
-                                expression: '(LEAD_ORGANIZATION LIKE \'[value]%\')',
-                                placeholder: 'e.g. HGAC',
-                                required: true,
-                                minChars: 3
-                            }
+                            //{
+                            //    name: 'Lead Organization',
+                            //    label: 'Lead Organization',
+                            //    expression: '(LEAD_ORGANIZATION LIKE \'[value]%\')',
+                            //    placeholder: 'e.g. HGAC',
+                            //    required: true,
+                            //    minChars: 3
+                            //}
                         ],
 
                         title: 'Houston Government Boundaries',
@@ -46,37 +41,21 @@ define([
                         gridOptions: {
                             columns: [
                                 {
-                                    field: 'layer_name',
-                                    label: 'Layer Name'
+                                    field: 'Lead_Organization',
+                                    label: 'Lead Organization'
                                 },
                                 {
-                                    field: 'OBJECTID',
-                                    label: 'Object ID'
+                                    field: 'Plan_Name',
+                                    label: 'Plan Name'
                                 },
                                 {
-                                    field: 'Shape',
-                                    label: 'Shape'
-                                },
-                                {
-                                    field: 'CODE',
-                                    label: 'Code'
-                                },
-                                {
-                                    field: 'NAME',
-                                    label: 'Name'
-                                },
-                                {
-                                    field: 'School Name',
-                                    label: 'School Name'
-                                },
-                                {
-                                    field: 'School District',
-                                    label: 'School District'
+                                    field: 'Plan_Link',
+                                    label: 'Plan Link'
                                 }
                             ],
                             sort: [
                                 {
-                                    attribute: 'CODE',
+                                    attribute: 'Plan_Name',
                                     descending: 'ASC'
                                 }
                             ]
