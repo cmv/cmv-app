@@ -14,7 +14,7 @@ define([
             {
                 name: 'Houston General Plans',
                 expression: '', // additional where expression applied to all queries
-                idProperty: 'OBJECTID',
+                idProperty: 'objectid',
                 open: false,
                 identifyParameters: {
                     type: 'spatial', // spatial, relationship, table or database
@@ -36,26 +36,30 @@ define([
                             //}
                         ],
 
-                        title: 'Houston Government Boundaries',
-                        topicID: 'HoustonGovernmentBoundaries',
+                        title: 'Houston General Plans',
+                        topicID: 'Houston_General_Plans',
+                        featureOptions: {
+                            addLayerNameToFeature: true,
+                            convertAttrKeysToLowerCase: true
+                        },
                         gridOptions: {
                             columns: [
                                 {
-                                    field: 'Lead_Organization',
+                                    field: 'lead_organization',
                                     label: 'Lead Organization'
                                 },
                                 {
-                                    field: 'Plan_Name',
+                                    field: 'plan_name',
                                     label: 'Plan Name'
                                 },
                                 {
-                                    field: 'Plan_Link',
+                                    field: 'plan_link',
                                     label: 'Plan Link'
                                 }
                             ],
                             sort: [
                                 {
-                                    attribute: 'Plan_Name',
+                                    attribute: 'plan_name',
                                     descending: 'ASC'
                                 }
                             ]
