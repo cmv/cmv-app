@@ -680,6 +680,9 @@ The Attribute Table publishes the following topics. The topicID should be unique
 // publishes the raw results of the QueryTask
 topicID + '/queryResults'
 
+// publishes the raw results of the IdentifyTask
+topicID + '/identifyResults'
+
 // publishes the selected feature when one is selected on the map or withing the Attribute Table grid
 topicID + '/selectFeatures'
 

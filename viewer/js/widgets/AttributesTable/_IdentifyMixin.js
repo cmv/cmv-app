@@ -352,7 +352,7 @@ define([
                 });
             }
 
-            topic.publish(this.topicID + '/queryResults', this.results);
+            topic.publish(this.topicID + '/identifyResults', this.results);
 
             if (this.linkedQuery && (this.linkedQuery.url || this.linkedQuery.layerID)) {
                 var lq = lang.clone(this.linkedQuery);
