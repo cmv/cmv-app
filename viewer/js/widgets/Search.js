@@ -143,6 +143,14 @@ define([
             aspect.after(this, 'resize', lang.hitch(this, function () {
                 this.tabContainer.resize();
             }));
+
+            this.setStyles();
+        },
+
+        setStyles: function () {
+            if (typeof this.hideShapeLayerSelect != 'undefined' && this.hideShapeLayerSelect) {
+                domStyle.set(this.divShapeLayer, 'display', 'none');
+            }
         },
 
         addTopics: function () {

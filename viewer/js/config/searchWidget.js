@@ -10,17 +10,17 @@ define([
         mapClickMode: true,
         identifyLayerInfos: true,
         identifyTolerance: 5,
+        hideShapeLayerSelect: true,
 
         layers: [
             {
                 name: 'Houston General Plans',
                 expression: '', // additional where expression applied to all queries
                 idProperty: 'objectid',
-                open: false,
                 identifyParameters: {
                     type: 'spatial', // spatial, relationship, table or database
                     layerID: 'Houston_General_Plans', // from operational layers
-                    layerOption: IdentifyParameters.LAYER_OPTION_ALL,
+                    //layerOption: IdentifyParameters.LAYER_OPTION_ALL,
                     outFields: ['*']
                 },
                 attributeSearches: [
