@@ -21,9 +21,24 @@ define([
     // url to your geometry server.
     esriConfig.defaults.geometryService = new GeometryService('http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
 
-    //image parameters for dynamic services, set to png32 for higher quality exports.
-    var imageParameters = new ImageParameters();
-    imageParameters.format = 'png32';
+    // helper function returning ImageParameters for dynamic layers
+    // example:
+    // imageParameters: buildImageParameters({
+    //     layerIds: [0],
+    //     layerOption: 'show'
+    // })
+    function buildImageParameters(config) {
+        config = config || {};
+        var ip = new ImageParameters();
+        //image parameters for dynamic services, set to png32 for higher quality exports
+        ip.format = 'png32';
+        for (var key in config) {
+            if (config.hasOwnProperty(key)) {
+                ip[key] = config[key];
+            }
+        }
+        return ip;
+    }
 
     return {
         // used for debugging your app
@@ -108,7 +123,7 @@ define([
                 id: 'louisvillePubSafety',
                 opacity: 1.0,
                 visible: true,
-                imageParameters: imageParameters
+                imageParameters: buildImageParameters()
             },
             identifyLayerInfos: {
                 layerIds: [2, 4, 5, 8, 12, 21]
@@ -126,7 +141,7 @@ define([
                 id: 'DamageAssessment',
                 opacity: 1.0,
                 visible: true,
-                imageParameters: imageParameters
+                imageParameters: buildImageParameters()
             },
             legendLayerInfos: {
                 exclude: true
