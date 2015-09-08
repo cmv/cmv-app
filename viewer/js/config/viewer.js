@@ -1,31 +1,20 @@
 define([
-    'dojo/_base/lang',
-    'esri/units',
-    'esri/geometry/Extent',
-    'esri/config',
-    /*'esri/urlUtils',*/
-    'esri/tasks/GeometryService',
-    'esri/layers/ImageParameters'
-], function (lang, units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters) {
+   'esri/units',
+   'esri/geometry/Extent',
+   'esri/config',
+   'esri/tasks/GeometryService',
+   'esri/layers/ImageParameters'
+], function (units, Extent, esriConfig, GeometryService, ImageParameters) {
 
-    // esri config
-    esriConfig.defaults.geometryService = new GeometryService('https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
+    // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
     esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
     esriConfig.defaults.io.alwaysUseProxy = false;
-    // esriConfig.defaults.io.corsDetection = false;
-    // urlUtils.addProxyRule({
-    //  urlPrefix: 'geocode.arcgis.com',
-    //  proxyUrl: 'proxy/proxy.ashx'
-    // });
+    // url to your geometry server.
+    esriConfig.defaults.geometryService = new GeometryService('http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
 
-    // additional functions, defines, etc you may need in config go here
-    function ipMix(params) {
-        return lang.mixin(new ImageParameters(), params);
-    }
-
-    var imageParams = ipMix({
-        format: 'png32'
-    });
+    //image parameters for dynamic services, set to png32 for higher quality exports.
+    var imageParameters = new ImageParameters();
+    imageParameters.format = 'png32';
 
     return {
         // used for debugging your app
@@ -91,7 +80,7 @@ define([
                     title: 'My layer'
                 }
             }
-        }, {
+  }, {
             type: 'feature',
             url: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
             title: 'San Francisco 311 Incidents',
@@ -102,7 +91,7 @@ define([
                 outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
                 mode: 0
             }
-        }, {
+  }, {
             type: 'dynamic',
             url: 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
             title: 'Louisville Public Safety',
@@ -110,7 +99,7 @@ define([
                 id: 'louisvillePubSafety',
                 opacity: 1.0,
                 visible: true,
-                imageParameters: imageParams
+                imageParameters: imageParameters
             },
             identifyLayerInfos: {
                 layerIds: [2, 4, 5, 8, 12, 21]
@@ -120,7 +109,7 @@ define([
                     hideLayers: [21]
                 }
             }
-        }, {
+  }, {
             type: 'dynamic',
             url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer',
             title: 'Damage Assessment',
@@ -128,7 +117,7 @@ define([
                 id: 'DamageAssessment',
                 opacity: 1.0,
                 visible: true,
-                imageParameters: imageParams
+                imageParameters: imageParameters
             },
             legendLayerInfos: {
                 exclude: true
@@ -138,7 +127,7 @@ define([
                 metadataUrl: true,
                 expanded: true
             }
-        }],
+  }],
         // set include:true to load. For titlePane type set position the the desired order in the sidebar
         widgets: {
             growler: {
