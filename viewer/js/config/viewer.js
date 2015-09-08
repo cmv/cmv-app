@@ -1,14 +1,23 @@
 define([
-   'esri/units',
-   'esri/geometry/Extent',
-   'esri/config',
-   'esri/tasks/GeometryService',
-   'esri/layers/ImageParameters'
-], function (units, Extent, esriConfig, GeometryService, ImageParameters) {
+    'esri/units',
+    'esri/geometry/Extent',
+    'esri/config',
+    /*'esri/urlUtils',*/
+    'esri/tasks/GeometryService',
+    'esri/layers/ImageParameters'
+], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters) {
 
     // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
     esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
     esriConfig.defaults.io.alwaysUseProxy = false;
+
+    // add a proxy rule to force specific domain requests through proxy
+    // be sure the domain is added in proxy.config
+    /*urlUtils.addProxyRule({
+        urlPrefix: 'www.example.com',
+        proxyUrl: 'proxy/proxy.ashx'
+    });*/
+
     // url to your geometry server.
     esriConfig.defaults.geometryService = new GeometryService('http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
 
@@ -80,7 +89,7 @@ define([
                     title: 'My layer'
                 }
             }
-  }, {
+        }, {
             type: 'feature',
             url: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
             title: 'San Francisco 311 Incidents',
@@ -91,7 +100,7 @@ define([
                 outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
                 mode: 0
             }
-  }, {
+        }, {
             type: 'dynamic',
             url: 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
             title: 'Louisville Public Safety',
@@ -109,7 +118,7 @@ define([
                     hideLayers: [21]
                 }
             }
-  }, {
+        }, {
             type: 'dynamic',
             url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer',
             title: 'Damage Assessment',
@@ -127,7 +136,7 @@ define([
                 metadataUrl: true,
                 expanded: true
             }
-  }],
+        }],
         // set include:true to load. For titlePane type set position the the desired order in the sidebar
         widgets: {
             growler: {
