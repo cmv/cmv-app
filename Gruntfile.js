@@ -44,6 +44,18 @@ module.exports = function(grunt) {
         src: ['**'],
         dest: 'dist/viewer',
         expand: true
+      },
+      proj4: {
+        src: 'bower_components/proj4/dist/proj4.js',
+        dest: 'viewer/js/libs/proj4/proj4.js'
+      },
+      turf: {
+        src: 'bower_components/turf/turf.min.js',
+        dest: 'viewer/js/libs/turf/turf.js'
+      },
+      'terra-arcgis': {
+        src: 'bower_components/terra-arcgis/TerraArcGIS.min.js',
+        dest: 'viewer/js/libs/TerraArcGIS/TerraArcGIS.js'
       }
     },
     clean: {
@@ -69,7 +81,7 @@ module.exports = function(grunt) {
     },
     jshint: {
       build: {
-        src: ['viewer/**/*.js'],
+        src: ['viewer/**/*.js', '!viewer/js/libs/**/*.js'],
         options: {
           jshintrc: '.jshintrc',
           reporter: require('jshint-stylish')
