@@ -23,14 +23,31 @@ define([
         i18n: i18n,
         mode: 'agol',
         title: i18n.title,
-        //baseClass: 'gis_Basemaps_Dijit',
-        //buttonClass: 'gis_Basemaps_Button',
-        //menuClass: 'gis_Basemaps_Menu',
-        mapStartBasemap: 'streets',
-        basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'gray', 'oceans', 'national-geographic', 'osm'],
-        validBasemaps: [],
+
+        mapStartBasemap: null,
+        basemapsToShow: null,
+
         postCreate: function () {
             this.inherited(arguments);
+
+            // if the basemaps to show is not explicitly set,
+            // get them from the basemap object
+            if (!this.basemapsToShow) {
+                this.basemapsToShow = Object.keys(this.basemaps);
+            }
+
+            // if the starting basemap is not explicitly set,
+            // get it from the map
+            if (!this.mapStartBasemap) {
+                this.mapStartBasemap = this.map.getBasemap();
+            }
+
+            // check to make sure the starting basemap
+            // is found in the basemaps object
+            if (!this.basemaps.hasOwnProperty(this.mapStartBasemap)) {
+                this.mapStartBasemap = this.basemapsToShow[0];
+            }
+
             this.currentBasemap = this.mapStartBasemap || null;
 
             if (this.mode === 'custom') {
@@ -41,15 +58,11 @@ define([
                         return map.basemap;
                     })
                 });
-                // if (this.map.getBasemap() !== this.mapStartBasemap) { //based off the title of custom basemaps in viewer.js config
-                //     this.gallery.select(this.mapStartBasemap);
-                // }
                 this.gallery.startup();
             }
 
             this.menu = new DropDownMenu({
-                style: 'display: none;' //,
-                //baseClass: this.menuClass
+                style: 'display: none;'
             });
 
             array.forEach(this.basemapsToShow, function (basemap) {

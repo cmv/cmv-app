@@ -6,11 +6,19 @@ define([
     return {
         map: true, // needs a refrence to the map
         mode: 'agol', //must be either 'agol' or 'custom'
-        title: 'Basemaps', // tilte for widget
-        mapStartBasemap: 'streets', // must match one of the basemap keys below
-        //basemaps to show in menu. define in basemaps object below and reference by name here
-        // TODO Is this array necessary when the same keys are explicitly included/excluded below?
-        basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'lightGray', 'gray', 'national-geographic', 'osm', 'oceans'],
+        title: 'Basemaps', // title for widget
+
+        /* optional starting basemap
+        / otherwise uses the basemap from the map
+        / must match one of the keys in basemaps object below
+        */
+        //mapStartBasemap: 'streets',
+
+        /* optional array of  basemaps to show in menu.
+        / otherwise uses keys in basemaps object below
+        / values in array must match keys in basemaps object
+        */
+        //basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'lightGray', 'gray', 'national-geographic', 'osm', 'oceans'],
 
         // define all valid custom basemaps here. Object of Basemap objects. For custom basemaps, the key name and basemap id must match.
         basemaps: { // agol basemaps
