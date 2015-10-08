@@ -123,11 +123,12 @@ define([
 				}
 			}
 
+			var container = (this.config.container && this.config.container.id && dom.byId(this.config.container.id)) || document.body;
 			this.panes.outer = new BorderContainer({
 				id: 'borderContainerOuter',
 				design: 'sidebar',
 				gutters: false
-			}).placeAt(document.body);
+			}).placeAt(container);
 
 			var options, placeAt, type;
 			for (key in panes) {

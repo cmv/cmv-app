@@ -53,6 +53,10 @@ define([
             zoom: 5,
             sliderStyle: 'small'
         },
+        // if needed, uncomment the container section and specify an existing DOM node ID to place the viewer inside that element
+        //container: {
+        //    id: 'cmv'
+        //},
         // panes: {
         // 	left: {
         // 		splitter: true
