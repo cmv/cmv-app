@@ -86,10 +86,10 @@ define([
         // 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
         operationalLayers: [{
             type: 'feature',
-            url: 'http://services1.arcgis.com/g2TonOxuRkIqSOFx/arcgis/rest/services/MeetUpHomeTowns/FeatureServer/0',
-            title: 'STLJS Meetup Home Towns',
+            url: 'http://services1.arcgis.com/6bXbLtkf4y11TosO/arcgis/rest/services/Restaurants/FeatureServer/0',
+            title: 'Restaurants',
             options: {
-                id: 'meetupHometowns',
+                id: 'restaurants',
                 opacity: 1.0,
                 visible: true,
                 outFields: ['*'],
@@ -101,7 +101,7 @@ define([
             legendLayerInfos: {
                 exclude: false,
                 layerInfo: {
-                    title: 'My layer'
+                    title: 'Restaurants'
                 }
             }
         }, {
