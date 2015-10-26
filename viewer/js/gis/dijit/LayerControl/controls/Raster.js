@@ -11,6 +11,8 @@ define([
     _Contained,
     _Control
 ) {
+    'use strict';
+
     var RasterControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
         _esriLayerType: 'raster', // constant

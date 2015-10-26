@@ -1,3 +1,4 @@
+/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dijit/TitlePane',
@@ -15,6 +16,7 @@ define([
     'dojo/dom-class',
     'xstyle/css!./FloatingTitlePane/css/FloatingTitlePane.css'
 ], function (declare, TitlePane, on, lang, Moveable, aspect, topic, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass) {
+
     return declare([TitlePane], {
         sidebarPosition: null,
         postCreate: function () {
@@ -35,7 +37,7 @@ define([
                 aspect.after(this._moveable, 'onMove', lang.hitch(this, '_dragging'), true);
                 aspect.after(this._moveable, 'onMoveStop', lang.hitch(this, '_endDrag'), true);
                 aspect.after(this._moveable, 'onMoveStart', lang.hitch(this, '_startDrag'), true);
-                
+
                 // ensure that dragging the movable stops no matter
                 // when/where the mouse is released or a touch is completed
                 on(document, 'mouseup, touchend', lang.hitch(this, '_endDrag'));

@@ -1,3 +1,4 @@
+/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dijit/_WidgetBase',
@@ -35,10 +36,8 @@ define([
                     this.connectMapClick();
                 }
                 // a measurement tool is active
-            } else {
-                if (this.mapClickMode !== 'measure') {
-                    this.disconnectMapClick();
-                }
+            } else if (this.mapClickMode !== 'measure') {
+                this.disconnectMapClick();
             }
         },
         disconnectMapClick: function () {

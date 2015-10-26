@@ -13,6 +13,8 @@ define([
     _Control,
     legendUtil
 ) {
+    'use strict';
+
     var ImageControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
         _esriLayerType: 'image', // constant

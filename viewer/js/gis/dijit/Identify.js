@@ -1,3 +1,4 @@
+/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dijit/_WidgetBase',
@@ -23,6 +24,7 @@ define([
     'dijit/form/FilteringSelect',
     'xstyle/css!./Identify/css/Identify.css'
 ], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, IdentifyTemplate, i18n) {
+
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
         templateString: IdentifyTemplate,
@@ -129,7 +131,7 @@ define([
         setupDraggable: function () {
             var popups, handles, pointers, movable;
             // the popup, handle (title) and pointers (arrows)
-            popups  = query('div.esriPopup');
+            popups = query('div.esriPopup');
             handles = query('div.esriPopup div.titlePane div.title');
             pointers = query('div.esriPopup div.outerPointer, div.esriPopup div.pointer');
 
@@ -180,7 +182,7 @@ define([
             }));
 
             if (identifies.length > 0) {
-                this.map.infoWindow.setTitle( this.i18n.mapInfoWindow.identifyingTitle );
+                this.map.infoWindow.setTitle(this.i18n.mapInfoWindow.identifyingTitle);
                 this.map.infoWindow.setContent('<div class="loading"></div>');
                 this.map.infoWindow.show(mapPoint);
                 all(identifies).then(lang.hitch(this, 'identifyCallback', identifiedlayers), lang.hitch(this, 'identifyError'));
@@ -308,7 +310,7 @@ define([
         },
 
         getInfoTemplate: function (layer, layerId, result) {
-            var popup = null, 
+            var popup = null,
                 content = null;
             if (result) {
                 layerId = result.layerId;
@@ -544,11 +546,9 @@ define([
                         }
                     // remove any infoTemplates that might
                     // interfere with clicking on a feature
-                    } else {
-                        if (layer.infoTemplate) {
-                            this.infoTemplates[layer.id] = lang.clone(layer.infoTemplate);
-                            layer.infoTemplate = null;
-                        }
+                    } else if (layer.infoTemplate) {
+                        this.infoTemplates[layer.id] = lang.clone(layer.infoTemplate);
+                        layer.infoTemplate = null;
                     }
                 }
             }, this);

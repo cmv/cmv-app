@@ -1,14 +1,14 @@
-/*global dojoConfig */
-/*jshint unused:true */
 define(function () {
+    'use strict';
+
     var cb = '_asyncApiLoaderCallback';
     return {
         load: function (param, req, loadCallback) {
             if (!cb) {
                 return;
             } else {
-                dojoConfig[cb] = function () {
-                    delete dojoConfig[cb];
+                window.dojoConfig[cb] = function () {
+                    delete window.dojoConfig[cb];
                     cb = null;
                     loadCallback();
                 };

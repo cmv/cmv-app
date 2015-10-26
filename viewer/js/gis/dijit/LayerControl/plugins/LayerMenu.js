@@ -1,3 +1,4 @@
+/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dijit/Menu',
@@ -25,7 +26,7 @@ define([
                 controlOptions = control.controlOptions,
                 controller = control.controller,
                 layerType = control._layerType,
-                menu = this;
+                self = this;
             //reorder menu items
             if ((layerType === 'vector' && controller.vectorReorder) || (layerType === 'overlay' && controller.overlayReorder)) {
                 control._reorderUp = new MenuItem({
@@ -34,23 +35,23 @@ define([
                         controller._moveUp(control);
                     }
                 });
-                menu.addChild(control._reorderUp);
+                self.addChild(control._reorderUp);
                 control._reorderDown = new MenuItem({
                     label: i18n.moveDown,
                     onClick: function () {
                         controller._moveDown(control);
                     }
                 });
-                menu.addChild(control._reorderDown);
-                menu.addChild(new MenuSeparator());
+                self.addChild(control._reorderDown);
+                self.addChild(new MenuSeparator());
             }
             // toggle all dynamic sublayers
             if (control._dynamicToggleMenuItems) {
-                control._dynamicToggleMenuItems(menu);
+                control._dynamicToggleMenuItems(self);
             }
             //zoom to layer
             if ((controlOptions.noZoom !== true && controller.noZoom !== true) || (controller.noZoom === true && controlOptions.noZoom === false)) {
-                menu.addChild(new MenuItem({
+                self.addChild(new MenuItem({
                     label: i18n.zoomTo,
                     onClick: function () {
                         controller._zoomToLayer(layer);
@@ -59,7 +60,7 @@ define([
             }
             //transparency
             if ((controlOptions.noTransparency !== true && controller.noTransparency !== true) || (controller.noTransparency === true && controlOptions.noTransparency === false)) {
-                menu.addChild(new Transparency({
+                self.addChild(new Transparency({
                     label: i18n.transparency,
                     layer: layer
                 }));
@@ -87,7 +88,7 @@ define([
                         }
                     }));
                 }
-                menu.addChild(new PopupMenuItem({
+                self.addChild(new PopupMenuItem({
                     label: i18n.layerSwipe,
                     popup: swipeMenu
                 }));
@@ -95,8 +96,8 @@ define([
             // metadata link
             // service url
             if (controlOptions.metadataUrl === true && layer.url) {
-                menu.addChild(new MenuSeparator());
-                menu.addChild(new MenuItem({
+                self.addChild(new MenuSeparator());
+                self.addChild(new MenuItem({
                     label: i18n.metadata,
                     onClick: function () {
                         window.open(layer.url, '_blank');
@@ -105,8 +106,8 @@ define([
             }
             // custom url
             if (controlOptions.metadataUrl && typeof controlOptions.metadataUrl === 'string') {
-                menu.addChild(new MenuSeparator());
-                menu.addChild(new MenuItem({
+                self.addChild(new MenuSeparator());
+                self.addChild(new MenuItem({
                     label: i18n.metadata,
                     onClick: function () {
                         window.open(controlOptions.metadataUrl, '_blank');
@@ -114,9 +115,9 @@ define([
                 }));
             }
             //if last child is a separator remove it
-            var lastChild = menu.getChildren()[menu.getChildren().length - 1];
+            var lastChild = self.getChildren()[self.getChildren().length - 1];
             if (lastChild && lastChild.isInstanceOf(MenuSeparator)) {
-                menu.removeChild(lastChild);
+                self.removeChild(lastChild);
             }
         }
     });

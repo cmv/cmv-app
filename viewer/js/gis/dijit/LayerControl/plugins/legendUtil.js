@@ -1,3 +1,4 @@
+/*eslint camelcase: 0*/
 define([
     'dojo/_base/array',
     'dojo/_base/lang',
@@ -31,7 +32,9 @@ define([
     i18n
 ) {
     'use strict';
+
     esriBundle.widgets.legend.NLS_noLegend = i18n.noLegend;
+
     return {
         /////////////////////
         // utility methods //

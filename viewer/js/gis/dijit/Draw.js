@@ -1,27 +1,28 @@
+/*eslint strict: 0*/
 define([
-   'dojo/_base/declare',
-   'dijit/_WidgetBase',
-   'dijit/_TemplatedMixin',
-   'dijit/_WidgetsInTemplateMixin',
-   'dojo/_base/lang',
-   'dojo/_base/Color',
-   'esri/toolbars/draw',
-   'esri/layers/GraphicsLayer',
-   'esri/graphic',
-   'esri/renderers/SimpleRenderer',
-   'dojo/text!./Draw/templates/Draw.html',
-   'esri/renderers/UniqueValueRenderer',
-   'esri/symbols/SimpleMarkerSymbol',
-   'esri/symbols/SimpleLineSymbol',
-   'esri/symbols/SimpleFillSymbol',
-   'esri/layers/FeatureLayer',
-   'dojo/topic',
-   'dojo/aspect',
-   'dojo/i18n!./Draw/nls/resource',
+    'dojo/_base/declare',
+    'dijit/_WidgetBase',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetsInTemplateMixin',
+    'dojo/_base/lang',
+    'dojo/_base/Color',
+    'esri/toolbars/draw',
+    'esri/layers/GraphicsLayer',
+    'esri/graphic',
+    'esri/renderers/SimpleRenderer',
+    'dojo/text!./Draw/templates/Draw.html',
+    'esri/renderers/UniqueValueRenderer',
+    'esri/symbols/SimpleMarkerSymbol',
+    'esri/symbols/SimpleLineSymbol',
+    'esri/symbols/SimpleFillSymbol',
+    'esri/layers/FeatureLayer',
+    'dojo/topic',
+    'dojo/aspect',
+    'dojo/i18n!./Draw/nls/resource',
 
-   'dijit/form/Button',
-   'xstyle/css!./Draw/css/Draw.css',
-   'xstyle/css!./Draw/css/adw-icons.css'
+    'dijit/form/Button',
+    'xstyle/css!./Draw/css/Draw.css',
+    'xstyle/css!./Draw/css/adw-icons.css'
 ], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, Color, Draw, GraphicsLayer, Graphic, SimpleRenderer, drawTemplate, UniqueValueRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, FeatureLayer, topic, aspect, i18n) {
 
     // main draw dijit
@@ -94,12 +95,12 @@ define([
                 mode: FeatureLayer.MODE_SNAPSHOT
             });
             this.polygonRenderer = new UniqueValueRenderer(new SimpleFillSymbol(), 'ren', null, null, ', ');
-                this.polygonRenderer.addValue({
-                    value: 1,
-                    symbol: new SimpleFillSymbol({
-                    color: [255,170,0,255],
+            this.polygonRenderer.addValue({
+                value: 1,
+                symbol: new SimpleFillSymbol({
+                    color: [255, 170, 0, 255],
                     outline: {
-                        color: [255,170,0,255],
+                        color: [255, 170, 0, 255],
                         width: 1,
                         type: 'esriSLS',
                         style: 'esriSLSSolid'
@@ -146,36 +147,36 @@ define([
         disconnectMapClick: function () {
             topic.publish('mapClickMode/setCurrent', 'draw');
             this.enableStopButtons();
-            // dojo.disconnect(this.mapClickEventHandle);
-            // this.mapClickEventHandle = null;
+        // dojo.disconnect(this.mapClickEventHandle);
+        // this.mapClickEventHandle = null;
         },
         connectMapClick: function () {
             topic.publish('mapClickMode/setDefault');
             this.disableStopButtons();
-            // if (this.mapClickEventHandle === null) {
-            //     this.mapClickEventHandle = dojo.connect(this.map, 'onClick', this.mapClickEventListener);
-            // }
+        // if (this.mapClickEventHandle === null) {
+        //     this.mapClickEventHandle = dojo.connect(this.map, 'onClick', this.mapClickEventListener);
+        // }
         },
         onDrawToolbarDrawEnd: function (evt) {
             this.drawToolbar.deactivate();
             this.drawModeTextNode.innerText = this.i18n.labels.currentDrawModeNone;
             var graphic;
             switch (evt.geometry.type) {
-                case 'point':
-                    graphic = new Graphic(evt.geometry);
-                    this.pointGraphics.add(graphic);
-                    break;
-                case 'polyline':
-                    graphic = new Graphic(evt.geometry);
-                    this.polylineGraphics.add(graphic);
-                    break;
-                case 'polygon':
-                    graphic = new Graphic(evt.geometry, null, {
-                        ren: 1
-                    });
-                    this.polygonGraphics.add(graphic);
-                    break;
-                default:
+            case 'point':
+                graphic = new Graphic(evt.geometry);
+                this.pointGraphics.add(graphic);
+                break;
+            case 'polyline':
+                graphic = new Graphic(evt.geometry);
+                this.polylineGraphics.add(graphic);
+                break;
+            case 'polygon':
+                graphic = new Graphic(evt.geometry, null, {
+                    ren: 1
+                });
+                this.polygonGraphics.add(graphic);
+                break;
+            default:
             }
             this.connectMapClick();
         },
@@ -197,20 +198,20 @@ define([
             this.disableStopButtons();
         },
         disableStopButtons: function () {
-            this.stopDrawingButton.set( 'disabled', true );
-            this.eraseDrawingButton.set( 'disabled', !this.noGraphics() );
+            this.stopDrawingButton.set('disabled', true);
+            this.eraseDrawingButton.set('disabled', !this.noGraphics());
         },
         enableStopButtons: function () {
-            this.stopDrawingButton.set( 'disabled', false );
-            this.eraseDrawingButton.set( 'disabled', !this.noGraphics() );
+            this.stopDrawingButton.set('disabled', false);
+            this.eraseDrawingButton.set('disabled', !this.noGraphics());
         },
         noGraphics: function () {
 
-            if ( this.pointGraphics.graphics.length > 0 ) {
+            if (this.pointGraphics.graphics.length > 0) {
                 return true;
-            } else if ( this.polylineGraphics.graphics.length > 0 ) {
+            } else if (this.polylineGraphics.graphics.length > 0) {
                 return true;
-            } else if ( this.polygonGraphics.graphics.length > 0 ) {
+            } else if (this.polygonGraphics.graphics.length > 0) {
                 return true;
             } else {
                 return false;

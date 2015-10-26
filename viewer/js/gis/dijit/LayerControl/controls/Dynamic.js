@@ -39,6 +39,8 @@ define([
     legendUtil,
     i18n
 ) {
+    'use strict';
+
     var DynamicControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
         _esriLayerType: 'dynamic', // constant

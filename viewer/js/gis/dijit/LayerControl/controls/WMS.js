@@ -11,6 +11,8 @@ define([
     _Contained,
     _Control
 ) {
+    'use strict';
+
     var WMSControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
         _esriLayerType: 'wms', // constant

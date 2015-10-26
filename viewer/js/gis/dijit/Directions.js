@@ -1,18 +1,19 @@
+/*eslint strict: 0*/
 define([
-   'dojo/_base/declare',
-   'dijit/_WidgetBase',
-   'dijit/_TemplatedMixin',
-   'esri/dijit/Directions',
-   'dojo/text!./Directions/templates/Directions.html',
-   'dojo/_base/lang',
-   'dijit/Menu',
-   'dijit/MenuItem',
-   'dijit/PopupMenuItem',
-   'dijit/MenuSeparator',
-   'esri/geometry/Point',
-   'esri/SpatialReference',
-   'dojo/topic',
-   'dojo/i18n!./Directions/nls/resource'
+    'dojo/_base/declare',
+    'dijit/_WidgetBase',
+    'dijit/_TemplatedMixin',
+    'esri/dijit/Directions',
+    'dojo/text!./Directions/templates/Directions.html',
+    'dojo/_base/lang',
+    'dijit/Menu',
+    'dijit/MenuItem',
+    'dijit/PopupMenuItem',
+    'dijit/MenuSeparator',
+    'esri/geometry/Point',
+    'esri/SpatialReference',
+    'dojo/topic',
+    'dojo/i18n!./Directions/nls/resource'
 ], function (declare, _WidgetBase, _TemplatedMixin, Directions, template, lang, Menu, MenuItem, PopupMenuItem, MenuSeparator, Point, SpatialReference, topic, i18n) {
 
     return declare([_WidgetBase, _TemplatedMixin], {
@@ -25,13 +26,13 @@ define([
             }, this.options), this.directionsNode);
             this.directions.startup();
 
-             //temp fix for 3.12 and 3.13 map click button.
+            //temp fix for 3.12 and 3.13 map click button.
             if (this.directions._activateButton) {
                 this.directions._activateButton.style.display = 'none';
             } else if (this.directions._activateButtonNode) {
                 this.directions._activateButtonNode.style.display = 'none';
-                this.directions._addDestinationNode.style['float'] = 'inherit';
-                this.directions._optionsButtonNode.style['float'] = 'inherit';
+                this.directions._addDestinationNode.style.float = 'inherit';
+                this.directions._optionsButtonNode.style.float = 'inherit';
                 this.directions._optionsButtonNode.style.marginRight = '5px';
             }
 

@@ -1,3 +1,4 @@
+/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dojo/_base/array',
@@ -28,6 +29,7 @@ define([
     esriConfig,
     require
 ) {
+
     var LayerControl = declare([WidgetBase, Container], {
         map: null,
         layerInfos: [],
@@ -151,8 +153,8 @@ define([
             }));
         },
         // create layer control and add to appropriate _container
-        _addControl: function (layerInfo, LayerControl) {
-            var layerControl = new LayerControl({
+        _addControl: function (layerInfo, Control) {
+            var layerControl = new Control({
                 controller: this,
                 layer: (typeof layerInfo.layer === 'string') ? this.map.getLayer(layerInfo.layer) : layerInfo.layer, // check if we have a layer or just a layer id
                 layerTitle: layerInfo.title,
@@ -263,25 +265,23 @@ define([
             var map = this.map;
             if (layer.spatialReference === map.spatialReference) {
                 map.setExtent(layer.fullExtent, true);
-            } else {
-                if (esriConfig.defaults.geometryService) {
-                    esriConfig.defaults.geometryService.project(lang.mixin(new ProjectParameters(), {
-                        geometries: [layer.fullExtent],
-                        outSR: map.spatialReference
-                    }), function (r) {
-                        map.setExtent(r[0], true);
-                    }, function (e) {
-                        topic.publish('viewer/handleError', {
-                            source: 'LayerControl._zoomToLayer',
-                            error: e
-                        });
-                    });
-                } else {
+            } else if (esriConfig.defaults.geometryService) {
+                esriConfig.defaults.geometryService.project(lang.mixin(new ProjectParameters(), {
+                    geometries: [layer.fullExtent],
+                    outSR: map.spatialReference
+                }), function (r) {
+                    map.setExtent(r[0], true);
+                }, function (e) {
                     topic.publish('viewer/handleError', {
                         source: 'LayerControl._zoomToLayer',
-                        error: 'esriConfig.defaults.geometryService is not set'
+                        error: e
                     });
-                }
+                });
+            } else {
+                topic.publish('viewer/handleError', {
+                    source: 'LayerControl._zoomToLayer',
+                    error: 'esriConfig.defaults.geometryService is not set'
+                });
             }
         },
         // layer swiper

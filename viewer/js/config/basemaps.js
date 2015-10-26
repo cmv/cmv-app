@@ -2,7 +2,9 @@ define([
     //'esri/dijit/Basemap',
     //'esri/dijit/BasemapLayer',
     //'esri/layers/osm'
-], function ( /* Basemap, BasemapLayer, osm */ ) {
+], function (/* Basemap, BasemapLayer, osm */) {
+    'use strict';
+
     return {
         map: true, // needs a refrence to the map
         mode: 'agol', //must be either 'agol' or 'custom'
