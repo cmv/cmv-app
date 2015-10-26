@@ -72,8 +72,7 @@ module.exports = function (grunt) {
             build: {
                 src: ['viewer/**/*.js'],
                 options: {
-                    eslintrc: '.eslintrc',
-                    reporter: require('eslint-stylish')
+                    eslintrc: '.eslintrc'
                 }
             }
         },
