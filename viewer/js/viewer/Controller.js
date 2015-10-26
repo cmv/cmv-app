@@ -20,10 +20,10 @@ define([
     'esri/dijit/PopupMobile',
     'dijit/Menu',
     'esri/IdentityManager'
-], function(Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
+], function (Map, dom, domStyle, domGeom, domClass, on, array, BorderContainer, ContentPane, FloatingTitlePane, lang, mapOverlay, FloatingWidgetDialog, put, aspect, has, topic, PopupMobile, Menu) {
     'use strict';
 
-    return{
+    return {
         legendLayerInfos: [],
         editorLayerInfos: [],
         identifyLayerInfos: [],
