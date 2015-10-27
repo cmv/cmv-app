@@ -8,6 +8,7 @@
     "repository": "https://github.com/cmv/cmv-app/",
     "dependencies": {
         "babel-eslint": "4.1.x",
+        "csslint": "0.10.x",
         "eslint": "1.7.3",
         "grunt": "0.4.x",
         "grunt-autoprefixer": "0.7.x",
@@ -15,6 +16,7 @@
         "grunt-contrib-connect": "0.7.x",
         "grunt-contrib-copy": "0.5.x",
         "grunt-contrib-cssmin": "0.9.x",
+        "grunt-contrib-csslint": "0.5.x",
         "grunt-eslint": "17.3.x",
         "grunt-contrib-uglify": "0.4.x",
         "grunt-contrib-watch": "0.6.x",
