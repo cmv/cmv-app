@@ -1,6 +1,9 @@
 # Folders to ignore
 dist
 node_modules
+bower_components
+viewer/js/libs/**
+!viewer/js/libs/README.md
 stash
 .idea
 

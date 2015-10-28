@@ -1,5 +1,13 @@
 (function () {
 
+  // example libs package
+  // {
+  //   name: 'proj4',
+  //   location: location.pathname.replace(/[^\/]+$/, '') + 'js/libs/proj4',
+  //   main: 'proj4.js' // simply require `proj4` and use it
+  // }
+
+
   // globel dojoConfig is required for async loading of gmaps api
   window.dojoConfig = {
     async: true,
