@@ -1,7 +1,6 @@
 /*global google */
 /*eslint strict: 0*/
 define([
-<<<<<<< HEAD
     'dojo/_base/declare',
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
@@ -18,28 +17,8 @@ define([
     'esri/geometry/Point',
     'esri/SpatialReference',
     'dijit/MenuItem',
-    '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.3/proj4.js',
+    '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js',
     'dojo/i18n!./StreetView/nls/resource',
-=======
-	'dojo/_base/declare',
-	'dijit/_WidgetBase',
-	'dijit/_TemplatedMixin',
-	'dijit/_WidgetsInTemplateMixin',
-	'dojo/_base/lang',
-	'dojo/aspect',
-	'dojo/topic',
-	'esri/layers/GraphicsLayer',
-	'esri/graphic',
-	'esri/renderers/SimpleRenderer',
-	'dojo/text!./StreetView/templates/StreetView.html',
-	'esri/symbols/PictureMarkerSymbol',
-	'dojo/dom-style',
-	'esri/geometry/Point',
-	'esri/SpatialReference',
-	'dijit/MenuItem',
-	'//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js',
-	'dojo/i18n!./StreetView/nls/resource',
->>>>>>> develop
 
     'dijit/form/Button',
     'xstyle/css!./StreetView/css/StreetView.css',
