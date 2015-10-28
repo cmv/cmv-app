@@ -1,3 +1,4 @@
+/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
@@ -25,7 +26,7 @@ define([
     TemplatedMixin,
     folderTemplate
 ) {
-    var _DynamicFolder =  declare([WidgetBase, TemplatedMixin], {
+    var _DynamicFolder = declare([WidgetBase, TemplatedMixin], {
         control: null,
         sublayerInfo: null,
         icons: null,

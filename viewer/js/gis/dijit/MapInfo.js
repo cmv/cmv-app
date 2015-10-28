@@ -169,6 +169,8 @@ define([
                     this._project(pnt);
                 }
                 break;
+            default:
+                break;
             }
         },
         _project: function (pnt) {

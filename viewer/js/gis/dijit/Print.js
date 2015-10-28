@@ -1,3 +1,4 @@
+/*eslint strict: 0, no-eval: 0 */
 define([
     'dojo/_base/declare',
     'dijit/_WidgetBase',
@@ -30,6 +31,47 @@ define([
     'dijit/form/RadioButton',
     'xstyle/css!./Print/css/Print.css'
 ], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, PrintTemplate, PrintParameters, esriRequest, i18n) {
+
+    // Print result dijit
+    var PrintResultDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+        widgetsInTemplate: true,
+        templateString: printResultTemplate,
+        i18n: i18n,
+        url: null,
+        fileHandle: null,
+        postCreate: function () {
+            this.inherited(arguments);
+            this.fileHandle.then(lang.hitch(this, '_onPrintComplete'), lang.hitch(this, '_onPrintError'));
+        },
+        _onPrintComplete: function (data) {
+            if (data.url) {
+                this.url = data.url;
+                this.nameNode.innerHTML = '<span class="bold">' + this.docName + '</span>';
+                domClass.add(this.resultNode, 'printResultHover');
+            } else {
+                this._onPrintError(this.i18n.printResults.errorMessage);
+            }
+        },
+        _onPrintError: function (err) {
+            topic.publish('viewer/handleError', {
+                source: 'Print',
+                error: err
+            });
+            this.nameNode.innerHTML = '<span class="bold">' + i18n.printResults.errorMessage + '</span>';
+            domClass.add(this.resultNode, 'printResultError');
+        },
+        _openPrint: function () {
+            if (this.url !== null) {
+                window.open(this.url);
+            }
+        },
+        _handleStatusUpdate: function (event) {
+            var jobStatus = event.jobInfo.jobStatus;
+            if (jobStatus === 'esriJobFailed') {
+                this._onPrintError(this.i18n.printResults.errorMessage);
+            }
+        }
+    });
 
     // Main print dijit
     var PrintDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -69,7 +111,7 @@ define([
         },
         operationalLayersInspector: function (opLayers) {
             array.forEach(opLayers, function (layer) {
-                if (layer.id == 'Measurement_graphicslayer') {
+                if (layer.id === 'Measurement_graphicslayer') {
                     array.forEach(layer.featureCollection.layers, function (fcLayer) {
                         array.forEach(fcLayer.featureSet.features, function (feature) {
                             delete feature.attributes;
@@ -92,17 +134,17 @@ define([
             this.printTask = new PrintTask(this.printTaskURL, {
                 async: data.executionType === 'esriExecutionTypeAsynchronous'
             });
-            var Layout_Template = array.filter(data.parameters, function (param) {
+            var layoutTemplate = array.filter(data.parameters, function (param) {
                 return param.name === 'Layout_Template';
             });
-            if (Layout_Template.length === 0) {
+            if (layoutTemplate.length === 0) {
                 topic.publish('viewer/handleError', {
                     source: 'Print',
                     error: 'Print service parameters name for templates must be \'Layout_Template\''
                 });
                 return;
             }
-            var layoutItems = array.map(Layout_Template[0].choiceList, function (item) {
+            var layoutItems = array.map(layoutTemplate[0].choiceList, function (item) {
                 return {
                     name: item,
                     id: item
@@ -118,7 +160,7 @@ define([
             if (this.defaultLayout) {
                 this.layoutDijit.set('value', this.defaultLayout);
             } else {
-                this.layoutDijit.set('value', Layout_Template[0].defaultValue);
+                this.layoutDijit.set('value', layoutTemplate[0].defaultValue);
             }
 
             var Format = array.filter(data.parameters, function (param) {
@@ -164,9 +206,7 @@ define([
                 var template = new PrintTemplate();
                 template.format = form.format;
                 template.layout = form.layout;
-                /*jslint evil: true */
                 template.preserveScale = eval(form.preserveScale); //turns a string 'true' into true
-                /*jslint evil: false */
                 template.label = form.title;
                 template.exportOptions = mapOnlyForm;
                 template.layoutOptions = {
@@ -187,8 +227,8 @@ define([
                     fileHandle: fileHandle
                 }).placeAt(this.printResultsNode, 'last');
 
-                if ( this.printTask.async ) {
-                    result.own( this.printTask.printGp.on( 'status-update', lang.hitch( result, '_handleStatusUpdate' ) ) );
+                if (this.printTask.async) {
+                    result.own(this.printTask.printGp.on('status-update', lang.hitch(result, '_handleStatusUpdate')));
                 }
 
 
@@ -205,45 +245,5 @@ define([
         }
     });
 
-    // Print result dijit
-    var PrintResultDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
-        widgetsInTemplate: true,
-        templateString: printResultTemplate,
-        i18n: i18n,
-        url: null,
-        fileHandle: null,
-        postCreate: function () {
-            this.inherited(arguments);
-            this.fileHandle.then(lang.hitch(this, '_onPrintComplete'), lang.hitch(this, '_onPrintError'));
-        },
-        _onPrintComplete: function (data) {
-            if (data.url) {
-                this.url = data.url;
-                this.nameNode.innerHTML = '<span class="bold">' + this.docName + '</span>';
-                domClass.add(this.resultNode, 'printResultHover');
-            } else {
-                this._onPrintError( this.i18n.printResults.errorMessage );
-            }
-        },
-        _onPrintError: function (err) {
-            topic.publish('viewer/handleError', {
-                source: 'Print',
-                error: err
-            });
-            this.nameNode.innerHTML = '<span class="bold">' + i18n.printResults.errorMessage + '</span>';
-            domClass.add(this.resultNode, 'printResultError');
-        },
-        _openPrint: function () {
-            if (this.url !== null) {
-                window.open(this.url);
-            }
-        },
-        _handleStatusUpdate: function ( event ) {
-            var jobStatus = event.jobInfo.jobStatus;
-            if ( jobStatus === 'esriJobFailed' ){
-                this._onPrintError( this.i18n.printResults.errorMessage );
-            }
-        }
-    });
     return PrintDijit;
 });

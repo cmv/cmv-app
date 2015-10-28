@@ -1,3 +1,4 @@
+/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dijit/_WidgetBase',

@@ -1,3 +1,4 @@
+/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dijit/_WidgetBase',
@@ -70,7 +71,7 @@ define([
                     var menuItem = new MenuItem({
                         id: basemap,
                         label: this.basemaps[basemap].title,
-                        iconClass: (basemap == this.mapStartBasemap) ? 'selectedIcon' : 'emptyIcon',
+                        iconClass: (basemap === this.mapStartBasemap) ? 'selectedIcon' : 'emptyIcon',
                         onClick: lang.hitch(this, function () {
                             if (basemap !== this.currentBasemap) {
                                 this.currentBasemap = basemap;
@@ -81,7 +82,7 @@ define([
                                 }
                                 var ch = this.menu.getChildren();
                                 array.forEach(ch, function (c) {
-                                    if (c.id == basemap) {
+                                    if (c.id === basemap) {
                                         c.set('iconClass', 'selectedIcon');
                                     } else {
                                         c.set('iconClass', 'emptyIcon');
@@ -102,11 +103,9 @@ define([
                 if (this.map.getBasemap() !== this.mapStartBasemap) { //based off the title of custom basemaps in viewer.js config
                     this.gallery.select(this.mapStartBasemap);
                 }
-            } else {
-                if (this.mapStartBasemap) {
-                    if (this.map.getBasemap() !== this.mapStartBasemap) { //based off the agol basemap name
-                        this.map.setBasemap(this.mapStartBasemap);
-                    }
+            } else if (this.mapStartBasemap) {
+                if (this.map.getBasemap() !== this.mapStartBasemap) { //based off the agol basemap name
+                    this.map.setBasemap(this.mapStartBasemap);
                 }
             }
         }

@@ -1,3 +1,4 @@
+/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
@@ -16,23 +17,23 @@ define([
     'dojo/text!./templates/Sublayer.html',
     'dojo/i18n!./../nls/resource'
 ], function (
-        declare,
-        lang,
-        array,
-        on,
-        domClass,
-        domStyle,
-        domAttr,
-        fx,
-        html,
-        Menu,
-        MenuItem,
-        topic,
-        WidgetBase,
-        TemplatedMixin,
-        sublayerTemplate,
-        i18n
-        ) {
+    declare,
+    lang,
+    array,
+    on,
+    domClass,
+    domStyle,
+    domAttr,
+    fx,
+    html,
+    Menu,
+    MenuItem,
+    topic,
+    WidgetBase,
+    TemplatedMixin,
+    sublayerTemplate,
+    i18n
+) {
     var _DynamicSublayer = declare([WidgetBase, TemplatedMixin], {
         control: null,
         sublayerInfo: null,
@@ -70,7 +71,7 @@ define([
             }
             //set up menu
             if (this.control.controlOptions.menu &&
-                    this.control.controlOptions.menu.length) {
+                this.control.controlOptions.menu.length) {
                 domClass.add(this.labelNode, 'menuLink');
                 domClass.add(this.iconNode, 'menuLink');
                 this.menu = new Menu({
@@ -84,15 +85,15 @@ define([
         },
         _addMenuItem: function (menuItem) {
             //create the menu item
-            var item  = new MenuItem(menuItem);
+            var item = new MenuItem(menuItem);
             item.set('onClick', lang.hitch(this, function () {
-                    topic.publish('LayerControl/' + menuItem.topic, {
-                        layer: this.control.layer,
-                        subLayer: this.sublayerInfo,
-                        iconNode: this.iconNode,
-                        menuItem: item
-                    });
-                }));
+                topic.publish('LayerControl/' + menuItem.topic, {
+                    layer: this.control.layer,
+                    subLayer: this.sublayerInfo,
+                    iconNode: this.iconNode,
+                    menuItem: item
+                });
+            }));
             this.menu.addChild(item);
         },
         // add on event to expandClickNode
@@ -100,7 +101,7 @@ define([
             var i = this.icons;
             this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
                 var expandNode = this.expandNode,
-                        iconNode = this.expandIconNode;
+                    iconNode = this.expandIconNode;
                 if (domStyle.get(expandNode, 'display') === 'none') {
                     fx.wipeIn({
                         node: expandNode,
@@ -131,9 +132,9 @@ define([
         // check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function () {
             var node = this.checkNode,
-                    scale = this.control.layer.getMap().getScale(),
-                    min = this.sublayerInfo.minScale,
-                    max = this.sublayerInfo.maxScale;
+                scale = this.control.layer.getMap().getScale(),
+                min = this.sublayerInfo.minScale,
+                max = this.sublayerInfo.maxScale;
             domClass.remove(node, 'layerControlCheckIconOutScale');
             if ((min !== 0 && scale > min) || (max !== 0 && scale < max)) {
                 domClass.add(node, 'layerControlCheckIconOutScale');

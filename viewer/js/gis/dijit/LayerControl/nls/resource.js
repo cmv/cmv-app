@@ -7,7 +7,7 @@
 // if need be or checkout the link above and submit a PR
 define({
     root: {
-    	noLegend: 'No Legend',
+        noLegend: 'No Legend',
         moveUp: 'Move Up',
         moveDown: 'Move Down',
         zoomTo: 'Zoom to Layer',

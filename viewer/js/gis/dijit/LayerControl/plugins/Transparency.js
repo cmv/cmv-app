@@ -1,3 +1,4 @@
+/*eslint strict: 0*/
 /* transparency component */
 define([
     'dojo/_base/declare',
@@ -20,6 +21,7 @@ define([
     HorizontalSlider,
     HorizontalRuleLabels
 ) {
+
     return declare(PopupMenuItem, {
         layer: null,
         constructor: function (options) {

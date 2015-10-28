@@ -1,3 +1,4 @@
+/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dijit/_WidgetBase',
@@ -10,23 +11,6 @@ define([
     'dojo/topic',
     'xstyle/css!./Growler/css/Growler.css'
 ], function (declare, _WidgetBase, _TemplatedMixin, lang, Style, domConstruct, fx, domClass, topic) {
-
-    // main growler dijit container
-    var Growler = declare([_WidgetBase, _TemplatedMixin], {
-        templateString: '<div class="gis-dijit-Growl" data-dojo-attach-point="containerNode"></div>',
-        postCreate: function () {
-            this.inherited(arguments);
-            this.own(topic.subscribe('growler/growl', lang.hitch(this, 'growl')));
-        },
-        growl: function (props) {
-            props = props || {};
-            lang.mixin(props, {
-                _container: this.containerNode
-            });
-            var g = new Growl(props);
-            g.startup();
-        }
-    });
 
     // the growl itself
     var Growl = declare([_WidgetBase, _TemplatedMixin], {
@@ -82,5 +66,23 @@ define([
             }, 250, null, lang.partial(domConstruct.destroy, this.domNode));
         }
     });
+
+    // main growler dijit container
+    var Growler = declare([_WidgetBase, _TemplatedMixin], {
+        templateString: '<div class="gis-dijit-Growl" data-dojo-attach-point="containerNode"></div>',
+        postCreate: function () {
+            this.inherited(arguments);
+            this.own(topic.subscribe('growler/growl', lang.hitch(this, 'growl')));
+        },
+        growl: function (props) {
+            props = props || {};
+            lang.mixin(props, {
+                _container: this.containerNode
+            });
+            var g = new Growl(props);
+            g.startup();
+        }
+    });
+
     return Growler;
 });

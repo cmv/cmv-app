@@ -6,6 +6,7 @@ define([
     'esri/tasks/GeometryService',
     'esri/layers/ImageParameters'
 ], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters) {
+    'use strict';
 
     // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
     esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
@@ -27,7 +28,7 @@ define([
     //     layerIds: [0],
     //     layerOption: 'show'
     // })
-    function buildImageParameters(config) {
+    function buildImageParameters (config) {
         config = config || {};
         var ip = new ImageParameters();
         //image parameters for dynamic services, set to png32 for higher quality exports

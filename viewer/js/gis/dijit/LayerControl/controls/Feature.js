@@ -13,6 +13,8 @@ define([
     _Control,
     legendUtil
 ) {
+    'use strict';
+
     var FeatureControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'vector', // constant
         _esriLayerType: 'feature', // constant
