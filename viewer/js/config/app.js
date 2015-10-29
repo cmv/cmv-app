@@ -1,33 +1,57 @@
 (function () {
     'use strict';
-
-    // globel dojoConfig is required for async loading of gmaps api
+    var path = location.pathname.replace(/[^\/]+$/, '');
     window.dojoConfig = {
         async: true,
-        packages: [{
-            name: 'viewer',
-            location: location.pathname.replace(/[^\/]+$/, '') + 'js/viewer'
-        }, {
-            name: 'config',
-            location: location.pathname.replace(/[^\/]+$/, '') + 'js/config'
-        }, {
-            name: 'gis',
-            location: location.pathname.replace(/[^\/]+$/, '') + 'js/gis'
-        }]
+        packages: [
+            {
+                name: 'viewer',
+                location: path + 'js/viewer'
+            }, {
+                name: 'gis',
+                location: path + 'js/gis'
+            }, {
+                name: 'config',
+                location: path + 'js/config'
+            }
+        ]
     };
 
-    // get the config file from the url if present
-    var file = 'config/viewer',
-        s = window.location.search,
-        q = s.match(/config=([^&]*)/i);
-    if (q && q.length > 0) {
-        file = q[1];
-        if (file.indexOf('/') < 0) {
-            file = 'config/' + file;
-        }
-    }
+    require(window.dojoConfig, [
+        'dojo/_base/declare',
 
-    require(window.dojoConfig, ['viewer/Controller', file, 'dojo/domReady!'], function (Controller, config) {
-        Controller.startup(config);
+        // minimal Base Controller
+        'viewer/_ControllerBase',
+
+        // *** Controller Mixins
+        // Use the core mixins, add custom mixins
+        // or replace core mixins with your own
+        'viewer/_ConfigMixin', // manage the Configuration
+        'viewer/_LayoutMixin', // build and manage the Page Layout and User Interface
+        'viewer/_MapMixin', // build and manage the Map
+        'viewer/_WidgetsMixin' // build and manage the Widgets
+
+        //'config/_customMixin'
+
+    ], function (
+        declare,
+
+        _ControllerBase,
+        _ConfigMixin,
+        _LayoutMixin,
+        _MapMixin,
+        _WidgetsMixin
+
+        //_MyCustomMixin
+
+    ) {
+        var controller = new (declare([
+            _ControllerBase,
+            _ConfigMixin,
+            _LayoutMixin,
+            _MapMixin,
+            _WidgetsMixin
+        ]))();
+        controller.startup();
     });
 })();
