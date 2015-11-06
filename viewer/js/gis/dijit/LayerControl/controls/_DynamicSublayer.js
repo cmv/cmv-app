@@ -45,6 +45,10 @@ define([
         _expandClickHandler: null,
         postCreate: function () {
             this.inherited(arguments);
+            // Should the control be visible or hidden?
+            if (this.control.controlOptions.layerIds && this.control.controlOptions.layerIds.indexOf(this.sublayerInfo.id) < 0) {
+                domClass.add(this.domNode, 'layerControlHidden');
+            }
             var checkNode = this.checkNode;
             domAttr.set(checkNode, 'data-sublayer-id', this.sublayerInfo.id);
             domClass.add(checkNode, this.control.layer.id + '-layerControlSublayerCheck');

@@ -67,6 +67,13 @@
     text-align: center;
 }
 
+.layerControlDijit .layerControlHidden {
+    display: none;
+}
+.layerControlDijit .layerControlVisible {
+    display: block;
+}
+
 .layerControlDijit .layerControlIndent {
     padding-left: 22px;
 }

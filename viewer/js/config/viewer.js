@@ -124,10 +124,16 @@ define([
                 id: 'louisvillePubSafety',
                 opacity: 1.0,
                 visible: true,
-                imageParameters: buildImageParameters()
+                imageParameters: buildImageParameters({
+                    layerIds: [0, 2, 4, 5, 8, 10, 12, 21],
+                    layerOption: 'show'
+                })
             },
             identifyLayerInfos: {
                 layerIds: [2, 4, 5, 8, 12, 21]
+            },
+            layerControlLayerInfos: {
+                layerIds: [0, 2, 4, 5, 8, 9, 10, 12, 21]
             },
             legendLayerInfos: {
                 layerInfo: {
