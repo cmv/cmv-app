@@ -70,6 +70,7 @@ define([
             georss: './LayerControl/controls/GeoRSS',
             wms: './LayerControl/controls/WMS',
             kml: './LayerControl/controls/KML',
+            vectortile: './LayerControl/controls/VectorTile',
             webtiled: './LayerControl/controls/WebTiled',
             imagevector: './LayerControl/controls/ImageVector',
             raster: './LayerControl/controls/Raster',

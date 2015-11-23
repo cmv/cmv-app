@@ -70,6 +70,7 @@ define([
                 raster: 'Raster',
                 stream: 'Stream',
                 tiled: 'ArcGISTiledMapService',
+                vectortile: 'VectorTile',
                 webtiled: 'WebTiled',
                 wms: 'WMS',
                 wmts: 'WMTS' //untested
@@ -97,7 +98,12 @@ define([
         },
 
         _initLayer: function (layer, Layer) {
-            var l = new Layer(layer.url, layer.options);
+            var l;
+            if (layer.url) {
+                l = new Layer(layer.url, layer.options);
+            } else {
+                l = new Layer(layer.options);
+            }
             this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
 
             //Legend LayerInfos array
