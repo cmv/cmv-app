@@ -39,6 +39,12 @@ define([
         draggable: false,
         layerSeparator: '||',
         allLayersId: '***',
+        excludedFields: [
+            'objectid', 'esri_oid', 'shape',
+            'shape.len', 'shape_length',
+            'shape_len', 'shape.stlength()',
+            'shape.area', 'shape_area', 'shape.starea()'
+        ],
 
         postCreate: function () {
             this.inherited(arguments);
@@ -339,13 +345,13 @@ define([
 
             // if no Popup config found, create one with all attributes or layer fields
             if (!popup) {
-                popup = this.createInfoTemplate(layer, layerId, result);
+                popup = this.createDefaultInfoTemplate(layer, layerId, result);
             }
 
             return popup;
         },
 
-        createInfoTemplate: function (layer, layerId, result) {
+        createDefaultInfoTemplate: function (layer, layerId, result) {
             var popup = null, fieldInfos = [];
 
             var layerName = this.getLayerName(layer);
@@ -359,8 +365,9 @@ define([
                 if (attributes) {
                     for (var prop in attributes) {
                         if (attributes.hasOwnProperty(prop)) {
-                            fieldInfos.push({
+                            this.addDefaultFieldInfo(fieldInfos, {
                                 fieldName: prop,
+                                label: prop.replace(/_/g, ' '),
                                 visible: true
                             });
                         }
@@ -371,29 +378,29 @@ define([
             } else if (layer._outFields && (layer._outFields.length) && (layer._outFields[0] !== '*')) {
 
                 var fields = layer.fields;
-                array.forEach(layer._outFields, function (fieldName) {
+                array.forEach(layer._outFields, lang.hitch(this, function (fieldName) {
                     var foundField = array.filter(fields, function (field) {
                         return (field.name === fieldName);
                     });
                     if (foundField.length > 0) {
-                        fieldInfos.push({
+                        this.addDefaultFieldInfo(fieldInfos, {
                             fieldName: foundField[0].name,
                             label: foundField[0].alias,
                             visible: true
                         });
                     }
-                });
+                }));
 
             // from the fields layer
             } else if (layer.fields) {
 
-                array.forEach(layer.fields, function (field) {
-                    fieldInfos.push({
+                array.forEach(layer.fields, lang.hitch(this, function (field) {
+                    this.addDefaultFieldInfo(fieldInfos, {
                         fieldName: field.name,
                         label: field.alias,
                         visible: true
                     });
-                });
+                }));
             }
 
             if (fieldInfos.length > 0) {
@@ -409,6 +416,13 @@ define([
             }
 
             return popup;
+        },
+
+        addDefaultFieldInfo: function (fieldInfos, field) {
+            var nameLC = field.fieldName.toLowerCase();
+            if (array.indexOf(this.excludedFields, nameLC) < 0) {
+                fieldInfos.push(field);
+            }
         },
 
         createIdentifyLayerList: function () {
