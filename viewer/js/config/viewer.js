@@ -158,6 +158,63 @@ define([
                 metadataUrl: true,
                 expanded: true
             }
+        /*
+        //examples of vector tile layers (beta in v3.15)
+        }, {
+            type: 'vectortile',
+            title: 'Light Gray Canvas Vector',
+            url: '//www.arcgis.com/sharing/rest/content/items/bdf1eec3fa79456c8c7c2bb62f86dade/resources/styles/root.json',
+            options: {
+                id: 'vectortile1',
+                opacity: 0.8,
+                visible: true
+            }
+        }, {
+           //  taken from this demo: https://github.com/ycabon/presentations/blob/gh-pages/2015-berlin-plenary/demos/3.15-vectortile/create-by-style-object.html
+            type: 'vectortile',
+            title: 'Custom Vector Style',
+            options: {
+                id: 'vectortile2',
+                opacity: 1.0,
+                visible: true,
+                'glyphs': '//www.arcgis.com/sharing/rest/content/items/00cd8e843bae49b3a040423e5d65416b/resources/fonts/{fontstack}/{range}.pbf',
+                'sprite': '//www.arcgis.com/sharing/rest/content/items/00cd8e843bae49b3a040423e5d65416b/resources/sprites/sprite',
+                'version': 8,
+                'sources': {
+                    'esri': {
+                        'url': '//basemapsdev.arcgis.com/arcgis/rest/services/World_Basemap/VectorTileServer',
+                        'type': 'vector'
+                    }
+                },
+                'layers': [{
+                    'id': 'background',
+                    'type': 'background',
+                    'paint': {
+                        'background-color': '#556688'
+                    }
+                }, {
+                    'id': 'Land',
+                    'type': 'fill',
+                    'source': 'esri',
+                    'source-layer': 'Land',
+                    'paint': {
+                        'fill-color': '#273344'
+                    },
+                }, {
+                    'id': 'roads',
+                    'type': 'line',
+                    'source': 'esri',
+                    'source-layer': 'Road',
+                    'layout': {
+                        'line-join': 'round'
+                    },
+                    'paint': {
+                        'line-width': 1,
+                        'line-color': '#131622'
+                    }
+                }]
+            }
+        */
         }],
         // set include:true to load. For titlePane type set position the the desired order in the sidebar
         widgets: {
