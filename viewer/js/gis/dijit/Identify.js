@@ -65,7 +65,7 @@ define([
                         // Identify (Feature Service), create an
                         // infoTemplate for the graphic features. Create
                         // it only if one does not already exist.
-                        if (layer.capabilities && layer.capabilities.toLowerCase().indexOf('data') < 0) {
+                        if (layer.capabilities && array.indexOf(layer.capabilities.toLowerCase(), 'data') < 0) {
                             if (!layer.infoTemplate) {
                                 var infoTemplate = this.getInfoTemplate(layer, layer.layerId);
                                 if (infoTemplate) {
@@ -200,7 +200,7 @@ define([
                 // handle feature layers that come from a feature service
                 // and may already have an info template
                 var layer = evt.graphic._layer;
-                if (layer.infoTemplate || (layer.capabilities && layer.capabilities.toLowerCase().indexOf('data') < 0)) {
+                if (layer.infoTemplate || (layer.capabilities && array.indexOf(layer.capabilities.toLowerCase(), 'data') < 0)) {
                     return false;
                 }
 
@@ -262,7 +262,7 @@ define([
                     } else if ((ref.declaredClass === 'esri.layers.FeatureLayer') && !isNaN(ref.layerId)) { // feature layer
                         // do not allow feature layer that does not support
                         // Identify (Feature Service)
-                        if (ref.capabilities && ref.capabilities.toLowerCase().indexOf('data') > 0) {
+                        if (ref.capabilities && array.indexOf(ref.capabilities.toLowerCase(), 'data') >= 0) {
                             layerIds = [ref.layerId];
                         }
                     } else if (ref.layerInfos) {

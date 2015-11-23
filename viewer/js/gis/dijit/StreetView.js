@@ -22,7 +22,7 @@ define([
 
     'dijit/form/Button',
     'xstyle/css!./StreetView/css/StreetView.css',
-    'gis/plugins/async!//maps.google.com/maps/api/js?v=3&sensor=false'
+    'gis/plugins/async!//maps.google.com/maps/api/js?v=3'
 ], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, Point, SpatialReference, MenuItem, proj4, i18n) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
