@@ -98,6 +98,107 @@ define([
                     })]
                 })
             }*/
+
+            // example using vector tile basemaps (beta in v3.15)
+
+            /*
+            streets: {
+                title: 'Streets',
+                basemap: new Basemap({
+                    id: 'streets',
+                    layers: [new BasemapLayer({
+                        'styleUrl': '//www.arcgis.com/sharing/rest/content/items/3b8814f6ddbd485cae67e8018992246e/resources/styles/root.json',
+                        'type': 'VectorTileLayer'
+                    })]
+                })
+            },
+            satellite: {
+                title: 'Satellite',
+                basemap: new Basemap({
+                    id: 'satellite',
+                    layers: [new BasemapLayer({
+                        url: '//services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+                    })]
+                })
+            },
+            hybrid: {
+                title: 'Hybrid',
+                basemap: new Basemap({
+                    id: 'hybrid',
+                    layers: [
+                        new BasemapLayer({
+                            url: '//services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+                        }),
+                        new BasemapLayer({
+                            'styleUrl': '//www.arcgis.com/sharing/rest/content/items/1854498c7e35420b963a514a32689c80/resources/styles/root.json',
+                            'type': 'VectorTileLayer',
+                            isReference: true
+                        })
+                    ]
+                })
+            },
+            lightGray: {
+                title: 'Light Gray Canvas',
+                basemap: new Basemap({
+                    id: 'lightGray',
+                    layers: [new BasemapLayer({
+                        'styleUrl': '//www.arcgis.com/sharing/rest/content/items/bdf1eec3fa79456c8c7c2bb62f86dade/resources/styles/root.json',
+                        'type': 'VectorTileLayer'
+                    })]
+                })
+            },
+            darkGray: {
+                title: 'Dark Gray Canvas',
+                basemap: new Basemap({
+                    id: 'darkGray',
+                    layers: [new BasemapLayer({
+                        'styleUrl': '//www.arcgis.com/sharing/rest/content/items/3e3099d7302f4d99bc6f916dcc07ed59/resources/styles/root.json',
+                        'type': 'VectorTileLayer'
+                    })]
+                })
+            },
+            navigation: {
+                title: 'Navigation',
+                basemap: new Basemap({
+                    id: 'navigation',
+                    layers: [new BasemapLayer({
+                        'styleUrl': '//www.arcgis.com/sharing/rest/content/items/00cd8e843bae49b3a040423e5d65416b/resources/styles/root.json',
+                        'type': 'VectorTileLayer'
+                    })]
+                })
+            },
+            streetsNight: {
+                title: 'Streets Night',
+                basemap: new Basemap({
+                    id: 'streetsNight',
+                    layers: [new BasemapLayer({
+                        'styleUrl': '//www.arcgis.com/sharing/rest/content/items/f96366254a564adda1dc468b447ed956/resources/styles/root.json',
+                        'type': 'VectorTileLayer'
+                    })]
+                })
+            },
+            streetsRelief: {
+                title: 'Streets w/ Relief',
+                basemap: new Basemap({
+                    id: 'streetsRelief',
+                    layers: [new BasemapLayer({
+                        'styleUrl': '//www.arcgis.com/sharing/rest/content/items/ad06088bd1174866aad2dddbf5ec9642/resources/styles/root.json',
+                        'type': 'VectorTileLayer'
+                    })]
+                })
+            },
+            topo: {
+                title: 'Topographic',
+                basemap: new Basemap({
+                    id: 'topo',
+                    layers: [new BasemapLayer({
+                        'styleUrl': '//www.arcgis.com/sharing/rest/content/items/be44936bcdd24db588a1ae5076e36f34/resources/styles/root.json',
+                        'type': 'VectorTileLayer'
+                    })]
+                })
+            }
+            */
+
         }
     };
 });
