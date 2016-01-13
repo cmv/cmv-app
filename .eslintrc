@@ -153,7 +153,6 @@
         "consistent-this": [2, "self"],
         "constructor-super": 2,
         "func-style": [2, "declaration"],
-        "id-match": [2, "^[a-z]+([A-Z][a-z]+)*$", {"properties": true}],
         "indent": [2, 4],
         "key-spacing": [2, {
             "beforeColon": false,
