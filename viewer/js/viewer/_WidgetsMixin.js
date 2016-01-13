@@ -113,7 +113,9 @@ define([
 
         createWidget: function (widgetConfig, options, WidgetClass) {
             // set any additional options
-            options.id = widgetConfig.id + '_widget';
+            if (widgetConfig.id) {
+                options.id = widgetConfig.id + '_widget';
+            }
             options.parentWidget = widgetConfig.parentWidget;
 
             //replace config map, layerInfos arrays, etc
