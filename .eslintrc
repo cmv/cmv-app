@@ -151,7 +151,6 @@
         "comma-style": 2,
         "computed-property-spacing": [2, "never"],
         "consistent-this": [2, "self"],
-        "constructor-super": 2,
         "func-style": [2, "declaration"],
         "indent": [2, 4],
         "key-spacing": [2, {
