@@ -228,19 +228,15 @@ define([
             },
             geocoder: {
                 include: true,
-                id: 'geocoder',
                 type: 'domNode',
-                path: 'gis/dijit/Geocoder',
-                srcNodeRef: 'geocodeDijit',
+                path: 'esri/dijit/Search',
+                srcNodeRef: 'geocoderButton',
                 options: {
                     map: true,
-                    mapRightClickMenu: true,
-                    geocoderOptions: {
-                        autoComplete: true,
-                        arcgisGeocoder: {
-                            placeholder: 'Enter an address or place'
-                        }
-                    }
+                    visible: true,
+                    enableInfoWindow: false,
+                    enableButtonMode: true,
+                    expanded: false
                 }
             },
             identify: {
