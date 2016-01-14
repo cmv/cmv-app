@@ -27,8 +27,7 @@ define([
             var returnDeferred = new Deferred();
             var returnWarnings = [];
 
-            var container = dom.byId(this.config.layout.map) || 'mapCenter';
-            this.map = new Map(container, this.config.mapOptions);
+            this._createMap();
 
             if (this.config.mapOptions.basemap) {
                 this.map.on('load', lang.hitch(this, '_initLayers', returnWarnings));
@@ -42,6 +41,11 @@ define([
                 returnDeferred.resolve(returnWarnings);
             }
             return returnDeferred;
+        },
+
+        _createMap: function () {
+            var container = dom.byId(this.config.layout.map) || 'mapCenter';
+            this.map = new Map(container, this.config.mapOptions);
         },
 
         _onLayersAddResult: function (returnDeferred, returnWarnings, lyrsResult) {
