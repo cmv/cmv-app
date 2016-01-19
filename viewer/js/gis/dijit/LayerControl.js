@@ -177,14 +177,12 @@ define([
             var layerControlList = this._overlayContainer.getChildren().filter(function (c) {
                 return _filterList(c);
             }).concat(
-                    this._vectorContainer.getChildren().filter(function (c) {
-                        return _filterList(c);
-                    })).concat(
-                    this.getChildren().filter(function (c) { 
-                        return _filterList(c);
-                    }));
-                
-        
+            this._vectorContainer.getChildren().filter(function (c) {
+                return _filterList(c);
+            })).concat(
+            this.getChildren().filter(function (c) { 
+                return _filterList(c);
+            }));
             // follow the same logic as when the layers were added
             array.forEach(layerControlList, lang.hitch(this, function (layerControl) {
                 if (this.separated) {
@@ -216,14 +214,15 @@ define([
                 }, layerInfo.controlOptions)
             });
             layerControl.startup();
+            var position = layerInfo.position || 0;
             if (this.separated) {
                 if (layerControl._layerType === 'overlay') {
-                    this._overlayContainer.addChild(layerControl, 'first');
+                    this._overlayContainer.addChild(layerControl, position);
                 } else {
-                    this._vectorContainer.addChild(layerControl, 'first');
+                    this._vectorContainer.addChild(layerControl, position);
                 }
             } else {
-                this.addChild(layerControl, 'first');
+                this.addChild(layerControl, position);
             }
         },
         // move control up in controller and layer up in map
