@@ -172,15 +172,19 @@ define([
                     }, row, 'last');
 
                     domConst.place(this._image(legend, layerId, layer), symbol);
-                }, this);
-                // place legend in the appropriate sublayer expandNode
-                // or if a single layer use control expandNode
-                if (layer.layerInfos.length > 1) {
-                    var sublayerExpandNode = registry.byId(layer.id + '-' + _layer.layerId + '-sublayer-control').expandNode;
-                    html.set(sublayerExpandNode, ''); //clear "No Legend" placeholder
-                    domConst.place(table, sublayerExpandNode);
-                } else {
-                    domConst.place(table, expandNode);
+                }, this);                
+                if (layer.layerInfos.reduce(function (prior, curr) {
+                    return (curr.id === _layer.layerId) || prior;
+                }, false)) {
+                    // place legend in the appropriate sublayer expandNode
+                    // or if a single layer use control expandNode
+                    if (layer.layerInfos.length > 1) {
+                        var sublayerExpandNode = registry.byId(layer.id + '-' + _layer.layerId + '-sublayer-control').expandNode;
+                        html.set(sublayerExpandNode, ''); //clear "No Legend" placeholder
+                        domConst.place(table, sublayerExpandNode);
+                    } else {
+                        domConst.place(table, expandNode);
+                    }
                 }
             }, this);
         },

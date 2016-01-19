@@ -122,8 +122,8 @@ define([
             this._subscribeToTopics();
         },
         _subscribeToTopics: function () {
-            this._removeLayerControlsHandler = topic.subscribe('layerControl/removeLayerControls', lang.hitch(this, function (layerTitles) {
-                this._removeLayerControls(layerTitles);
+            this._removeLayerControlsHandler = topic.subscribe('layerControl/removeLayerControls', lang.hitch(this, function (layers) {
+                this._removeLayerControls(layers);
             }));
             this._addLayerControlsHandler = topic.subscribe('layerControl/addLayerControls', lang.hitch(this, function (layerInfos) {
                 this._addLayerControls(layerInfos);
@@ -165,12 +165,12 @@ define([
                 this._checkReorder();
             }));
         },
-        // remove the control given an array of layerTitles
-        _removeLayerControls: function (layerTitles) {
-            // helper function to determine which children's title have a match in the layerTitles parameter
+        // remove the control given an array of layers
+        _removeLayerControls: function (layers) {
+            // helper function to determine which children's layer have a match in the layers parameter
             function _filterList (entry) {
-                return layerTitles.reduce(function (prior, curr) {
-                    return (curr === entry.layerTitle) || prior;
+                return layers.reduce(function (prior, curr) {
+                    return (curr === entry.layer) || prior;
                 }, false);
             }
             // get a list of ALL the layers that meet the criteria
@@ -196,6 +196,7 @@ define([
                 } else {
                     this.removeChild(layerControl);
                 }
+                layerControl.destroy();
             }));
         },
         // create layer control and add to appropriate _container
