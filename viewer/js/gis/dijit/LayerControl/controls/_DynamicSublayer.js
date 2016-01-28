@@ -91,7 +91,7 @@ define([
             //create the menu item
             var item = new MenuItem(menuItem);
             item.set('onClick', lang.hitch(this, function () {
-                topic.publish('LayerControl/' + menuItem.topic, {
+                topic.publish('layerControl/' + menuItem.topic, {
                     layer: this.control.layer,
                     subLayer: this.sublayerInfo,
                     iconNode: this.iconNode,
