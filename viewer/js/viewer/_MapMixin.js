@@ -76,6 +76,7 @@ define([
                 tiled: 'ArcGISTiledMapService',
                 vectortile: 'VectorTile',
                 webtiled: 'WebTiled',
+                wfs: 'WFS',
                 wms: 'WMS',
                 wmts: 'WMTS' //untested
             };
