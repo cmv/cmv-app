@@ -10,8 +10,7 @@ define([
     _WidgetBase,
     _TemplatedMixin,
     _Contained,
-    _Control,
-    legendUtil
+    _Control
 ) {
     'use strict';
 
