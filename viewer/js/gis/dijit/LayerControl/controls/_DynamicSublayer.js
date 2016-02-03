@@ -17,23 +17,23 @@ define([
     'dojo/text!./templates/Sublayer.html',
     'dojo/i18n!./../nls/resource'
 ], function (
-    declare,
-    lang,
-    array,
-    on,
-    domClass,
-    domStyle,
-    domAttr,
-    fx,
-    html,
-    Menu,
-    MenuItem,
-    topic,
-    WidgetBase,
-    TemplatedMixin,
-    sublayerTemplate,
-    i18n
-) {
+        declare,
+        lang,
+        array,
+        on,
+        domClass,
+        domStyle,
+        domAttr,
+        fx,
+        html,
+        Menu,
+        MenuItem,
+        topic,
+        WidgetBase,
+        TemplatedMixin,
+        sublayerTemplate,
+        i18n
+        ) {
     var _DynamicSublayer = declare([WidgetBase, TemplatedMixin], {
         control: null,
         sublayerInfo: null,
@@ -43,6 +43,7 @@ define([
         templateString: sublayerTemplate,
         i18n: i18n,
         _expandClickHandler: null,
+        _handlers: [],
         postCreate: function () {
             this.inherited(arguments);
             // Should the control be visible or hidden?
@@ -58,7 +59,7 @@ define([
 
                 this._setSublayerCheckbox(false, checkNode);
             }
-            on(checkNode, 'click', lang.hitch(this, function () {
+            this._handlers.push(on(checkNode, 'click', lang.hitch(this, function () {
                 if (domAttr.get(checkNode, 'data-checked') === 'checked') {
                     this._setSublayerCheckbox(false, checkNode);
                 } else {
@@ -66,16 +67,16 @@ define([
                 }
                 this.control._setVisibleLayers();
                 this._checkboxScaleRange();
-            }));
+            })));
             html.set(this.labelNode, this.sublayerInfo.name);
             this._expandClick();
             if (this.sublayerInfo.minScale !== 0 || this.sublayerInfo.maxScale !== 0) {
                 this._checkboxScaleRange();
-                this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
+                this._handlers.push(this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange')));
             }
             //set up menu
             if (this.control.controlOptions.menu &&
-                this.control.controlOptions.menu.length) {
+                    this.control.controlOptions.menu.length) {
                 domClass.add(this.labelNode, 'menuLink');
                 domClass.add(this.iconNode, 'menuLink');
                 this.menu = new Menu({
@@ -91,7 +92,7 @@ define([
             //create the menu item
             var item = new MenuItem(menuItem);
             item.set('onClick', lang.hitch(this, function () {
-                topic.publish('LayerControl/' + menuItem.topic, {
+                topic.publish('layerControl/' + menuItem.topic, {
                     layer: this.control.layer,
                     subLayer: this.sublayerInfo,
                     iconNode: this.iconNode,
@@ -120,6 +121,7 @@ define([
                     domClass.replace(iconNode, i.expand, i.collapse);
                 }
             }));
+            this._handlers.push(this._expandClickHandler);
         },
         // set checkbox based on layer so it's always in sync
         _setSublayerCheckbox: function (checked, checkNode) {
@@ -143,6 +145,12 @@ define([
             if ((min !== 0 && scale > min) || (max !== 0 && scale < max)) {
                 domClass.add(node, 'layerControlCheckIconOutScale');
             }
+        },
+        destroy: function () {
+            this.inherited(arguments);
+            this._handlers.forEach(function (h) {
+                h.remove();
+            });
         }
     });
     return _DynamicSublayer;
