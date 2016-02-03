@@ -33,6 +33,7 @@ define([
         // ^args
         templateString: folderTemplate,
         _expandClickHandler: null,
+        _handlers: [],
         postCreate: function () {
             this.inherited(arguments);
             // Should the control be visible or hidden?
@@ -47,7 +48,7 @@ define([
             } else {
                 this._setSublayerCheckbox(false, checkNode);
             }
-            on(checkNode, 'click', lang.hitch(this, function () {
+            this._handlers.push(on(checkNode, 'click', lang.hitch(this, function () {
                 if (domAttr.get(checkNode, 'data-checked') === 'checked') {
                     this._setSublayerCheckbox(false, checkNode);
                 } else {
@@ -55,18 +56,18 @@ define([
                 }
                 this.control._setVisibleLayers();
                 this._checkboxScaleRange();
-            }));
+            })));
             html.set(this.labelNode, this.sublayerInfo.name);
             this._expandClick();
             if (this.sublayerInfo.minScale !== 0 || this.sublayerInfo.maxScale !== 0) {
                 this._checkboxScaleRange();
-                this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
+                this._handlers.push(this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange')));
             }
         },
         // add on event to expandClickNode
         _expandClick: function () {
             var i = this.icons;
-            this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
+            this._handlers.push(this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
                 var expandNode = this.expandNode,
                     iconNode = this.expandIconNode;
                 if (domStyle.get(expandNode, 'display') === 'none') {
@@ -82,7 +83,7 @@ define([
                     }).play();
                     domClass.replace(iconNode, i.folder, i.folderOpen);
                 }
-            }));
+            })));
         },
         // set checkbox based on layer so it's always in sync
         _setSublayerCheckbox: function (checked, checkNode) {
@@ -106,6 +107,12 @@ define([
             if ((min !== 0 && scale > min) || (max !== 0 && scale < max)) {
                 domClass.add(node, 'layerControlCheckIconOutScale');
             }
+        },
+        destroy: function () {
+            this.inherited(arguments);
+            this._handlers.forEach(function (h) { 
+                h.remove(); 
+            });
         }
     });
     return _DynamicFolder;

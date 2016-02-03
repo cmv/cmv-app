@@ -118,10 +118,22 @@ define([
                 this.overlayReorder = false;
                 this.vectorReorder = false;
             }
+            this._addLayerControls(this.layerInfos);
+            this._subscribeToTopics();
+        },
+        _subscribeToTopics: function () {
+            this._removeLayerControlsHandler = topic.subscribe('layerControl/removeLayerControls', lang.hitch(this, function (layers) {
+                this._removeLayerControls(layers);
+            }));
+            this._addLayerControlsHandler = topic.subscribe('layerControl/addLayerControls', lang.hitch(this, function (layerInfos) {
+                this._addLayerControls(layerInfos);
+            }));
+        },
+        _addLayerControls: function (layerInfos) {
             // load only the modules we need
             var modules = [];
             // push layer control mods
-            array.forEach(this.layerInfos, function (layerInfo) {
+            array.forEach(layerInfos, function (layerInfo) {
                 // check if control is excluded
                 var controlOptions = layerInfo.controlOptions;
                 if (controlOptions && controlOptions.exclude === true) {
@@ -139,7 +151,7 @@ define([
             }, this);
             // load and go
             require(modules, lang.hitch(this, function () {
-                array.forEach(this.layerInfos, function (layerInfo) {
+                array.forEach(layerInfos, function (layerInfo) {
                     // exclude from widget
                     var controlOptions = layerInfo.controlOptions;
                     if (controlOptions && controlOptions.exclude === true) {
@@ -151,6 +163,38 @@ define([
                     }
                 }, this);
                 this._checkReorder();
+            }));
+        },
+        // remove the control given an array of layers
+        _removeLayerControls: function (layers) {
+            // helper function to determine which children's layer have a match in the layers parameter
+            function _filterList (entry) {
+                return layers.reduce(function (prior, curr) {
+                    return (curr === entry.layer) || prior;
+                }, false);
+            }
+            // get a list of ALL the layers that meet the criteria
+            var layerControlList = this._overlayContainer.getChildren().filter(function (c) {
+                return _filterList(c);
+            }).concat(
+            this._vectorContainer.getChildren().filter(function (c) {
+                return _filterList(c);
+            })).concat(
+            this.getChildren().filter(function (c) { 
+                return _filterList(c);
+            }));
+            // follow the same logic as when the layers were added
+            array.forEach(layerControlList, lang.hitch(this, function (layerControl) {
+                if (this.separated) {
+                    if (layerControl._layerType === 'overlay') {
+                        this._overlayContainer.removeChild(layerControl);
+                    } else {
+                        this._vectorContainer.removeChild(layerControl);
+                    }
+                } else {
+                    this.removeChild(layerControl);
+                }
+                layerControl.destroy();
             }));
         },
         // create layer control and add to appropriate _container
@@ -170,14 +214,15 @@ define([
                 }, layerInfo.controlOptions)
             });
             layerControl.startup();
+            var position = layerInfo.position || 0;
             if (this.separated) {
                 if (layerControl._layerType === 'overlay') {
-                    this._overlayContainer.addChild(layerControl, 'first');
+                    this._overlayContainer.addChild(layerControl, position);
                 } else {
-                    this._vectorContainer.addChild(layerControl, 'first');
+                    this._vectorContainer.addChild(layerControl, position);
                 }
             } else {
-                this.addChild(layerControl, 'first');
+                this.addChild(layerControl, position);
             }
         },
         // move control up in controller and layer up in map
