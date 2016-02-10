@@ -69,6 +69,7 @@ define([
             csv: './LayerControl/controls/CSV',
             georss: './LayerControl/controls/GeoRSS',
             wms: './LayerControl/controls/WMS',
+            wfs: './LayerControl/controls/WFS',
             kml: './LayerControl/controls/KML',
             vectortile: './LayerControl/controls/VectorTile',
             webtiled: './LayerControl/controls/WebTiled',
