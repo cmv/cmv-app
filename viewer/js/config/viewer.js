@@ -133,7 +133,10 @@ define([
                 layerIds: [2, 4, 5, 8, 12, 21]
             },
             layerControlLayerInfos: {
-                layerIds: [0, 2, 4, 5, 8, 9, 10, 12, 21]
+                //layerIds: [0, 2, 4, 5, 8, 9, 10, 12, 21]
+				includeUnspecifiedLayers : true,
+				//excludedLayers : [1,3],
+				subLayerInfos: [{id:0,name:"Layer 1",defaultVisibility:false},{id:2,name:"Layer 2"},{id:4,name:"Layer 3"},{id:5,name:"Layer 4"},{id:8,name:"Layer 5"},{id:9},{id:10},{id:12,name:"Layer 6"},{id:21,name:"Layer 7"}]
             },
             legendLayerInfos: {
                 layerInfo: {

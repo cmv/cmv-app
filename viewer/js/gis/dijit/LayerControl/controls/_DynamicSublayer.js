@@ -46,6 +46,15 @@ define([
         _handlers: [],
         postCreate: function () {
             this.inherited(arguments);
+            // Should the control be visible or hidden (depends on subLayerInfos)?
+            if (this.control.controlOptions.subLayerInfos && !this.control.controlOptions.includeUnspecifiedLayers) {
+                var subLayerInfos = array.map(this.control.controlOptions.subLayerInfos, function (sli) {
+                    return sli.id;
+                });
+                if (array.indexOf(subLayerInfos, this.sublayerInfo.id) < 0) {
+                    domClass.add(this.domNode, 'layerControlHidden');
+                }
+            }
             // Should the control be visible or hidden?
             if (this.control.controlOptions.layerIds && array.indexOf(this.control.controlOptions.layerIds, this.sublayerInfo.id) < 0) {
                 domClass.add(this.domNode, 'layerControlHidden');
@@ -56,7 +65,6 @@ define([
             if (array.indexOf(this.control.layer.visibleLayers, this.sublayerInfo.id) !== -1) {
                 this._setSublayerCheckbox(true, checkNode);
             } else {
-
                 this._setSublayerCheckbox(false, checkNode);
             }
             this._handlers.push(on(checkNode, 'click', lang.hitch(this, function () {
