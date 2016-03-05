@@ -27,6 +27,15 @@ define([
             streets: {
                 title: 'Streets'
             },
+            'streets-night-vector': {
+                title: 'Streets (Night)'
+            },
+            'streets-navigation-vector': {
+                title: 'Streets (Navigation)'
+            },
+            'streets-relief-vector': {
+                title: 'Street (Relief)'
+            },
             satellite: {
                 title: 'Satellite'
             },
@@ -36,8 +45,14 @@ define([
             topo: {
                 title: 'Topo'
             },
-            gray: {
+            'terrain': {
+                title: 'Terrain'
+            },
+            'gray-vector': {
                 title: 'Gray'
+            },
+            'dark-gray-vector': {
+                title: 'Dark Gray'
             },
             oceans: {
                 title: 'Oceans'
