@@ -8,6 +8,7 @@ define([
     'dijit/DropDownMenu',
     'dijit/MenuItem',
     'dojo/_base/array',
+    'dojo/topic',
     'dojox/lang/functional',
     'dojo/text!./Basemaps/templates/Basemaps.html',
     'esri/dijit/BasemapGallery',
@@ -15,7 +16,7 @@ define([
 
     'dijit/form/DropDownButton',
     'xstyle/css!./Basemaps/css/Basemaps.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownMenu, MenuItem, array, functional, template, BasemapGallery, i18n) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownMenu, MenuItem, array, topic, functional, template, BasemapGallery, i18n) {
 
     // main basemap widget
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -72,30 +73,31 @@ define([
                         id: basemap,
                         label: this.basemaps[basemap].title,
                         iconClass: (basemap === this.mapStartBasemap) ? 'selectedIcon' : 'emptyIcon',
-                        onClick: lang.hitch(this, function () {
-                            if (basemap !== this.currentBasemap) {
-                                this.currentBasemap = basemap;
-                                if (this.mode === 'custom') {
-                                    this.gallery.select(basemap);
-                                } else {
-                                    this.map.setBasemap(basemap);
-                                }
-                                var ch = this.menu.getChildren();
-                                array.forEach(ch, function (c) {
-                                    if (c.id === basemap) {
-                                        c.set('iconClass', 'selectedIcon');
-                                    } else {
-                                        c.set('iconClass', 'emptyIcon');
-                                    }
-                                });
-                            }
-                        })
+                        onClick: lang.hitch(this, 'updateBasemap', basemap)
                     });
                     this.menu.addChild(menuItem);
                 }
             }, this);
-
+            topic.subscribe('basemaps/updateBasemap', lang.hitch(this, 'updateBasemap'));
             this.dropDownButton.set('dropDown', this.menu);
+        },
+        updateBasemap: function (basemap) {
+            if (basemap !== this.currentBasemap && (array.indexOf(this.basemapsToShow, basemap) !== -1)) {
+                this.currentBasemap = basemap;
+                if (this.mode === 'custom') {
+                    this.gallery.select(basemap);
+                } else {
+                    this.map.setBasemap(basemap);
+                }
+                var ch = this.menu.getChildren();
+                array.forEach(ch, function (c) {
+                    if (c.id === basemap) {
+                        c.set('iconClass', 'selectedIcon');
+                    } else {
+                        c.set('iconClass', 'emptyIcon');
+                    }
+                });
+            }
         },
         startup: function () {
             this.inherited(arguments);
