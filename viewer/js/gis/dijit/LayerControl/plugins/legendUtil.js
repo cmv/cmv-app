@@ -58,14 +58,22 @@ define([
         },
         // request legend json
         _legendRequest: function (layer, expandNode, callback, errback) {
+            var content = {
+                    f: 'json',
+                    token: (typeof layer._getToken === 'function') ? layer._getToken() : null
+                },
+                options = {disableIdentityLookup: false,
+                    usePost: false,
+                    useProxy: false};
+            if (layer.layerDrawingOptions && layer.layerDrawingOptions.length > 0) {
+                content.dynamicLayers = this._createDynamicLayerParameter(layer);
+                options.usePost = true;
+            }
             esriRequest({
                 url: layer.url + '/legend',
                 callbackParamName: 'callback',
-                content: {
-                    f: 'json',
-                    token: (typeof layer._getToken === 'function') ? layer._getToken() : null
-                }
-            }).then(
+                content: content
+            }, options).then(
                 lang.hitch(this, callback, layer, expandNode),
                 lang.hitch(this, errback, layer, expandNode)
             );
@@ -172,7 +180,7 @@ define([
                     }, row, 'last');
 
                     domConst.place(this._image(legend, layerId, layer), symbol);
-                }, this);                
+                }, this);
                 if (layer.layerInfos.reduce(function (prior, curr) {
                     return (curr.id === _layer.layerId) || prior;
                 }, false)) {
@@ -305,6 +313,30 @@ define([
                 // place legend in expandNode
                 domConst.place(table, expandNode);
             }, this);
+        },
+        _createDynamicLayerParameter: function (layer) {
+            if (layer.dynamicLayerInfos && layer.dynamicLayerInfos.length > 0 || layer.layerDrawingOptions && layer.layerDrawingOptions.length > 0) {
+                layer.dynamicLayerInfos = layer.createDynamicLayerInfosFromLayerInfos();
+                var dlis = layer.dynamicLayerInfos,
+                    param = [];
+                dlis.forEach(function (dli) {
+                    if (!dli.subLayerIds) {
+                        var e, i = dli.id;
+                        e = {
+                            id: i,
+                            name: dli.name
+                        };
+                        if (dli.source) {
+                            e.source = dli.source.toJson();
+                        }
+                        if (layer.layerDrawingOptions && layer.layerDrawingOptions[i]) {
+                            e.drawingInfo = layer.layerDrawingOptions[i].toJson();
+                        }
+                        param.push(e);
+                    }
+                }, this);
+                return JSON.stringify(param);                
+            }
         }
     };
 });
