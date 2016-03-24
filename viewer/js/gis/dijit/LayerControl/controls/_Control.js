@@ -44,6 +44,7 @@ define([
             if (params.controller) {
                 this.icons = params.controller.icons;
             } // if not you've got bigger problems
+            this._handlers = [];
         },
         postCreate: function () {
             this.inherited(arguments);
@@ -67,7 +68,7 @@ define([
             if (this.layer.loaded) {
                 this._initialize();
             } else {
-                this.layer.on('load', lang.hitch(this, '_initialize'));
+                this._handlers.push(this.layer.on('load', lang.hitch(this, '_initialize')));
             }
         },
         // initialize the control
@@ -80,17 +81,8 @@ define([
                 controlOptions = this.controlOptions;
             // set checkbox
             this._setLayerCheckbox(layer, this.checkNode);
-            // wire up layer visibility
-            on(this.checkNode, 'click', lang.hitch(this, '_setLayerVisibility', layer, this.checkNode));
             // set title
             html.set(this.labelNode, this.layerTitle);
-            // wire up updating indicator
-            layer.on('update-start', lang.hitch(this, function () {
-                domStyle.set(this.layerUpdateNode, 'display', 'inline-block'); //font awesome display
-            }));
-            layer.on('update-end', lang.hitch(this, function () {
-                domStyle.set(this.layerUpdateNode, 'display', 'none');
-            }));
             // create layer menu
             if ((controlOptions.noMenu !== true && this.controller.noMenu !== true) || (this.controller.noMenu === true && controlOptions.noMenu === false)) {
                 this.layerMenu = new LayerMenu({
@@ -109,19 +101,6 @@ define([
                 this._checkboxScaleRange();
                 this._scaleRangeHandler = layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
             }
-            // if layer scales change
-            this.layer.on('scale-range-change', lang.hitch(this, function () {
-                if (layer.minScale !== 0 || layer.maxScale !== 0) {
-                    this._checkboxScaleRange();
-                    this._scaleRangeHandler = layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
-                } else {
-                    this._checkboxScaleRange();
-                    if (this._scaleRangeHandler) {
-                        this._scaleRangeHandler.remove();
-                        this._scaleRangeHandler = null;
-                    }
-                }
-            }));
             // a function in each control widget for layer type specifics like legends and such
             this._layerTypeInit();
             // show expandNode
@@ -131,30 +110,36 @@ define([
             }
             // esri layer's don't inherit from Stateful
             //   connect to update events to handle "watching" layers
-            layer.on('update-start', lang.hitch(this, '_updateStart'));
-            layer.on('update-end', lang.hitch(this, '_updateEnd'));
-            layer.on('visibility-change', lang.hitch(this, '_visibilityChange'));
+            this._handlers.push(
+                on(this.checkNode, 'click', lang.hitch(this, '_setLayerVisibility', layer, this.checkNode)),
+                layer.on('scale-range-change', lang.hitch(this, '_scaleRangeChange')),
+                layer.on('update-start', lang.hitch(this, '_updateStart')),
+                layer.on('update-end', lang.hitch(this, '_updateEnd')),
+                layer.on('visibility-change', lang.hitch(this, '_visibilityChange'))
+            );
         },
         // add on event to expandClickNode
         _expandClick: function () {
-            var i = this.icons;
-            this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
-                var expandNode = this.expandNode,
-                    iconNode = this.expandIconNode;
-                if (domStyle.get(expandNode, 'display') === 'none') {
-                    fx.wipeIn({
-                        node: expandNode,
-                        duration: 300
-                    }).play();
-                    domClass.replace(iconNode, i.collapse, i.expand);
-                } else {
-                    fx.wipeOut({
-                        node: expandNode,
-                        duration: 300
-                    }).play();
-                    domClass.replace(iconNode, i.expand, i.collapse);
-                }
-            }));
+            this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, '_expandClicked'));
+            this._handlers.push(this._expandClickHandler);
+        },
+        _expandClicked: function () {
+            var i = this.icons,
+                expandNode = this.expandNode,
+                iconNode = this.expandIconNode;
+            if (domStyle.get(expandNode, 'display') === 'none') {
+                fx.wipeIn({
+                    node: expandNode,
+                    duration: 300
+                }).play();
+                domClass.replace(iconNode, i.collapse, i.expand);
+            } else {
+                fx.wipeOut({
+                    node: expandNode,
+                    duration: 300
+                }).play();
+                domClass.replace(iconNode, i.expand, i.collapse);
+            }
         },
         // removes the icons and cursor:pointer from expandClickNode and destroys expandNode
         _expandRemove: function () {
@@ -206,8 +191,21 @@ define([
                 domClass.add(node, 'layerControlCheckIconOutScale');
             }
         },
+        _scaleRangeChange: function () {
+            if (this.layer.minScale !== 0 || this.layer.maxScale !== 0) {
+                this._checkboxScaleRange();
+                this._scaleRangeHandler = this.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
+            } else {
+                this._checkboxScaleRange();
+                if (this._scaleRangeHandler) {
+                    this._scaleRangeHandler.remove();
+                    this._scaleRangeHandler = null;
+                }
+            }
+        },
         // anything the widget may need to do before update
         _updateStart: function () {
+            domStyle.set(this.layerUpdateNode, 'display', 'inline-block'); //font awesome display
             // clone a layer state before layer updates for use after update
             this._layerState = lang.clone({
                 visible: this.layer.visible,
@@ -216,6 +214,7 @@ define([
         },
         // anything the widget may need to do after update
         _updateEnd: function () {
+            domStyle.set(this.layerUpdateNode, 'display', 'none');
             // how to handle external layer.setVisibleLayers() ???
             //
             // without topics to get/set sublayer state this will be challenging
@@ -234,6 +233,12 @@ define([
             if ((r.visible && domAttr.get(this.checkNode, 'data-checked') === 'unchecked') || (!r.visible && domAttr.get(this.checkNode, 'data-checked') === 'checked')) {
                 this._setLayerCheckbox(this.layer, this.checkNode);
             }
+        },
+        destroy: function () {
+            this.inherited(arguments);
+            this._handlers.forEach(function (h) {
+                h.remove();
+            });
         }
     });
     return _Control;
