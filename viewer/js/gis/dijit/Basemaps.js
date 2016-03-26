@@ -8,11 +8,13 @@ define([
     'dojo/_base/lang',
     'dojo/_base/array',
     'dojo/topic',
+    'dojox/lang/functional',
 
     'dijit/DropDownMenu',
     'dijit/MenuItem',
 
     'esri/basemaps',
+    'esri/dijit/BasemapGallery',
 
     'dojo/text!./Basemaps/templates/Basemaps.html',
     'dojo/i18n!./Basemaps/nls/resource',
@@ -28,11 +30,13 @@ define([
     lang,
     array,
     topic,
+    functional,
 
     DropDownMenu,
     MenuItem,
 
     esriBasemaps,
+    BasemapGallery,
 
     template,
     i18n
@@ -43,6 +47,7 @@ define([
         widgetsInTemplate: true,
         i18n: i18n,
         title: i18n.title,
+        mode: 'agol',
 
         basemaps: {},
         currentBasemap: null,
@@ -70,20 +75,32 @@ define([
                 this.mapStartBasemap = this.basemapsToShow[0];
             }
 
+            if (this.mode === 'custom') {
+                this.gallery = new BasemapGallery({
+                    map: this.map,
+                    showArcGISBasemaps: false,
+                    basemaps: functional.map(this.basemaps, function (map) {
+                        return map.basemap;
+                    })
+                });
+                this.gallery.startup();
+            }
             this.menu = new DropDownMenu({
                 style: 'display: none;'
             });
 
             array.forEach(this.basemapsToShow, function (basemap) {
                 if (this.basemaps.hasOwnProperty(basemap)) {
-                    // add any custom to the esri basemaps
-                    var basemapObj = this.basemaps[basemap];
-                    if (basemapObj.basemap) {
-                        if (!esriBasemaps[basemap]) {
-                            if (!basemapObj.basemap.title) {
-                                basemapObj.basemap.title = basemapObj.title || basemap;
+                    if (this.mode !== 'custom') {
+                        // add any custom to the esri basemaps
+                        var basemapObj = this.basemaps[basemap];
+                        if (basemapObj.basemap) {
+                            if (!esriBasemaps[basemap]) {
+                                if (!basemapObj.basemap.title) {
+                                    basemapObj.basemap.title = basemapObj.title || basemap;
+                                }
+                                esriBasemaps[basemap] = basemapObj.basemap;
                             }
-                            esriBasemaps[basemap] = basemapObj.basemap;
                         }
                     }
                     var menuItem = new MenuItem({
@@ -105,7 +122,11 @@ define([
                     return;
                 }
                 this.currentBasemap = basemap;
-                this.map.setBasemap(basemap);
+                if (this.mode === 'custom') {
+                    this.gallery.select(basemap);
+                } else {
+                    this.map.setBasemap(basemap);
+                }
 
                 var ch = this.menu.getChildren();
                 array.forEach(ch, function (c) {
