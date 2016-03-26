@@ -200,9 +200,17 @@ define([
         },
         // create layer control and add to appropriate _container
         _addControl: function (layerInfo, Control) {
+            var layer = (typeof layerInfo.layer === 'string') ? this.map.getLayer(layerInfo.layer) : layerInfo.layer;
+            if (layerInfo.controlOptions && (layerInfo.type === 'dynamic' || layerInfo.type === 'feature')) {
+                if (layer.loaded) {
+                    this._applyLayerControlOptions(layerInfo.controlOptions, layer);
+                } else {
+                    layer.on('load', lang.hitch(this, '_applyLayerControlOptions', layer.controlOptions));
+                }
+            }
             var layerControl = new Control({
                 controller: this,
-                layer: (typeof layerInfo.layer === 'string') ? this.map.getLayer(layerInfo.layer) : layerInfo.layer, // check if we have a layer or just a layer id
+                layer: layer,
                 layerTitle: layerInfo.title,
                 controlOptions: lang.mixin({
                     noLegend: null,
@@ -224,6 +232,70 @@ define([
                 }
             } else {
                 this.addChild(layerControl, position);
+            }
+        },
+        _applyLayerControlOptions: function (controlOptions, layer) {
+            if (typeof controlOptions.includeUnspecifiedLayers === 'undefined' && typeof controlOptions.subLayerInfos === 'undefined' && typeof controlOptions.excludedLayers === 'undefined') {
+                return;
+            }			
+            var esriLayerInfos = [];
+            // Case 1: only show the layers that are explicitly listed
+            if (!controlOptions.includeUnspecifiedLayers && controlOptions.subLayerInfos && controlOptions.subLayerInfos.length !== 0) {            
+                var subLayerInfos = array.map(controlOptions.subLayerInfos, function (sli) {
+                    return sli.id;
+                });
+                array.forEach(layer.layerInfos, function (li) {
+                    if (array.indexOf(subLayerInfos, li.id) !== -1) {
+                        esriLayerInfos.push(li);
+                    }
+                });
+            // Case 2: show ALL layers except those in the excluded list
+            } else if (controlOptions.excludedLayers) {
+                array.forEach(layer.layerInfos, function (li) {
+                    if (array.indexOf(controlOptions.excludedLayers, li.id) === -1) {
+                        esriLayerInfos.push(li);
+                    }
+                });
+			// Case 3: just override the values found in the subLayerInfos
+            } else if (controlOptions.subLayerInfos) {
+                // show ALL layers that are in the map service's layerInfos, but take care to override the properties of each subLayerInfo as configured
+                this._mixinLayerInfos(layer.layerInfos, controlOptions.subLayerInfos);
+                this._setSublayerVisibilities(layer);
+                return;
+            }
+            // Finally, if we made use of the esriLayerInfos, make sure to apply all the subLayerInfos that were defined to our new array of esri layer infos
+            if (controlOptions.subLayerInfos) {
+                this._mixinLayerInfos(esriLayerInfos, controlOptions.subLayerInfos);
+            }
+            layer.layerInfos = esriLayerInfos;
+            this._setSublayerVisibilities(layer);
+        },
+        _setSublayerVisibilities: function (layer) {
+            var visibleIds = array.map(array.filter(layer.layerInfos, function (li) {
+                return li.defaultVisibility;
+            }), function (l) {
+                return l.id;
+            });
+            layer.setVisibleLayers(visibleIds);  
+        },
+        _mixinLayerInfos: function (esriLayerInfos, subLayerInfos) {
+            // for each of the sublayers, go through the subLayerInfos from the controlOptions and see if defaultVisiblity is set to true or false
+            // then set each of the layer.layerInfos defaultVisibility appropriately
+			// assume defaultVisibility is true if it's not defined
+            if (subLayerInfos && subLayerInfos.length !== 0) {
+                array.forEach(subLayerInfos, function (sli) {
+                    if (typeof sli.defaultVisibility === 'undefined') {
+                        sli.defaultVisibility = true;
+                    }
+                });
+                array.forEach(esriLayerInfos, function (li) {
+                    var sli = array.filter(subLayerInfos, function (s) {
+                        return s.id === li.id;
+                    }).shift();
+                    if (sli) {
+                        lang.mixin(li, sli);
+                    }
+                });
             }
         },
         // move control up in controller and layer up in map

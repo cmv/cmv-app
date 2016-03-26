@@ -161,7 +161,6 @@ define([
                 }
             }
         },
-
         initMapComplete: function (warnings) {
             if (warnings && warnings.length > 0) {
                 this.handleError({
