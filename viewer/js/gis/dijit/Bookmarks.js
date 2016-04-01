@@ -23,6 +23,7 @@ define([
 
             this.bookmarks = new Bookmarks({
                 map: this.map,
+                id: this.id + '_esri',
                 editable: this.editable,
                 bookmarks: lang.mixin(this.bookmarkItems, bookmarks)
             }, this.domNode);
