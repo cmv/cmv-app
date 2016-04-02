@@ -131,7 +131,7 @@ define([
                 if (!this.mapRightClickMenu) {
                     this.mapRightClickMenu = new Menu({
                         targetNodeIds: [this.map.root],
-                        selector: '.layersDiv' // restrict to map only
+                        selector: '.esriMapLayers' // restrict to map only
                     });
                     this.mapRightClickMenu.startup();
                 }
