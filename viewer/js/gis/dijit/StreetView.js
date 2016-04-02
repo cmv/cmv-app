@@ -14,16 +14,17 @@ define([
     'dojo/text!./StreetView/templates/StreetView.html',
     'esri/symbols/PictureMarkerSymbol',
     'dojo/dom-style',
+    'dojo/dom-geometry',
     'esri/geometry/Point',
     'esri/SpatialReference',
     'dijit/MenuItem',
     '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js',
     'dojo/i18n!./StreetView/nls/resource',
 
-    'dijit/form/Button',
+    'dijit/form/ToggleButton',
     'xstyle/css!./StreetView/css/StreetView.css',
     'gis/plugins/async!//maps.google.com/maps/api/js?v=3'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, Point, SpatialReference, MenuItem, proj4, i18n) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, domGeom, Point, SpatialReference, MenuItem, proj4, i18n) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -68,11 +69,8 @@ define([
                         this.onLayoutChange(this.parentWidget.open);
                     })));
                 }
-                this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, function () {
-                    if (this.panorama) {
-                        google.maps.event.trigger(this.panorama, 'resize');
-                    }
-                })));
+                this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, 'resize')));
+                this.own(topic.subscribe(this.parentWidget.id + '/resize/resize', lang.hitch(this, 'resize')));
             }
 
             // spatialreference.org uses the old
@@ -111,9 +109,6 @@ define([
                 this.panorama = new google.maps.StreetViewPanorama(this.panoNode, this.panoOptions);
                 this.panoramaService = new google.maps.StreetViewService();
             }
-            if (this.panorama) {
-                google.maps.event.trigger(this.panorama, 'resize');
-            }
         },
         onClose: function () {
             // end streetview on close of title pane
@@ -130,14 +125,20 @@ define([
             }
         },
         placePoint: function () {
-            this.disconnectMapClick();
+            if (this.streetViewButtonDijit.get('checked')) {
+                this.disconnectMapClick();
+            } else {
+                this.connectMapClick();
+            }
         //get map click, set up listener in post create
         },
         disconnectMapClick: function () {
+            this.streetViewButtonDijit.set('checked', true);
             this.map.setMapCursor('crosshair');
             topic.publish('mapClickMode/setCurrent', 'streetview');
         },
         connectMapClick: function () {
+            this.streetViewButtonDijit.set('checked', false);
             this.map.setMapCursor('auto');
             topic.publish('mapClickMode/setDefault');
         },
@@ -184,9 +185,9 @@ define([
                     };
                 }
 
+                domStyle.set(this.streetViewInstructions, 'display', 'none');
                 if (geometry) {
                     domStyle.set(this.noStreetViewResults, 'display', 'none');
-                    domStyle.set(this.loadingStreetView, 'display', 'inline-block');
                     this.getPanoramaLocation(geometry);
                 } else {
                     this.setPanoPlace = null;
@@ -205,7 +206,6 @@ define([
             google.maps.event.addListener(this.panorama, 'pov_changed', lang.hitch(this, 'setPlaceMarkerRotation'));
         },
         getPanoramaByLocationComplete: function (geoPoint, StreetViewPanoramaData, StreetViewStatus) {
-            domStyle.set(this.loadingStreetView, 'display', 'none');
             if (StreetViewStatus === 'OK') {
                 this.disableStreetViewClick();
                 var place = new google.maps.LatLng(geoPoint.y, geoPoint.x);
@@ -225,6 +225,16 @@ define([
                     source: 'StreetView',
                     error: 'Unknown.'
                 });
+            }
+        },
+        resize: function (options) {
+            if (options && options.h) {
+                domGeom.setContentSize(this.containerNode, {
+                    h: (options.h - 2)
+                });
+            }
+            if (this.panorama) {
+                google.maps.event.trigger(this.panorama, 'resize');
             }
         },
         setPlaceMarkerPosition: function () {

@@ -1,14 +1,12 @@
 // http://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
 define({
     root: {
-        activateButton: {
-            label: 'Activate with map click'
-        },
         messages: {
-            notAvailable: 'Street View not available at this location.'
+            instructions: 'Click the StreetView button then click the map at your desired location.',
+            notAvailable: 'Unfortunately, Google StreetView imagery is not yet available at that location.'
         },
         rightClickMenuItem: {
-            label: 'Street View here'
+            label: 'Google StreetView here'
         }
     }
 });
