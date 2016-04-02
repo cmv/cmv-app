@@ -4,28 +4,53 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
+
     'dojo/_base/lang',
-    'dijit/DropDownMenu',
-    'dijit/MenuItem',
     'dojo/_base/array',
     'dojo/topic',
     'dojox/lang/functional',
-    'dojo/text!./Basemaps/templates/Basemaps.html',
+
+    'dijit/DropDownMenu',
+    'dijit/MenuItem',
+
+    'esri/basemaps',
     'esri/dijit/BasemapGallery',
+
+    'dojo/text!./Basemaps/templates/Basemaps.html',
     'dojo/i18n!./Basemaps/nls/resource',
 
     'dijit/form/DropDownButton',
     'xstyle/css!./Basemaps/css/Basemaps.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, DropDownMenu, MenuItem, array, topic, functional, template, BasemapGallery, i18n) {
+], function (
+    declare,
+    _WidgetBase,
+    _TemplatedMixin,
+    _WidgetsInTemplateMixin,
 
-    // main basemap widget
+    lang,
+    array,
+    topic,
+    functional,
+
+    DropDownMenu,
+    MenuItem,
+
+    esriBasemaps,
+    BasemapGallery,
+
+    template,
+    i18n
+) {
+
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         widgetsInTemplate: true,
         i18n: i18n,
-        mode: 'agol',
         title: i18n.title,
+        mode: 'agol',
 
+        basemaps: {},
+        currentBasemap: null,
         mapStartBasemap: null,
         basemapsToShow: null,
 
@@ -50,8 +75,6 @@ define([
                 this.mapStartBasemap = this.basemapsToShow[0];
             }
 
-            this.currentBasemap = this.mapStartBasemap || null;
-
             if (this.mode === 'custom') {
                 this.gallery = new BasemapGallery({
                     map: this.map,
@@ -62,13 +85,24 @@ define([
                 });
                 this.gallery.startup();
             }
-
             this.menu = new DropDownMenu({
                 style: 'display: none;'
             });
 
             array.forEach(this.basemapsToShow, function (basemap) {
                 if (this.basemaps.hasOwnProperty(basemap)) {
+                    if (this.mode !== 'custom') {
+                        // add any custom to the esri basemaps
+                        var basemapObj = this.basemaps[basemap];
+                        if (basemapObj.basemap) {
+                            if (!esriBasemaps[basemap]) {
+                                if (!basemapObj.basemap.title) {
+                                    basemapObj.basemap.title = basemapObj.title || basemap;
+                                }
+                                esriBasemaps[basemap] = basemapObj.basemap;
+                            }
+                        }
+                    }
                     var menuItem = new MenuItem({
                         id: basemap,
                         label: this.basemaps[basemap].title,
@@ -81,14 +115,19 @@ define([
             topic.subscribe('basemaps/updateBasemap', lang.hitch(this, 'updateBasemap'));
             this.dropDownButton.set('dropDown', this.menu);
         },
+
         updateBasemap: function (basemap) {
             if (basemap !== this.currentBasemap && (array.indexOf(this.basemapsToShow, basemap) !== -1)) {
+                if (!this.basemaps.hasOwnProperty(basemap)) {
+                    return;
+                }
                 this.currentBasemap = basemap;
                 if (this.mode === 'custom') {
                     this.gallery.select(basemap);
                 } else {
                     this.map.setBasemap(basemap);
                 }
+
                 var ch = this.menu.getChildren();
                 array.forEach(ch, function (c) {
                     if (c.id === basemap) {
@@ -99,15 +138,13 @@ define([
                 });
             }
         },
+
         startup: function () {
             this.inherited(arguments);
-            if (this.mode === 'custom') {
-                if (this.map.getBasemap() !== this.mapStartBasemap) { //based off the title of custom basemaps in viewer.js config
-                    this.gallery.select(this.mapStartBasemap);
-                }
-            } else if (this.mapStartBasemap) {
-                if (this.map.getBasemap() !== this.mapStartBasemap) { //based off the agol basemap name
-                    this.map.setBasemap(this.mapStartBasemap);
+            if (this.mapStartBasemap) {
+                this.currentBasemap = this.mapStartBasemap;
+                if (this.map.getBasemap() !== this.mapStartBasemap) {
+                    this.updateBasemap(this.mapStartBasemap);
                 }
             }
         }
