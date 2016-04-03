@@ -129,6 +129,7 @@ define([
             this.map.infoWindow.clearFeatures();
             this.map.infoWindow.setTitle(graphic.getTitle());
             this.map.infoWindow.setContent(graphic.getContent());
+            this.map.infoWindow.setFeatures([graphic]);
 
             var screenPnt = this.map.toScreen(res.location);
             this.map.infoWindow.show(screenPnt, this.map.getInfoWindowAnchor(screenPnt));
