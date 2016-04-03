@@ -219,6 +219,7 @@ body, html {
     margin-bottom: 2px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
+    background-color: #FFFFFF;
 }
 .dbootstrap .dijitTitlePaneTitle {
     color: #666666 !important;
@@ -228,9 +229,6 @@ body, html {
 }
 .dijitSliderBarContainerH {
     z-index: 0 !important;
-}
-.dbootstrap .dijitTitlePaneContentInner {
-    background-color: #FFFFFF;
 }
 .dijitBorderContainerNoGutterPane {
     z-index: auto;

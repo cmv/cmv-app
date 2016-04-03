@@ -1,15 +1,15 @@
-<div class="gis_StreetView">
-    <div data-dojo-attach-point="panoNode" class="streetViewNode">
+<div data-dojo-attach-point="containerNode" class="gis_StreetView">
+    <div data-dojo-attach-point="panoNode" class="streetViewPano">
+        <button data-dojo-type="dijit/form/ToggleButton" class="streetViewButton" data-dojo-attach-point="streetViewButtonDijit" data-dojo-props="iconClass:'fa fa-street-view fa-fw',showLabel:false" data-dojo-attach-event="onClick:placePoint"></button>
+        <span data-dojo-attach-point="streetViewInstructions" class="streetViewInstructions">
+            <div class="streetViewInstructionsText">
+                ${i18n.messages.instructions}
+            </div>
+        </span>
     	<span data-dojo-attach-point="noStreetViewResults" class="noStreetViewResults">
             <div class="noStreetViewResultsText">
                 ${i18n.messages.notAvailable}
             </div>
         </span>
-    </div>
-    <div data-dojo-attach-point="buttonActionBar" class="buttonActionBar">
-    	<img data-dojo-attach-point="loadingStreetView" class="loadingStreetView">
-        <button data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'fa fa-location-arrow fa-fw',showLabel:true" data-dojo-attach-event="onClick:placePoint">
-            ${i18n.activateButton.label}
-        </button>
     </div>
 </div>

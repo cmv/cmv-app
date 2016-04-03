@@ -90,15 +90,19 @@ define([
                 return;
             }
 
+            if (position) {
+                widgetConfig.position = position;
+            }
+
             // build a titlePane or floating widget as the parent
             if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
                 parentId = widgetConfig.id + '_parent';
                 if (widgetConfig.type === 'titlePane') {
-                    pnl = this._createTitlePaneWidget(parentId, widgetConfig.title, position, widgetConfig.open, widgetConfig.canFloat, widgetConfig.placeAt);
+                    pnl = this._createTitlePaneWidget(parentId, widgetConfig);
                 } else if (widgetConfig.type === 'contentPane') {
-                    pnl = this._createContentPaneWidget(parentId, widgetConfig.title, widgetConfig.className, widgetConfig.region, widgetConfig.placeAt);
+                    pnl = this._createContentPaneWidget(parentId, widgetConfig);
                 } else if (widgetConfig.type === 'floating') {
-                    pnl = this._createFloatingWidget(parentId, widgetConfig.title);
+                    pnl = this._createFloatingWidget(parentId, widgetConfig);
                 }
                 widgetConfig.parentWidget = pnl;
             }
@@ -127,7 +131,7 @@ define([
                 if (!this.mapRightClickMenu) {
                     this.mapRightClickMenu = new Menu({
                         targetNodeIds: [this.map.root],
-                        selector: '.layersDiv' // restrict to map only
+                        selector: '.esriMapLayers' // restrict to map only
                     });
                     this.mapRightClickMenu.startup();
                 }
@@ -165,16 +169,18 @@ define([
             }
         },
 
-        _createTitlePaneWidget: function (parentId, title, position, open, canFloat, placeAt) {
+        _createTitlePaneWidget: function (parentId, widgetConfig) {
             var tp,
-                options = {
-                    title: title || 'Widget',
-                    open: open || false,
-                    canFloat: canFloat || false
-                };
+                options = lang.mixin({
+                    title: widgetConfig.title || 'Widget',
+                    open: widgetConfig.open || false,
+                    canFloat: widgetConfig.canFloat || false,
+                    resizable: widgetConfig.resizable || false
+                }, widgetConfig.paneOptions || {});
             if (parentId) {
                 options.id = parentId;
             }
+            var placeAt = widgetConfig.placeAt;
             if (typeof (placeAt) === 'string') {
                 placeAt = this.panes[placeAt];
             }
@@ -183,16 +189,16 @@ define([
             }
             if (placeAt) {
                 options.sidebar = placeAt;
-                tp = new FloatingTitlePane(options).placeAt(placeAt, position);
+                tp = new FloatingTitlePane(options).placeAt(placeAt, widgetConfig.position);
                 tp.startup();
             }
             return tp;
         },
 
-        _createFloatingWidget: function (parentId, title) {
-            var options = {
-                title: title
-            };
+        _createFloatingWidget: function (parentId, widgetConfig) {
+            var options = lang.mixin({
+                title: widgetConfig.title
+            }, widgetConfig.paneOptions || {});
             if (parentId) {
                 options.id = parentId;
             }
@@ -201,18 +207,19 @@ define([
             return fw;
         },
 
-        _createContentPaneWidget: function (parentId, title, className, region, placeAt) {
+        _createContentPaneWidget: function (parentId, widgetConfig) {
             var cp,
-                options = {
-                    title: title,
-                    region: region || 'center'
-                };
-            if (className) {
-                options.className = className;
+                options = lang.mixin({
+                    title: widgetConfig.title,
+                    region: widgetConfig.region || 'center'
+                }, widgetConfig.paneOptions || {});
+            if (widgetConfig.className) {
+                options.className = widgetConfig.className;
             }
             if (parentId) {
                 options.id = parentId;
             }
+            var placeAt = widgetConfig.placeAt;
             if (!placeAt) {
                 placeAt = this.panes.sidebar;
             } else if (typeof (placeAt) === 'string') {

@@ -493,6 +493,15 @@ define([
                 position: 9,
                 path: 'gis/dijit/StreetView',
                 title: 'Google Street View',
+                paneOptions: {
+                    resizable: true,
+                    resizeOptions: {
+                        minSize: {
+                            w: 250,
+                            h: 250
+                        }
+                    }
+                },
                 options: {
                     map: true,
                     mapClickMode: true,
