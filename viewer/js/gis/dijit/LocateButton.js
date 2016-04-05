@@ -8,7 +8,6 @@ define([
     'esri/InfoTemplate',
     'dojo/topic'
 ], function (declare, lang, LocateButton, SimpleRenderer, PictureMarkerSymbol, GraphicsLayer, InfoTemplate, topic) {
-    'use strict';
 
     return declare(null, {
         growlTemplate: 'latitude: {latitude}<br/>longitude: {longitude}<br/>accuracy: {accuracy}<br/>altitude: {altitude}<br/>altitude accuracy: {altitudeAccuracy}<br/>heading: {heading}<br/>speed: {speed}',

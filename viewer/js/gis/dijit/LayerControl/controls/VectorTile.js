@@ -11,7 +11,6 @@ define([
     _Contained,
     _Control
 ) {
-    'use strict';
 
     var VectorTileControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant

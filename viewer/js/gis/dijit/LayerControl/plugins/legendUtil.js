@@ -31,7 +31,6 @@ define([
     esriBundle,
     i18n
 ) {
-    'use strict';
 
     esriBundle.widgets.legend.NLS_noLegend = i18n.noLegend;
 
@@ -55,6 +54,7 @@ define([
                     return false;
                 }
             }
+            return false;
         },
         // request legend json
         _legendRequest: function (layer, expandNode, callback, errback) {
@@ -335,8 +335,9 @@ define([
                         param.push(e);
                     }
                 }, this);
-                return JSON.stringify(param);                
+                return JSON.stringify(param);
             }
+            return null;
         }
     };
 });

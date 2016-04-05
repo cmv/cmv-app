@@ -1,5 +1,4 @@
 (function () {
-    'use strict';
     var path = location.pathname.replace(/[^\/]+$/, '');
     window.dojoConfig = {
         async: true,

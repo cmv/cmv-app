@@ -1,4 +1,3 @@
-/*eslint strict: 0*/
 /* transparency component */
 define([
     'dojo/_base/declare',

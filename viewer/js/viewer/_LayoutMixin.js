@@ -43,7 +43,7 @@ define([
 
     mapOverlay
 ) {
-    'use strict';
+
     return declare(null, {
 
         panes: {

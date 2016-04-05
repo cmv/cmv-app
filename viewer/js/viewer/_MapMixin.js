@@ -20,7 +20,7 @@ define([
 
     Map
 ) {
-    'use strict';
+
     return declare(null, {
 
         initMapAsync: function () {
