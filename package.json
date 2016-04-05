@@ -25,5 +25,5 @@
         "grunt-contrib-compress": "1.2.x",
         "proxypage": "*"
     },
-    "engine": "node >= 0.12"
+    "engine": "node >= 4"
 }
