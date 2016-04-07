@@ -2,7 +2,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    //'dojo/_base/array',
+    'dojo/_base/array',
     'dojo/on',
     'dojo/topic',
     'dojo/dom-construct',
@@ -16,7 +16,7 @@ define([
 ], function (
     declare,
     lang,
-    //array,
+    array,
     on,
     topic,
     domConst,
@@ -194,11 +194,23 @@ define([
         _scaleRangeChange: function () {
             if (this.layer.minScale !== 0 || this.layer.maxScale !== 0) {
                 this._checkboxScaleRange();
+                if (this._scaleRangeHandler) {
+                    var handlerIndex = array.indexOf(this._handlers, this._scaleRangeHandler);
+                    if (handlerIndex !== -1) {
+                        this._handlers[handlerIndex].remove();
+                        this._handlers.splice(handlerIndex, 1);
+                    }
+                }
                 this._scaleRangeHandler = this.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange'));
+                this._handlers.push(this._scaleRangeHandler);
             } else {
                 this._checkboxScaleRange();
                 if (this._scaleRangeHandler) {
-                    this._scaleRangeHandler.remove();
+                    var handlerIndex2 = array.indexOf(this._handlers, this._scaleRangeHandler);
+                    if (handlerIndex2 !== -1) {
+                        this._handlers[handlerIndex2].remove();
+                        this._handlers.splice(handlerIndex2, 1);
+                    }
                     this._scaleRangeHandler = null;
                 }
             }
