@@ -75,7 +75,7 @@ define([
         addTopics: function () {
             // toggle a sidebar pane
             topic.subscribe('viewer/togglePane', lang.hitch(this, function (args) {
-                this.toggleSidebar(args.pane, args.show);
+                this.togglePane(args.pane, args.show);
             }));
 
             // load a widget
@@ -160,12 +160,17 @@ define([
                 }
             }
             this.panes.outer.startup();
-            this.createPanes(panes);
         },
 
-        createPanes: function (panes) {
-            var key;
-            // where to place the buttons
+        createPanes: function () {
+            var key,
+                panes = this.config.panes || {};
+            for (key in this.panes) {
+                if (this.panes.hasOwnProperty(key)) {
+                    panes[key] = lang.mixin(this.panes[key], panes[key]);
+                }
+            }
+                        // where to place the buttons
             // either the center map pane or the outer pane?
             this.collapseButtonsPane = this.config.collapseButtonsPane || 'outer';
 
@@ -204,6 +209,7 @@ define([
                 }
             }
 
+            this.resizeLayout();
         },
 
         togglePane: function (id, show) {
