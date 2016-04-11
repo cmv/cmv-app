@@ -177,7 +177,7 @@ define([
             });
 
             // in _LayoutsMixin
-            this.resizeLayout();
+            this.createPanes();
 
             // in _WidgetsMixin
             this.initWidgets();
