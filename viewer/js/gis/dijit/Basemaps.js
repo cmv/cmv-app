@@ -141,7 +141,6 @@ define([
         startup: function () {
             this.inherited(arguments);
             if (this.mapStartBasemap) {
-                this.currentBasemap = this.mapStartBasemap;
                 if (this.map.getBasemap() !== this.mapStartBasemap) {
                     this.updateBasemap(this.mapStartBasemap);
                 }
