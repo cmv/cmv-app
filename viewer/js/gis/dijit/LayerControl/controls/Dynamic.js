@@ -39,7 +39,6 @@ define([
     legendUtil,
     i18n
 ) {
-    'use strict';
 
     var DynamicControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
@@ -100,8 +99,8 @@ define([
         _createSublayers: function (layer) {
             // check for single sublayer - if so no sublayer/folder controls
             if (layer.layerInfos.length > 1) {
-                var allLayers = array.map(layer.layerInfos, function (l) { 
-                    return l.id; 
+                var allLayers = array.map(layer.layerInfos, function (l) {
+                    return l.id;
                 });
                 array.forEach(layer.layerInfos, lang.hitch(this, function (info) {
                     // see if there was any override needed from the subLayerInfos array in the controlOptions
@@ -113,7 +112,7 @@ define([
                         slids = info.subLayerIds,
                         controlId = layer.id + '-' + info.id + '-sublayer-control',
                         control;
-                    // it's a top level 
+                    // it's a top level
                     if (pid === -1 || allLayers.indexOf(pid) === -1) {
                         if (slids === null) {
                             // it's a top level sublayer

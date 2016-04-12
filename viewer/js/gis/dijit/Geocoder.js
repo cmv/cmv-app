@@ -1,4 +1,3 @@
-/*eslint strict: 0*/
 // adapted from https://github.com/esri/arcgis-dijit-geocoder-button-js/
 define([
     'dojo/_base/declare',

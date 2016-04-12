@@ -1,5 +1,4 @@
 define(function () {
-    'use strict';
 
     var cb = '_asyncApiLoaderCallback';
     return {

@@ -13,7 +13,6 @@ define([
     _Control,
     legendUtil
 ) {
-    'use strict';
 
     var TiledControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant

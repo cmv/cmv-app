@@ -12,7 +12,6 @@ define([
     _Contained,
     _Control
 ) {
-    'use strict';
 
     var WFSControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'vector', // constant

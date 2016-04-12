@@ -1,4 +1,4 @@
-/*eslint strict: 0, no-console: 0, no-alert: 0*/
+/*eslint no-console: 0, no-alert: 0*/
 define({
     map: true,
     zoomExtentFactor: 2,

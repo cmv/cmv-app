@@ -1,4 +1,3 @@
-/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dojo/_base/array',
@@ -181,7 +180,7 @@ define([
             this._vectorContainer.getChildren().filter(function (c) {
                 return _filterList(c);
             })).concat(
-            this.getChildren().filter(function (c) { 
+            this.getChildren().filter(function (c) {
                 return _filterList(c);
             }));
             // follow the same logic as when the layers were added
@@ -237,10 +236,10 @@ define([
         _applyLayerControlOptions: function (controlOptions, layer) {
             if (typeof controlOptions.includeUnspecifiedLayers === 'undefined' && typeof controlOptions.subLayerInfos === 'undefined' && typeof controlOptions.excludedLayers === 'undefined') {
                 return;
-            }			
+            }
             var esriLayerInfos = [];
             // Case 1: only show the layers that are explicitly listed
-            if (!controlOptions.includeUnspecifiedLayers && controlOptions.subLayerInfos && controlOptions.subLayerInfos.length !== 0) {            
+            if (!controlOptions.includeUnspecifiedLayers && controlOptions.subLayerInfos && controlOptions.subLayerInfos.length !== 0) {
                 var subLayerInfos = array.map(controlOptions.subLayerInfos, function (sli) {
                     return sli.id;
                 });
@@ -276,7 +275,7 @@ define([
             }), function (l) {
                 return l.id;
             });
-            layer.setVisibleLayers(visibleIds);  
+            layer.setVisibleLayers(visibleIds);
         },
         _mixinLayerInfos: function (esriLayerInfos, subLayerInfos) {
             // for each of the sublayers, go through the subLayerInfos from the controlOptions and see if defaultVisiblity is set to true or false

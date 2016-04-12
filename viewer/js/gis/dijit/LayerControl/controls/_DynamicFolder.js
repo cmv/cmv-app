@@ -1,4 +1,3 @@
-/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
@@ -119,8 +118,8 @@ define([
         },
         destroy: function () {
             this.inherited(arguments);
-            this._handlers.forEach(function (h) { 
-                h.remove(); 
+            this._handlers.forEach(function (h) {
+                h.remove();
             });
         }
     });

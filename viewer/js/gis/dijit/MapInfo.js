@@ -23,7 +23,7 @@ define([
     topic,
     proj4
 ) {
-    'use strict';
+
     return declare([WidgetBase, TemplatedMixin], {
         map: null,
         mode: 'map',

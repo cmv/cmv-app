@@ -51,7 +51,7 @@ module.exports = function (grunt) {
                 src: ['dist']
             }
         },
-        autoprefixer: {
+        postcss: {
             build: {
                 expand: true,
                 cwd: 'dist/viewer',
@@ -161,7 +161,7 @@ module.exports = function (grunt) {
     // load the tasks
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-autoprefixer');
+    grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -177,6 +177,6 @@ module.exports = function (grunt) {
     grunt.registerTask('build', 'Compiles all of the assets and copies the files to the build directory.', ['clean', 'copy', 'scripts', 'stylesheets', 'compress:build']);
     grunt.registerTask('build-view', 'Compiles all of the assets and copies the files to the build directory starts a web server and opens browser to preview app.', ['clean', 'copy', 'scripts', 'stylesheets', 'compress:build', 'connect:build', 'open:build_browser', 'watch:build']);
     grunt.registerTask('scripts', 'Compiles the JavaScript files.', ['eslint', 'uglify']);
-    grunt.registerTask('stylesheets', 'Auto prefixes css and compiles the stylesheets.', ['csslint:lax', 'autoprefixer', 'cssmin']);
+    grunt.registerTask('stylesheets', 'Auto prefixes css and compiles the stylesheets.', ['csslint:lax', 'postcss', 'cssmin']);
     grunt.registerTask('lint', 'Run eslint and csslint.', ['eslint', 'csslint:strict']);
 };

@@ -25,7 +25,6 @@ define([
     FloatingWidgetDialog
 ) {
 
-    'use strict';
     return declare(null, {
 
         legendLayerInfos: [],

@@ -6,7 +6,6 @@ define([
     'esri/tasks/GeometryService',
     'esri/layers/ImageParameters'
 ], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters) {
-    'use strict';
 
     // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
     esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';

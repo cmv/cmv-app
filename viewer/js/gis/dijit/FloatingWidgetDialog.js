@@ -2,7 +2,6 @@ define([
     'dojo/_base/declare',
     'dijit/Dialog'
 ], function (declare, Dialog) {
-    'use strict';
 
     return declare([Dialog], {
         declaredClass: 'gis.dijit.FloatingWidget',

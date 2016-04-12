@@ -1,4 +1,3 @@
-/*eslint strict: 0*/
 define([
     'dojo/_base/declare',
     'dijit/_WidgetBase',
@@ -216,7 +215,6 @@ define([
             } else {
                 return false;
             }
-            return false;
 
         },
         onLayoutChange: function (open) {

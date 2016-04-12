@@ -13,7 +13,6 @@ define([
     'dojo/_base/unload',
     'dojo/_base/lang'
 ], function (declare, kernel, cookie, JSON, baseUnload, lang) {
-    'use strict';
 
     return declare(null, {
         constructor: function (idStateName) {

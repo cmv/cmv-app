@@ -7,7 +7,6 @@ define([
     lang,
     Deferred
 ) {
-    'use strict';
 
     return declare(null, {
 

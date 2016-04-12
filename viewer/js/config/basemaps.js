@@ -2,7 +2,6 @@ define([
     //'esri/dijit/Basemap',
     //'esri/dijit/BasemapLayer'
 ], function (/* Basemap, BasemapLayer */) {
-    'use strict';
 
     return {
         map: true, // needs a reference to the map
