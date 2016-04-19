@@ -15,6 +15,8 @@
             }, {
                 name: 'put-selector',
                 main: 'put',
+              name: 'proj4js',
+              location: '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12'
                 location: 'https://cdn.rawgit.com/kriszyp/put-selector/v0.3.6'
             }, {
                 name: 'xstyle',

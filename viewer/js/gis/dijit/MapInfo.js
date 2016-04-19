@@ -10,7 +10,7 @@ define([
     'dojo/dom-style',
     'dojo/number',
     'dojo/topic',
-    '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js',
+    'proj4js/proj4',
     'xstyle/css!./MapInfo/css/MapInfo.css'
 ], function (
     declare,
