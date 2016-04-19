@@ -53,6 +53,7 @@ define([
             zoom: 5,
             sliderStyle: 'small'
         },
+
         // panes: {
         // 	left: {
         // 		splitter: true
@@ -80,6 +81,29 @@ define([
         // 	}
         // },
         // collapseButtonsPane: 'center', //center or outer
+
+        // custom titles
+        /*
+        titles: {
+            header: 'My App',
+            subHeader: 'My GIS App is the best!',
+            pageTitle: 'My App'
+        },
+        */
+
+        // user-defined layer types
+        /*
+        layerTypes: {
+            myCustomLayer: 'widgets/MyCustomLayer'
+        },
+        */
+
+        // user-defined widget types
+        /*
+        widgetTypes: [
+            'myWidgetType'
+        ],
+        */
 
         // operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: 'dynamic', 'tiled', 'feature'.
         // The 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
