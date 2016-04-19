@@ -79,8 +79,10 @@ define([
         widgetLoader: function (widgetConfig, position) {
             var parentId, pnl;
 
-            // only proceed for valid widget types
             var widgetTypes = ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map'];
+            // add any user-defined widget types
+            widgetTypes = widgetTypes.concat(this.config.widgetTypes || []);
+            // only proceed for valid widget types
             if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
                 this.handleError({
                     source: 'Controller',
