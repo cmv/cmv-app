@@ -85,6 +85,8 @@ define([
                 });
                 return;
             }
+            // add any user-defined controls - possibly for user-defined layers
+            this._controls = lang.mixin(this._controls, options.controls || {});
         },
         postCreate: function () {
             this.inherited(arguments);

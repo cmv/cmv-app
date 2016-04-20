@@ -60,34 +60,36 @@ define([
         _initLayers: function (returnWarnings) {
             this.layers = [];
             var layerTypes = {
-                csv: 'CSV',
-                dataadapter: 'DataAdapterFeature', //untested
-                dynamic: 'ArcGISDynamicMapService',
-                feature: 'Feature',
-                georss: 'GeoRSS',
-                image: 'ArcGISImageService',
-                imagevector: 'ArcGISImageServiceVector',
-                kml: 'KML',
-                label: 'Label', //untested
-                mapimage: 'MapImage', //untested
-                osm: 'OpenStreetMap',
-                raster: 'Raster',
-                stream: 'Stream',
-                tiled: 'ArcGISTiledMapService',
-                vectortile: 'VectorTile',
-                webtiled: 'WebTiled',
-                wfs: 'WFS',
-                wms: 'WMS',
-                wmts: 'WMTS' //untested
+                csv: 'esri/layers/CSVLayer',
+                dataadapter: 'esri/layers/DataAdapterFeatureLayer', //untested
+                dynamic: 'esri/layers/ArcGISDynamicMapServiceLayer',
+                feature: 'esri/layers/FeatureLayer',
+                georss: 'esri/layers/GeoRSSLayer',
+                image: 'esri/layers/ArcGISImageServiceLayer',
+                imagevector: 'esri/layers/ArcGISImageServiceVectorLayer',
+                kml: 'esri/layers/KMLLayer',
+                label: 'esri/layers/LabelLayer', //untested
+                mapimage: 'esri/layers/MapImageLayer', //untested
+                osm: 'esri/layers/OpenStreetMapLayer',
+                raster: 'esri/layers/RasterLayer',
+                stream: 'esri/layers/StreamLayer',
+                tiled: 'esri/layers/ArcGISTiledMapServiceLayer',
+                vectortile: 'esri/layers/VectorTileLayer',
+                webtiled: 'esri/layers/WebTiledLayer',
+                wfs: 'esri/layers/WFSLayer',
+                wms: 'esri/layers/WMSLayer',
+                wmts: 'esri/layers/WMTSLayer' //untested
             };
+            // add any user-defined layer types such as https://github.com/Esri/geojson-layer-js
+            layerTypes = lang.mixin(layerTypes, this.config.layerTypes || {});
             // loading all the required modules first ensures the layer order is maintained
             var modules = [];
             array.forEach(this.config.operationalLayers, function (layer) {
                 var type = layerTypes[layer.type];
                 if (type) {
-                    modules.push('esri/layers/' + type + 'Layer');
+                    modules.push(type);
                 } else {
-                    returnWarnings.push('Layer type "' + layer.type + '"" isnot supported: ');
+                    returnWarnings.push('Layer type "' + layer.type + '" is not supported: ');
                 }
             }, this);
 
@@ -95,7 +97,7 @@ define([
                 array.forEach(this.config.operationalLayers, function (layer) {
                     var type = layerTypes[layer.type];
                     if (type) {
-                        require(['esri/layers/' + type + 'Layer'], lang.hitch(this, '_initLayer', layer));
+                        require([type], lang.hitch(this, '_initLayer', layer));
                     }
                 }, this);
                 this.map.addLayers(this.layers);
