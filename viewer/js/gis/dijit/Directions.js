@@ -30,8 +30,8 @@ define([
                 this.directions._activateButton.style.display = 'none';
             } else if (this.directions._activateButtonNode) {
                 this.directions._activateButtonNode.style.display = 'none';
-                this.directions._addDestinationNode.style.float = 'inherit';
-                this.directions._optionsButtonNode.style.float = 'inherit';
+                this.directions._addDestinationNode.style['float'] = 'inherit';
+                this.directions._optionsButtonNode.style['float'] = 'inherit';
                 this.directions._optionsButtonNode.style.marginRight = '5px';
             }
 
