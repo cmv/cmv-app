@@ -22,7 +22,6 @@ define([
     'gis/plugins/Google',
     'dijit/form/ToggleButton',
     'xstyle/css!./StreetView/css/StreetView.css'
-    // 'gis/plugins/async!//maps.google.com/maps/api/js?v=3'
 ], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, domGeom, Point, SpatialReference, MenuItem, proj4, i18n, Google) {
     var google;
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
