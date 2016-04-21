@@ -19,28 +19,19 @@ define([
     'dijit/MenuItem',
     'proj4js/proj4',
     'dojo/i18n!./StreetView/nls/resource',
+    'gis/plugins/Google',
     'dijit/form/ToggleButton',
-    'xstyle/css!./StreetView/css/StreetView.css',
-    'gis/plugins/async!//maps.google.com/maps/api/js?v=3'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, domGeom, Point, SpatialReference, MenuItem, proj4, i18n) {
-
+    'xstyle/css!./StreetView/css/StreetView.css'
+    // 'gis/plugins/async!//maps.google.com/maps/api/js?v=3'
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, domGeom, Point, SpatialReference, MenuItem, proj4, i18n, Google) {
+    var google;
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
         templateString: template,
         i18n: i18n,
         mapClickMode: null,
 
-        panoOptions: {
-            addressControlOptions: {
-                position: google.maps.ControlPosition.TOP_RIGHT
-            },
-            linksControl: false,
-            panControl: false,
-            zoomControlOptions: {
-                style: google.maps.ZoomControlStyle.SMALL
-            },
-            enableCloseButton: false
-        },
+        panoOptions: null,
 
         // in case this changes some day
         proj4BaseURL: 'http://spatialreference.org/',
@@ -56,29 +47,47 @@ define([
 
         postCreate: function () {
             this.inherited(arguments);
-            this.createGraphicsLayer();
-            this.map.on('click', lang.hitch(this, 'getStreetView'));
+            //load the google api asynchronously
+            Google.load(lang.hitch(this, function(g){
+              //store a reference to google
+              google = g;
 
-            this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
+              //init our panoOptions since they depend on google
+              this.panoOptions = {
+                  addressControlOptions: {
+                      position: google.maps.ControlPosition.TOP_RIGHT
+                  },
+                  linksControl: false,
+                  panControl: false,
+                  zoomControlOptions: {
+                      style: google.maps.ZoomControlStyle.SMALL
+                  },
+                  enableCloseButton: false
+              };
+              this.createGraphicsLayer();
+              this.map.on('click', lang.hitch(this, 'getStreetView'));
 
-            if (this.parentWidget) {
-                if (this.parentWidget.toggleable) {
-                    this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
-                        this.onLayoutChange(this.parentWidget.open);
-                    })));
-                }
-                this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, 'resize')));
-                this.own(topic.subscribe(this.parentWidget.id + '/resize/resize', lang.hitch(this, 'resize')));
-            }
+              this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
 
-            // spatialreference.org uses the old
-            // Proj4js style so we need an alias
-            // https://github.com/proj4js/proj4js/issues/23
-            window.Proj4js = proj4;
+              if (this.parentWidget) {
+                  if (this.parentWidget.toggleable) {
+                      this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
+                          this.onLayoutChange(this.parentWidget.open);
+                      })));
+                  }
+                  this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, 'resize')));
+                  this.own(topic.subscribe(this.parentWidget.id + '/resize/resize', lang.hitch(this, 'resize')));
+              }
 
-            if (this.mapRightClickMenu) {
-                this.addRightClickMenu();
-            }
+              // spatialreference.org uses the old
+              // Proj4js style so we need an alias
+              // https://github.com/proj4js/proj4js/issues/23
+              window.Proj4js = proj4;
+
+              if (this.mapRightClickMenu) {
+                  this.addRightClickMenu();
+              }
+          }));
         },
         createGraphicsLayer: function () {
             this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/StreetView/images/blueArrow.png'), 30, 30);
