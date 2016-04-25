@@ -1,3 +1,5 @@
+//https://www.npmjs.com/package/google-maps
+/* eslint-disable */
 (function(root, factory) {
 
 	if (root === null) {
