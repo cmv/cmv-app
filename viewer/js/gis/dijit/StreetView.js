@@ -1,4 +1,3 @@
-/*global google */
 define([
     'dojo/_base/declare',
     'dijit/_WidgetBase',
@@ -23,6 +22,7 @@ define([
     'dijit/form/ToggleButton',
     'xstyle/css!./StreetView/css/StreetView.css'
 ], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, domGeom, Point, SpatialReference, MenuItem, proj4, i18n, Google) {
+    //cache google so
     var google;
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -47,46 +47,46 @@ define([
         postCreate: function () {
             this.inherited(arguments);
             //load the google api asynchronously
-            Google.load(lang.hitch(this, function(g){
-              //store a reference to google
-              google = g;
+            Google.load(lang.hitch(this, function (g) {
+                //store a reference to google
+                google = g;
 
-              //init our panoOptions since they depend on google
-              this.panoOptions = {
-                  addressControlOptions: {
-                      position: google.maps.ControlPosition.TOP_RIGHT
-                  },
-                  linksControl: false,
-                  panControl: false,
-                  zoomControlOptions: {
-                      style: google.maps.ZoomControlStyle.SMALL
-                  },
-                  enableCloseButton: false
-              };
-              this.createGraphicsLayer();
-              this.map.on('click', lang.hitch(this, 'getStreetView'));
+                //init our panoOptions since they depend on google
+                this.panoOptions = {
+                    addressControlOptions: {
+                        position: google.maps.ControlPosition.TOP_RIGHT
+                    },
+                    linksControl: false,
+                    panControl: false,
+                    zoomControlOptions: {
+                        style: google.maps.ZoomControlStyle.SMALL
+                    },
+                    enableCloseButton: false
+                };
+                this.createGraphicsLayer();
+                this.map.on('click', lang.hitch(this, 'getStreetView'));
 
-              this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
+                this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
 
-              if (this.parentWidget) {
-                  if (this.parentWidget.toggleable) {
-                      this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
-                          this.onLayoutChange(this.parentWidget.open);
-                      })));
-                  }
-                  this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, 'resize')));
-                  this.own(topic.subscribe(this.parentWidget.id + '/resize/resize', lang.hitch(this, 'resize')));
-              }
+                if (this.parentWidget) {
+                    if (this.parentWidget.toggleable) {
+                        this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
+                            this.onLayoutChange(this.parentWidget.open);
+                        })));
+                    }
+                    this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, 'resize')));
+                    this.own(topic.subscribe(this.parentWidget.id + '/resize/resize', lang.hitch(this, 'resize')));
+                }
 
-              // spatialreference.org uses the old
-              // Proj4js style so we need an alias
-              // https://github.com/proj4js/proj4js/issues/23
-              window.Proj4js = proj4;
+                // spatialreference.org uses the old
+                // Proj4js style so we need an alias
+                // https://github.com/proj4js/proj4js/issues/23
+                window.Proj4js = proj4;
 
-              if (this.mapRightClickMenu) {
-                  this.addRightClickMenu();
-              }
-          }));
+                if (this.mapRightClickMenu) {
+                    this.addRightClickMenu();
+                }
+            }));
         },
         createGraphicsLayer: function () {
             this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/StreetView/images/blueArrow.png'), 30, 30);
@@ -136,7 +136,7 @@ define([
             } else {
                 this.connectMapClick();
             }
-        //get map click, set up listener in post create
+            //get map click, set up listener in post create
         },
         disconnectMapClick: function () {
             this.streetViewButtonDijit.set('checked', true);
