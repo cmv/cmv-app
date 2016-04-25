@@ -16,13 +16,14 @@ define([
     'esri/tasks/IdentifyTask',
     'esri/tasks/IdentifyParameters',
     'esri/dijit/PopupTemplate',
+    'esri/TimeExtent',
     'dojo/text!./Identify/templates/Identify.html',
     'dojo/i18n!./Identify/nls/resource',
 
     'dijit/form/Form',
     'dijit/form/FilteringSelect',
     'xstyle/css!./Identify/css/Identify.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, IdentifyTemplate, i18n) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, TimeExtent, IdentifyTemplate, i18n) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -181,6 +182,9 @@ define([
                     var params = lang.clone(identifyParams);
                     params.layerDefinitions = layer.ref.layerDefinitions;
                     params.layerIds = layerIds;
+                    if (layer.ref.timeInfo && layer.ref.timeInfo.timeExtent && this.map.timeExtent) {
+                        params.timeExtent = new TimeExtent(this.map.timeExtent.startTime, this.map.timeExtent.endTime);
+                    }
                     identifies.push(layer.identifyTask.execute(params));
                     identifiedlayers.push(layer);
                 }
