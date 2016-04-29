@@ -21,7 +21,8 @@ var profile = {
 		// are typically binaries (images, etc.) and may be corrupted by the build system if it attempts to process
 		// them and naively assumes they are scripts.
 		copyOnly: function (filename, mid) {
-			return (/^cmv\/(images)\//.test(mid) && !/\.css$/.test(filename));
+			return (/^cmv\/(images)\//.test(mid) && !/\.css$/.test(filename)) ||
+			/\/node_modules\//.test(mid);
 		},
 
 		// Files that are AMD modules.
