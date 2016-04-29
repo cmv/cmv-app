@@ -25,5 +25,6 @@
         "grunt-contrib-compress": "1.2.x",
         "proxypage": "*"
     },
-    "engine": "node >= 4"
+    "engine": "node >= 4",
+    "dojoBuild": "package.js"
 }
