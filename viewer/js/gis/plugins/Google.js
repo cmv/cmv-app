@@ -3,7 +3,7 @@
 (function(root, factory) {
 
 	if (root === null) {
-		throw new Error('Google-maps package can be used only in browser');
+		//throw new Error('Google-maps package can be used only in browser');
 	}
 
 	if (typeof define === 'function' && define.amd) {
