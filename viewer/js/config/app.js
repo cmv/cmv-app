@@ -12,6 +12,14 @@
             }, {
                 name: 'config',
                 location: path + 'js/config'
+            }, {
+                name: 'put-selector',
+                main: 'put',
+                location: 'https://cdn.rawgit.com/kriszyp/put-selector/v0.3.6'
+            }, {
+                name: 'xstyle',
+                main: 'css',
+                location: 'https://cdn.rawgit.com/kriszyp/xstyle/master'
             }
         ]
     };
