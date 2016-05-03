@@ -19,7 +19,7 @@
             }, {
                 name: 'xstyle',
                 main: 'css',
-                location: 'https://cdn.rawgit.com/kriszyp/xstyle/master'
+                location: 'https://cdn.rawgit.com/kriszyp/xstyle/v0.3.2'
             }
         ]
     };
