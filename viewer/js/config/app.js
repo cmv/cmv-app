@@ -1,4 +1,4 @@
-define(['dojo/_base/window'], function(window){
+define(['dojo/_base/window'], function (window) {
 
     var path = window.global.location.pathname.replace(/[^\/]+$/, '');
     var dojoConfig = window.global.dojoConfig = {
@@ -14,8 +14,8 @@ define(['dojo/_base/window'], function(window){
                 name: 'config',
                 location: path + 'js/config'
             }, {
-              name: 'proj4js',
-              location: '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12'
+                name: 'proj4js',
+                location: '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12'
             }, {
                 name: 'put-selector',
                 main: 'put',
