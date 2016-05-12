@@ -1,6 +1,7 @@
-(function () {
-    var path = location.pathname.replace(/[^\/]+$/, '');
-    window.dojoConfig = {
+define(['dojo/_base/window'], function(window){
+
+    var path = window.global.location.pathname.replace(/[^\/]+$/, '');
+    var dojoConfig = window.global.dojoConfig = {
         async: true,
         packages: [
             {
@@ -26,7 +27,7 @@
         ]
     };
 
-    require(window.dojoConfig, [
+    require(dojoConfig, [
         'dojo/_base/declare',
 
         // minimal Base Controller
@@ -63,4 +64,6 @@
         ]))();
         controller.startup();
     });
-})();
+    //we have to return something
+    return dojoConfig;
+});
