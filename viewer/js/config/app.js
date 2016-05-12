@@ -1,7 +1,6 @@
-define(['dojo/_base/window'], function (window) {
-
-    var path = window.global.location.pathname.replace(/[^\/]+$/, '');
-    var dojoConfig = window.global.dojoConfig = {
+(function () {
+    var path = location.pathname.replace(/[^\/]+$/, '');
+    window.dojoConfig = {
         async: true,
         packages: [
             {
@@ -14,9 +13,6 @@ define(['dojo/_base/window'], function (window) {
                 name: 'config',
                 location: path + 'js/config'
             }, {
-                name: 'proj4js',
-                location: '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12'
-            }, {
                 name: 'put-selector',
                 main: 'put',
                 location: 'https://cdn.rawgit.com/kriszyp/put-selector/v0.3.6'
@@ -24,11 +20,14 @@ define(['dojo/_base/window'], function (window) {
                 name: 'xstyle',
                 main: 'css',
                 location: 'https://cdn.rawgit.com/kriszyp/xstyle/v0.3.2'
+            }, {
+                name: 'proj4js',
+                location: '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12'
             }
         ]
     };
 
-    require(dojoConfig, [
+    require(window.dojoConfig, [
         'dojo/_base/declare',
 
         // minimal Base Controller
@@ -65,6 +64,4 @@ define(['dojo/_base/window'], function (window) {
         ]))();
         controller.startup();
     });
-    //we have to return something
-    return dojoConfig;
-});
+})();
