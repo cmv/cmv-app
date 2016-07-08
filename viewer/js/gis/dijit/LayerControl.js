@@ -206,7 +206,7 @@ define([
                 if (layer.loaded) {
                     this._applyLayerControlOptions(layerInfo.controlOptions, layer);
                 } else {
-                    layer.on('load', lang.hitch(this, '_applyLayerControlOptions', layer.controlOptions));
+                    layer.on('load', lang.hitch(this, '_applyLayerControlOptions', layerInfo.controlOptions));
                 }
             }
             var layerControl = new Control({
