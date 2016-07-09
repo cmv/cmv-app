@@ -1,6 +1,6 @@
 # CMV - The Configurable Map Viewer
 
-[![Read The Docs](https://img.shields.io/badge/docs-1.3.4-brightgreen.svg?style=flat)](http://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app) 
+[![Read The Docs](https://img.shields.io/badge/docs-1.3.4-brightgreen.svg?style=flat)](http://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app)
 
 ## Introduction
 [CMV](http://cmv.io/) is a community-supported open source mapping framework. CMV works with the [Esri JavaScript API](http://docs.cmv.io/en/latest/developers.arcgis.com/javascript/jsapi/), [ArcGIS Server](http://www.esri.com/software/arcgis/arcgisserver), [ArcGIS Online](https://arcgis.com/) and more.
@@ -38,6 +38,9 @@ This JavaScript web app can be easily configured or used as a boilerplate/starti
 - Highly configurable UI, right or left sidebars with widgets in both, top and bottom regions for other content.
 
 Read more about the [core widgets](http://docs.cmv.io/en/latest/widgets/). In addition, there is a growing number of [widgets contributed by the CMV developer community](https://github.com/cmv/cmv-contrib-widgets).
+
+## Resource Proxy:
+A [resource proxy](https://github.com/Esri/resource-proxy) may be required to access some MapServices and other content that reside on a different domain. A proxy is not available for the Github demo.
 
 ## Documentation:
 Use the [documentation](http://docs.cmv.io/) for getting started and guidance on configuring your application. The initial documentation is sparse. Please help make it better by contributing over at the [cmv documentation repo](https://github.com/cmv/cmv-docs).
