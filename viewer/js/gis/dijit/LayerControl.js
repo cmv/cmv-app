@@ -206,7 +206,7 @@ define([
                 if (layer.loaded) {
                     this._applyLayerControlOptions(layerInfo.controlOptions, layer);
                 } else {
-                    layer.on('load', lang.hitch(this, '_applyLayerControlOptions', layer.controlOptions));
+                    layer.on('load', lang.hitch(this, '_applyLayerControlOptions', layerInfo.controlOptions));
                 }
             }
             var layerControl = new Control({
@@ -346,29 +346,37 @@ define([
             if (this.separated) {
                 if (this.vectorReorder) {
                     array.forEach(this._vectorContainer.getChildren(), function (child) {
-                        if (!child.getPreviousSibling()) {
-                            child._reorderUp.set('disabled', true);
-                        } else {
-                            child._reorderUp.set('disabled', false);
+                        if (child._reorderUp) {
+                            if (!child.getPreviousSibling()) {
+                                child._reorderUp.set('disabled', true);
+                            } else {
+                                child._reorderUp.set('disabled', false);
+                            }
                         }
-                        if (!child.getNextSibling()) {
-                            child._reorderDown.set('disabled', true);
-                        } else {
-                            child._reorderDown.set('disabled', false);
+                        if (child._reorderDown) {
+                            if (!child.getNextSibling()) {
+                                child._reorderDown.set('disabled', true);
+                            } else {
+                                child._reorderDown.set('disabled', false);
+                            }
                         }
                     }, this);
                 }
                 if (this.overlayReorder) {
                     array.forEach(this._overlayContainer.getChildren(), function (child) {
-                        if (!child.getPreviousSibling()) {
-                            child._reorderUp.set('disabled', true);
-                        } else {
-                            child._reorderUp.set('disabled', false);
+                        if (child._reorderUp) {
+                            if (!child.getPreviousSibling()) {
+                                child._reorderUp.set('disabled', true);
+                            } else {
+                                child._reorderUp.set('disabled', false);
+                            }
                         }
-                        if (!child.getNextSibling()) {
-                            child._reorderDown.set('disabled', true);
-                        } else {
-                            child._reorderDown.set('disabled', false);
+                        if (child._reorderDown) {
+                            if (!child.getNextSibling()) {
+                                child._reorderDown.set('disabled', true);
+                            } else {
+                                child._reorderDown.set('disabled', false);
+                            }
                         }
                     }, this);
                 }
