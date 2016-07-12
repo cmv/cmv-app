@@ -4,8 +4,9 @@ define([
     'esri/config',
     /*'esri/urlUtils',*/
     'esri/tasks/GeometryService',
-    'esri/layers/ImageParameters'
-], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters) {
+    'esri/layers/ImageParameters',
+    'dojo/i18n!./nls/main'
+], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters, i18n) {
 
     // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
     esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
@@ -131,7 +132,7 @@ define([
         }, {
             type: 'feature',
             url: 'https://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
-            title: 'San Francisco 311 Incidents',
+            title: i18n.operationalLayers.sf311Incidents,
             options: {
                 id: 'sf311Incidents',
                 opacity: 1.0,
@@ -267,7 +268,7 @@ define([
                 id: 'identify',
                 type: 'titlePane',
                 path: 'gis/dijit/Identify',
-                title: 'Identify',
+                title: i18n.widgetTitles.identify,
                 open: false,
                 position: 3,
                 options: 'config/identify'
@@ -366,7 +367,7 @@ define([
                 id: 'legend',
                 type: 'titlePane',
                 path: 'esri/dijit/Legend',
-                title: 'Legend',
+                title: i18n.widgetTitles.legend,
                 open: false,
                 position: 0,
                 options: {
@@ -379,7 +380,7 @@ define([
                 id: 'layerControl',
                 type: 'titlePane',
                 path: 'gis/dijit/LayerControl',
-                title: 'Layers',
+                title: i18n.widgetTitles.layerControl,
                 open: false,
                 position: 0,
                 options: {
@@ -395,7 +396,7 @@ define([
                 id: 'bookmarks',
                 type: 'titlePane',
                 path: 'gis/dijit/Bookmarks',
-                title: 'Bookmarks',
+                title: i18n.widgetTitles.bookmarks,
                 open: false,
                 position: 2,
                 options: 'config/bookmarks'
@@ -406,7 +407,7 @@ define([
                 type: 'titlePane',
                 canFloat: true,
                 path: 'gis/dijit/Find',
-                title: 'Find',
+                title: i18n.widgetTitles.find,
                 open: false,
                 position: 3,
                 options: 'config/find'
@@ -417,7 +418,7 @@ define([
                 type: 'titlePane',
                 canFloat: true,
                 path: 'gis/dijit/Draw',
-                title: 'Draw',
+                title: i18n.widgetTitles.draw,
                 open: false,
                 position: 4,
                 options: {
@@ -431,7 +432,7 @@ define([
                 type: 'titlePane',
                 canFloat: true,
                 path: 'gis/dijit/Measurement',
-                title: 'Measurement',
+                title: i18n.widgetTitles.measure,
                 open: false,
                 position: 5,
                 options: {
@@ -447,7 +448,7 @@ define([
                 type: 'titlePane',
                 canFloat: true,
                 path: 'gis/dijit/Print',
-                title: 'Print',
+                title: i18n.widgetTitles.print,
                 open: false,
                 position: 6,
                 options: {
@@ -465,7 +466,7 @@ define([
                 id: 'directions',
                 type: 'titlePane',
                 path: 'gis/dijit/Directions',
-                title: 'Directions',
+                title: i18n.widgetTitles.directions,
                 open: false,
                 position: 7,
                 options: {
@@ -486,7 +487,7 @@ define([
                 id: 'editor',
                 type: 'titlePane',
                 path: 'gis/dijit/Editor',
-                title: 'Editor',
+                title: i18n.widgetTitles.editor,
                 open: false,
                 position: 8,
                 options: {
@@ -515,7 +516,7 @@ define([
                 canFloat: true,
                 position: 9,
                 path: 'gis/dijit/StreetView',
-                title: 'Google Street View',
+                title: i18n.widgetTitles.streetview,
                 paneOptions: {
                     resizable: true,
                     resizeOptions: {
@@ -536,7 +537,7 @@ define([
                 id: 'help',
                 type: 'floating',
                 path: 'gis/dijit/Help',
-                title: 'Help',
+                title: i18n.widgetTitles.help,
                 options: {}
             }
 
