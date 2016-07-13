@@ -19,7 +19,7 @@ define([
     });*/
 
     // url to your geometry server.
-    esriConfig.defaults.geometryService = new GeometryService('http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
+    esriConfig.defaults.geometryService = new GeometryService('https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
 
     // helper function returning ImageParameters for dynamic layers
     // example:
@@ -110,7 +110,7 @@ define([
         // 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
         operationalLayers: [{
             type: 'feature',
-            url: 'http://services1.arcgis.com/6bXbLtkf4y11TosO/arcgis/rest/services/Restaurants/FeatureServer/0',
+            url: 'https://services1.arcgis.com/6bXbLtkf4y11TosO/arcgis/rest/services/Restaurants/FeatureServer/0',
             title: 'Restaurants',
             options: {
                 id: 'restaurants',
@@ -130,7 +130,7 @@ define([
             }
         }, {
             type: 'feature',
-            url: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
+            url: 'https://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
             title: 'San Francisco 311 Incidents',
             options: {
                 id: 'sf311Incidents',
@@ -141,7 +141,7 @@ define([
             }
         }, {
             type: 'dynamic',
-            url: 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
+            url: 'https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
             title: 'Louisville Public Safety',
             options: {
                 id: 'louisvillePubSafety',
@@ -165,7 +165,7 @@ define([
             }
         }, {
             type: 'dynamic',
-            url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer',
+            url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer',
             title: 'Damage Assessment',
             options: {
                 id: 'DamageAssessment',
@@ -186,7 +186,7 @@ define([
         }, {
             type: 'vectortile',
             title: 'Light Gray Canvas Vector',
-            url: '//www.arcgis.com/sharing/rest/content/items/bdf1eec3fa79456c8c7c2bb62f86dade/resources/styles/root.json',
+            url: 'https://www.arcgis.com/sharing/rest/content/items/bdf1eec3fa79456c8c7c2bb62f86dade/resources/styles/root.json',
             options: {
                 id: 'vectortile1',
                 opacity: 0.8,
@@ -200,12 +200,12 @@ define([
                 id: 'vectortile2',
                 opacity: 1.0,
                 visible: true,
-                'glyphs': '//www.arcgis.com/sharing/rest/content/items/00cd8e843bae49b3a040423e5d65416b/resources/fonts/{fontstack}/{range}.pbf',
-                'sprite': '//www.arcgis.com/sharing/rest/content/items/00cd8e843bae49b3a040423e5d65416b/resources/sprites/sprite',
+                'glyphs': 'https://www.arcgis.com/sharing/rest/content/items/00cd8e843bae49b3a040423e5d65416b/resources/fonts/{fontstack}/{range}.pbf',
+                'sprite': 'https://www.arcgis.com/sharing/rest/content/items/00cd8e843bae49b3a040423e5d65416b/resources/sprites/sprite',
                 'version': 8,
                 'sources': {
                     'esri': {
-                        'url': '//basemapsdev.arcgis.com/arcgis/rest/services/World_Basemap/VectorTileServer',
+                        'url': 'https://basemapsdev.arcgis.com/arcgis/rest/services/World_Basemap/VectorTileServer',
                         'type': 'vector'
                     }
                 },
@@ -472,7 +472,7 @@ define([
                     map: true,
                     mapRightClickMenu: true,
                     options: {
-                        routeTaskUrl: 'http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Network/USA/NAServer/Route',
+                        routeTaskUrl: 'https://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Network/USA/NAServer/Route',
                         routeParams: {
                             directionsLanguage: 'en-US',
                             directionsLengthUnits: units.MILES
