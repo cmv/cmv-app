@@ -23,12 +23,22 @@ define({
         bookmarks: {
           usa: 'USA'
         },
+        find: {
+            louisvillePubSafety: 'Find A Public Safety Location By Name',
+            sf311Incidents: 'Find Incident By Code/Description'
+        },
+        identify: {
+            louisvillePubSafety: {
+                policeStation: 'Police Station',
+                trafficCamera: 'Traffic Camera'
+            }
+        },
         viewer: {
             operationalLayers: {
                 damageAssessment: 'Damage Assessment',
                 louisvillePubSafety: 'Louisville Public Safety',
                 restaurants: 'Restaurants',
-                sf311Incidents: 'San Francisco 311 Incidents',
+                sf311Incidents: 'San Francisco 311 Incidents'
             },
             titles: {
                 header: 'Configurable Map Viewer',
