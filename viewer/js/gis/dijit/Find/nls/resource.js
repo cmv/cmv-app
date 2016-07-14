@@ -24,6 +24,7 @@ define({
         optionsLabel: 'Options',
         zoomOnSelect: 'Zoom on select',
         zoomOnDeselect: 'Zoom on deselect'
-    }
+    },
+    'pt-pt': true
 });
 

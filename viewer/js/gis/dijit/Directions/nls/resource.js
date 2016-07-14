@@ -21,5 +21,6 @@ define ({
                 message: 'There was a problem getting your location: '
             }
         }
-    }
+    },
+    'pt-pt': true
 });

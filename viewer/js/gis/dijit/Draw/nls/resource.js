@@ -12,5 +12,6 @@ define ({
             currentDrawMode: 'Current draw mode:',
             currentDrawModeNone: 'None'
         }
-    }
+    },
+    'pt-pt': true
 });

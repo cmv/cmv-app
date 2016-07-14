@@ -10,5 +10,6 @@ define ({
         mapInfoWindow: {
             identifyingTitle: 'Identifying...'
         }
-    }
+    },
+    'pt-pt': true
 });

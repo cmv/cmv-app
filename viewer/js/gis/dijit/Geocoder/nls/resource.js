@@ -12,5 +12,6 @@ define ({
             locatorName: 'Locator name',
             getAddressHere: 'Get address here'
         }
-    }
+    },
+    'pt-pt': true
 });

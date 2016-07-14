@@ -38,6 +38,7 @@ define({
             },
             errorMessage: 'Error, try again'
         }
-    }
+    },
+    'pt-pt': true
 });
 
