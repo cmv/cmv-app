@@ -29,8 +29,6 @@ define({
                 louisvillePubSafety: 'Louisville Public Safety',
                 restaurants: 'Restaurants',
                 sf311Incidents: 'San Francisco 311 Incidents',
-                vectortile1: 'Light Gray Canvas Vector',
-                vectortile2: 'Custom Vector Style'
             },
             titles: {
                 header: 'Configurable Map Viewer',

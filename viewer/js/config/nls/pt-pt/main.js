@@ -28,8 +28,6 @@ define({
             louisvillePubSafety: 'Segurança Pública de Louisville',
             restaurants: 'Restaurantes',
             sf311Incidents: 'Incidentes do 311 de São Francisco',
-            vectortile1: 'Tela vectorial cinzento claro',
-            vectortile2: 'Estilo vectorial personalizado'
         },
         titles: {
             header: 'Configurable Map Viewer',

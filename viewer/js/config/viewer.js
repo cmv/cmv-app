@@ -184,8 +184,8 @@ define([
         //examples of vector tile layers (beta in v3.15)
         }, {
             type: 'vectortile',
-            title: i18n.viewer.operationalLayers.vectortile1,
-            url: 'https://www.arcgis.com/sharing/rest/content/items/bdf1eec3fa79456c8c7c2bb62f86dade/resources/styles/root.json',
+            title: 'Light Gray Canvas Vector',
+            url: 'https//www.arcgis.com/sharing/rest/content/items/bdf1eec3fa79456c8c7c2bb62f86dade/resources/styles/root.json',
             options: {
                 id: 'vectortile1',
                 opacity: 0.8,
@@ -194,7 +194,7 @@ define([
         }, {
            //  taken from this demo: https://github.com/ycabon/presentations/blob/gh-pages/2015-berlin-plenary/demos/3.15-vectortile/create-by-style-object.html
             type: 'vectortile',
-            title: i18n.viewer.operationalLayers.vectortile2,
+            title: 'Custom Vector Style',
             options: {
                 id: 'vectortile2',
                 opacity: 1.0,
