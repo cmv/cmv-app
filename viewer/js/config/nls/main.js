@@ -21,7 +21,8 @@ define({
             topo: 'Topographic'
         },
         bookmarks: {
-          usa: 'USA'
+            nullIsland: 'Null Island',
+            usa: 'USA'
         },
         find: {
             louisvillePubSafety: 'Find A Public Safety Location By Name',

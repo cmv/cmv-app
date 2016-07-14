@@ -17,6 +17,18 @@ define([
                     }
                 },
                 name: i18n.bookmarks.usa
+            },
+            {
+                extent: {
+                    xmin: 0,
+                    ymin: 0,
+                    xmax: 0,
+                    ymax: 0,
+                    spatialReference: {
+                        wkid: 102100
+                    }
+                },
+                name: i18n.bookmarks.nullIsland
             }
         ]
     }

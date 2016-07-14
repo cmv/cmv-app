@@ -20,6 +20,7 @@ define({
         topo: 'Topográfico'
     },
     bookmarks: {
+        nullIsland: 'Ilha Nula',
         usa: 'EUA'
     },
     find: {
