@@ -86,9 +86,9 @@ define([
         // custom titles
         /*
         titles: {
-            header: 'My App',
-            subHeader: 'My GIS App is the best!',
-            pageTitle: 'My App'
+            header: i18n.viewer.titles.header,
+            subHeader: i18n.viewer.titles.subHeader,
+            pageTitle: i18n.viewer.titles.pageTitle
         },
         */
 
@@ -112,7 +112,7 @@ define([
         operationalLayers: [{
             type: 'feature',
             url: 'https://services1.arcgis.com/6bXbLtkf4y11TosO/arcgis/rest/services/Restaurants/FeatureServer/0',
-            title: 'Restaurants',
+            title: i18n.viewer.operationalLayers.restaurants,
             options: {
                 id: 'restaurants',
                 opacity: 1.0,
@@ -126,13 +126,13 @@ define([
             legendLayerInfos: {
                 exclude: false,
                 layerInfo: {
-                    title: 'Restaurants'
+                    title: i18n.viewer.operationalLayers.restaurants
                 }
             }
         }, {
             type: 'feature',
             url: 'https://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
-            title: i18n.operationalLayers.sf311Incidents,
+            title: i18n.viewer.operationalLayers.sf311Incidents,
             options: {
                 id: 'sf311Incidents',
                 opacity: 1.0,
@@ -143,7 +143,7 @@ define([
         }, {
             type: 'dynamic',
             url: 'https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
-            title: 'Louisville Public Safety',
+            title: i18n.viewer.operationalLayers.louisvillePubSafety,
             options: {
                 id: 'louisvillePubSafety',
                 opacity: 1.0,
@@ -167,9 +167,9 @@ define([
         }, {
             type: 'dynamic',
             url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/MapServer',
-            title: 'Damage Assessment',
+            title: i18n.viewer.operationalLayers.damageAssessment,
             options: {
-                id: 'DamageAssessment',
+                id: 'damageAssessment',
                 opacity: 1.0,
                 visible: true,
                 imageParameters: buildImageParameters()
@@ -186,7 +186,7 @@ define([
         //examples of vector tile layers (beta in v3.15)
         }, {
             type: 'vectortile',
-            title: 'Light Gray Canvas Vector',
+            title: i18n.viewer.operationalLayers.vectortile1,
             url: 'https://www.arcgis.com/sharing/rest/content/items/bdf1eec3fa79456c8c7c2bb62f86dade/resources/styles/root.json',
             options: {
                 id: 'vectortile1',
@@ -196,7 +196,7 @@ define([
         }, {
            //  taken from this demo: https://github.com/ycabon/presentations/blob/gh-pages/2015-berlin-plenary/demos/3.15-vectortile/create-by-style-object.html
             type: 'vectortile',
-            title: 'Custom Vector Style',
+            title: i18n.viewer.operationalLayers.vectortile2,
             options: {
                 id: 'vectortile2',
                 opacity: 1.0,
@@ -268,7 +268,7 @@ define([
                 id: 'identify',
                 type: 'titlePane',
                 path: 'gis/dijit/Identify',
-                title: i18n.widgetTitles.identify,
+                title: i18n.viewer.widgets.identify,
                 open: false,
                 position: 3,
                 options: 'config/identify'
@@ -367,7 +367,7 @@ define([
                 id: 'legend',
                 type: 'titlePane',
                 path: 'esri/dijit/Legend',
-                title: i18n.widgetTitles.legend,
+                title: i18n.viewer.widgets.legend,
                 open: false,
                 position: 0,
                 options: {
@@ -380,7 +380,7 @@ define([
                 id: 'layerControl',
                 type: 'titlePane',
                 path: 'gis/dijit/LayerControl',
-                title: i18n.widgetTitles.layerControl,
+                title: i18n.viewer.widgets.layerControl,
                 open: false,
                 position: 0,
                 options: {
@@ -396,7 +396,7 @@ define([
                 id: 'bookmarks',
                 type: 'titlePane',
                 path: 'gis/dijit/Bookmarks',
-                title: i18n.widgetTitles.bookmarks,
+                title: i18n.viewer.widgets.bookmarks,
                 open: false,
                 position: 2,
                 options: 'config/bookmarks'
@@ -407,7 +407,7 @@ define([
                 type: 'titlePane',
                 canFloat: true,
                 path: 'gis/dijit/Find',
-                title: i18n.widgetTitles.find,
+                title: i18n.viewer.widgets.find,
                 open: false,
                 position: 3,
                 options: 'config/find'
@@ -418,7 +418,7 @@ define([
                 type: 'titlePane',
                 canFloat: true,
                 path: 'gis/dijit/Draw',
-                title: i18n.widgetTitles.draw,
+                title: i18n.viewer.widgets.draw,
                 open: false,
                 position: 4,
                 options: {
@@ -432,7 +432,7 @@ define([
                 type: 'titlePane',
                 canFloat: true,
                 path: 'gis/dijit/Measurement',
-                title: i18n.widgetTitles.measure,
+                title: i18n.viewer.widgets.measure,
                 open: false,
                 position: 5,
                 options: {
@@ -448,7 +448,7 @@ define([
                 type: 'titlePane',
                 canFloat: true,
                 path: 'gis/dijit/Print',
-                title: i18n.widgetTitles.print,
+                title: i18n.viewer.widgets.print,
                 open: false,
                 position: 6,
                 options: {
@@ -466,7 +466,7 @@ define([
                 id: 'directions',
                 type: 'titlePane',
                 path: 'gis/dijit/Directions',
-                title: i18n.widgetTitles.directions,
+                title: i18n.viewer.widgets.directions,
                 open: false,
                 position: 7,
                 options: {
@@ -487,7 +487,7 @@ define([
                 id: 'editor',
                 type: 'titlePane',
                 path: 'gis/dijit/Editor',
-                title: i18n.widgetTitles.editor,
+                title: i18n.viewer.widgets.editor,
                 open: false,
                 position: 8,
                 options: {
@@ -516,7 +516,7 @@ define([
                 canFloat: true,
                 position: 9,
                 path: 'gis/dijit/StreetView',
-                title: i18n.widgetTitles.streetview,
+                title: i18n.viewer.widgets.streetview,
                 paneOptions: {
                     resizable: true,
                     resizeOptions: {
@@ -537,7 +537,7 @@ define([
                 id: 'help',
                 type: 'floating',
                 path: 'gis/dijit/Help',
-                title: i18n.widgetTitles.help,
+                title: i18n.viewer.widgets.help,
                 options: {}
             }
 
