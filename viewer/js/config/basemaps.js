@@ -86,7 +86,7 @@ define([
                 basemap: {
                     baseMapLayers: [
                         {
-                            url: 'http://tiles.arcgis.com/tiles/IEuSomXfi6iB7a25/arcgis/rest/services/World_Globe_1812/MapServer'
+                            url: 'https://tiles.arcgis.com/tiles/IEuSomXfi6iB7a25/arcgis/rest/services/World_Globe_1812/MapServer'
                         }
                     ]
                 }
@@ -252,7 +252,7 @@ define([
                 basemap: new Basemap({
                     id: 'stamenToner',
                     layers: [new BasemapLayer({
-                        url: 'http://tile.stamen.com/toner/${level}/${col}/${row}.png',
+                        url: 'https://tile.stamen.com/toner/${level}/${col}/${row}.png',
                         copyright: 'stamen, 2016',
                         id: 'stamenToner',
                         type: 'WebTiledLayer'
@@ -264,7 +264,7 @@ define([
                 basemap: new Basemap({
                     id: 'stamenTerrain',
                     layers: [new BasemapLayer({
-                        url: 'http://tile.stamen.com/terrain/${level}/${col}/${row}.png',
+                        url: 'https://tile.stamen.com/terrain/${level}/${col}/${row}.png',
                         copyright: 'stamen, 2016',
                         id: 'stamenTerrain',
                         type: 'WebTiledLayer'
@@ -276,7 +276,7 @@ define([
                 basemap: new Basemap({
                     id: 'stamenWatercolor',
                     layers: [new BasemapLayer({
-                        url: 'http://tile.stamen.com/watercolor/${level}/${col}/${row}.png',
+                        url: 'https://tile.stamen.com/watercolor/${level}/${col}/${row}.png',
                         copyright: 'stamen, 2016',
                         id: 'stamenWatercolor',
                         type: 'WebTiledLayer'
