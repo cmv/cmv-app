@@ -1,5 +1,27 @@
 // http://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
 define({
+    basemaps: {
+        davidRumseyMap1812: 'David Rumsey 1812',
+        darkGrayVector: 'Cinzento escuro',
+        earthAtNight: 'Terra à noite',
+        grayVector: 'Cinzento',
+        hybrid: 'Híbrido',
+        landsatShaded: 'Landsat sombreado',
+        nationalGeographic: 'National Geographic',
+        oceans: 'Oceanos',
+        osm: 'Open Street Map',
+        satellite: 'Satélite',
+        streets: 'Ruas',
+        streetsNavigationVector: 'Ruas (Navegação)',
+        streetsNightVector: 'Ruas (Nocturno)',
+        streetsReliefVector: 'Ruas (Relevo)',
+        terrain: 'Terreno',
+        title: 'Mapas base',
+        topo: 'Topográfico'
+    },
+    bookmarks: {
+        usa: 'EUA'
+    },
     viewer: {
         operationalLayers: {
             damageAssessment: 'Avaliação de dano',

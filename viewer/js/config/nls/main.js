@@ -15,7 +15,7 @@ define({
             streets: 'Streets',
             streetsNavigationVector: 'Streets (Navigation)',
             streetsNightVector: 'Streets (Night)',
-            streetsReliefVector: 'Street (Relief)',
+            streetsReliefVector: 'Streets (Relief)',
             terrain: 'Terrain',
             title: 'Basemaps',
             topo: 'Topographic'
