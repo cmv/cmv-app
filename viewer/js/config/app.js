@@ -20,6 +20,9 @@
                 name: 'xstyle',
                 main: 'css',
                 location: 'https://cdn.rawgit.com/kriszyp/xstyle/v0.3.2'
+            }, {
+                name: 'proj4js',
+                location: '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12'
             }
         ]
     };
