@@ -84,13 +84,11 @@ define([
         // collapseButtonsPane: 'center', //center or outer
 
         // custom titles
-        /*
         titles: {
             header: i18n.viewer.titles.header,
             subHeader: i18n.viewer.titles.subHeader,
             pageTitle: i18n.viewer.titles.pageTitle
         },
-        */
 
         // user-defined layer types
         /*

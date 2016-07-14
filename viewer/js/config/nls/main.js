@@ -34,8 +34,8 @@ define({
             },
             titles: {
                 header: 'Configurable Map Viewer',
-                pageTitle: 'Configurable Map Viewer'
-                subHeader: 'make it your own',
+                pageTitle: 'Configurable Map Viewer',
+                subHeader: 'make it your own'
             },
             widgets: {
                 bookmarks: 'Bookmarks',
@@ -51,8 +51,7 @@ define({
                 print: 'Print',
                 streetview: 'Google Street View'
             }
-
-        },
+        }
     },
     'pt-pt': true
 });

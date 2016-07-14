@@ -11,8 +11,8 @@ define({
         },
         titles: {
             header: 'Configurable Map Viewer',
-            pageTitle: 'Configurable Map Viewer'
-            subHeader: 'make it your own',
+            pageTitle: 'Configurable Map Viewer — Um visualizador de mapas configurável', // One configurable map viewer
+            subHeader: 'personaliza-o ao teu gosto' // customize it at your will (the literal translation doesn’t sound good)
         },
         widgets: {
             bookmarks: 'Marcadores',
