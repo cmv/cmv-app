@@ -19,20 +19,20 @@ define([
         / otherwise uses keys in basemaps object below
         / values in array must match keys in basemaps object
         */
-        //basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'lightGray', 'gray', 'nationalGeographic', 'osm', 'oceans'],
+        //basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'lightGray', 'gray', 'national-geographic', 'osm', 'oceans'],
 
         // define all valid basemaps here.
         basemaps: {
             streets: {
                 title: i18n.basemaps.streets
             },
-            streetsNightVector: { // requires v3.16 or higher
+            'streets-night-vector': { // requires v3.16 or higher
                 title: i18n.basemaps.streetsNightVector
             },
-            streetsNavigationVector: { // requires v3.16 or higher
+            'streets-navigation-vector': { // requires v3.16 or higher
                 title: i18n.basemaps.streetsNavigationVector
             },
-            streetsReliefVector: { // requires v3.16 or higher
+            'streets-relief-vector': { // requires v3.16 or higher
                 title: i18n.basemaps.streetsReliefVector
             },
             satellite: {
@@ -47,16 +47,16 @@ define([
             terrain: {
                 title: i18n.basemaps.terrain
             },
-            grayVector: { // requires v3.16 or higher
+            'gray-vector': { // requires v3.16 or higher
                 title: i18n.basemaps.grayVector
             },
-            darkGrayVector: { // requires v3.16 or higher
+            'dark-gray-vector': { // requires v3.16 or higher
                 title: i18n.basemaps.darkGrayVector
             },
             oceans: {
                 title: i18n.basemaps.oceans
             },
-            nationalGeographic: {
+            'national-geographic': {
                 title: i18n.basemaps.nationalGeographic
             },
             osm: {
@@ -142,7 +142,7 @@ define([
                     ]
                 }
             },
-            darkGrayVector: {
+            'dark-gray-vector': {
                 title: 'Dark Gray Canvas',
                 basemap: {
                     baseMapLayers: [
@@ -164,7 +164,7 @@ define([
                     ]
                 }
             },
-            streetsNightVector: {
+            'streets-night-vector': {
                 title: 'Streets Night',
                 basemap: {
                     baseMapLayers: [

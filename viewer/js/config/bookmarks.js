@@ -31,5 +31,5 @@ define([
                 name: i18n.bookmarks.nullIsland
             }
         ]
-    }
+    };
 });

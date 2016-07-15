@@ -1,6 +1,6 @@
 // http://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
 define({
-	title: 'Título',
+    title: 'Título',
     format: 'Formato',
     layout: 'Modelo',
     settings: 'Configurações',

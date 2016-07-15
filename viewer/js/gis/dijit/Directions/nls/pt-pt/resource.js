@@ -1,5 +1,5 @@
-define ({
-	labels: {
+define({
+    labels: {
         startAtMyLocation: 'iniciar na minha localização',
         endAtMyLocation: 'terminar na minha localização',
         clearStops: 'limpar paragens',

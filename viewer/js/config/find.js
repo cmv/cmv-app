@@ -113,5 +113,5 @@ define([
             }
         },
         selectionMode: 'extended'
-    }
+    };
 });

@@ -6,7 +6,7 @@
 // https://github.com/cmv/cmv-app/issues and someone will assist
 // if need be or checkout the link above and submit a PR
 define({
-	noLegend: 'Sem legenda',
+    noLegend: 'Sem legenda',
     moveUp: 'Mover para cima',
     moveDown: 'Mover para baixo',
     zoomTo: 'Aproximar à Camada',

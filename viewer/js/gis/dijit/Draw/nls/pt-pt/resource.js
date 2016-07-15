@@ -1,5 +1,5 @@
-define ({
-	labels: {
+define({
+    labels: {
         point: 'Ponto',
         circle: 'Círculo',
         polyline: 'Polilinha',

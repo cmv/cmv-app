@@ -1,3 +1,3 @@
-define ({
-	title: 'Mapas base'
+define({
+    title: 'Mapas base'
 });

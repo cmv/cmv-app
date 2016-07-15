@@ -1,6 +1,6 @@
 // http://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
 define({
-	selectQuery: 'Seleccionar consulta',
+    selectQuery: 'Seleccionar consulta',
     searchText: {
         label: 'Procurar por',
         placeholder: 'Introduza o texto que pretende procurar.'

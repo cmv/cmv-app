@@ -1,5 +1,5 @@
-define ({
-	labels: {
+define({
+    labels: {
         selectLayer: 'Escolher "Todas as camadas visíveis" ou uma única camada para identificar:',
         allVisibleLayers: '*** Todas as camadas visíveis ***'
     },
