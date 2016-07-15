@@ -1,68 +1,65 @@
-define({
-    map: true,
-    mapClickMode: true,
-    mapRightClickMenu: true,
-    identifyLayerInfos: true,
-    identifyTolerance: 5,
+define([
+    'dojo/i18n!./nls/main'
+], function (i18n) {
 
-    // config object definition:
-    //  {<layer id>:{
-    //      <sub layer number>:{
-    //          <pop-up definition, see link below>
-    //          }
-    //      },
-    //  <layer id>:{
-    //      <sub layer number>:{
-    //          <pop-up definition, see link below>
-    //          }
-    //      }
-    //  }
+    return {
+        map: true,
+        mapClickMode: true,
+        mapRightClickMenu: true,
+        identifyLayerInfos: true,
+        identifyTolerance: 5,
+        draggable: false,
 
-    // for details on pop-up definition see: https://developers.arcgis.com/javascript/jshelp/intro_popuptemplate.html
+        // config object definition:
+        //  {<layer id>:{
+        //      <sub layer number>:{
+        //          <pop-up definition, see link below>
+        //          }
+        //      },
+        //  <layer id>:{
+        //      <sub layer number>:{
+        //          <pop-up definition, see link below>
+        //          }
+        //      }
+        //  }
 
-    identifies: {
-        meetupHometowns: {
-            0: {
-                title: 'Hometowns',
-                fieldInfos: [{
-                    fieldName: 'Location',
-                    visible: true
-                }]
-            }
-        },
-        louisvillePubSafety: {
-            2: {
-                title: 'Police Station',
-                fieldInfos: [{
-                    fieldName: 'Name',
-                    visible: true
-                }, {
-                    fieldName: 'Address',
-                    visible: true
-                }, {
-                    fieldName: 'Type',
-                    visible: true
-                }, {
-                    fieldName: 'Police Function',
-                    visible: true
-                }, {
-                    fieldName: 'Last Update Date',
-                    visible: true
-                }]
-            },
-            8: {
-                title: 'Traffic Camera',
-                description: '{Description} lasted updated: {Last Update Date}',
-                mediaInfos: [{
-                    title: '',
-                    caption: '',
-                    type: 'image',
-                    value: {
-                        sourceURL: '{Location URL}',
-                        linkURL: '{Location URL}'
-                    }
-                }]
+        // for details on pop-up definition see: https://developers.arcgis.com/javascript/jshelp/intro_popuptemplate.html
+
+        identifies: {
+            louisvillePubSafety: {
+                2: {
+                    title: i18n.identify.louisvillePubSafety.policeStation,
+                    fieldInfos: [{
+                        fieldName: 'Name',
+                        visible: true
+                    }, {
+                        fieldName: 'Address',
+                        visible: true
+                    }, {
+                        fieldName: 'Type',
+                        visible: true
+                    }, {
+                        fieldName: 'Police Function',
+                        visible: true
+                    }, {
+                        fieldName: 'Last Update Date',
+                        visible: true
+                    }]
+                },
+                8: {
+                    title: i18n.identify.louisvillePubSafety.trafficCamera,
+                    description: '{Description} lasted updated: {Last Update Date}',
+                    mediaInfos: [{
+                        title: '',
+                        caption: '',
+                        type: 'image',
+                        value: {
+                            sourceURL: '{Location URL}',
+                            linkURL: '{Location URL}'
+                        }
+                    }]
+                }
             }
         }
-    }
+    };
 });

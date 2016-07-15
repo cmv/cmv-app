@@ -4,5 +4,6 @@ define ({
             startEditing: 'Start editing',
             stopEditing: 'Stop editing'
         }
-    }
+    },
+    'pt-pt': true
 });

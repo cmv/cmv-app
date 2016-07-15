@@ -19,5 +19,6 @@ define({
         layerSwipeScope: 'Scope',
         dynamicSublayersOn: 'Turn On All Sublayers',
         dynamicSublayersOff: 'Turn Off All Sublayers'
-    }
+    },
+    'pt-pt': true
 });

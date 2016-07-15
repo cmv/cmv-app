@@ -8,6 +8,7 @@ define({
         rightClickMenuItem: {
             label: 'Google StreetView here'
         }
-    }
+    },
+    'pt-pt': true
 });
 

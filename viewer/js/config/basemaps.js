@@ -1,12 +1,13 @@
 define([
     //'esri/dijit/Basemap',
     //'esri/dijit/BasemapLayer'
-], function (/* Basemap, BasemapLayer */) {
+    'dojo/i18n!./nls/main'
+], function (/* Basemap, BasemapLayer, */i18n) {
 
     return {
         map: true, // needs a reference to the map
         mode: 'agol', // mut be either 'agol' or 'custom'
-        title: 'Basemaps', // title for widget
+        title: i18n.basemaps.title, // title for widget
 
         /* optional starting basemap
         / otherwise uses the basemap from the map
@@ -23,46 +24,46 @@ define([
         // define all valid basemaps here.
         basemaps: {
             streets: {
-                title: 'Streets'
+                title: i18n.basemaps.streets
             },
             'streets-night-vector': { // requires v3.16 or higher
-                title: 'Streets (Night)'
+                title: i18n.basemaps.streetsNightVector
             },
             'streets-navigation-vector': { // requires v3.16 or higher
-                title: 'Streets (Navigation)'
+                title: i18n.basemaps.streetsNavigationVector
             },
             'streets-relief-vector': { // requires v3.16 or higher
-                title: 'Street (Relief)'
+                title: i18n.basemaps.streetsReliefVector
             },
             satellite: {
-                title: 'Satellite'
+                title: i18n.basemaps.satellite
             },
             hybrid: {
-                title: 'Hybrid'
+                title: i18n.basemaps.hybrid
             },
             topo: {
-                title: 'Topo'
+                title: i18n.basemaps.topo
             },
-            'terrain': {
-                title: 'Terrain'
+            terrain: {
+                title: i18n.basemaps.terrain
             },
             'gray-vector': { // requires v3.16 or higher
-                title: 'Gray'
+                title: i18n.basemaps.grayVector
             },
             'dark-gray-vector': { // requires v3.16 or higher
-                title: 'Dark Gray'
+                title: i18n.basemaps.darkGrayVector
             },
             oceans: {
-                title: 'Oceans'
+                title: i18n.basemaps.oceans
             },
             'national-geographic': {
-                title: 'Nat Geo'
+                title: i18n.basemaps.nationalGeographic
             },
             osm: {
-                title: 'Open Street Map'
+                title: i18n.basemaps.osm
             },
-            LandsatShaded: {
-                title: 'Landsat Shaded',
+            landsatShaded: {
+                title: i18n.basemaps.landsatShaded,
                 basemap: {
                     baseMapLayers: [
                         {
@@ -71,8 +72,8 @@ define([
                     ]
                 }
             },
-            EarthAtNight: {
-                title: 'Earth at Night',
+            earthAtNight: {
+                title: i18n.basemaps.earthAtNight,
                 basemap: {
                     baseMapLayers: [
                         {
@@ -81,8 +82,8 @@ define([
                     ]
                 }
             },
-            DavidRumseyMap1812: {
-                title: 'David Rumsey 1812',
+            davidRumseyMap1812: {
+                title: i18n.basemaps.davidRumseyMap1812,
                 basemap: {
                     baseMapLayers: [
                         {
@@ -141,7 +142,7 @@ define([
                     ]
                 }
             },
-            darkGrayVector: {
+            'dark-gray-vector': {
                 title: 'Dark Gray Canvas',
                 basemap: {
                     baseMapLayers: [
@@ -163,7 +164,7 @@ define([
                     ]
                 }
             },
-            streetsNightVector: {
+            'streets-night-vector': {
                 title: 'Streets Night',
                 basemap: {
                     baseMapLayers: [
