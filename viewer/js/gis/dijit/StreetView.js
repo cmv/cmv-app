@@ -42,7 +42,7 @@ define([
         // if desired, you can load a projection file from your server
         // instead of using one from epsg.io
         // i.e., http://server/projections/102642.js
-        projCustomURL: null,
+        proj4CustomURL: null,
 
         postCreate: function () {
             this.inherited(arguments);
