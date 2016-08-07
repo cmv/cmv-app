@@ -20,5 +20,8 @@ define({
         dynamicSublayersOn: 'Turn On All Sublayers',
         dynamicSublayersOff: 'Turn Off All Sublayers'
     },
+    'es': true,
+    'fr': true,
+    'pt-br': true,
     'pt-pt': true
 });

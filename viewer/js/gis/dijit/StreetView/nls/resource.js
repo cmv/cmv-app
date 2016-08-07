@@ -9,6 +9,9 @@ define({
             label: 'Google StreetView here'
         }
     },
+    'es': true,
+    'fr': true,
+    'pt-br': true,
     'pt-pt': true
 });
 

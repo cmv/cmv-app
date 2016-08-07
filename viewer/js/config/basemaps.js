@@ -7,7 +7,6 @@ define([
     return {
         map: true, // needs a reference to the map
         mode: 'agol', // mut be either 'agol' or 'custom'
-        title: i18n.basemaps.title, // title for widget
 
         /* optional starting basemap
         / otherwise uses the basemap from the map

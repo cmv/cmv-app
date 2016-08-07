@@ -13,5 +13,8 @@ define ({
             getAddressHere: 'Get address here'
         }
     },
+    'es': true,
+    'fr': true,
+    'pt-br': true,
     'pt-pt': true
 });

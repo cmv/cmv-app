@@ -17,7 +17,6 @@ define({
             streetsNightVector: 'Streets (Night)',
             streetsReliefVector: 'Streets (Relief)',
             terrain: 'Terrain',
-            title: 'Basemaps',
             topo: 'Topographic'
         },
         bookmarks: {
@@ -62,5 +61,8 @@ define({
             }
         }
     },
+    'es': true,
+    'fr': true,
+    'pt-br': true,
     'pt-pt': true
 });
