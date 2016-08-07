@@ -27,6 +27,7 @@ This JavaScript web app can be easily configured or used as a boilerplate/starti
 - Identify
 - Layer Control (Table of Contents)
 - Legend
+- Locale (Change the Country + Language)
 - Locate Button (Geolocation)
 - MapInfo
 - Measure

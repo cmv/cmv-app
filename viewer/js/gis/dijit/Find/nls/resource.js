@@ -25,6 +25,9 @@ define({
         zoomOnSelect: 'Zoom on select',
         zoomOnDeselect: 'Zoom on deselect'
     },
+    'es': true,
+    'fr': true,
+    'pt-br': true,
     'pt-pt': true
 });
 

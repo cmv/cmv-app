@@ -17,7 +17,6 @@ define({
             streetsNightVector: 'Streets (Night)',
             streetsReliefVector: 'Streets (Relief)',
             terrain: 'Terrain',
-            title: 'Basemaps',
             topo: 'Topographic'
         },
         bookmarks: {
@@ -57,10 +56,14 @@ define({
                 measure: 'Measurement',
                 layerControl: 'Layers',
                 legend: 'Legend',
+                locale: 'Locale',
                 print: 'Print',
                 streetview: 'Google Street View'
             }
         }
     },
+    'es': true,
+    'fr': true,
+    'pt-br': true,
     'pt-pt': true
 });
