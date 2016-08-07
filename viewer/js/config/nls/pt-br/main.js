@@ -55,6 +55,7 @@ define({
             measure: 'Medir',
             layerControl: 'Camadas',
             legend: 'Legendas',
+            locale: 'Localidade',
             print: 'Imprimir',
             streetview: 'Google Street View'
         }

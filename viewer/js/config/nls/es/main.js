@@ -56,6 +56,7 @@ define({
             measure: 'Medición',
             layerControl: 'Capas',
             legend: 'Leyenda',
+            locale: 'Lugar',
             print: 'Imprimir',
             streetview: 'Google Street View'
         }

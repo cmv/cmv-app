@@ -56,6 +56,7 @@ define({
                 measure: 'Measurement',
                 layerControl: 'Layers',
                 legend: 'Legend',
+                locale: 'Locale',
                 print: 'Print',
                 streetview: 'Google Street View'
             }

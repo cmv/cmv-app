@@ -530,6 +530,20 @@ define([
                     mapRightClickMenu: true
                 }
             },
+            locale: {
+                include: true,
+                id: 'locale',
+                //type: 'titlePane',
+                //position: 0,
+                //open: true,
+                type: 'domNode',
+                srcNodeRef: 'geocodeDijit',
+                path: 'gis/dijit/Locale',
+                title: i18n.viewer.widgets.locale,
+                options: {
+                    style: 'margin-left: 30px;'
+                }
+            },
             help: {
                 include: true,
                 id: 'help',
