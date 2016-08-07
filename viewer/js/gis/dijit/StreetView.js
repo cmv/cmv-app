@@ -33,16 +33,16 @@ define([
         panoOptions: null,
 
         // in case this changes some day
-        proj4BaseURL: 'http://spatialreference.org/',
+        proj4BaseURL: 'https://epsg.io/',
 
         //  options are ESRI, EPSG and SR-ORG
-        // See http://spatialreference.org/ for more information
+        // See http://sepsg.io/ for more information
         proj4Catalog: 'EPSG',
 
         // if desired, you can load a projection file from your server
-        // instead of using one from spatialreference.org
+        // instead of using one from epsg.io
         // i.e., http://server/projections/102642.js
-        projCustomURL: null,
+        proj4CustomURL: null,
 
         postCreate: function () {
             this.inherited(arguments);
@@ -78,10 +78,9 @@ define([
                     this.own(topic.subscribe(this.parentWidget.id + '/resize/resize', lang.hitch(this, 'resize')));
                 }
 
-                // spatialreference.org uses the old
-                // Proj4js style so we need an alias
-                // https://github.com/proj4js/proj4js/issues/23
-                window.Proj4js = proj4;
+                if (!window.proj4) {
+                    window.proj4 = proj4;
+                }
 
                 if (this.mapRightClickMenu) {
                     this.addRightClickMenu();
@@ -175,9 +174,9 @@ define([
                 if (wkid === 102100) {
                     wkid = 3857;
                 }
-                var key = this.proj4Catalog + ':' + wkid;
+                var key = this.proj4Catalog + ':' + String(wkid);
                 if (!proj4.defs[key]) {
-                    var url = this.proj4CustomURL || this.proj4BaseURL + 'ref/' + this.proj4Catalog.toLowerCase() + '/' + wkid + '/proj4js/';
+                    var url = this.proj4CustomURL || this.proj4BaseURL + String(wkid) + '.js';
                     require([url], lang.hitch(this, 'getStreetView', evt, true));
                     return;
                 }
@@ -261,9 +260,9 @@ define([
                 if (wkid === 102100) {
                     wkid = 3857;
                 }
-                var key = this.proj4Catalog + ':' + wkid;
+                var key = this.proj4Catalog + ':' + String(wkid);
                 if (!proj4.defs[key]) {
-                    var url = this.proj4CustomURL || this.proj4BaseURL + 'ref/' + this.proj4Catalog.toLowerCase() + '/' + wkid + '/proj4js/';
+                    var url = this.proj4CustomURL || this.proj4BaseURL + String(wkid) + '.js';
                     require([url], lang.hitch(this, 'setPlaceMarkerPosition'));
                     return;
                 }

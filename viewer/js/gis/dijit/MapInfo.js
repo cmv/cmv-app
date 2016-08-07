@@ -36,6 +36,7 @@ define([
         scaleLabel: '1:',
         zoomLabel: 'Z:',
         minWidth: 0,
+        proj4BaseURL: 'https://epsg.io/',
         proj4Catalog: null,
         proj4Wkid: null,
         proj4CustomURL: null,
@@ -99,27 +100,26 @@ define([
                 this._mode = 3;
             } else {
                 this._mode = 4;
-                // spatialreference.org uses the old
-                // Proj4js style so we need an alias
-                // https://github.com/proj4js/proj4js/issues/23
-                window.Proj4js = proj4;
-                //load custom projection file or default to spatialreference.org
-                if (!this.proj4Catalog && !this.proj4Wkid && !this.proj4CustomURL) {
+                if (!window.proj4) {
+                    window.proj4 = proj4;
+                }
+                if (this.proj4Wkid) {
+                    wkid = this.proj4Wkid;
+                }
+                //load custom projection file or default to epsg.io
+                if (!this.proj4Catalog && !wkid && !this.proj4CustomURL) {
                     topic.publish('viewer/handleError', {
                         source: 'MapInfo',
                         error: 'MapInfo error::a proj4Catalog/proj4Wkid or custom URL must be defined'
                     });
                     return;
                 }
-                if (this.proj4CustomURL) {
-                    require([this.proj4CustomURL], lang.hitch(this, function () {
+                var key = this.proj4Catalog + ':' + String(wkid);
+                this._projection = key;
+                if (!proj4.defs[key]) {
+                    var url = this.proj4CustomURL || this.proj4BaseURL + String(wkid) + '.js';
+                    require([url], lang.hitch(this, function () {
                         this._projectionLoaded = true;
-                        this._projection = this.proj4Catalog + ':' + this.proj4Wkid;
-                    }));
-                } else {
-                    require(['http://spatialreference.org/ref/' + this.proj4Catalog.toLowerCase() + '/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function () {
-                        this._projectionLoaded = true;
-                        this._projection = this.proj4Catalog + ':' + this.proj4Wkid;
                     }));
                 }
             }
