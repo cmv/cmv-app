@@ -1,10 +1,10 @@
 define ({
-    selectQuery: 'Sélectionnez requête',
+    selectQuery: 'Sélection',
     searchText: {
         label: 'Rechercher',
         placeholder: 'Entrez le texte que vous souhaitez rechercher.'
     },
-    exactMatches: 'Trouver seulement les correspondances exactes',
+    exactMatches: 'Correspondances exactes seulement',
     searchButton: {
         label: 'Rechercher',
         busyLabel: 'recherche'
@@ -16,10 +16,10 @@ define ({
     resultsLabel: {
         multipleResultsSuffix: 's',
         labelPrefix: 'Résultat',
-        labelSuffix: 'trouvé'
+        labelSuffix: 'Trouvé'
     },
-    noResultsLabel: 'Aucun résultat trouvé.',
+    noResultsLabel: 'Aucun résultat',
     optionsLabel: 'Options',
-    zoomOnSelect: 'Zoom sur select',
-    zoomOnDeselect: 'Zoom sur deselect'
+    zoomOnSelect: 'Zoom sur la sélection',
+    zoomOnDeselect: 'Zoom en desélectionnant'
 });

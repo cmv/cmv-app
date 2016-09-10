@@ -1,14 +1,14 @@
 define ({
-    noLegend: 'No Légende',
+    noLegend: 'Aucune légende',
     moveUp: 'Déplacer vers le haut',
     moveDown: 'Descendre',
     zoomTo: 'Zoom sur la couche',
     transparency: 'Transparence',
     metadata: 'Métadonnées',
     layerSwipe: 'Couche swipe',
-    layerSwipeVertical: 'Verticale',
+    layerSwipeVertical: 'Vertical',
     layerSwipeHorizontal: 'Horizontal',
-    layerSwipeScope: 'Microscope',
-    dynamicSublayersOn: 'Activer tous les sous-couches',
-    dynamicSublayersOff: 'Éteignez tous les sous-couches'
+    layerSwipeScope: 'Étendue',
+    dynamicSublayersOn: 'Activer toutes les sous-couches',
+    dynamicSublayersOff: 'Éteignez toutes les sous-couches'
 });
