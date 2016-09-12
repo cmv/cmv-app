@@ -16,6 +16,7 @@ define([
     'esri/tasks/IdentifyTask',
     'esri/tasks/IdentifyParameters',
     'esri/dijit/PopupTemplate',
+    'esri/layers/FeatureLayer',
     'esri/TimeExtent',
     'dojo/text!./Identify/templates/Identify.html',
     'dojo/i18n!./Identify/nls/resource',
@@ -23,7 +24,7 @@ define([
     'dijit/form/Form',
     'dijit/form/FilteringSelect',
     'xstyle/css!./Identify/css/Identify.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, TimeExtent, IdentifyTemplate, i18n) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, FeatureLayer, TimeExtent, IdentifyTemplate, i18n) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -34,6 +35,7 @@ define([
         mapClickMode: null,
         identifies: {},
         infoTemplates: {},
+        featureLayers: {},
         ignoreOtherGraphics: true,
         createDefaultInfoTemplates: true,
         draggable: false,
@@ -53,8 +55,7 @@ define([
             }
             this.layers = [];
             array.forEach(this.layerInfos, function (layerInfo) {
-                var lyrId = layerInfo.layer.id;
-                var layer = this.map.getLayer(lyrId);
+                var lyrId = layerInfo.layer.id, layer = this.map.getLayer(lyrId), infoTemplate;
                 if (layer) {
                     var url = layer.url;
 
@@ -67,7 +68,7 @@ define([
                         // it only if one does not already exist.
                         if (layer.capabilities && array.indexOf(layer.capabilities.toLowerCase(), 'data') < 0) {
                             if (!layer.infoTemplate) {
-                                var infoTemplate = this.getInfoTemplate(layer, layer.layerId);
+                                infoTemplate = this.getInfoTemplate(layer, layer.layerId);
                                 if (infoTemplate) {
                                     layer.setInfoTemplate(infoTemplate);
                                     return;
@@ -81,6 +82,13 @@ define([
                         if (lastSL > 0) {
                             url = url.substring(0, lastSL);
                         }
+                    } else if (layer.layerInfos) {
+                        array.forEach(layer.layerInfos, lang.hitch(this, function (subLayerInfo) {
+                            var subLayerId = subLayerInfo.id;
+                            if ((layerInfo.layerIds === null) || (array.indexOf(layerInfo.layerIds, subLayerId) >= 0)) {
+                                this.getFeatureLayerForDynamicSublayer(layer, subLayerId);
+                            }
+                        }));
                     }
 
                     this.layers.push({
@@ -297,6 +305,9 @@ define([
                     if (result.feature.infoTemplate === undefined) {
                         var infoTemplate = this.getInfoTemplate(ref, null, result);
                         if (infoTemplate) {
+                            if (result.layerId && ref.layerInfos && infoTemplate.info.showAttachments) {
+                                result.feature._layer = this.getFeatureLayerForDynamicSublayer(ref, result.layerId);
+                            }
                             result.feature.setInfoTemplate(infoTemplate);
                         } else {
                             return;
@@ -416,10 +427,11 @@ define([
             }
 
             if (fieldInfos.length > 0) {
+                var featLayer = this.getFeatureLayerForDynamicSublayer(layer, layerId);
                 popup = new PopupTemplate({
                     title: layerName,
                     fieldInfos: fieldInfos,
-                    showAttachments: (layer.hasAttachments)
+                    showAttachments: (layer.hasAttachments || featLayer.hasAttachments)
                 });
                 if (!this.identifies[layer.id]) {
                     this.identifies[layer.id] = {};
@@ -551,6 +563,17 @@ define([
                 }
             }
             return name;
+        },
+
+        getFeatureLayerForDynamicSublayer: function (layer, layerId) {
+            if (!layer.layerInfos) {
+                return false;
+            }
+            var key = layer.url + '/' + layerId;
+            if (!this.featureLayers.hasOwnProperty(key)) {
+                this.featureLayers[key] = new FeatureLayer(key);
+            }
+            return this.featureLayers[key];
         },
 
         layerVisibleAtCurrentScale: function (layer) {
