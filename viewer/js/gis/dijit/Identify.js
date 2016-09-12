@@ -327,6 +327,15 @@ define([
                 layerId = layer.layerId;
             }
 
+            // get infoTemplate from the layer's infoTemplates array
+            if (layer.infoTemplates) {
+                if (layer.infoTemplates.hasOwnProperty(layerId)) {
+                    return layer.infoTemplates[layerId].infoTemplate;
+                } else {
+                    return null;
+                }
+            }
+
             // see if we have a Popup config defined for this layer
             if (this.identifies.hasOwnProperty(layer.id)) {
                 if (this.identifies[layer.id].hasOwnProperty(layerId)) {
