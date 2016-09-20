@@ -4,7 +4,6 @@ body, html {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    /*font-family: Tahoma;*/
     font-size: 14px;
 }
 .appHeader {
@@ -59,7 +58,7 @@ body, html {
     right: 0;
     border: none;
     padding: 0;
-    background-color: #FFFFFF
+    background-color: #FFFFFF;
 }
 #sidebarLeft {
     width: 334px;
@@ -170,6 +169,9 @@ body, html {
     border-radius: 0 0 5px 5px;
     border-bottom: 1px solid #B5BCC7;
 }
+.sidebarCollapseButton .open:before, .sidebarCollapseButton .close:before {
+    font-family: FontAwesome;
+}
 .sidebarCollapseButtonHorz .button {
     padding-top: 4px;
     padding-left: 2px;
@@ -208,107 +210,6 @@ body, html {
 #help_parent_underlay {
     display: block;
 }
-
-/* dbootstrap overrides*/
-
-.dbootstrap .dijitToolbar .dijitButtonContents {
-    padding: 1px !important;
-}
-.dbootstrap .dijitTitlePane {
-    border: 1px solid #DDDDDD;
-    margin-bottom: 2px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-    background-color: #FFFFFF;
-}
-.dbootstrap .dijitTitlePaneTitle {
-    color: #666666 !important;
-    border-bottom: none;
-    padding: 8px 15px;
-    background-color: #F5F5F5;
-}
-.dijitSliderBarContainerH {
-    z-index: 0 !important;
-}
-.dijitBorderContainerNoGutterPane {
-    z-index: auto;
-}
-.dbootstrap :focus {
-    outline: none !important;
-}
-
-/* end dbootstrap overrides*/
-
-/* esri popup window overrides */
-
-.esriPopup .sizer {
-    width: 325px;
-}
-
-.esriPopup .esriPopupWrapper {
-    background-color: #FFFFFF;
-}
-.esriPopup .attachmentsSection div {
-    font-weight: bold;
-}
-.esriPopup .contentPane table.attrTable {
-    width: 100%;
-    border-collapse: collapse;
-}
-.esriPopup .contentPane table.attrTable td {
-    padding: 2px;
-}
-.esriPopup .contentPane table.attrTable td.attrName {
-    text-align: right;
-    font-weight: bold;
-    color: #333333;
-    width: 40%;
-    padding-right: 5px;
-}
-.esriPopup .contentPane table.attrTable td.attrValue {
-    width: 60%;
-}
-.esriPopup .contentPane table.attrTable tr {
-    vertical-align: top;
-    border-bottom: 1px solid rgb(221, 221, 221);
-}
-.esriPopup .contentPane table.attrTable tr:nth-child(odd) {
-    background-color: none;
-}
-.esriPopup .contentPane table.attrTable tr:nth-child(even) {
-    background-color: rgb(238, 238, 238);
-}
-
-/* end esri popup window overrides */
-
-/* esri mobile popup overrides */
-
-.esriPopupMobile {
-    z-index: 999;
-}
-.esriMobileNavigationBar {
-    background-color: #666666;
-    background: url("../images/linen.jpg") repeat-x scroll left top transparent;
-    color: #FFFFFF;
-}
-.esriPopupMobile .titlePane {
-    background-color: #666666;
-    background: url("../images/linen.jpg") repeat-x scroll left top transparent;
-    color: #FFFFFF;
-}
-.esriPopupMobile .pointer.bottom{
-    background:url("../images/pointertop.png");
-    -webkit-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    transform: rotate(180deg);
-}
-.esriPopupMobile .pointer.top {
-    background:url("../images/pointertop.png");
-}
-
-/* end esri mobile popup overrides */
 
 /*
     media queries bootstrap style
