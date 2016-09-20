@@ -127,9 +127,10 @@ define([
         initPanes: function () {
             var key,
                 panes = this.config.panes || {};
+            this.defaultPanes = lang.clone(this.panes);
             for (key in this.panes) {
-                if (this.panes.hasOwnProperty(key)) {
-                    panes[key] = lang.mixin(this.panes[key], panes[key]);
+                if (this.defaultPanes.hasOwnProperty(key)) {
+                    panes[key] = lang.mixin(this.defaultPanes[key], panes[key]);
                 }
             }
 
@@ -166,8 +167,8 @@ define([
             var key,
                 panes = this.config.panes || {};
             for (key in this.panes) {
-                if (this.panes.hasOwnProperty(key)) {
-                    panes[key] = lang.mixin(this.panes[key], panes[key]);
+                if (this.defaultPanes.hasOwnProperty(key)) {
+                    panes[key] = lang.mixin(this.defaultPanes[key], panes[key]);
                 }
             }
                         // where to place the buttons
