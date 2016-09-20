@@ -7,6 +7,6 @@ define ({
         label: 'Identifier ici'
     },
     mapInfoWindow: {
-        identifyingTitle: 'Identifier...'
+        identifyingTitle: 'Identification...'
     }
 });

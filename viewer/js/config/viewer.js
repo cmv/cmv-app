@@ -372,7 +372,7 @@ define([
                 path: 'esri/dijit/Legend',
                 title: i18n.viewer.widgets.legend,
                 open: false,
-                position: 0,
+                position: 1,
                 options: {
                     map: true,
                     legendLayerInfos: true
