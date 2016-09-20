@@ -2,29 +2,29 @@
 define({
     basemaps: {
         davidRumseyMap1812: 'David Rumsey 1812',
-        darkGrayVector: 'Gris Foncé',
+        darkGrayVector: 'Gris foncé',
         earthAtNight: 'Terre la nuit',
         grayVector: 'Gris',
         hybrid: 'Hybride',
-        landsatShaded: 'Landsat Ombragée',
+        landsatShaded: 'Landsat et relief ombragé',
         nationalGeographic: 'National Geographic',
-        oceans: 'Oceans',
-        osm: 'Open Street Map',
-        satellite: 'Photos aériennes',
+        oceans: 'Océans',
+        osm: 'OpenStreetMap',
+        satellite: 'Image satellitaire',
         streets: 'Rues',
-        streetsNavigationVector: 'Rues (Navigation)',
-        streetsNightVector: 'Rues (Nuit)',
-        streetsReliefVector: 'Rues (Relief)',
-        terrain: 'Sol',
+        streetsNavigationVector: 'Rues (navigation)',
+        streetsNightVector: 'Rues (nuit)',
+        streetsReliefVector: 'Rues (relief)',
+        terrain: 'Terrain',
         topo: 'Topographique'
     },
     bookmarks: {
         nullIsland: 'Île Null',
-        usa: 'USA'
+        usa: 'États-Unis'
     },
     find: {
-        louisvillePubSafety: 'Trouvez une Sécurité Publique locale par nom',
-        sf311Incidents: 'Trouver incident en code/description'
+        louisvillePubSafety: 'Trouvez un bâtiment de sécurité publique par nom',
+        sf311Incidents: 'Trouver un incident par code/description'
     },
     identify: {
         louisvillePubSafety: {
@@ -34,15 +34,15 @@ define({
     },
     viewer: {
         operationalLayers: {
-            damageAssessment: 'Évaluation des Dommages',
-            louisvillePubSafety: 'Louisville Sécurité Publique',
+            damageAssessment: 'Évaluation des dommages',
+            louisvillePubSafety: 'Sécurité publique de Louisville',
             restaurants: 'Restaurants',
-            sf311Incidents: '311 Incidents de San Francisco'
+            sf311Incidents: 'Incidents 311 de San Francisco'
         },
         titles: {
             header: 'Configurable Map Viewer',
             pageTitle: 'Configurable Map Viewer - Un visualiseur de cartes configurables',
-            subHeader: 'personalizarlo su gusto'
+            subHeader: 'Personnalisez-le'
         },
         widgets: {
             bookmarks: 'Géosignets',
@@ -57,7 +57,7 @@ define({
             legend: 'Légende',
             locale: 'Lieu',
             print: 'Impression',
-            streetview: 'Google Street View'
+            streetview: 'Google StreetView'
         }
     }
 });
