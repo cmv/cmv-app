@@ -1,5 +1,5 @@
 define ({
-    title: 'Basculer barre de recherche',
+    title: 'Activer/désactiver la barre de recherche',
     labels: {
         address: 'Adresse',
         neighborhood: 'Quartier',

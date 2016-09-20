@@ -1,3 +1,3 @@
 define ({
-    selectLocale: 'Sélectionnez votre lieu:'
+    selectLocale: 'Sélectionnez votre lieu :'
 });
