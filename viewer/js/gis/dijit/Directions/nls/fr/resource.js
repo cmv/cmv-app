@@ -1,11 +1,11 @@
 define ({
     labels: {
-        startAtMyLocation: 'commencer à mon endroit',
-        endAtMyLocation: 'fin à mon endroit',
-        clearStops: 'arrêts clairs',
-        addStop: 'Ajouter arrêt',
+        startAtMyLocation: 'Commencer à mon endroit',
+        endAtMyLocation: 'Terminer à mon endroit',
+        clearStops: 'Supprimer les arrêts',
+        addStop: 'Ajouter un arrêt',
         directionsToHere: 'Directions vers ici',
-        directionsFromHere: 'Directions d\'ici',
+        directionsFromHere: 'Directions à partir d\'ici',
         useMyLocationAsStart: 'Utiliser ma position comme point de départ',
         useMyLocationAsEnd: 'Utiliser ma position comme point final',
         directions: 'Directions'
@@ -17,7 +17,7 @@ define ({
         },
         location: {
             title: 'Erreur',
-            message: 'Il y avait un problème pour obtenir votre position: '
+            message: 'Il y a un problème pour obtenir votre position: '
         }
     }
 });

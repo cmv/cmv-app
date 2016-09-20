@@ -5,8 +5,9 @@ define([
     /*'esri/urlUtils',*/
     'esri/tasks/GeometryService',
     'esri/layers/ImageParameters',
+    'gis/plugins/Google',
     'dojo/i18n!./nls/main'
-], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters, i18n) {
+], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters, GoogleMapsLoader, i18n) {
 
     // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
     esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
@@ -21,6 +22,10 @@ define([
 
     // url to your geometry server.
     esriConfig.defaults.geometryService = new GeometryService('https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
+
+    // Use your own Google Maps API Key.
+    // https://developers.google.com/maps/documentation/javascript/get-api-key
+    GoogleMapsLoader.KEY = 'NOT-A-REAL-API-KEY';
 
     // helper function returning ImageParameters for dynamic layers
     // example:
@@ -367,7 +372,7 @@ define([
                 path: 'esri/dijit/Legend',
                 title: i18n.viewer.widgets.legend,
                 open: false,
-                position: 0,
+                position: 1,
                 options: {
                     map: true,
                     legendLayerInfos: true
