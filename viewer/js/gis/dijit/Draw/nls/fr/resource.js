@@ -3,11 +3,11 @@ define ({
         point: 'Point',
         circle: 'Cercle',
         polyline: 'Polyline',
-        freehandPolyline: 'À main levée polyline',
+        freehandPolyline: 'Polyligne à main levée',
         polygon: 'Polygone',
-        freehandPolygon: 'À main levée polygone',
-        stopDrawing: 'Arrêtez le dessin',
-        clearDrawing: 'Effacer dessin',
+        freehandPolygon: 'Polygone à main levée',
+        stopDrawing: 'Terminer le dessin',
+        clearDrawing: 'Effacer le dessin',
         currentDrawMode: 'Mode de dessin:',
         currentDrawModeNone: 'Aucun'
     }
