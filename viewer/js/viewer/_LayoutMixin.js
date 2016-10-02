@@ -188,9 +188,9 @@ define([
                                 aspect.after(splitter, '_stopDrag', lang.hitch(this, '_splitterStopDrag', key));
                             }
                         }
-                        if (panes[key].open !== undefined) {
-                            this.togglePane(key, panes[key].open);
-                        }
+                    }
+                    if (panes[key].open !== undefined) {
+                        this.togglePane(key, panes[key].open, true);
                     }
                     if (key !== 'center' && this.panes[key]._splitterWidget) {
                         domClass.add(this.map.root.parentNode, 'pane' + key);
@@ -213,20 +213,46 @@ define([
             this.resizeLayout();
         },
 
-        togglePane: function (id, show) {
+        togglePane: function (id, show, suppressEvent) {
             if (!this.panes[id]) {
                 return;
             }
             var domNode = this.panes[id].domNode;
             if (domNode) {
-                var disp = (show && typeof (show) === 'string') ? show : (domStyle.get(domNode, 'display') === 'none') ? 'block' : 'none';
-                domStyle.set(domNode, 'display', disp);
-                if (this.panes[id]._splitterWidget) { // show/hide the splitter, if found
-                    domStyle.set(this.panes[id]._splitterWidget.domNode, 'display', disp);
+                var oldDisp = domStyle.get(domNode, 'display');
+                var newDisp;
+                
+                if (typeof(show) === 'string' && (show === 'none' || show === 'block')) {
+                    // Set (CSS Display Property)
+                    newDisp = show;
+                } else if (typeof(show) === 'boolean') {
+                    // Set (boolean)
+                    newDisp = (show) ? 'block' : 'none';
+                } else if (show === undefined) {
+                    // Toggle
+                    newDisp = (oldDisp === 'none') ? 'block' : 'none';
+                } else {
+                    this.handleError({
+                        source: '_LayoutMixin',
+                        error: 'Invalid type passed as "show" property of "togglePane" function : ' + typeof(show)
+                    });
+                    return;
                 }
-                this.positionSideBarToggle(id);
-                if (this.panes.outer) {
-                    this.panes.outer.resize();
+                show = (newDisp === 'block');
+
+                if (newDisp !== oldDisp) {
+                    domStyle.set(domNode, 'display', newDisp);
+                    if (this.panes[id]._splitterWidget) { // show/hide the splitter, if found
+                        domStyle.set(this.panes[id]._splitterWidget.domNode, 'display', newDisp);
+                    }
+                    this.positionSideBarToggle(id);
+                    if (this.panes.outer) {
+                        this.panes.outer.resize();
+                    }
+
+                    if (!suppressEvent) {
+                        topic.publish('viewer/onTogglePane', {pane: id, show: show});
+                    }
                 }
             }
         },
