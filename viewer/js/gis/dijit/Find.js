@@ -29,6 +29,7 @@ define([
     'dijit/form/FilteringSelect',
     'dijit/form/ValidationTextBox',
     'dijit/form/CheckBox',
+    'dijit/form/Button',
     'xstyle/css!./Find/css/Find.css'
 ], function (
     declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct, lang, array, on, keys, domStyle, Memory,
