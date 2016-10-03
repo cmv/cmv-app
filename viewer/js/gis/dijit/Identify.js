@@ -514,8 +514,10 @@ define([
             if (layerInfo.subLayerIds !== null) {
                 return false;
             }
-            // only include sublayers that are currently visible
-            if (array.indexOf(ref.visibleLayers, layerInfo.id) < 0) {
+
+            if (this.isDefaultLayerVisibility(ref) && !this.checkVisibilityRecursive(ref, layerInfo.id)) {
+                return false;
+            } else if (array.indexOf(ref.visibleLayers, layerInfo.id) < 0) {
                 return false;
             }
             // only include sublayers that are within the current map scale
@@ -540,6 +542,39 @@ define([
             }
 
             // all tests pass so include this sublayer
+            return true;
+        },
+
+        /**
+         * recursively check all a layer's parent(s) layers for visibility
+         * this only needs to be done if the layers visibleLayers array is
+         * set to the default visibleLayers. After setVisibleLayers
+         * is called the first time group layers are NOT included.
+         * @param  {esri/layers/DynamicMapServiceLayer} layer The layer reference
+         * @param  {Integer} id   The sublayer id to check for visibility
+         * @return {Boolean}      Whether or not the sublayer is visible based on its parent(s) visibility
+         */
+        checkVisibilityRecursive: function (layer, id) {
+            var info = layer.layerInfos[id];
+            if (layer.visibleLayers.indexOf(id) !== -1 &&
+                (info.parentLayerId === -1 || this.checkVisibilityRecursive(layer, info.parentLayerId))) {
+                return true;
+            }
+            return false;
+        },
+        /**
+         * check each defaultVisibility and if its not in the visibleLayers
+         * array, then the layer has non-default layer visibility
+         * @param  {esri/layers/DynamicMapServiceLayer} layer The layer reference
+         * @return {Boolean}       Whether or not we're operating with the default visibleLayers array or not
+         */
+        isDefaultLayerVisibility: function (layer) {
+            for (var i = 0; i < layer.layerInfos.length; i++) {
+                var item = layer.layerInfos[i];
+                if (item.defaultVisibility && layer.visibleLayers.indexOf(item.id) === -1) {
+                    return false;
+                }
+            }
             return true;
         },
 
