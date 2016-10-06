@@ -75,7 +75,7 @@ define([
         addTopics: function () {
             // toggle a sidebar pane
             topic.subscribe('viewer/togglePane', lang.hitch(this, function (args) {
-                this.togglePane(args.pane, args.show);
+                this.togglePane(args.pane, args.show, args.suppressEvent);
             }));
 
             // load a widget
@@ -179,7 +179,7 @@ define([
                 if (panes.hasOwnProperty(key)) {
                     if (panes[key].collapsible) {
                         this.collapseButtons[key] = put(this.panes[this.collapseButtonsPane].domNode, 'div.sidebarCollapseButton.sidebar' + key + 'CollapseButton.sidebarCollapseButton' + ((key === 'bottom' || key === 'top') ? 'Vert' : 'Horz') + ' div.dijitIcon.button.close').parentNode;
-                        on(this.collapseButtons[key], 'click', lang.hitch(this, 'togglePane', key));
+                        on(this.collapseButtons[key], 'click', lang.hitch(this, 'togglePane', key, null, false));
                         this.positionSideBarToggle(key);
                         if (this.collapseButtonsPane === 'outer') {
                             var splitter = this.panes[key]._splitterWidget;
@@ -221,14 +221,14 @@ define([
             if (domNode) {
                 var oldDisp = domStyle.get(domNode, 'display');
                 var newDisp;
-                
+
                 if (typeof(show) === 'string' && (show === 'none' || show === 'block')) {
                     // Set (CSS Display Property)
                     newDisp = show;
                 } else if (typeof(show) === 'boolean') {
                     // Set (boolean)
                     newDisp = (show) ? 'block' : 'none';
-                } else if (show === undefined) {
+                } else if (show === undefined || show === null) {
                     // Toggle
                     newDisp = (oldDisp === 'none') ? 'block' : 'none';
                 } else {
