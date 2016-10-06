@@ -75,7 +75,7 @@ define([
         addTopics: function () {
             // toggle a sidebar pane
             topic.subscribe('viewer/togglePane', lang.hitch(this, function (args) {
-                this.togglePane(args.pane, args.show);
+                this.togglePane(args.pane, args.show, args.suppressEvent);
             }));
 
             // load a widget
