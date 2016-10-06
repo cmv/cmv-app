@@ -6,6 +6,7 @@ define([
     'dojo/dnd/Moveable',
     'dojo/aspect',
     'dojo/topic',
+    'dojo/sniff',
     'dojo/_base/window',
     'dojo/window',
     'dojo/dom-geometry',
@@ -16,7 +17,7 @@ define([
     'dojox/layout/ResizeHandle',
     'xstyle/css!dojox/layout/resources/ResizeHandle.css',
     'xstyle/css!./FloatingTitlePane/css/FloatingTitlePane.css'
-], function (declare, TitlePane, on, lang, Moveable, aspect, topic, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass, ResizeHandle) {
+], function (declare, TitlePane, on, lang, Moveable, aspect, topic, has, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass, ResizeHandle) {
 
     return declare([TitlePane], {
         sidebarPosition: null,
@@ -41,8 +42,12 @@ define([
         },
         startup: function () {
             if (this.titleBarNode && this.canFloat) {
+                if (has('edge') || has('trident')) {
+                    this.dragDelay = 0;
+                }
                 this._moveable = new Moveable(this.domNode, {
-                    handle: this.titleBarNode
+                    handle: this.titleBarNode,
+                    delay: this.dragDelay
                 });
                 this._titleBarHeight = domStyle.get(this.titleBarNode, 'height');
                 aspect.after(this._moveable, 'onMove', lang.hitch(this, '_dragging'), true);
@@ -100,12 +105,7 @@ define([
         },
 
         /* Methods for Dragging */
-        _dragging: function (mover) {
-            // add our own delay since the movable delay
-            // property breaks in all versions of Internet Explorer
-            if (Math.abs(mover.marginBox.l - this._moverBox.l) <= this.dragDelay || Math.abs(mover.marginBox.t - this._moverBox.t) <= this.dragDelay) {
-                return;
-            }
+        _dragging: function () {
             this.isDragging = true;
             if (!this.titleCursor) {
                 this.titleCursor = domStyle.get(this.titleBarNode, 'cursor');
