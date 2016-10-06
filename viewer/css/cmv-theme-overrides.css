@@ -4,6 +4,7 @@
 
 .cmv .dijitTitlePane {
     margin-bottom: 2px;
+    background-color: #FFF;
 }
 
 .cmv .dijitTitlePaneTitle {
@@ -191,7 +192,6 @@
 
 .flat .dijitTitlePaneTitle {
     border: 1px solid #DDD;
-    border-bottom: none;
     -webkit-border-radius: 4px;
     border-radius: 4px;
     padding: 8px 15px;
