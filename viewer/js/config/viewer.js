@@ -11,7 +11,7 @@ define([
 ], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters, GoogleMapsLoader, i18n, topic) {
 
     // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
-    esriConfig.defaults.io.proxyUrl = 'proxy/proxy.aspx';
+    esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
     esriConfig.defaults.io.alwaysUseProxy = false;
 
     // add a proxy rule to force specific domain requests through proxy
