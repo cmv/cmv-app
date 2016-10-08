@@ -6,11 +6,12 @@ define([
     'esri/tasks/GeometryService',
     'esri/layers/ImageParameters',
     'gis/plugins/Google',
-    'dojo/i18n!./nls/main'
-], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters, GoogleMapsLoader, i18n) {
+    'dojo/i18n!./nls/main',
+    'dojo/topic'
+], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters, GoogleMapsLoader, i18n, topic) {
 
     // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
-    esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
+    esriConfig.defaults.io.proxyUrl = 'proxy/proxy.aspx';
     esriConfig.defaults.io.alwaysUseProxy = false;
 
     // add a proxy rule to force specific domain requests through proxy
@@ -45,6 +46,14 @@ define([
         }
         return ip;
     }
+
+    //some example topics for listening to menu item clicks
+    topic.subscribe('layerControl/hello', function(event){
+      alert(event.layer._titleForLegend + ' ' + event.subLayer.name + ' says hello');
+    });
+    topic.subscribe('layerControl/goodbye', function(event){
+      alert(event.layer._titleForLegend + ' ' + event.subLayer.name + ' says goodbye');
+    });
 
     return {
         // used for debugging your app
@@ -183,7 +192,14 @@ define([
             layerControlLayerInfos: {
                 swipe: true,
                 metadataUrl: true,
-                expanded: true
+                expanded: true,
+
+                //override the menu on this particular layer
+                menu: [{
+                  topic: 'hello',
+                  label: 'Say Hello',
+                  iconClass: 'fa fa-smile-o'
+                }]
             }
         /*
         //examples of vector tile layers (beta in v3.15)
@@ -391,7 +407,14 @@ define([
                     layerControlLayerInfos: true,
                     separated: true,
                     vectorReorder: true,
-                    overlayReorder: true
+                    overlayReorder: true,
+                    subLayerMenu: {
+                      dynamic: [{
+                        topic: 'goodbye',
+                        iconClass: 'fa fa-frown-o',
+                        label: 'Say goodbye'
+                      }]
+                    }
                 }
             },
             bookmarks: {
