@@ -89,8 +89,8 @@ define([
             }
 
             // add custom sublayer menu items if we only have one sublayer
-            if(!this._hasSublayers){
-              array.forEach(this.controlOptions.menu, lang.hitch(this, '_addMenuItem', menu));
+            if (!this._hasSublayers) {
+                array.forEach(this.controlOptions.menu, lang.hitch(this, '_addMenuItem', menu));
             }
         },
         _addMenuItem: function (menu, menuItem) {

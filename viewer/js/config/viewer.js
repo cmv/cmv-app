@@ -48,11 +48,20 @@ define([
     }
 
     //some example topics for listening to menu item clicks
-    topic.subscribe('layerControl/hello', function(event){
-      alert(event.layer._titleForLegend + ' ' + event.subLayer.name + ' says hello');
+    //these topics publish a simple message to the growler
+    //in a real world example, these topics would be used
+    //in their own widget to listen for layer menu click events
+    topic.subscribe('layerControl/hello', function (event) {
+        topic.publish('growler/growl', {
+            title: 'Hello!',
+            message: event.layer._titleForLegend + ' ' + event.subLayer.name + ' says hello'
+        });
     });
-    topic.subscribe('layerControl/goodbye', function(event){
-      alert(event.layer._titleForLegend + ' ' + event.subLayer.name + ' says goodbye');
+    topic.subscribe('layerControl/goodbye', function (event) {
+        topic.publish('growler/growl', {
+            title: 'Goodbye!',
+            message: event.layer._titleForLegend + ' ' + event.subLayer.name + ' says goodbye'
+        });
     });
 
     return {
@@ -196,9 +205,9 @@ define([
 
                 //override the menu on this particular layer
                 menu: [{
-                  topic: 'hello',
-                  label: 'Say Hello',
-                  iconClass: 'fa fa-smile-o'
+                    topic: 'hello',
+                    label: 'Say Hello',
+                    iconClass: 'fa fa-smile-o'
                 }]
             }
         /*
@@ -408,12 +417,15 @@ define([
                     separated: true,
                     vectorReorder: true,
                     overlayReorder: true,
+
+                    //create a example sub layer menu that will
+                    //apply to all layers of type 'dynamic'
                     subLayerMenu: {
-                      dynamic: [{
-                        topic: 'goodbye',
-                        iconClass: 'fa fa-frown-o',
-                        label: 'Say goodbye'
-                      }]
+                        dynamic: [{
+                            topic: 'goodbye',
+                            iconClass: 'fa fa-frown-o',
+                            label: 'Say goodbye'
+                        }]
                     }
                 }
             },
