@@ -6,8 +6,9 @@ define([
     'esri/tasks/GeometryService',
     'esri/layers/ImageParameters',
     'gis/plugins/Google',
-    'dojo/i18n!./nls/main'
-], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters, GoogleMapsLoader, i18n) {
+    'dojo/i18n!./nls/main',
+    'dojo/topic'
+], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters, GoogleMapsLoader, i18n, topic) {
 
     // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
     esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
@@ -45,6 +46,23 @@ define([
         }
         return ip;
     }
+
+    //some example topics for listening to menu item clicks
+    //these topics publish a simple message to the growler
+    //in a real world example, these topics would be used
+    //in their own widget to listen for layer menu click events
+    topic.subscribe('layerControl/hello', function (event) {
+        topic.publish('growler/growl', {
+            title: 'Hello!',
+            message: event.layer._titleForLegend + ' ' + event.subLayer.name + ' says hello'
+        });
+    });
+    topic.subscribe('layerControl/goodbye', function (event) {
+        topic.publish('growler/growl', {
+            title: 'Goodbye!',
+            message: event.layer._titleForLegend + ' ' + event.subLayer.name + ' says goodbye'
+        });
+    });
 
     return {
         // used for debugging your app
@@ -183,7 +201,14 @@ define([
             layerControlLayerInfos: {
                 swipe: true,
                 metadataUrl: true,
-                expanded: true
+                expanded: true,
+
+                //override the menu on this particular layer
+                menu: [{
+                    topic: 'hello',
+                    label: 'Say Hello',
+                    iconClass: 'fa fa-smile-o'
+                }]
             }
         /*
         //examples of vector tile layers (beta in v3.15)
@@ -391,7 +416,17 @@ define([
                     layerControlLayerInfos: true,
                     separated: true,
                     vectorReorder: true,
-                    overlayReorder: true
+                    overlayReorder: true,
+
+                    //create a example sub layer menu that will
+                    //apply to all layers of type 'dynamic'
+                    subLayerMenu: {
+                        dynamic: [{
+                            topic: 'goodbye',
+                            iconClass: 'fa fa-frown-o',
+                            label: 'Say goodbye'
+                        }]
+                    }
                 }
             },
             bookmarks: {
