@@ -1,7 +1,15 @@
 define([
-    'dojo/i18n!./nls/main'
-], function (i18n) {
+    'dojo/i18n!./nls/main',
+    'dojo/_base/lang'
+], function (i18n, lang) {
 
+    var linkTemplate = '<a href="{url}" target="_blank">{text}</a>';
+    function directionsFormatter (noValue, attributes) {
+        return lang.replace(linkTemplate, {
+            url: 'https://www.google.com/maps/dir/' + attributes.Address + ' Louisville, KY',
+            text: 'Get Directions'
+        });
+    }
     return {
         map: true,
         mapClickMode: true,
@@ -30,6 +38,13 @@ define([
                 2: {
                     title: i18n.identify.louisvillePubSafety.policeStation,
                     fieldInfos: [{
+                      // example of adding a 'calculated' or formatted field
+                      // click on a louisville kentucky police station to see
+                      // the result
+                        fieldName: 'Directions',
+                        visible: true,
+                        formatter: directionsFormatter
+                    }, {
                         fieldName: 'Name',
                         visible: true
                     }, {

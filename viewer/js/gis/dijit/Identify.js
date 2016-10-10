@@ -20,11 +20,12 @@ define([
     'esri/TimeExtent',
     'dojo/text!./Identify/templates/Identify.html',
     'dojo/i18n!./Identify/nls/resource',
+    './Identify/Formatters',
 
     'dijit/form/Form',
     'dijit/form/FilteringSelect',
     'xstyle/css!./Identify/css/Identify.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, FeatureLayer, TimeExtent, IdentifyTemplate, i18n) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, FeatureLayer, TimeExtent, IdentifyTemplate, i18n, Formatters) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -47,6 +48,19 @@ define([
             'shape_len', 'shape.stlength()',
             'shape.area', 'shape_area', 'shape.starea()'
         ],
+        /**
+         * field type mappings to their default formatter functions
+         * overriding this object will globally replace the default
+         * formatter function for the field type
+         * @type {Object<Function>}
+         */
+        defaultFormatters: {
+            'esriFieldTypeSmallInteger': Formatters.formatInt,
+            'esriFieldTypeInteger': Formatters.formatInt,
+            'esriFieldTypeSingle': Formatters.formatFloat,
+            'esriFieldTypeDouble': Formatters.formatFloat,
+            'esriFieldTypeDate': Formatters.formatDate
+        },
 
         postCreate: function () {
             this.inherited(arguments);
@@ -313,10 +327,19 @@ define([
                             return;
                         }
                     }
-                    fSet.push(result.feature);
+                    var feature = this.getFormattedFeature(result.feature);
+                    fSet.push(feature);
                 }, this);
             }, this);
             this.map.infoWindow.setFeatures(fSet);
+        },
+        getFormattedFeature: function (feature) {
+            array.forEach(feature.infoTemplate.info.fieldInfos, function (info) {
+                if (typeof info.formatter === 'function') {
+                    feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes);
+                }
+            });
+            return feature;
         },
         identifyError: function (err) {
             this.map.infoWindow.hide();
@@ -330,52 +353,41 @@ define([
         },
 
         getInfoTemplate: function (layer, layerId, result) {
-            var popup = null,
-                content = null;
+            var popup, config;
             if (result) {
                 layerId = result.layerId;
             } else if (layerId === null) {
                 layerId = layer.layerId;
             }
 
-            // get infoTemplate from the layer's infoTemplates array
-            if (layer.infoTemplates) {
-                if (layer.infoTemplates.hasOwnProperty(layerId)) {
-                    return layer.infoTemplates[layerId].infoTemplate;
-                } else {
-                    return null;
-                }
-            }
-
-            // see if we have a Popup config defined for this layer
-            if (this.identifies.hasOwnProperty(layer.id)) {
-                if (this.identifies[layer.id].hasOwnProperty(layerId)) {
-                    popup = this.identifies[layer.id][layerId];
-                    if (popup) {
-                        if (typeof (popup.declaredClass) !== 'string') { // has it been created already?
-                            if (popup.content) {
-                                content = popup.content;
-                            }
-                            popup = new PopupTemplate(popup);
-                            if (content) {
-                                popup.setContent(content);
-                            }
-                            this.identifies[layer.id][layerId] = popup;
-                        }
+            var ids = this.identifies;
+            if (ids.hasOwnProperty(layer.id)) {
+                if (ids[layer.id].hasOwnProperty(layerId)) {
+                    popup = ids[layer.id][layerId];
+                    if (popup instanceof PopupTemplate) {
+                        return popup;
                     }
                 }
+            } else {
+                ids[layer.id] = {};
             }
 
-            // if no Popup config found, create one with all attributes or layer fields
-            if (!popup) {
-                popup = this.createDefaultInfoTemplate(layer, layerId, result);
+            // by mixin in the users config with the default props we can
+            // generate a config object that provides the basics automatically
+            // while letting the user override only the parts they want...like mediaInfos
+            config = lang.mixin(this.createDefaultInfoTemplate(layer, layerId, result), ids[layer.id][layerId] || {});
+
+            popup = ids[layer.id][layerId] = new PopupTemplate(config);
+            if (config.content) {
+                popup.setContent(config.content);
             }
 
-            return popup;
+            return ids[layer.id][layerId];
         },
 
         createDefaultInfoTemplate: function (layer, layerId, result) {
-            var popup = null, fieldInfos = [];
+            var popup = null,
+                fieldInfos = [];
 
             var layerName = this.getLayerName(layer);
             if (result) {
@@ -390,14 +402,14 @@ define([
                         if (attributes.hasOwnProperty(prop)) {
                             this.addDefaultFieldInfo(fieldInfos, {
                                 fieldName: prop,
-                                label: prop.replace(/_/g, ' '),
+                                label: this.makeSentenceCase(prop),
                                 visible: true
                             });
                         }
                     }
                 }
 
-            // from the outFields of the layer
+                // from the outFields of the layer
             } else if (layer._outFields && (layer._outFields.length) && (layer._outFields[0] !== '*')) {
 
                 var fields = layer.fields;
@@ -414,32 +426,43 @@ define([
                     }
                 }));
 
-            // from the fields layer
+                // from the fields layer
             } else if (layer.fields) {
 
                 array.forEach(layer.fields, lang.hitch(this, function (field) {
                     this.addDefaultFieldInfo(fieldInfos, {
                         fieldName: field.name,
-                        label: field.alias,
+                        label: field.alias === field.name ? this.makeSentenceCase(field.name) : field.alias,
                         visible: true
                     });
                 }));
             }
 
             if (fieldInfos.length > 0) {
-                var featLayer = this.getFeatureLayerForDynamicSublayer(layer, layerId);
-                popup = new PopupTemplate({
+                popup = {
                     title: layerName,
                     fieldInfos: fieldInfos,
-                    showAttachments: (layer.hasAttachments || featLayer.hasAttachments)
-                });
-                if (!this.identifies[layer.id]) {
-                    this.identifies[layer.id] = {};
-                }
-                this.identifies[layer.id][layerId] = popup;
+                    showAttachments: (layer.hasAttachments)
+                };
             }
 
             return popup;
+        },
+        /**
+         * converts a string to a nice sentence case format
+         * @url http://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
+         * @param  {string} str The string to convert
+         * @return {string}     The converted string
+         */
+        makeSentenceCase: function (str) {
+            if (!str.length) {
+                return '';
+            }
+            str = str.toLowerCase().replace(/_/g, ' ').split(' ');
+            for (var i = 0; i < str.length; i++) {
+                str[i] = str[i].charAt(0).toUpperCase() + (str[i].substr(1).length ? str[i].substr(1) : '');
+            }
+            return (str.length ? str.join(' ') : str);
         },
 
         addDefaultFieldInfo: function (fieldInfos, field) {
