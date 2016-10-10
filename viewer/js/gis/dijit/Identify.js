@@ -20,11 +20,12 @@ define([
     'esri/TimeExtent',
     'dojo/text!./Identify/templates/Identify.html',
     'dojo/i18n!./Identify/nls/resource',
+    './Identify/Formatters',
 
     'dijit/form/Form',
     'dijit/form/FilteringSelect',
     'xstyle/css!./Identify/css/Identify.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, FeatureLayer, TimeExtent, IdentifyTemplate, i18n) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, FeatureLayer, TimeExtent, IdentifyTemplate, i18n, Formatters) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -47,6 +48,19 @@ define([
             'shape_len', 'shape.stlength()',
             'shape.area', 'shape_area', 'shape.starea()'
         ],
+        /**
+         * field type mappings to their default formatter functions
+         * overriding this object will globally replace the default
+         * formatter function for the field type
+         * @type {Object<Function>}
+         */
+        defaultFormatters: {
+            'esriFieldTypeSmallInteger': Formatters.formatInt,
+            'esriFieldTypeInteger': Formatters.formatInt,
+            'esriFieldTypeSingle': Formatters.formatFloat,
+            'esriFieldTypeDouble': Formatters.formatFloat,
+            'esriFieldTypeDate': Formatters.formatDate
+        },
 
         postCreate: function () {
             this.inherited(arguments);
@@ -419,19 +433,20 @@ define([
                         this.addDefaultFieldInfo(fieldInfos, {
                             fieldName: foundField[0].name,
                             label: foundField[0].alias,
-                            visible: true
+                            visible: true,
+                            formatter: typeof this.defaultFormatters[foundField[0].type] !== 'undefined' ? this.defaultFormatters[foundField[0].type] : undefined
                         });
                     }
                 }));
 
             // from the fields layer
             } else if (layer.fields) {
-
                 array.forEach(layer.fields, lang.hitch(this, function (field) {
                     this.addDefaultFieldInfo(fieldInfos, {
                         fieldName: field.name,
                         label: field.alias,
-                        visible: true
+                        visible: true,
+                        formatter: typeof this.defaultFormatters[field.type] !== 'undefined' ? this.defaultFormatters[field.type] : undefined
                     });
                 }));
             }
