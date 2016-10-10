@@ -4,12 +4,12 @@ define([
 ], function (i18n, lang) {
 
     var linkTemplate = '<a href="{url}" target="_blank">{text}</a>';
-    var directionsFormatter = function(noValue, attributes){
-      return lang.replace(linkTemplate, {
-        url: 'https://www.google.com/maps/dir/' + attributes.Address + ' Louisville, KY',
-        text: 'Get Directions'
-      });
-    };
+    function directionsFormatter (noValue, attributes) {
+        return lang.replace(linkTemplate, {
+            url: 'https://www.google.com/maps/dir/' + attributes.Address + ' Louisville, KY',
+            text: 'Get Directions'
+        });
+    }
     return {
         map: true,
         mapClickMode: true,
@@ -41,10 +41,10 @@ define([
                       // example of adding a 'calculated' or formatted field
                       // click on a louisville kentucky police station to see
                       // the result
-                      fieldName: 'Directions',
-                      visible: true,
-                      formatter: directionsFormatter
-                    },{
+                        fieldName: 'Directions',
+                        visible: true,
+                        formatter: directionsFormatter
+                    }, {
                         fieldName: 'Name',
                         visible: true
                     }, {

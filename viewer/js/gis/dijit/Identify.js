@@ -320,13 +320,13 @@ define([
             }, this);
             this.map.infoWindow.setFeatures(fSet);
         },
-        getFormattedFeature: function(feature){
-          array.forEach(feature.infoTemplate.info.fieldInfos, function(info){
-            if(typeof info.formatter === 'function'){
-              feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes);
-            }
-          });
-          return feature;
+        getFormattedFeature: function (feature) {
+            array.forEach(feature.infoTemplate.info.fieldInfos, function (info) {
+                if (typeof info.formatter === 'function') {
+                    feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes);
+                }
+            });
+            return feature;
         },
         identifyError: function (err) {
             this.map.infoWindow.hide();
