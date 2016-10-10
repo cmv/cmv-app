@@ -328,7 +328,6 @@ define([
                         }
                     }
                     var feature = this.getFormattedFeature(result.feature);
-                    // console.log(feature);
                     fSet.push(feature);
                 }, this);
             }, this);
