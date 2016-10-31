@@ -578,10 +578,15 @@ define([
          * @return {Boolean}      Whether or not the sublayer is visible based on its parent(s) visibility
          */
         checkVisibilityRecursive: function (layer, id) {
-            var info = layer.layerInfos[id];
-            if (layer.visibleLayers.indexOf(id) !== -1 &&
-                (info.parentLayerId === -1 || this.checkVisibilityRecursive(layer, info.parentLayerId))) {
-                return true;
+            var layerInfos = array.filter(layer.layerInfos, function (layerInfo) {
+                return (layerInfo.id === id);
+            });
+            if (layerInfos.length > 0) {
+                var info = layerInfos[0];
+                if (layer.visibleLayers.indexOf(id) !== -1 &&
+                    (info.parentLayerId === -1 || this.checkVisibilityRecursive(layer, info.parentLayerId))) {
+                    return true;
+                }
             }
             return false;
         },
