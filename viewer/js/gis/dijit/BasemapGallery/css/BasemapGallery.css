@@ -1,0 +1,41 @@
+.cmvBasemapGalleryWidget .dijitTitlePane {
+   border-radius: 4px;
+}
+
+.cmvBasemapGalleryWidget .dijitTitlePaneTitle {
+    border-color: #BBB;
+    padding: 4px;
+}
+
+.cmvBasemapGalleryWidget .dijitTitlePane .dijitArrowNode {
+    float: right;
+    padding-top: 3px;
+}
+
+.cmvBasemapGalleryWidget .dijitTitlePaneTextNode:before {
+    content: '\f009';
+    font-family: FontAwesome;
+}
+
+.cmvBasemapGalleryWidget .dijitTitlePaneContentOuter {
+    border-color: #BBB;
+}
+
+.cmvBasemapGalleryWidget .dijitTitlePaneContentInner {
+    padding: 0;
+}
+
+.cmvBasemapGalleryWidget .basemapGalleryContent {
+    height: 280px;
+    overflow:auto;
+    width: 410px;
+}
+.cmvBasemapGalleryWidget .esriBasemapGalleryNode {
+    margin: 5px 15px;
+}
+
+@media screen and (max-width: 767px) {
+    .cmvBasemapGalleryWidget .basemapGalleryContent {
+        width: 140px;
+    }
+}
