@@ -42,13 +42,17 @@ define([
         },
         startup: function () {
             if (this.titleBarNode && this.canFloat) {
-                if (has('edge') || has('trident')) {
-                    this.dragDelay = 0;
-                }
                 this._moveable = new Moveable(this.domNode, {
                     handle: this.titleBarNode,
                     delay: this.dragDelay
                 });
+                if (this.dragDelay > 0) {
+                    this._moveable.mover.prototype.onMouseUp = function (e) {
+                        this.destroy();
+                        e.preventDefault();
+                        e.stopPropagation();
+                    };
+                }
                 this._titleBarHeight = domStyle.get(this.titleBarNode, 'height');
                 aspect.after(this._moveable, 'onMove', lang.hitch(this, '_dragging'), true);
                 aspect.after(this._moveable, 'onMoveStop', lang.hitch(this, '_endDrag'), true);
