@@ -22,45 +22,19 @@ define([
 
         // define all valid basemaps here.
         basemaps: {
-            streets: {
-                title: i18n.basemaps.streets
-            },
-            'streets-night-vector': { // requires v3.16 or higher
-                title: i18n.basemaps.streetsNightVector
-            },
-            'streets-navigation-vector': { // requires v3.16 or higher
-                title: i18n.basemaps.streetsNavigationVector
-            },
-            'streets-relief-vector': { // requires v3.16 or higher
-                title: i18n.basemaps.streetsReliefVector
-            },
-            satellite: {
-                title: i18n.basemaps.satellite
-            },
-            hybrid: {
-                title: i18n.basemaps.hybrid
-            },
-            topo: {
-                title: i18n.basemaps.topo
-            },
-            terrain: {
-                title: i18n.basemaps.terrain
-            },
-            'gray-vector': { // requires v3.16 or higher
-                title: i18n.basemaps.grayVector
-            },
-            'dark-gray-vector': { // requires v3.16 or higher
-                title: i18n.basemaps.darkGrayVector
-            },
-            oceans: {
-                title: i18n.basemaps.oceans
-            },
-            'national-geographic': {
-                title: i18n.basemaps.nationalGeographic
-            },
-            osm: {
-                title: i18n.basemaps.osm
-            },
+            streets: {},
+            'streets-night-vector': {}, // requires v3.16 or higher
+            'streets-navigation-vector': {}, // requires v3.16 or higher
+            'streets-relief-vector': {}, // requires v3.16 or higher
+            satellite: {},
+            hybrid: {},
+            topo: {},
+            terrain: {},
+            'gray-vector': {}, // requires v3.16 or higher
+            'dark-gray-vector': {}, // requires v3.16 or higher
+            oceans: {},
+            'national-geographic': {},
+            osm: {},
             landsatShaded: {
                 title: i18n.basemaps.landsatShaded,
                 basemap: {
