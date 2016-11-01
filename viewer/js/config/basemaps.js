@@ -6,7 +6,7 @@ define([
 
     return {
         map: true, // needs a reference to the map
-        mode: 'agol', // mut be either 'agol' or 'custom'
+        //mode: 'agol', // mut be either 'agol' or 'custom'
 
         /* optional starting basemap
         / otherwise uses the basemap from the map
