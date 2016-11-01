@@ -1,8 +1,8 @@
 define([
-    //'esri/dijit/Basemap',
-    //'esri/dijit/BasemapLayer'
+    'esri/dijit/Basemap',
+    'esri/dijit/BasemapLayer',
     'dojo/i18n!./nls/main'
-], function (/* Basemap, BasemapLayer, */i18n) {
+], function (Basemap, BasemapLayer, i18n) {
 
     return {
         map: true, // needs a reference to the map
@@ -64,6 +64,19 @@ define([
                         }
                     ]
                 }
+            },
+            mapboxPirates: {
+                title: 'Pirates (mapbox.com)',
+                basemap: new Basemap({
+                    id: 'mapboxPirates',
+                    layers: [new BasemapLayer({
+                        url: 'https://${subDomain}.tiles.mapbox.com/v3/aj.Sketchy2/${level}/${col}/${row}.png',
+                        copyright: 'mapbox, 2016',
+                        id: 'mapboxPirates',
+                        subDomains: ['a', 'b', 'c', 'd'],
+                        type: 'WebTiledLayer'
+                    })]
+                })
             }
 
             // additional examples of vector tile basemaps (requires v3.16 or higher)
@@ -257,19 +270,6 @@ define([
                     })]
                 })
             },
-            mapboxPirates: {
-                title: 'Pirates (mapbox.com)',
-                basemap: new Basemap({
-                    id: 'mapboxPirates',
-                    layers: [new BasemapLayer({
-                        url: 'https://${subDomain}.tiles.mapbox.com/v3/aj.Sketchy2/${level}/${col}/${row}.png',
-                        copyright: 'mapbox, 2016',
-                        id: 'mapboxPirates',
-                        subDomains: ['a', 'b', 'c', 'd'],
-                        type: 'WebTiledLayer'
-                    })]
-                })
-            }
             */
         }
     };
