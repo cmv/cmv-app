@@ -27,25 +27,47 @@ define([
             var returnDeferred = new Deferred();
             var returnWarnings = [];
 
-            this._createMap();
+            this._createMap(returnWarnings).then(
+                lang.hitch(this, '_createMapResult', returnDeferred, returnWarnings)
+            );
+            return returnDeferred;
+        },
 
-            if (this.config.mapOptions.basemap) {
-                this.map.on('load', lang.hitch(this, '_initLayers', returnWarnings));
+        _createMap: function (returnWarnings) {
+            var mapDeferred = new Deferred(),
+                container = dom.byId(this.config.layout.map) || 'mapCenter';
+
+            if (this.config.webMapId) {
+                if (this._initWebMap) {
+                    mapDeferred = this._initWebMap(this.config.webMapId, container, this.config.webMapOptions);
+                } else {
+                    returnWarnings.push('The "_WebMapMixin" Controller Mixin is required to use a webmap');
+                    mapDeferred.resolve(returnWarnings);
+                }
             } else {
-                this._initLayers(returnWarnings);
+                this.map = new Map(container, this.config.mapOptions);
+                mapDeferred.resolve(returnWarnings);
             }
+            return mapDeferred;
+        },
 
-            if (this.config.operationalLayers && this.config.operationalLayers.length > 0) {
-                on.once(this.map, 'layers-add-result', lang.hitch(this, '_onLayersAddResult', returnDeferred, returnWarnings));
+        _createMapResult: function (returnDeferred, returnWarnings) {
+            if (this.map) {
+                if (!this.config.webMapId && this.config.mapOptions && this.config.mapOptions.basemap) {
+                    this.map.on('load', lang.hitch(this, '_initLayers', returnWarnings));
+                } else {
+                    this._initLayers(returnWarnings);
+                }
+
+                if (this.config.operationalLayers && this.config.operationalLayers.length > 0) {
+                    on.once(this.map, 'layers-add-result', lang.hitch(this, '_onLayersAddResult', returnDeferred, returnWarnings));
+                } else {
+                    returnDeferred.resolve(returnWarnings);
+                }
             } else {
                 returnDeferred.resolve(returnWarnings);
             }
             return returnDeferred;
-        },
-
-        _createMap: function () {
-            var container = dom.byId(this.config.layout.map) || 'mapCenter';
-            this.map = new Map(container, this.config.mapOptions);
         },
 
         _onLayersAddResult: function (returnDeferred, returnWarnings, lyrsResult) {
@@ -171,18 +193,21 @@ define([
                 });
             }
 
-            this.map.on('resize', function (evt) {
-                var pnt = evt.target.extent.getCenter();
-                setTimeout(function () {
-                    evt.target.centerAt(pnt);
-                }, 100);
-            });
+            if (this.map) {
+                this.map.on('resize', function (evt) {
+                    var pnt = evt.target.extent.getCenter();
+                    setTimeout(function () {
+                        evt.target.centerAt(pnt);
+                    }, 100);
+                });
 
-            // in _LayoutsMixin
-            this.createPanes();
+                // in _LayoutsMixin
+                this.createPanes();
 
-            // in _WidgetsMixin
-            this.initWidgets();
+                // in _WidgetsMixin
+                this.initWidgets();
+            }
+
         },
 
         initMapError: function (err) {

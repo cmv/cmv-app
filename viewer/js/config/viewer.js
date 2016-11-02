@@ -78,6 +78,9 @@ define([
             sliderStyle: 'small'
         },
 
+        //webMapId: 'ef9c7fbda731474d98647bebb4b33c20',  // High Cost Mortgage
+        // webMapOptions: {},
+
         // panes: {
         // 	left: {
         // 		splitter: true
@@ -278,7 +281,7 @@ define([
                 srcNodeRef: 'growlerDijit',
                 options: {}
             },
-            geocoder: {
+            search: {
                 include: true,
                 type: 'domNode',
                 path: 'esri/dijit/Search',
@@ -300,14 +303,6 @@ define([
                 open: false,
                 position: 3,
                 options: 'config/identify'
-            },
-            basemaps: {
-                include: true,
-                id: 'basemaps',
-                type: 'domNode',
-                path: 'gis/dijit/Basemaps',
-                srcNodeRef: 'basemapsDijit',
-                options: 'config/basemaps'
             },
             mapInfo: {
                 include: false,
