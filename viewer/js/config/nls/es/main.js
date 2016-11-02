@@ -2,22 +2,8 @@
 define({
     basemaps: {
         davidRumseyMap1812: 'David Rumsey 1812',
-        darkGrayVector: 'Gris oscuro',
         earthAtNight: 'Tierra en la noche',
-        grayVector: 'Gris',
-        hybrid: 'Híbrido',
-        landsatShaded: 'Landsat sombreada',
-        nationalGeographic: 'Nat Geo',
-        oceans: 'Oceános',
-        osm: 'Open Street Map',
-        satellite: 'Satélite',
-        streets: 'Calle',
-        streetsNavigationVector: 'Calle (Navegación)',
-        streetsNightVector: 'Calle (Noche)',
-        streetsReliefVector: 'Calle (Relieve)',
-        terrain: 'Terreno',
-        title: 'Mapas base',
-        topo: 'Topográfico'
+        landsatShaded: 'Landsat sombreada'
     },
     bookmarks: {
         nullIsland: 'Isla nula',

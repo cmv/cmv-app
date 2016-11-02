@@ -3,21 +3,8 @@ define({
     root: {
         basemaps: {
             davidRumseyMap1812: 'David Rumsey 1812',
-            darkGrayVector: 'Dark Gray',
             earthAtNight: 'Earth at Night',
-            grayVector: 'Gray',
-            hybrid: 'Hybrid',
-            landsatShaded: 'Landsat Shaded',
-            nationalGeographic: 'Nat Geo',
-            oceans: 'Oceans',
-            osm: 'Open Street Map',
-            satellite: 'Satellite',
-            streets: 'Streets',
-            streetsNavigationVector: 'Streets (Navigation)',
-            streetsNightVector: 'Streets (Night)',
-            streetsReliefVector: 'Streets (Relief)',
-            terrain: 'Terrain',
-            topo: 'Topographic'
+            landsatShaded: 'Landsat Shaded'
         },
         bookmarks: {
             nullIsland: 'Null Island',
