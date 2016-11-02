@@ -1,12 +1,12 @@
 define([
-    //'esri/dijit/Basemap',
-    //'esri/dijit/BasemapLayer'
+    'esri/dijit/Basemap',
+    'esri/dijit/BasemapLayer',
     'dojo/i18n!./nls/main'
-], function (/* Basemap, BasemapLayer, */i18n) {
+], function (Basemap, BasemapLayer, i18n) {
 
     return {
         map: true, // needs a reference to the map
-        mode: 'agol', // mut be either 'agol' or 'custom'
+        //mode: 'agol', // mut be either 'agol' or 'custom'
 
         /* optional starting basemap
         / otherwise uses the basemap from the map
@@ -22,45 +22,19 @@ define([
 
         // define all valid basemaps here.
         basemaps: {
-            streets: {
-                title: i18n.basemaps.streets
-            },
-            'streets-night-vector': { // requires v3.16 or higher
-                title: i18n.basemaps.streetsNightVector
-            },
-            'streets-navigation-vector': { // requires v3.16 or higher
-                title: i18n.basemaps.streetsNavigationVector
-            },
-            'streets-relief-vector': { // requires v3.16 or higher
-                title: i18n.basemaps.streetsReliefVector
-            },
-            satellite: {
-                title: i18n.basemaps.satellite
-            },
-            hybrid: {
-                title: i18n.basemaps.hybrid
-            },
-            topo: {
-                title: i18n.basemaps.topo
-            },
-            terrain: {
-                title: i18n.basemaps.terrain
-            },
-            'gray-vector': { // requires v3.16 or higher
-                title: i18n.basemaps.grayVector
-            },
-            'dark-gray-vector': { // requires v3.16 or higher
-                title: i18n.basemaps.darkGrayVector
-            },
-            oceans: {
-                title: i18n.basemaps.oceans
-            },
-            'national-geographic': {
-                title: i18n.basemaps.nationalGeographic
-            },
-            osm: {
-                title: i18n.basemaps.osm
-            },
+            streets: {},
+            'streets-night-vector': {}, // requires v3.16 or higher
+            'streets-navigation-vector': {}, // requires v3.16 or higher
+            'streets-relief-vector': {}, // requires v3.16 or higher
+            satellite: {},
+            hybrid: {},
+            topo: {},
+            terrain: {},
+            'gray-vector': {}, // requires v3.16 or higher
+            'dark-gray-vector': {}, // requires v3.16 or higher
+            oceans: {},
+            'national-geographic': {},
+            osm: {},
             landsatShaded: {
                 title: i18n.basemaps.landsatShaded,
                 basemap: {
@@ -90,6 +64,19 @@ define([
                         }
                     ]
                 }
+            },
+            mapboxPirates: {
+                title: 'Pirates (mapbox.com)',
+                basemap: new Basemap({
+                    id: 'mapboxPirates',
+                    layers: [new BasemapLayer({
+                        url: 'https://${subDomain}.tiles.mapbox.com/v3/aj.Sketchy2/${level}/${col}/${row}.png',
+                        copyright: 'mapbox, 2016',
+                        id: 'mapboxPirates',
+                        subDomains: ['a', 'b', 'c', 'd'],
+                        type: 'WebTiledLayer'
+                    })]
+                })
             }
 
             // additional examples of vector tile basemaps (requires v3.16 or higher)
@@ -283,19 +270,6 @@ define([
                     })]
                 })
             },
-            mapboxPirates: {
-                title: 'Pirates (mapbox.com)',
-                basemap: new Basemap({
-                    id: 'mapboxPirates',
-                    layers: [new BasemapLayer({
-                        url: 'https://${subDomain}.tiles.mapbox.com/v3/aj.Sketchy2/${level}/${col}/${row}.png',
-                        copyright: 'mapbox, 2016',
-                        id: 'mapboxPirates',
-                        subDomains: ['a', 'b', 'c', 'd'],
-                        type: 'WebTiledLayer'
-                    })]
-                })
-            }
             */
         }
     };
