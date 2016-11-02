@@ -12,6 +12,11 @@
     background-color: #F5F5F5;
 }
 
+.cmv .dijitTitlePaneTitleOpen {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 .cmv label {
     font-weight: bold;
 }
