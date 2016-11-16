@@ -222,7 +222,7 @@ define([
             }
             var placeAt = widgetConfig.placeAt;
             if (!placeAt) {
-                placeAt = this.panes.sidebar;
+                placeAt = this.panes.left;
             } else if (typeof (placeAt) === 'string') {
                 placeAt = this.panes[placeAt];
             }
