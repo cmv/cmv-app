@@ -294,6 +294,14 @@ define([
                     expanded: false
                 }
             },
+            basemaps: {
+                include: true,
+                id: 'basemaps',
+                type: 'domNode',
+                path: 'gis/dijit/Basemaps',
+                srcNodeRef: 'basemapsDijit',
+                options: 'config/basemaps'
+            },
             identify: {
                 include: true,
                 id: 'identify',
