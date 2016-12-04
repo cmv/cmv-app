@@ -186,11 +186,6 @@ define([
             return options;
         },
 
-            }
-
-            }
-        },
-
         _createTitlePaneWidget: function (parentId, widgetConfig) {
             var tp,
                 options = lang.mixin({
