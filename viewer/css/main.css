@@ -210,6 +210,16 @@ body, html {
 #help_parent_underlay {
     display: block;
 }
+.widgetLoader {
+    color: #333;
+    display: block;
+    font-size: 18px;
+    left: 0;
+    margin: 4px;
+    text-align: center;
+    top: 0;
+    width:  100%;
+}
 
 /*
     media queries bootstrap style

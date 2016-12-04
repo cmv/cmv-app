@@ -112,6 +112,7 @@ define([
                     pnl = this._createFloatingWidget(parentId, widgetConfig);
                 }
                 widgetConfig.parentWidget = pnl;
+                this._showWidgetLoader(pnl);
             }
 
             // 2 ways to use require to accommodate widgets that may have an optional separate configuration file
@@ -145,6 +146,7 @@ define([
             if (widgets[key] && widgets[key].startup && !widgets[key]._started) {
                 widgets[key].startup();
             }
+            this._hideWidgetLoader(pnl);
         },
 
         _setWidgetOptions: function (widgetConfig, options) {
@@ -184,6 +186,20 @@ define([
                 options.layerInfos = this.identifyLayerInfos;
             }
             return options;
+        },
+
+        _showWidgetLoader: function (pnl) {
+            if (pnl && pnl.containerNode) {
+                pnl.loadingNode = put(pnl.containerNode, 'div.widgetLoader i.fa.fa-spinner.fa-pulse.fa-fw').parentNode;
+            }
+        },
+
+        _hideWidgetLoader: function (pnl) {
+            if (pnl && pnl.loadingNode) {
+                require(['dojo/domReady!'], function () {
+                    put(pnl.loadingNode, '!');
+                });
+            }
         },
 
         _createTitlePaneWidget: function (parentId, widgetConfig) {
