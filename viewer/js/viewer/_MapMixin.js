@@ -194,6 +194,9 @@ define([
             }
 
             if (this.map) {
+                // in _WidgetsMixin
+                this.createWidgets(['map', 'layer']);
+
                 this.map.on('resize', function (evt) {
                     var pnt = evt.target.extent.getCenter();
                     setTimeout(function () {
@@ -205,7 +208,7 @@ define([
                 this.createPanes();
 
                 // in _WidgetsMixin
-                this.initWidgets();
+                this.createWidgets();
             }
 
         },

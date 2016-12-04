@@ -31,6 +31,9 @@ define([
         initConfigSuccess: function (config) {
             this.config = config;
 
+            // in _WidgetsMixin
+            this.createWidgets(['loading']);
+
             if (config.isDebug) {
                 window.app = this; //dev only
             }
@@ -43,6 +46,9 @@ define([
 
             // in _LayoutMixin
             this.initLayout();
+
+            // in _WidgetsMixin
+            this.createWidgets(['layout']);
 
             // in _MapMixin
             this.initMapAsync().then(

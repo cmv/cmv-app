@@ -32,16 +32,22 @@ define([
         identifyLayerInfos: [],
         layerControlLayerInfos: [],
 
-        initWidgets: function () {
+        widgets: {},
+        widgetTypes: ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map', 'layer', 'layout', 'loading'],
+
+        createWidgets: function (widgetTypes) {
             var widgets = [],
                 paneWidgets;
 
+            widgetTypes = widgetTypes || this.widgetTypes;
             for (var key in this.config.widgets) {
                 if (this.config.widgets.hasOwnProperty(key)) {
                     var widget = lang.clone(this.config.widgets[key]);
-                    if (widget.include) {
+                    widget.widgetKey = widget.widgetKey || widget.id || key;
+                    if (widget.include && (!this.widgets[widget.widgetKey]) && (array.indexOf(widgetTypes, widget.type) >= 0)) {
                         widget.position = (typeof (widget.position) !== 'undefined') ? widget.position : 10000;
                         widgets.push(widget);
+                        this.widgets[key] = true; // will be replaced by actual widget once created
                     }
                 }
             }
@@ -79,7 +85,7 @@ define([
         widgetLoader: function (widgetConfig, position) {
             var parentId, pnl;
 
-            var widgetTypes = ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map'];
+            var widgetTypes = this.widgetTypes;
             // add any user-defined widget types
             widgetTypes = widgetTypes.concat(this.config.widgetTypes || []);
             // only proceed for valid widget types
@@ -96,8 +102,8 @@ define([
             }
 
             // build a titlePane or floating widget as the parent
-            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
-                parentId = widgetConfig.id + '_parent';
+            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
+                parentId = widgetConfig.widgetKey + '_parent';
                 if (widgetConfig.type === 'titlePane') {
                     pnl = this._createTitlePaneWidget(parentId, widgetConfig);
                 } else if (widgetConfig.type === 'contentPane') {
@@ -117,7 +123,31 @@ define([
         },
 
         createWidget: function (widgetConfig, options, WidgetClass) {
+            var key = widgetConfig.widgetKey;
+            if (!key) {
+                return;
+            }
+
             // set any additional options
+            options = this._setWidgetOptions(widgetConfig, options);
+
+            // create the widget
+            var pnl = options.parentWidget;
+            var widgets = this.widgets;
+            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
+                widgets[key] = new WidgetClass(options, put('div')).placeAt(pnl.containerNode);
+            } else if (widgetConfig.type === 'domNode') {
+                widgets[key] = new WidgetClass(options, widgetConfig.srcNodeRef);
+            } else {
+                widgets[key] = new WidgetClass(options);
+            }
+            // start up the widget
+            if (widgets[key] && widgets[key].startup && !widgets[key]._started) {
+                widgets[key].startup();
+            }
+        },
+
+        _setWidgetOptions: function (widgetConfig, options) {
             if (widgetConfig.id) {
                 options.id = widgetConfig.id + '_widget';
             }
@@ -153,20 +183,11 @@ define([
             if (options.identifyLayerInfos) {
                 options.layerInfos = this.identifyLayerInfos;
             }
+            return options;
+        },
 
-            // create the widget
-            var pnl = options.parentWidget;
-            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
-                this[widgetConfig.id] = new WidgetClass(options, put('div')).placeAt(pnl.containerNode);
-            } else if (widgetConfig.type === 'domNode') {
-                this[widgetConfig.id] = new WidgetClass(options, widgetConfig.srcNodeRef);
-            } else {
-                this[widgetConfig.id] = new WidgetClass(options);
             }
 
-            // start up the widget
-            if (this[widgetConfig.id] && this[widgetConfig.id].startup && !this[widgetConfig.id]._started) {
-                this[widgetConfig.id].startup();
             }
         },
 
