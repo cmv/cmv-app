@@ -20,8 +20,6 @@
 	'use strict';
 
 
-	var googleVersion = '3.18';
-
 	var script = null;
 
 	var google = null;
@@ -52,7 +50,7 @@
 
 	GoogleMapsLoader.REGION = null;
 
-	GoogleMapsLoader.VERSION = googleVersion;
+	GoogleMapsLoader.VERSION = '3';
 
 	GoogleMapsLoader.WINDOW_CALLBACK_NAME = '__google_maps_api_provider_initializator__';
 
@@ -108,8 +106,12 @@
 			url += '&libraries=' + GoogleMapsLoader.LIBRARIES.join(',');
 		}
 
+		if (GoogleMapsLoader.VERSION) {
+			url += '&v=' + GoogleMapsLoader.VERSION;
+		}
+
 		if (GoogleMapsLoader.CLIENT) {
-			url += '&client=' + GoogleMapsLoader.CLIENT + '&v=' + GoogleMapsLoader.VERSION;
+			url += '&client=' + GoogleMapsLoader.CLIENT;
 		}
 
 		if (GoogleMapsLoader.CHANNEL) {
