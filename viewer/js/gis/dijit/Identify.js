@@ -68,62 +68,10 @@ define([
                 this.identifies = {};
             }
             this.layers = [];
-            array.forEach(this.layerInfos, function (layerInfo) {
-                var lyrId = layerInfo.layer.id, layer = this.map.getLayer(lyrId), infoTemplate;
-                if (layer) {
-                    var url = layer.url;
-
-                    // handle feature layers
-                    if (layer.declaredClass === 'esri.layers.FeatureLayer') {
-
-                        // If is a feature layer that does not support
-                        // Identify (Feature Service), create an
-                        // infoTemplate for the graphic features. Create
-                        // it only if one does not already exist.
-                        if (layer.capabilities && array.indexOf(layer.capabilities.toLowerCase(), 'data') < 0) {
-                            if (!layer.infoTemplate) {
-                                infoTemplate = this.getInfoTemplate(layer, layer.layerId);
-                                if (infoTemplate) {
-                                    layer.setInfoTemplate(infoTemplate);
-                                    return;
-                                }
-                            }
-                        }
-
-                        // If it is a feature Layer, we get the base url
-                        // for the map service by removing the layerId.
-                        var lastSL = url.lastIndexOf('/' + layer.layerId);
-                        if (lastSL > 0) {
-                            url = url.substring(0, lastSL);
-                        }
-                    } else if (layer.layerInfos) {
-                        array.forEach(layer.layerInfos, lang.hitch(this, function (subLayerInfo) {
-                            var subLayerId = subLayerInfo.id;
-                            if ((layerInfo.layerIds === null) || (array.indexOf(layerInfo.layerIds, subLayerId) >= 0)) {
-                                this.getFeatureLayerForDynamicSublayer(layer, subLayerId);
-                            }
-                        }));
-                    }
-
-                    this.layers.push({
-                        ref: layer,
-                        layerInfo: layerInfo,
-                        identifyTask: new IdentifyTask(url)
-                    });
-
-                    // rebuild the layer selection list when any layer is hidden
-                    // but only if we have a UI
-                    if (this.parentWidget) {
-                        layer.on('visibility-change', lang.hitch(this, function (evt) {
-                            if (evt.visible === false) {
-                                this.createIdentifyLayerList();
-                            }
-                        }));
-                    }
-                }
-            }, this);
+            this.addLayerInfos(this.layerInfos);
 
             this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
+            this.own(topic.subscribe('identify/addLayerInfos', lang.hitch(this, 'addLayerInfos')));
 
             this.map.on('click', lang.hitch(this, function (evt) {
                 if (this.mapClickMode === 'identify') {
@@ -145,6 +93,72 @@ define([
 
             if (this.draggable) {
                 this.setupDraggable();
+            }
+        },
+        /**
+         * handles an array of layerInfos to call addLayerInfo for each layerInfo
+         * @param {Array<layerInfo>} layerInfos The array of layer infos
+         */
+        addLayerInfos: function (layerInfos) {
+            array.forEach(layerInfos, lang.hitch(this, 'addLayerInfo'));
+        },
+        /**
+         * Initializes an infoTemplate on a layerInfo.layer object if it doesn't
+         * exist already.
+         * @param {object} layerInfo A cmv layerInfo object that contains a layer property
+         */
+        addLayerInfo: function (layerInfo) {
+            var lyrId = layerInfo.layer.id, layer = this.map.getLayer(lyrId), infoTemplate;
+            if (layer) {
+                var url = layer.url;
+
+                // handle feature layers
+                if (layer.declaredClass === 'esri.layers.FeatureLayer') {
+
+                    // If is a feature layer that does not support
+                    // Identify (Feature Service), create an
+                    // infoTemplate for the graphic features. Create
+                    // it only if one does not already exist.
+                    if (layer.capabilities && array.indexOf(layer.capabilities.toLowerCase(), 'data') < 0) {
+                        if (!layer.infoTemplate) {
+                            infoTemplate = this.getInfoTemplate(layer, layer.layerId);
+                            if (infoTemplate) {
+                                layer.setInfoTemplate(infoTemplate);
+                                return;
+                            }
+                        }
+                    }
+
+                    // If it is a feature Layer, we get the base url
+                    // for the map service by removing the layerId.
+                    var lastSL = url.lastIndexOf('/' + layer.layerId);
+                    if (lastSL > 0) {
+                        url = url.substring(0, lastSL);
+                    }
+                } else if (layer.layerInfos) {
+                    array.forEach(layer.layerInfos, lang.hitch(this, function (subLayerInfo) {
+                        var subLayerId = subLayerInfo.id;
+                        if ((layerInfo.layerIds === null) || (array.indexOf(layerInfo.layerIds, subLayerId) >= 0)) {
+                            this.getFeatureLayerForDynamicSublayer(layer, subLayerId);
+                        }
+                    }));
+                }
+
+                this.layers.push({
+                    ref: layer,
+                    layerInfo: layerInfo,
+                    identifyTask: new IdentifyTask(url)
+                });
+
+                // rebuild the layer selection list when any layer is hidden
+                // but only if we have a UI
+                if (this.parentWidget) {
+                    layer.on('visibility-change', lang.hitch(this, function (evt) {
+                        if (evt.visible === false) {
+                            this.createIdentifyLayerList();
+                        }
+                    }));
+                }
             }
         },
         addRightClickMenu: function () {
