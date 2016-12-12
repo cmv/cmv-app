@@ -13,14 +13,6 @@
                 name: 'config',
                 location: path + 'js/config'
             }, {
-                name: 'put-selector',
-                main: 'put',
-                location: 'https://cdn.rawgit.com/kriszyp/put-selector/v0.3.6'
-            }, {
-                name: 'xstyle',
-                main: 'css',
-                location: 'https://cdn.rawgit.com/kriszyp/xstyle/v0.3.2'
-            }, {
                 name: 'proj4js',
                 location: '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15'
             }
