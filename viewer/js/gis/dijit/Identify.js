@@ -98,6 +98,7 @@ define([
         /**
          * handles an array of layerInfos to call addLayerInfo for each layerInfo
          * @param {Array<layerInfo>} layerInfos The array of layer infos
+         * @returns {undefined}
          */
         addLayerInfos: function (layerInfos) {
             array.forEach(layerInfos, lang.hitch(this, 'addLayerInfo'));
@@ -106,6 +107,7 @@ define([
          * Initializes an infoTemplate on a layerInfo.layer object if it doesn't
          * exist already.
          * @param {object} layerInfo A cmv layerInfo object that contains a layer property
+         * @return {undefined}
          */
         addLayerInfo: function (layerInfo) {
             var lyrId = layerInfo.layer.id, layer = this.map.getLayer(lyrId), infoTemplate;
