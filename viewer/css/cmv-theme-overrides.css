@@ -159,10 +159,20 @@
     letter-spacing: 0;
     text-transform: none;
 }
-.cmv .simpleDirections .esriDirectionsButton:before {
-    font-family:'FontAwesome';
+.cmv .simpleDirections .esriStopsGetDirections:before {
+    content: '\f277';
+    font-family: 'FontAwesome';
     margin-right: 8px;
-    content: '\f277'
+}
+
+.cmv .simpleDirections .esriResultsPrint {
+    padding: 8px;
+}
+
+.cmv .simpleDirections .esriResultsPrint:before {
+    content: '\f02f';
+    font-family: 'FontAwesome';
+    font-size: 14px;
 }
 
 .cmv .simpleDirections .esriLinkButton {
