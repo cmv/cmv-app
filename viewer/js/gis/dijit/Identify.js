@@ -363,7 +363,7 @@ define([
             if (feature && infoTemplate && infoTemplate.info) {
                 array.forEach(infoTemplate.info.fieldInfos, function (info) {
                     if (typeof info.formatter === 'function') {
-                        feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes, feature.geometry);
+                        feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes, lang.clone(feature.geometry));
                     }
                 });
             }
