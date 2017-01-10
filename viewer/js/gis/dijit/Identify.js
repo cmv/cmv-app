@@ -126,6 +126,13 @@ define([
                             infoTemplate = this.getInfoTemplate(layer, layer.layerId);
                             if (infoTemplate) {
                                 layer.setInfoTemplate(infoTemplate);
+                                var fieldInfos = infoTemplate.info.fieldInfos;
+                                var formatters = array.filter(fieldInfos, function (info) {
+                                    return (info.formatter);
+                                });
+                                if (formatters.length > 0) {
+                                    layer.on('graphic-draw', lang.hitch(this, 'getFormattedFeature', layer.infoTemplate));
+                                }
                                 return;
                             }
                         }
@@ -343,18 +350,23 @@ define([
                             return;
                         }
                     }
-                    var feature = this.getFormattedFeature(result.feature);
+                    var feature = this.getFormattedFeature(result.feature.infoTemplate, result.feature);
                     fSet.push(feature);
                 }, this);
             }, this);
             this.map.infoWindow.setFeatures(fSet);
         },
-        getFormattedFeature: function (feature) {
-            array.forEach(feature.infoTemplate.info.fieldInfos, function (info) {
-                if (typeof info.formatter === 'function') {
-                    feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes);
-                }
-            });
+        getFormattedFeature: function (infoTemplate, feature) {
+            if (feature.graphic) {
+                feature = feature.graphic;
+            }
+            if (feature && infoTemplate && infoTemplate.info) {
+                array.forEach(infoTemplate.info.fieldInfos, function (info) {
+                    if (typeof info.formatter === 'function') {
+                        feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes, lang.clone(feature.geometry));
+                    }
+                });
+            }
             return feature;
         },
         identifyError: function (err) {
