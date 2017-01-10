@@ -46,6 +46,9 @@ define([
                     widget.widgetKey = widget.widgetKey || widget.id || key;
                     if (widget.include && (!this.widgets[widget.widgetKey]) && (array.indexOf(widgetTypes, widget.type) >= 0)) {
                         widget.position = (typeof (widget.position) !== 'undefined') ? widget.position : 10000;
+                        if ((widget.type === 'titlePane' || widget.type === 'contentPane') && !widget.placeAt) {
+                            widget.placeAt = 'left';
+                        }
                         widgets.push(widget);
                         this.widgets[key] = true; // will be replaced by actual widget once created
                     }
@@ -60,11 +63,14 @@ define([
             }
 
             for (var pane in this.panes) {
-                if (this.panes.hasOwnProperty(pane) && (pane !== 'outer' || pane !== 'center')) {
+                if (this.panes.hasOwnProperty(pane) && pane !== 'outer' && pane !== 'center') {
                     paneWidgets = getPaneWidgets(pane);
                     paneWidgets.sort(function (a, b) {
                         return a.position - b.position;
                     });
+                    if (paneWidgets.length > 0 && paneWidgets[0].position !== 0) {
+                        paneWidgets[0].position = 0;
+                    }
                     array.forEach(paneWidgets, function (paneWidget, i) {
                         this.widgetLoader(paneWidget, i);
                     }, this);
