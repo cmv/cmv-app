@@ -397,7 +397,7 @@ define([
                 include: true,
                 id: 'legend',
                 type: 'titlePane',
-                path: 'esri/dijit/Legend',
+                path: 'gis/dijit/Legend',
                 title: i18n.viewer.widgets.legend,
                 open: false,
                 position: 1,
