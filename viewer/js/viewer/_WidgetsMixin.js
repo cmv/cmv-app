@@ -63,7 +63,7 @@ define([
             }
 
             for (var pane in this.panes) {
-                if (this.panes.hasOwnProperty(pane) && (pane !== 'outer' || pane !== 'center')) {
+                if (this.panes.hasOwnProperty(pane) && pane !== 'outer' && pane !== 'center') {
                     paneWidgets = getPaneWidgets(pane);
                     paneWidgets.sort(function (a, b) {
                         return a.position - b.position;
