@@ -46,6 +46,9 @@ define([
                     widget.widgetKey = widget.widgetKey || widget.id || key;
                     if (widget.include && (!this.widgets[widget.widgetKey]) && (array.indexOf(widgetTypes, widget.type) >= 0)) {
                         widget.position = (typeof (widget.position) !== 'undefined') ? widget.position : 10000;
+                        if ((widget.type === 'titlePane' || widget.type === 'contentPane') && !widget.placeAt) {
+                            widget.placeAt = 'left';
+                        }
                         widgets.push(widget);
                         this.widgets[key] = true; // will be replaced by actual widget once created
                     }
