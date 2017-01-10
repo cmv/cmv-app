@@ -68,6 +68,9 @@ define([
                     paneWidgets.sort(function (a, b) {
                         return a.position - b.position;
                     });
+                    if (paneWidgets.length > 0 && paneWidgets[0].position !== 0) {
+                        paneWidgets[0].position = 0;
+                    }
                     array.forEach(paneWidgets, function (paneWidget, i) {
                         this.widgetLoader(paneWidget, i);
                     }, this);
