@@ -2,6 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/promise/all',
 
     'esri/arcgis/utils',
     'esri/units',
@@ -12,6 +13,7 @@ define([
     declare,
     lang,
     array,
+    promiseAll,
 
     arcgisUtils,
     units,
@@ -19,14 +21,19 @@ define([
     i18n
 ) {
     return declare(null, {
+        startup: function () {
+            this.inherited(arguments);
+            promiseAll([this.configDeferred, this.mapDeferred]).then(lang.hitch(this, '_initWebMap'));
+        },
 
-        _initWebMap: function (webMapId, container, webMapOptions) {
-            webMapOptions = webMapOptions || {};
+        _initWebMap: function () {
+            var webMapOptions = this.config.webMapOptions || {};
             if (!webMapOptions.mapOptions && this.config.mapOptions) {
                 webMapOptions.mapOptions = this.config.mapOptions;
             }
+            var container = dom.byId(this.config.layout.map) || 'mapCenter';
 
-            var mapDeferred = arcgisUtils.createMap(webMapId, container, webMapOptions);
+            var mapDeferred = arcgisUtils.createMap(this.config.webMapId, container, webMapOptions);
             mapDeferred.then(lang.hitch(this, function (response) {
                 this.webMap = {
                     clickEventHandle: response.clickEventHandle,

@@ -1,21 +1,35 @@
 /*eslint no-console: 0*/
 define([
     'dojo/_base/declare',
-    'dojo/_base/lang'
+    'dojo/_base/lang',
+    'dojo/Deferred'
 ], function (
     declare,
-    lang
+    lang,
+    Deferred
 ) {
     return declare(null, {
+        init: function () {
+
+            // create a set of deferreds that can be resolved by mixins
+            // other mixins can also create deferreds in their relevent constructors
+            this.configDeferred = new Deferred();
+
+            this.inherited(arguments);
+        },
 
         startup: function () {
+            this.init();
+            this.mapDeferred.then(function () {
+                console.log(' map deferred');
+            });
+            this.configDeferred.then(function () {
+                console.log(' config deferred');
+            });
+            this.layoutDeferred.then(function () {
+                console.log(' layout deferred');
+            });
             this.inherited(arguments);
-
-            // in _ConfigMixin
-            this.initConfigAsync().then(
-                lang.hitch(this, 'initConfigSuccess'),
-                lang.hitch(this, 'initConfigError')
-            );
         },
 
         //centralized error handler

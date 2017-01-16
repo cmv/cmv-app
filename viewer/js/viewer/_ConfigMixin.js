@@ -9,6 +9,13 @@ define([
 ) {
 
     return declare(null, {
+        startup: function () {
+            this.inherited(arguments);
+            this.initConfigAsync().then(
+                lang.hitch(this, 'initConfigSuccess'),
+                lang.hitch(this, 'initConfigError')
+            );
+        },
 
         initConfigAsync: function () {
             var returnDeferred = new Deferred();
@@ -30,10 +37,6 @@ define([
 
         initConfigSuccess: function (config) {
             this.config = config;
-
-            // in _WidgetsMixin
-            this.createWidgets(['loading']);
-
             if (config.isDebug) {
                 window.app = this; //dev only
             }
@@ -44,17 +47,7 @@ define([
                 defaultMode: config.defaultMapClickMode
             };
 
-            // in _LayoutMixin
-            this.initLayout();
-
-            // in _WidgetsMixin
-            this.createWidgets(['layout']);
-
-            // in _MapMixin
-            this.initMapAsync().then(
-                lang.hitch(this, 'initMapComplete'),
-                lang.hitch(this, 'initMapError')
-            );
+            this.configDeferred.resolve(config);
         },
 
         initConfigError: function (err) {

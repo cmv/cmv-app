@@ -5,6 +5,7 @@ define([
     'dojo/dom',
     'dojo/_base/array',
     'dojo/Deferred',
+    'dojo/promise/all',
 
     'esri/map',
 
@@ -17,11 +18,22 @@ define([
     dom,
     array,
     Deferred,
+    promiseAll,
 
     Map
 ) {
 
     return declare(null, {
+
+        init: function () {
+            this.inherited(arguments);
+            this.mapDeferred = new Deferred();
+        },
+
+        startup: function () {
+            this.inherited(arguments);
+            promiseAll([this.configDeferred, this.layoutDeferred]).then(lang.hitch(this, 'initMapAsync'));
+        },
 
         initMapAsync: function () {
             var returnDeferred = new Deferred();
@@ -39,7 +51,7 @@ define([
 
             if (this.config.webMapId) {
                 if (this._initWebMap) {
-                    mapDeferred = this._initWebMap(this.config.webMapId, container, this.config.webMapOptions);
+                    // mapDeferred = this._initWebMap(this.config.webMapId, container, this.config.webMapOptions);
                 } else {
                     returnWarnings.push('The "_WebMapMixin" Controller Mixin is required to use a webmap');
                     mapDeferred.resolve(returnWarnings);
@@ -195,7 +207,7 @@ define([
 
             if (this.map) {
                 // in _WidgetsMixin
-                this.createWidgets(['map', 'layer']);
+                // this.createWidgets(['map', 'layer']);
 
                 this.map.on('resize', function (evt) {
                     var pnt = evt.target.extent.getCenter();
@@ -205,10 +217,11 @@ define([
                 });
 
                 // in _LayoutsMixin
-                this.createPanes();
+                // this.createPanes();
 
                 // in _WidgetsMixin
-                this.createWidgets();
+                // this.createWidgets();
+                this.mapDeferred.resolve(this.map);
             }
 
         },

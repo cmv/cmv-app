@@ -11,6 +11,8 @@ define([
     'dojo/dom-class',
     'dojo/dom-geometry',
     'dojo/sniff',
+    'dojo/Deferred',
+    'dojo/promise/all',
 
     'put-selector',
 
@@ -33,6 +35,8 @@ define([
     domClass,
     domGeom,
     has,
+    Deferred,
+    promiseAll,
 
     put,
 
@@ -61,6 +65,14 @@ define([
             }
         },
         collapseButtons: {},
+        init: function () {
+            this.inherited(arguments);
+            this.layoutDeferred = new Deferred();
+        },
+        startup: function () {
+            this.inherited(arguments);
+            promiseAll([this.configDeferred]).then(lang.hitch(this, 'initLayout'));
+        },
 
         initLayout: function () {
             this.config.layout = this.config.layout || {};
@@ -69,6 +81,9 @@ define([
             this.addTitles();
             this.detectTouchDevices();
             this.initPanes();
+
+            // resolve the layout deferred
+            this.layoutDeferred.resolve();
         },
 
         // add topics for subscribing and publishing

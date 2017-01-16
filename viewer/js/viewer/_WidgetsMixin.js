@@ -34,6 +34,21 @@ define([
 
         widgets: {},
         widgetTypes: ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map', 'layer', 'layout', 'loading'],
+        init: function () {
+            this.inherited(arguments);
+            this.configDeferred.then(lang.hitch(this, 'createWidgets', ['loading']));
+        },
+        startup: function () {
+            this.inherited(arguments);
+            this.configDeferred.then(lang.hitch(this, function () {
+                if (this.mapDeferred) {
+                    this.mapDeferred.then(lang.hitch(this, 'createWidgets', ['map', 'layer']));
+                }
+                if (this.layoutDeferred) {
+                    this.layoutDeferred.then(lang.hitch(this, 'createWidgets', ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'layout']));
+                }
+            }));
+        },
 
         createWidgets: function (widgetTypes) {
             var widgets = [],
@@ -45,7 +60,7 @@ define([
                     var widget = lang.clone(this.config.widgets[key]);
                     widget.widgetKey = widget.widgetKey || widget.id || key;
                     if (widget.include && (!this.widgets[widget.widgetKey]) && (array.indexOf(widgetTypes, widget.type) >= 0)) {
-                        widget.position = (typeof (widget.position) !== 'undefined') ? widget.position : 10000;
+                        widget.position = (typeof(widget.position) !== 'undefined') ? widget.position : 10000;
                         if ((widget.type === 'titlePane' || widget.type === 'contentPane') && !widget.placeAt) {
                             widget.placeAt = 'left';
                         }
@@ -122,7 +137,7 @@ define([
             }
 
             // 2 ways to use require to accommodate widgets that may have an optional separate configuration file
-            if (typeof (widgetConfig.options) === 'string') {
+            if (typeof(widgetConfig.options) === 'string') {
                 require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
             } else {
                 require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
@@ -220,7 +235,7 @@ define([
                 options.id = parentId;
             }
             var placeAt = widgetConfig.placeAt;
-            if (typeof (placeAt) === 'string') {
+            if (typeof(placeAt) === 'string') {
                 placeAt = this.panes[placeAt];
             }
             if (!placeAt) {
@@ -261,7 +276,7 @@ define([
             var placeAt = widgetConfig.placeAt;
             if (!placeAt) {
                 placeAt = this.panes.left;
-            } else if (typeof (placeAt) === 'string') {
+            } else if (typeof(placeAt) === 'string') {
                 placeAt = this.panes[placeAt];
             }
             if (placeAt) {
