@@ -2,6 +2,8 @@ define([
     'dojo/_base/declare',
     'dojo/_base/array',
     'dojo/_base/lang',
+    'dojo/promise/all',
+    'dojo/Deferred',
 
     'put-selector',
 
@@ -15,6 +17,8 @@ define([
     declare,
     array,
     lang,
+    promiseAll,
+    Deferred,
 
     put,
 
@@ -34,20 +38,36 @@ define([
 
         widgets: {},
         widgetTypes: ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map', 'layer', 'layout', 'loading'],
-        init: function () {
-            this.inherited(arguments);
-            this.configDeferred.then(lang.hitch(this, 'createWidgets', ['loading']));
+        preStartup: function (wait) {
+
+            var waitDeferred;
+            if (wait) {
+                waitDeferred = new Deferred();
+
+                wait.then(lang.hitch(this, function () {
+                    // load loading widgets
+                    promiseAll(this.createWidgets(['loading'])).then(waitDeferred.resolve);
+                }));
+            } else {
+                var deferreds = this.createWidgets(['loading']);
+                if (deferreds.length) {
+                    waitDeferred = promiseAll(deferreds);
+                }
+            }
+
+            return this.inherited(arguments) || waitDeferred;
         },
         startup: function () {
             this.inherited(arguments);
-            this.configDeferred.then(lang.hitch(this, function () {
-                if (this.mapDeferred) {
-                    this.mapDeferred.then(lang.hitch(this, 'createWidgets', ['map', 'layer']));
-                }
-                if (this.layoutDeferred) {
-                    this.layoutDeferred.then(lang.hitch(this, 'createWidgets', ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'layout']));
-                }
-            }));
+            if (this.mapDeferred) {
+                this.mapDeferred.then(lang.hitch(this, 'createWidgets', ['map', 'layer']));
+            }
+            if (this.layoutDeferred) {
+                promiseAll([this.mapDeferred, this.layoutDeferred])
+                    .then(lang.hitch(this,
+                        'createWidgets', ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'layout']
+                    ));
+            }
         },
 
         createWidgets: function (widgetTypes) {
@@ -97,10 +117,14 @@ define([
             paneWidgets.sort(function (a, b) {
                 return a.position - b.position;
             });
-
+            var deferreds = [];
             array.forEach(paneWidgets, function (paneWidget, i) {
-                this.widgetLoader(paneWidget, i);
+                var def = this.widgetLoader(paneWidget, i);
+                if (def) {
+                    deferreds.push(def);
+                }
             }, this);
+            return deferreds;
         },
 
         widgetLoader: function (widgetConfig, position) {
@@ -137,11 +161,19 @@ define([
             }
 
             // 2 ways to use require to accommodate widgets that may have an optional separate configuration file
+            var deferred = new Deferred();
             if (typeof(widgetConfig.options) === 'string') {
-                require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
+                require([widgetConfig.options, widgetConfig.path], lang.hitch(this, function (options, WidgetClass) {
+                    deferred.resolve();
+                    this.createWidget(widgetConfig, options, WidgetClass);
+                }));
             } else {
-                require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
+                require([widgetConfig.path], lang.hitch(this, function (WidgetClass) {
+                    deferred.resolve();
+                    this.createWidget(widgetConfig, widgetConfig.options, WidgetClass);
+                }));
             }
+            return deferred;
         },
 
         createWidget: function (widgetConfig, options, WidgetClass) {

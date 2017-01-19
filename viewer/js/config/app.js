@@ -49,15 +49,16 @@
         //_MyCustomMixin
 
     ) {
-        var controller = new (declare([
-            _ControllerBase,
-            _ConfigMixin,
+        var App = declare([
             _LayoutMixin,
             _MapMixin,
             _WidgetsMixin,
 
-            _WebMapMixin
-        ]))();
-        controller.startup();
+            _WebMapMixin,
+            _ConfigMixin,
+            _ControllerBase
+        ]);
+        var app = new App();
+        app.startup();
     });
 })();

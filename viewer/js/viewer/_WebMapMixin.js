@@ -3,6 +3,7 @@ define([
     'dojo/_base/lang',
     'dojo/_base/array',
     'dojo/promise/all',
+    'dojo/dom',
 
     'esri/arcgis/utils',
     'esri/units',
@@ -14,6 +15,7 @@ define([
     lang,
     array,
     promiseAll,
+    dom,
 
     arcgisUtils,
     units,
@@ -23,7 +25,7 @@ define([
     return declare(null, {
         startup: function () {
             this.inherited(arguments);
-            promiseAll([this.configDeferred, this.mapDeferred]).then(lang.hitch(this, '_initWebMap'));
+            this.mapDeferred.then(lang.hitch(this, '_initWebMap'));
         },
 
         _initWebMap: function () {

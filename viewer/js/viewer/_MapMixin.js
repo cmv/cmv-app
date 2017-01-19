@@ -25,14 +25,14 @@ define([
 
     return declare(null, {
 
-        init: function () {
-            this.inherited(arguments);
+        preStartup: function () {
             this.mapDeferred = new Deferred();
+            return this.inherited(arguments);
         },
 
         startup: function () {
             this.inherited(arguments);
-            promiseAll([this.configDeferred, this.layoutDeferred]).then(lang.hitch(this, 'initMapAsync'));
+            this.layoutDeferred.then(lang.hitch(this, 'initMapAsync'));
         },
 
         initMapAsync: function () {
@@ -42,6 +42,7 @@ define([
             this._createMap(returnWarnings).then(
                 lang.hitch(this, '_createMapResult', returnDeferred, returnWarnings)
             );
+            returnDeferred.then(lang.hitch(this, 'initMapComplete'));
             return returnDeferred;
         },
 
@@ -49,17 +50,8 @@ define([
             var mapDeferred = new Deferred(),
                 container = dom.byId(this.config.layout.map) || 'mapCenter';
 
-            if (this.config.webMapId) {
-                if (this._initWebMap) {
-                    // mapDeferred = this._initWebMap(this.config.webMapId, container, this.config.webMapOptions);
-                } else {
-                    returnWarnings.push('The "_WebMapMixin" Controller Mixin is required to use a webmap');
-                    mapDeferred.resolve(returnWarnings);
-                }
-            } else {
-                this.map = new Map(container, this.config.mapOptions);
-                mapDeferred.resolve(returnWarnings);
-            }
+            this.map = new Map(container, this.config.mapOptions);
+            mapDeferred.resolve(returnWarnings);
             return mapDeferred;
         },
 
@@ -206,8 +198,6 @@ define([
             }
 
             if (this.map) {
-                // in _WidgetsMixin
-                // this.createWidgets(['map', 'layer']);
 
                 this.map.on('resize', function (evt) {
                     var pnt = evt.target.extent.getCenter();
@@ -216,11 +206,7 @@ define([
                     }, 100);
                 });
 
-                // in _LayoutsMixin
-                // this.createPanes();
-
-                // in _WidgetsMixin
-                // this.createWidgets();
+                // resolve the map deferred
                 this.mapDeferred.resolve(this.map);
             }
 

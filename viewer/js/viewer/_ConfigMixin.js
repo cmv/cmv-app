@@ -9,12 +9,41 @@ define([
 ) {
 
     return declare(null, {
-        startup: function () {
-            this.inherited(arguments);
-            this.initConfigAsync().then(
-                lang.hitch(this, 'initConfigSuccess'),
-                lang.hitch(this, 'initConfigError')
-            );
+        loadConfig: function (wait) {
+
+            // this will be used to make any inherited methods 'wait'
+            var waitDeferred;
+
+            if (wait) {
+                waitDeferred = new Deferred();
+
+                // if we need to wait for a previous deferred
+                // wait for it,
+                wait.then(lang.hitch(this, function () {
+
+                    // load the config
+                    this.initConfigAsync().then(lang.hitch(this, function () {
+
+                        // do some stuff
+                        this.initConfigSuccess(arguments);
+
+                        // resolve
+                        waitDeferred.resolve();
+                    }),
+                        lang.hitch(this, 'initConfigError')
+                    );
+
+                }));
+            } else {
+
+                waitDeferred = this.initConfigAsync();
+                waitDeferred.then(
+                    lang.hitch(this, 'initConfigSuccess'),
+                    lang.hitch(this, 'initConfigError')
+                );
+            }
+            // call any inherited methods or return a deferred
+            return this.inherited(arguments, [waitDeferred]) || waitDeferred;
         },
 
         initConfigAsync: function () {
@@ -46,8 +75,6 @@ define([
                 current: config.defaultMapClickMode,
                 defaultMode: config.defaultMapClickMode
             };
-
-            this.configDeferred.resolve(config);
         },
 
         initConfigError: function (err) {

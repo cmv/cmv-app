@@ -65,16 +65,12 @@ define([
             }
         },
         collapseButtons: {},
-        init: function () {
-            this.inherited(arguments);
+        preStartup: function () {
             this.layoutDeferred = new Deferred();
-        },
-        startup: function () {
-            this.inherited(arguments);
-            promiseAll([this.configDeferred]).then(lang.hitch(this, 'initLayout'));
+            return this.inherited(arguments);
         },
 
-        initLayout: function () {
+        startup: function () {
             this.config.layout = this.config.layout || {};
 
             this.addTopics();
@@ -84,6 +80,7 @@ define([
 
             // resolve the layout deferred
             this.layoutDeferred.resolve();
+            this.inherited(arguments);
         },
 
         // add topics for subscribing and publishing
@@ -186,7 +183,7 @@ define([
                     panes[key] = lang.mixin(this.defaultPanes[key], panes[key]);
                 }
             }
-                        // where to place the buttons
+            // where to place the buttons
             // either the center map pane or the outer pane?
             this.collapseButtonsPane = this.config.collapseButtonsPane || 'outer';
 
@@ -266,7 +263,10 @@ define([
                     }
 
                     if (!suppressEvent) {
-                        topic.publish('viewer/onTogglePane', {pane: id, show: show});
+                        topic.publish('viewer/onTogglePane', {
+                            pane: id,
+                            show: show
+                        });
                     }
                 }
             }
