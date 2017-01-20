@@ -29,7 +29,6 @@ define([
         },
 
         createMap: function () {
-            console.log('web map mixin');
             var webMapOptions = this.config.webMapOptions || {};
             if (!webMapOptions.mapOptions && this.config.mapOptions) {
                 webMapOptions.mapOptions = this.config.mapOptions;
