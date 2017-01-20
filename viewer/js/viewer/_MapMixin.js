@@ -47,6 +47,14 @@ define([
         },
 
         createMap: function (returnWarnings) {
+
+            // mixins override the default createMap method and return a deferred
+            var result = this.inherited(arguments);
+            if (result) {
+                return result;
+            }
+
+            // otherwise we can create the map
             var returnWarnings = [];
             var mapDeferred = new Deferred(),
                 container = dom.byId(this.config.layout.map) || 'mapCenter';
@@ -54,7 +62,7 @@ define([
             this.map = new Map(container, this.config.mapOptions);
 
             // let some other mixins modify or add map items async
-            var wait = this.inherited(arguments);
+            wait = this.inherited(arguments) || wait;
             if (wait) {
                 wait.then(function (warnings) {
                     // are warnings passed?

@@ -51,10 +51,10 @@
     ) {
         var App = declare([
             _LayoutMixin,
-            _MapMixin,
             _WidgetsMixin,
 
             _WebMapMixin,
+            _MapMixin,
             _ConfigMixin,
             _ControllerBase
         ]);
