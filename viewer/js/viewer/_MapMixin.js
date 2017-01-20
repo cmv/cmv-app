@@ -62,7 +62,7 @@ define([
             this.map = new Map(container, this.config.mapOptions);
 
             // let some other mixins modify or add map items async
-            wait = this.inherited(arguments) || wait;
+            var wait = this.inherited(arguments);
             if (wait) {
                 wait.then(function (warnings) {
                     // are warnings passed?
