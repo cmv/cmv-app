@@ -25,10 +25,10 @@ define([
     return declare(null, {
         startup: function () {
             this.inherited(arguments);
-            this.mapDeferred.then(lang.hitch(this, '_initWebMap'));
+            // this.mapDeferred.then(lang.hitch(this, '_initWebMap'));
         },
 
-        _initWebMap: function () {
+        createMap: function () {
             var webMapOptions = this.config.webMapOptions || {};
             if (!webMapOptions.mapOptions && this.config.mapOptions) {
                 webMapOptions.mapOptions = this.config.mapOptions;

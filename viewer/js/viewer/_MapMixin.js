@@ -39,19 +39,31 @@ define([
             var returnDeferred = new Deferred();
             var returnWarnings = [];
 
-            this._createMap(returnWarnings).then(
+            this.createMap(returnWarnings).then(
                 lang.hitch(this, '_createMapResult', returnDeferred, returnWarnings)
             );
             returnDeferred.then(lang.hitch(this, 'initMapComplete'));
             return returnDeferred;
         },
 
-        _createMap: function (returnWarnings) {
+        createMap: function (returnWarnings) {
+            var returnWarnings = [];
             var mapDeferred = new Deferred(),
                 container = dom.byId(this.config.layout.map) || 'mapCenter';
 
             this.map = new Map(container, this.config.mapOptions);
-            mapDeferred.resolve(returnWarnings);
+
+            // let some other mixins modify or add map items async
+            var wait = this.inherited(arguments);
+            if (wait) {
+                wait.then(function (warnings) {
+                    // are warnings passed?
+                    // returnWarnings.push(warnings);
+                    mapDeferred.resolve(returnWarnings);
+                });
+            } else {
+                mapDeferred.resolve(returnWarnings);
+            }
             return mapDeferred;
         },
 
