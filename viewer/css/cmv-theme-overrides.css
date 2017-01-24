@@ -26,48 +26,9 @@
 }
 
 /* icons for the sidebar */
-
-.cmv .dijitTitlePane .dijitTitlePaneTextNode:before,
-.cmv .dijitDialogTitleBar:before {
-    font-family:'FontAwesome';
-    margin-right: 8px;
-}
-
-.cmv #bookmarks_parent .dijitTitlePaneTextNode:before {
-    content: '\f02e'
-}
-.cmv #directions_parent .dijitTitlePaneTextNode:before {
-    content: '\f277'
-}
-.cmv #draw_parent .dijitTitlePaneTextNode:before {
-    content: '\f1fc'
-}
-.cmv #editor_parent .dijitTitlePaneTextNode:before {
-    content: '\f040'
-}
-.cmv #find_parent .dijitTitlePaneTextNode:before {
-    content: '\f002';
-}
-.cmv #help_parent .dijitTitlePaneTextNode:before {
-    content: '\f059'
-}
-.cmv #identify_parent .dijitTitlePaneTextNode:before {
-    content: '\f05a'
-}
-.cmv #layerControl_parent .dijitTitlePaneTextNode:before{
-    content: '\f00b';
-}
-.cmv #legend_parent .dijitTitlePaneTextNode:before {
-    content: '\f03e'
-}
-.cmv #measurement_parent .dijitTitlePaneTextNode:before {
-    content: '\f065'
-}
-.cmv #print_parent .dijitTitlePaneTextNode:before {
-    content: '\f02f';
-}
-.cmv #streetview_parent .dijitTitlePaneTextNode:before {
-    content: '\f21d';
+.cmv .dijitTitlePane .dijitTitlePaneTitle .titlePaneIcon {
+    margin: 0 0 0 8px;
+    padding-top: 2px;
 }
 /* end custom icons */
 

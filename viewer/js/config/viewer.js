@@ -308,6 +308,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/Identify',
                 title: i18n.viewer.widgets.identify,
+                iconClass: 'fa-info-circle',
                 open: false,
                 position: 3,
                 options: 'config/identify'
@@ -399,6 +400,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/Legend',
                 title: i18n.viewer.widgets.legend,
+                iconClass: 'fa-picture-o',
                 open: false,
                 position: 1,
                 options: {
@@ -412,6 +414,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/LayerControl',
                 title: i18n.viewer.widgets.layerControl,
+                iconClass: 'fa-th-list',
                 open: false,
                 position: 0,
                 options: {
@@ -438,6 +441,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/Bookmarks',
                 title: i18n.viewer.widgets.bookmarks,
+                iconClass: 'fa-bookmark',
                 open: false,
                 position: 2,
                 options: 'config/bookmarks'
@@ -449,6 +453,7 @@ define([
                 canFloat: true,
                 path: 'gis/dijit/Find',
                 title: i18n.viewer.widgets.find,
+                iconClass: 'fa-search',
                 open: false,
                 position: 3,
                 options: 'config/find'
@@ -460,6 +465,7 @@ define([
                 canFloat: true,
                 path: 'gis/dijit/Draw',
                 title: i18n.viewer.widgets.draw,
+                iconClass: 'fa-paint-brush',
                 open: false,
                 position: 4,
                 options: {
@@ -474,6 +480,7 @@ define([
                 canFloat: true,
                 path: 'gis/dijit/Measurement',
                 title: i18n.viewer.widgets.measure,
+                iconClass: 'fa-expand',
                 open: false,
                 position: 5,
                 options: {
@@ -490,6 +497,7 @@ define([
                 canFloat: true,
                 path: 'gis/dijit/Print',
                 title: i18n.viewer.widgets.print,
+                iconClass: 'fa-print',
                 open: false,
                 position: 6,
                 options: {
@@ -508,6 +516,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/Directions',
                 title: i18n.viewer.widgets.directions,
+                iconClass: 'fa-map-signs',
                 open: false,
                 position: 7,
                 options: {
@@ -529,6 +538,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/Editor',
                 title: i18n.viewer.widgets.editor,
+                iconClass: 'fa-pencil',
                 open: false,
                 position: 8,
                 options: {
@@ -558,6 +568,7 @@ define([
                 position: 9,
                 path: 'gis/dijit/StreetView',
                 title: i18n.viewer.widgets.streetview,
+                iconClass: 'fa-street-view',
                 paneOptions: {
                     resizable: true,
                     resizeOptions: {
