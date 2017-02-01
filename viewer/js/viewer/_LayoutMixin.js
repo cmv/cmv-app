@@ -77,6 +77,8 @@ define([
             this.addTitles();
             this.detectTouchDevices();
             this.initPanes();
+            
+            this.mapDeferred.then(lang.hitch(this, 'createPanes'));
 
             // resolve the layout deferred
             this.layoutDeferred.resolve();
