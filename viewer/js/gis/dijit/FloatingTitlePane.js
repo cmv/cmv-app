@@ -36,6 +36,11 @@ define([
                 this.createDomNodes();
                 this.own(on(window, 'resize', lang.hitch(this, '_endDrag')));
             }
+            if (this.iconClass) {
+                this.iconNode = domConstruct.create('span', {
+                    'class': 'titlePaneIcon fa fa-fw ' + this.iconClass
+                }, this.titleNode, 'before');
+            }
             this.own(topic.subscribe('titlePane/event', lang.hitch(this, '_updateWidgetSidebarPosition')));
             this.own(aspect.after(this, 'toggle', lang.hitch(this, '_afterToggle')));
             this.inherited(arguments);

@@ -259,6 +259,7 @@ define([
             var tp,
                 options = lang.mixin({
                     title: widgetConfig.title || 'Widget',
+                    iconClass: widgetConfig.iconClass,
                     open: widgetConfig.open || false,
                     canFloat: widgetConfig.canFloat || false,
                     resizable: widgetConfig.resizable || false
