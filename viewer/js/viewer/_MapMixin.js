@@ -5,6 +5,7 @@ define([
     'dojo/dom',
     'dojo/_base/array',
     'dojo/Deferred',
+    'dojo/promise/all',
 
     'esri/map',
 
@@ -17,35 +18,58 @@ define([
     dom,
     array,
     Deferred,
+    promiseAll,
 
     Map
 ) {
 
     return declare(null, {
 
+        preStartup: function () {
+            this.mapDeferred = new Deferred();
+            return this.inherited(arguments);
+        },
+
+        startup: function () {
+            this.inherited(arguments);
+            this.layoutDeferred.then(lang.hitch(this, 'initMapAsync'));
+        },
+
         initMapAsync: function () {
             var returnDeferred = new Deferred();
             var returnWarnings = [];
 
-            this._createMap(returnWarnings).then(
+            this.createMap(returnWarnings).then(
                 lang.hitch(this, '_createMapResult', returnDeferred, returnWarnings)
             );
+            returnDeferred.then(lang.hitch(this, 'initMapComplete'));
             return returnDeferred;
         },
 
-        _createMap: function (returnWarnings) {
+        createMap: function (returnWarnings) {
+
+            // mixins override the default createMap method and return a deferred
+            var result = this.inherited(arguments);
+            if (result) {
+                return result;
+            }
+
+            // otherwise we can create the map
+            var returnWarnings = [];
             var mapDeferred = new Deferred(),
                 container = dom.byId(this.config.layout.map) || 'mapCenter';
 
-            if (this.config.webMapId) {
-                if (this._initWebMap) {
-                    mapDeferred = this._initWebMap(this.config.webMapId, container, this.config.webMapOptions);
-                } else {
-                    returnWarnings.push('The "_WebMapMixin" Controller Mixin is required to use a webmap');
+            this.map = new Map(container, this.config.mapOptions);
+
+            // let some other mixins modify or add map items async
+            var wait = this.inherited(arguments);
+            if (wait) {
+                wait.then(function (warnings) {
+                    // are warnings passed?
+                    // returnWarnings.push(warnings);
                     mapDeferred.resolve(returnWarnings);
-                }
+                });
             } else {
-                this.map = new Map(container, this.config.mapOptions);
                 mapDeferred.resolve(returnWarnings);
             }
             return mapDeferred;
@@ -194,8 +218,6 @@ define([
             }
 
             if (this.map) {
-                // in _WidgetsMixin
-                this.createWidgets(['map', 'layer']);
 
                 this.map.on('resize', function (evt) {
                     var pnt = evt.target.extent.getCenter();
@@ -204,11 +226,8 @@ define([
                     }, 100);
                 });
 
-                // in _LayoutsMixin
-                this.createPanes();
-
-                // in _WidgetsMixin
-                this.createWidgets();
+                // resolve the map deferred
+                this.mapDeferred.resolve(this.map);
             }
 
         },

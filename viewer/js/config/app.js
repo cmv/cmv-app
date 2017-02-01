@@ -49,15 +49,28 @@
         //_MyCustomMixin
 
     ) {
-        var controller = new (declare([
-            _ControllerBase,
-            _ConfigMixin,
-            _LayoutMixin,
-            _MapMixin,
-            _WidgetsMixin,
+        var App = declare([
 
-            _WebMapMixin
-        ]))();
-        controller.startup();
+            // add custom mixins here...note order may be important and
+            // overriding certain methods incorrectly may break the app
+            // First on the list are last called last, for instance the startup
+            // method on _ControllerBase is called FIRST, and _LayoutMixin is called LAST
+            // for the most part they are interchangeable, except _ConfigMixin
+            // and _ControllerBase
+            //
+            _LayoutMixin,
+            _WidgetsMixin,
+            // _WebMapMixin,
+            _MapMixin,
+
+            // configMixin should be right before _ControllerBase so it is
+            // called first to initialize the config object
+            _ConfigMixin,
+
+            // controller base needs to be last
+            _ControllerBase
+        ]);
+        var app = new App();
+        app.startup();
     });
 })();
