@@ -235,17 +235,17 @@ define([
             }
 
 
-            array.forEach(this.layers, lang.hitch(this, function (layer) {
-                var layerIds = this.getLayerIds(layer, selectedLayer);
+            array.forEach(this.layers, lang.hitch(this, function (lyr) {
+                var layerIds = this.getLayerIds(lyr, selectedLayer);
                 if (layerIds.length > 0) {
                     var params = lang.clone(identifyParams);
-                    params.layerDefinitions = layer.ref.layerDefinitions;
+                    params.layerDefinitions = lyr.ref.layerDefinitions;
                     params.layerIds = layerIds;
-                    if (layer.ref.timeInfo && layer.ref.timeInfo.timeExtent && this.map.timeExtent) {
+                    if (lyr.ref.timeInfo && lyr.ref.timeInfo.timeExtent && this.map.timeExtent) {
                         params.timeExtent = new TimeExtent(this.map.timeExtent.startTime, this.map.timeExtent.endTime);
                     }
-                    identifies.push(layer.identifyTask.execute(params));
-                    identifiedlayers.push(layer);
+                    identifies.push(lyr.identifyTask.execute(params));
+                    identifiedlayers.push(lyr);
                 }
             }));
 
