@@ -55,7 +55,6 @@ define([
             }
 
             // otherwise we can create the map
-            var returnWarnings = [];
             var mapDeferred = new Deferred(),
                 container = dom.byId(this.config.layout.map) || 'mapCenter';
 
@@ -64,7 +63,7 @@ define([
             // let some other mixins modify or add map items async
             var wait = this.inherited(arguments);
             if (wait) {
-                wait.then(function (warnings) {
+                wait.then(function () {
                     // are warnings passed?
                     // returnWarnings.push(warnings);
                     mapDeferred.resolve(returnWarnings);

@@ -31,9 +31,9 @@
         'viewer/_ConfigMixin', // manage the Configuration
         'viewer/_LayoutMixin', // build and manage the Page Layout and User Interface
         'viewer/_MapMixin', // build and manage the Map
-        'viewer/_WidgetsMixin', // build and manage the Widgets
+        'viewer/_WidgetsMixin' // build and manage the Widgets
 
-        'viewer/_WebMapMixin' // for WebMaps
+        // 'viewer/_WebMapMixin' // for WebMaps
         //'config/_customMixin'
 
     ], function (
@@ -43,9 +43,9 @@
         _ConfigMixin,
         _LayoutMixin,
         _MapMixin,
-        _WidgetsMixin,
+        _WidgetsMixin
 
-        _WebMapMixin
+        // _WebMapMixin
         //_MyCustomMixin
 
     ) {

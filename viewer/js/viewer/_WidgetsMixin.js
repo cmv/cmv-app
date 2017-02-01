@@ -50,7 +50,7 @@ define([
                 }));
             } else {
                 var deferreds = this.createWidgets(['loading']);
-                if (deferreds.length) {
+                if (deferreds && deferreds.length) {
                     waitDeferred = promiseAll(deferreds);
                 }
             }
@@ -139,7 +139,7 @@ define([
                     source: 'Controller',
                     error: 'Widget type "' + widgetConfig.type + '" (' + widgetConfig.title + ') at position ' + position + ' is not supported.'
                 });
-                return;
+                return null;
             }
 
             if (position) {
