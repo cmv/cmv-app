@@ -25,7 +25,7 @@ define([
 
     return declare(null, {
 
-        preStartup: function () {
+        postConfig: function () {
             this.mapDeferred = new Deferred();
             return this.inherited(arguments);
         },

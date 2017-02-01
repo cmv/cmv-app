@@ -65,7 +65,7 @@ define([
             }
         },
         collapseButtons: {},
-        preStartup: function () {
+        postConfig: function () {
             this.layoutDeferred = new Deferred();
             return this.inherited(arguments);
         },
@@ -77,7 +77,7 @@ define([
             this.addTitles();
             this.detectTouchDevices();
             this.initPanes();
-            
+
             this.mapDeferred.then(lang.hitch(this, 'createPanes'));
 
             // resolve the layout deferred

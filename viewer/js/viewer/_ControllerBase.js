@@ -7,6 +7,7 @@ define([
     declare, lang, Deferred
 ) {
     return declare(null, {
+
         /**
          * A method run before anything else, can be inherited by mixins to
          * load and process the config sync or async
@@ -22,8 +23,31 @@ define([
          * @return {undefined | Deferred} If the operation is async it should return
          * a deferred, otherwise it should return the value of `this.inherited(arguments)`
          */
-        preStartup: function () {
+        postConfig: function () {
             return this.inherited(arguments);
+        },
+        /**
+         * Start the application mixin chain, once the
+         * startupDeferred is resolved
+         * @return {undefined}
+         */
+        startup: function () {
+
+            // cache the inherited
+            var inherited = this.getInherited(arguments);
+
+            // load config and process it
+            this.startupDeferred = this.executeSync([
+                this.loadConfig,
+                this.postConfig
+            ]);
+
+            // wait for any loading to complete
+            this.startupDeferred.then(lang.hitch(this, function () {
+
+                // start up the mixin chain
+                inherited.apply(this);
+            }));
         },
         /**
          * executes an array of asynchronous methods synchronously
@@ -50,21 +74,6 @@ define([
                 this.executeSync(methods, deferred);
             }
             return deferred;
-
-        },
-        startup: function () {
-
-            var inherited = this.getInherited(arguments);
-            this.executeSync([
-                this.loadConfig,
-                this.preStartup
-            ]).then(lang.hitch(this, function () {
-                console.log(this);
-
-                // start up the mixin chain
-                inherited.apply(this);
-            }));
-
 
         },
 
