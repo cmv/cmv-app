@@ -78,7 +78,7 @@ define([
             sliderStyle: 'small'
         },
 
-        webMapId: '880a967872114b44a63c207df10e0a75',  // High Cost Mortgage
+        //webMapId: 'ef9c7fbda731474d98647bebb4b33c20',  // High Cost Mortgage
         // webMapOptions: {},
 
         // panes: {
@@ -273,16 +273,6 @@ define([
         }],
         // set include:true to load. For titlePane type set position the the desired order in the sidebar
         widgets: {
-            // a widget that loads and runs before the app
-            // loader: {
-            //     type: 'loading',
-            //     path: 'dijit/_WidgetBase',
-            //     options: {
-            //         constructor: function () {
-            //             alert('Preload!');
-            //         }
-            //     }
-            // },
             growler: {
                 include: true,
                 id: 'growler',
