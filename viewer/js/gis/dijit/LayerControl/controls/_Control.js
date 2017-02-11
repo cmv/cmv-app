@@ -10,6 +10,7 @@ define([
     'dojo/dom-attr',
     'dojo/fx',
     'dojo/html',
+    'dijit/MenuItem',
     './../plugins/LayerMenu',
     'dojo/text!./templates/Control.html'
 ], function (
@@ -24,6 +25,7 @@ define([
     domAttr,
     fx,
     html,
+    MenuItem,
     LayerMenu,
     template
 ) {
@@ -91,6 +93,7 @@ define([
                     leftClickToOpen: true
                 });
                 this.layerMenu.startup();
+                this._initCustomMenu();
             } else {
                 domClass.remove(this.menuNode, 'fa, layerControlMenuIcon, ' + this.icons.menu);
                 domStyle.set(this.menuClickNode, 'cursor', 'default');
@@ -116,6 +119,21 @@ define([
                 layer.on('update-end', lang.hitch(this, '_updateEnd')),
                 layer.on('visibility-change', lang.hitch(this, '_visibilityChange'))
             );
+        },
+        _initCustomMenu: function () {
+            array.forEach(this.controlOptions.menu, lang.hitch(this, '_addCustomMenuItem', this.layerMenu));
+        },
+        _addCustomMenuItem: function (menu, menuItem) {
+            //create the menu item
+            var item = new MenuItem(menuItem);
+            item.set('onClick', lang.hitch(this, function () {
+                topic.publish('layerControl/' + menuItem.topic, {
+                    layer: this.layer,
+                    iconNode: this.iconNode,
+                    menuItem: item
+                });
+            }));
+            menu.addChild(item);
         },
         // add on event to expandClickNode
         _expandClick: function () {
