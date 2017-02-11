@@ -5,7 +5,6 @@ define([
     'dojo/dom',
     'dojo/_base/array',
     'dojo/Deferred',
-    'dojo/promise/all',
 
     'esri/map',
 
@@ -18,7 +17,6 @@ define([
     dom,
     array,
     Deferred,
-    promiseAll,
 
     Map
 ) {
