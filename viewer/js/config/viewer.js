@@ -54,13 +54,17 @@ define([
     topic.subscribe('layerControl/hello', function (event) {
         topic.publish('growler/growl', {
             title: 'Hello!',
-            message: event.layer._titleForLegend + ' ' + event.subLayer.name + ' says hello'
+            message: event.layer._titleForLegend + ' ' +
+            (event.subLayer ? event.subLayer.name : '') +
+            ' says hello'
         });
     });
     topic.subscribe('layerControl/goodbye', function (event) {
         topic.publish('growler/growl', {
             title: 'Goodbye!',
-            message: event.layer._titleForLegend + ' ' + event.subLayer.name + ' says goodbye'
+            message: event.layer._titleForLegend + ' ' +
+            (event.subLayer ? event.subLayer.name : '') +
+            ' says goodbye'
         });
     });
 
@@ -163,6 +167,13 @@ define([
                 visible: true,
                 outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
                 mode: 0
+            },
+            layerControlLayerInfos: {
+                menu: [{
+                    topic: 'hello',
+                    label: 'Say Hello Custom',
+                    iconClass: 'fa fa-smile-o'
+                }]
             }
         }, {
             type: 'dynamic',
@@ -431,6 +442,11 @@ define([
                             topic: 'goodbye',
                             iconClass: 'fa fa-frown-o',
                             label: 'Say goodbye'
+                        }],
+                        feature: [{
+                            topic: 'hello',
+                            iconClass: 'fa fa-smile-o',
+                            label: 'Say Hello'
                         }]
                     }
                 }
