@@ -91,7 +91,8 @@ define([
         _initCustomMenu: function () {
             // add custom sublayer menu items if we only have one sublayer
             if (!this._hasSublayers) {
-                array.forEach(this.controlOptions.menu, lang.hitch(this, '_addMenuItem', this.layerMenu));
+                array.forEach(this.controlOptions.subLayerMenu, lang.hitch(this, '_addCustomMenuItem', this.layerMenu));
+                this.layerMenu.addChild(new MenuSeparator());
             }
         },
         // toggle all sublayers on/off
