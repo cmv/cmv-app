@@ -2,6 +2,8 @@ define([
     'dojo/_base/declare',
     'dojo/_base/array',
     'dojo/_base/lang',
+    'dojo/promise/all',
+    'dojo/Deferred',
 
     'put-selector',
 
@@ -15,6 +17,8 @@ define([
     declare,
     array,
     lang,
+    promiseAll,
+    Deferred,
 
     put,
 
@@ -34,6 +38,35 @@ define([
 
         widgets: {},
         widgetTypes: ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map', 'layer', 'layout', 'loading'],
+        postConfig: function (wait) {
+
+            var waitDeferred;
+            if (wait) {
+                waitDeferred = new Deferred();
+
+                wait.then(lang.hitch(this, function () {
+                    // load loading widgets
+                    promiseAll(this.createWidgets(['loading'])).then(waitDeferred.resolve);
+                }));
+            } else {
+                var deferreds = this.createWidgets(['loading']);
+                if (deferreds && deferreds.length) {
+                    waitDeferred = promiseAll(deferreds);
+                }
+            }
+
+            return this.inherited(arguments) || waitDeferred;
+        },
+        startup: function () {
+            this.inherited(arguments);
+            if (this.mapDeferred) {
+                this.mapDeferred.then(lang.hitch(this, 'createWidgets', ['map', 'layer']));
+            }
+            if (this.layoutDeferred) {
+                promiseAll([this.mapDeferred, this.layoutDeferred])
+                    .then(lang.hitch(this, 'createWidgets', null));
+            }
+        },
 
         createWidgets: function (widgetTypes) {
             var widgets = [],
@@ -45,7 +78,7 @@ define([
                     var widget = lang.clone(this.config.widgets[key]);
                     widget.widgetKey = widget.widgetKey || widget.id || key;
                     if (widget.include && (!this.widgets[widget.widgetKey]) && (array.indexOf(widgetTypes, widget.type) >= 0)) {
-                        widget.position = (typeof (widget.position) !== 'undefined') ? widget.position : 10000;
+                        widget.position = (typeof(widget.position) !== 'undefined') ? widget.position : 10000;
                         if ((widget.type === 'titlePane' || widget.type === 'contentPane') && !widget.placeAt) {
                             widget.placeAt = 'left';
                         }
@@ -82,10 +115,14 @@ define([
             paneWidgets.sort(function (a, b) {
                 return a.position - b.position;
             });
-
+            var deferreds = [];
             array.forEach(paneWidgets, function (paneWidget, i) {
-                this.widgetLoader(paneWidget, i);
+                var def = this.widgetLoader(paneWidget, i);
+                if (def) {
+                    deferreds.push(def);
+                }
             }, this);
+            return deferreds;
         },
 
         widgetLoader: function (widgetConfig, position) {
@@ -100,7 +137,7 @@ define([
                     source: 'Controller',
                     error: 'Widget type "' + widgetConfig.type + '" (' + widgetConfig.title + ') at position ' + position + ' is not supported.'
                 });
-                return;
+                return null;
             }
 
             if (position) {
@@ -122,11 +159,19 @@ define([
             }
 
             // 2 ways to use require to accommodate widgets that may have an optional separate configuration file
-            if (typeof (widgetConfig.options) === 'string') {
-                require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
+            var deferred = new Deferred();
+            if (typeof(widgetConfig.options) === 'string') {
+                require([widgetConfig.options, widgetConfig.path], lang.hitch(this, function (options, WidgetClass) {
+                    deferred.resolve();
+                    this.createWidget(widgetConfig, options, WidgetClass);
+                }));
             } else {
-                require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
+                require([widgetConfig.path], lang.hitch(this, function (WidgetClass) {
+                    deferred.resolve();
+                    this.createWidget(widgetConfig, widgetConfig.options, WidgetClass);
+                }));
             }
+            return deferred;
         },
 
         createWidget: function (widgetConfig, options, WidgetClass) {
@@ -221,7 +266,7 @@ define([
                 options.id = parentId;
             }
             var placeAt = widgetConfig.placeAt;
-            if (typeof (placeAt) === 'string') {
+            if (typeof(placeAt) === 'string') {
                 placeAt = this.panes[placeAt];
             }
             if (!placeAt) {
@@ -262,7 +307,7 @@ define([
             var placeAt = widgetConfig.placeAt;
             if (!placeAt) {
                 placeAt = this.panes.left;
-            } else if (typeof (placeAt) === 'string') {
+            } else if (typeof(placeAt) === 'string') {
                 placeAt = this.panes[placeAt];
             }
             if (placeAt) {
