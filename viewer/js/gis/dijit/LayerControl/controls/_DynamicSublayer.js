@@ -84,8 +84,7 @@ define([
             //set up menu
             if (this.control.controlOptions.menu &&
                     this.control.controlOptions.menu.length) {
-                domClass.add(this.labelNode, 'menuLink');
-                domClass.add(this.iconNode, 'menuLink');
+                domClass.add(this.labelNode, 'has-menu');
                 this.menu = new Menu({
                     contextMenuForWindow: false,
                     targetNodeIds: [this.labelNode],
