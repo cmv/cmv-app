@@ -43,7 +43,7 @@
         _ConfigMixin,
         _LayoutMixin,
         _MapMixin,
-        _WidgetsMixin,
+        _WidgetsMixin
 
         // _WebMapMixin
         //_MyCustomMixin

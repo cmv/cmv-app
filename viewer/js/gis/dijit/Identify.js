@@ -18,6 +18,7 @@ define([
     'esri/dijit/PopupTemplate',
     'esri/layers/FeatureLayer',
     'esri/TimeExtent',
+    'dojo/Deferred',
     'dojo/text!./Identify/templates/Identify.html',
     'dojo/i18n!./Identify/nls/resource',
     './Identify/Formatters',
@@ -25,7 +26,7 @@ define([
     'dijit/form/Form',
     'dijit/form/FilteringSelect',
     'xstyle/css!./Identify/css/Identify.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, FeatureLayer, TimeExtent, IdentifyTemplate, i18n, Formatters) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, FeatureLayer, TimeExtent, Deferred, IdentifyTemplate, i18n, Formatters) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -133,7 +134,6 @@ define([
                                 if (formatters.length > 0) {
                                     layer.on('graphic-draw', lang.hitch(this, 'getFormattedFeature', layer.infoTemplate));
                                 }
-                                return;
                             }
                         }
                     }
@@ -203,8 +203,27 @@ define([
             }
         },
         executeIdentifyTask: function (evt) {
+
+
+            var mapPoint = evt.mapPoint;
+            var identifyParams = this.createIdentifyParams(mapPoint);
+            var identifies = [];
+            var identifiedlayers = [];
+            var selectedLayer = this.getSelectedLayer();
+
+
             if (!this.checkForGraphicInfoTemplate(evt)) {
-                return;
+                // return;
+                var layer = array.filter(this.layers, function (l) {
+                    return l.ref.id === evt.graphic._layer.id;
+                })[0];
+                if (!layer) {
+                    return;
+                }
+                identifiedlayers.push(layer);
+                var d = new Deferred();
+                identifies.push(d.promise);
+                d.resolve([{feature: evt.graphic}]);
             }
 
             this.map.infoWindow.hide();
@@ -215,23 +234,18 @@ define([
                 return;
             }
 
-            var mapPoint = evt.mapPoint;
-            var identifyParams = this.createIdentifyParams(mapPoint);
-            var identifies = [];
-            var identifiedlayers = [];
-            var selectedLayer = this.getSelectedLayer();
 
-            array.forEach(this.layers, lang.hitch(this, function (layer) {
-                var layerIds = this.getLayerIds(layer, selectedLayer);
+            array.forEach(this.layers, lang.hitch(this, function (lyr) {
+                var layerIds = this.getLayerIds(lyr, selectedLayer);
                 if (layerIds.length > 0) {
                     var params = lang.clone(identifyParams);
-                    params.layerDefinitions = layer.ref.layerDefinitions;
+                    params.layerDefinitions = lyr.ref.layerDefinitions;
                     params.layerIds = layerIds;
-                    if (layer.ref.timeInfo && layer.ref.timeInfo.timeExtent && this.map.timeExtent) {
+                    if (lyr.ref.timeInfo && lyr.ref.timeInfo.timeExtent && this.map.timeExtent) {
                         params.timeExtent = new TimeExtent(this.map.timeExtent.startTime, this.map.timeExtent.endTime);
                     }
-                    identifies.push(layer.identifyTask.execute(params));
-                    identifiedlayers.push(layer);
+                    identifies.push(lyr.identifyTask.execute(params));
+                    identifiedlayers.push(lyr);
                 }
             }));
 
@@ -383,7 +397,7 @@ define([
         getInfoTemplate: function (layer, layerId, result) {
             var popup, config;
             if (result) {
-                layerId = result.layerId;
+                layerId = result.layerId || layer.layerId;
             } else if (layerId === null) {
                 layerId = layer.layerId;
             }

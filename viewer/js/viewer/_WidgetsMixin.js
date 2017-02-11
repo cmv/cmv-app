@@ -38,7 +38,7 @@ define([
 
         widgets: {},
         widgetTypes: ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map', 'layer', 'layout', 'loading'],
-        preStartup: function (wait) {
+        postConfig: function (wait) {
 
             var waitDeferred;
             if (wait) {
@@ -50,7 +50,7 @@ define([
                 }));
             } else {
                 var deferreds = this.createWidgets(['loading']);
-                if (deferreds.length) {
+                if (deferreds && deferreds.length) {
                     waitDeferred = promiseAll(deferreds);
                 }
             }
@@ -257,6 +257,7 @@ define([
             var tp,
                 options = lang.mixin({
                     title: widgetConfig.title || 'Widget',
+                    iconClass: widgetConfig.iconClass,
                     open: widgetConfig.open || false,
                     canFloat: widgetConfig.canFloat || false,
                     resizable: widgetConfig.resizable || false
