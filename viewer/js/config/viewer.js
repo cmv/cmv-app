@@ -55,16 +55,16 @@ define([
         topic.publish('growler/growl', {
             title: 'Hello!',
             message: event.layer._titleForLegend + ' ' +
-            (event.subLayer ? event.subLayer.name : '') +
-            ' says hello'
+                (event.subLayer ? event.subLayer.name : '') +
+                ' says hello'
         });
     });
     topic.subscribe('layerControl/goodbye', function (event) {
         topic.publish('growler/growl', {
             title: 'Goodbye!',
             message: event.layer._titleForLegend + ' ' +
-            (event.subLayer ? event.subLayer.name : '') +
-            ' says goodbye'
+                (event.subLayer ? event.subLayer.name : '') +
+                ' says goodbye'
         });
     });
 
@@ -218,7 +218,7 @@ define([
                 expanded: true,
 
                 //override the menu on this particular layer
-                menu: [{
+                subLayerMenu: [{
                     topic: 'hello',
                     label: 'Say Hello',
                     iconClass: 'fa fa-smile-o'
@@ -434,7 +434,15 @@ define([
                     separated: true,
                     vectorReorder: true,
                     overlayReorder: true,
-
+                    // create a custom menu entry in all of these feature types
+                    // the custom menu item will publish a topic when clicked
+                    menu: {
+                        feature: [{
+                            topic: 'hello',
+                            iconClass: 'fa fa-smile-o',
+                            label: 'Say Hello'
+                        }]
+                    },
                     //create a example sub layer menu that will
                     //apply to all layers of type 'dynamic'
                     subLayerMenu: {
@@ -442,11 +450,6 @@ define([
                             topic: 'goodbye',
                             iconClass: 'fa fa-frown-o',
                             label: 'Say goodbye'
-                        }],
-                        feature: [{
-                            topic: 'hello',
-                            iconClass: 'fa fa-smile-o',
-                            label: 'Say Hello'
                         }]
                     }
                 }

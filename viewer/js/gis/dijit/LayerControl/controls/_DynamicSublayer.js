@@ -82,15 +82,15 @@ define([
                 this._handlers.push(this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange')));
             }
             //set up menu
-            if (this.control.controlOptions.menu &&
-                    this.control.controlOptions.menu.length) {
+            if (this.control.controlOptions.subLayerMenu &&
+                    this.control.controlOptions.subLayerMenu.length) {
                 domClass.add(this.labelNode, 'has-menu');
                 this.menu = new Menu({
                     contextMenuForWindow: false,
                     targetNodeIds: [this.labelNode],
                     leftClickToOpen: true
                 });
-                array.forEach(this.control.controlOptions.menu, lang.hitch(this, '_addMenuItem'));
+                array.forEach(this.control.controlOptions.subLayerMenu, lang.hitch(this, '_addMenuItem'));
                 this.menu.startup();
             }
         },
