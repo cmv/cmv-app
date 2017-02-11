@@ -55,7 +55,6 @@ define([
             }
 
             // otherwise we can create the map
-            var returnWarnings = [];
             var mapDeferred = new Deferred(),
                 container = dom.byId(this.config.layout.map) || 'mapCenter';
 
@@ -65,8 +64,9 @@ define([
             var wait = this.inherited(arguments);
             if (wait) {
                 wait.then(function (warnings) {
-                    // are warnings passed?
-                    // returnWarnings.push(warnings);
+                    if (warnings) {
+                        returnWarnings = returnWarnings.concat(warnings);
+                    }
                     mapDeferred.resolve(returnWarnings);
                 });
             } else {

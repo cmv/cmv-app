@@ -12,7 +12,6 @@ define([
     'dojo/dom-geometry',
     'dojo/sniff',
     'dojo/Deferred',
-    'dojo/promise/all',
 
     'put-selector',
 
@@ -36,7 +35,6 @@ define([
     domGeom,
     has,
     Deferred,
-    promiseAll,
 
     put,
 

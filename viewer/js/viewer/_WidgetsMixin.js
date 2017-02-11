@@ -64,9 +64,7 @@ define([
             }
             if (this.layoutDeferred) {
                 promiseAll([this.mapDeferred, this.layoutDeferred])
-                    .then(lang.hitch(this,
-                        'createWidgets', ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'layout']
-                    ));
+                    .then(lang.hitch(this, 'createWidgets'));
             }
         },
 
@@ -139,7 +137,7 @@ define([
                     source: 'Controller',
                     error: 'Widget type "' + widgetConfig.type + '" (' + widgetConfig.title + ') at position ' + position + ' is not supported.'
                 });
-                return;
+                return null;
             }
 
             if (position) {
