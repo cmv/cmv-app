@@ -64,7 +64,7 @@ define([
             }
             if (this.layoutDeferred) {
                 promiseAll([this.mapDeferred, this.layoutDeferred])
-                    .then(lang.hitch(this, 'createWidgets'));
+                    .then(lang.hitch(this, 'createWidgets', null));
             }
         },
 
