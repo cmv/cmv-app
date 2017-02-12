@@ -52,6 +52,10 @@
     line-height: 16px;
 }
 
+.layerControlDijit .layerControlTableMenu {
+  width: auto;
+}
+
 .layerControlDijit .layerControlTableLabel {
     font-size: 15px;
     height: 16px;
@@ -144,15 +148,16 @@
     display: none;
 }
 
-/* dynamic sublayer menu */ 
+/* dynamic sublayer menu */
 
 .layerControlDijit .label.has-menu:hover {
     cursor: pointer;
 }
 
-.layerControlDijit .label.has-menu:after {
+.layerControlDijit .label.has-menu:before {
     color: #000;
     content: '\f0c9';
     font-family: FontAwesome;
-    margin-left: 10px;
+    margin-left: 3px;
+    margin-right:10px;
 }
