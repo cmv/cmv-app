@@ -4,14 +4,15 @@ module.exports = function (grunt) {
     // middleware for grunt.connect
     var middleware = function (connect, options, middlewares) {
         // inject a custom middleware into the array of default middlewares for proxy page
+        var bodyParser = require('body-parser');
         var proxypage = require('proxypage');
         var proxyRe = /\/proxy\/proxy.ashx/i;
 
         var enableCORS = function (req, res, next) {
-            res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+            res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
             res.setHeader('Access-Control-Allow-Credentials', true);
             res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-            res.setHeader('Access-Control-Allow-Headers', req.headers['access-control-request-headers']);
+            res.setHeader('Access-Control-Allow-Headers', req.headers['access-control-request-headers'] || 'Origin, X-Requested-With, Content-Type, Accept');
             return next();
         };
 
@@ -24,8 +25,8 @@ module.exports = function (grunt) {
 
         middlewares.unshift(proxyMiddleware);
         middlewares.unshift(enableCORS);
-        middlewares.unshift(connect.json()); //body parser, see https://github.com/senchalabs/connect/wiki/Connect-3.0
-        middlewares.unshift(connect.urlencoded()); //body parser
+        middlewares.unshift(bodyParser.json()); //body parser, see https://github.com/senchalabs/connect/wiki/Connect-3.0
+        middlewares.unshift(bodyParser.urlencoded({extended: true})); //body parser
         return middlewares;
     };
 
@@ -124,6 +125,8 @@ module.exports = function (grunt) {
                     port: 3000,
                     base: 'viewer',
                     hostname: '*',
+                    protocol: 'https',
+                    keepalive: true,
                     middleware: middleware
                 }
             },
@@ -132,16 +135,18 @@ module.exports = function (grunt) {
                     port: 3001,
                     base: 'dist/viewer',
                     hostname: '*',
+                    protocol: 'https',
+                    keepalive: true,
                     middleware: middleware
                 }
             }
         },
         open: {
             'dev_browser': {
-                path: 'http://localhost:3000/index.html'
+                path: 'https://localhost:3000/index.html'
             },
             'build_browser': {
-                path: 'http://localhost:3001/index.html'
+                path: 'https://localhost:3001/index.html'
             }
         },
         compress: {
