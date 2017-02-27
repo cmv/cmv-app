@@ -33,8 +33,8 @@ define([
         map: null,
         layerInfos: [],
         icons: {
-            expand: 'fa-plus-square-o',
-            collapse: 'fa-minus-square-o',
+            expand: 'fa-caret-right',
+            collapse: 'fa-caret-down',
             checked: 'fa-check-square-o',
             unchecked: 'fa-square-o',
             update: 'fa-refresh',
