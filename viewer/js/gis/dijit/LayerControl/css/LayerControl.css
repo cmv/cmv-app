@@ -45,12 +45,15 @@
     line-height: 15px;
 }
 
-.layerControlDijit .layerControlTableCheck,
-.layerControlDijit .layerControlTableMenu {
+.layerControlDijit .layerControlTableCheck, .layerControlDijit .layerControlTableMenu {
     cursor: pointer;
     width: 19px;
     height: 16px;
     line-height: 16px;
+}
+
+.layerControlDijit .layerControlTableMenu {
+  width: auto;
 }
 
 .layerControlDijit .layerControlTableLabel {
@@ -70,6 +73,7 @@
 .layerControlDijit .layerControlHidden {
     display: none;
 }
+
 .layerControlDijit .layerControlVisible {
     display: block;
 }
@@ -99,7 +103,9 @@
     color: #BBB;
 }
 
+
 /* not in use - retain for links */
+
 .layerControlDijit .layerControlClick {
     cursor: pointer;
     color: #1f78af;
@@ -118,7 +124,7 @@
     vertical-align: middle;
 }
 
-.layerControlDijit .layerControlLegendImage > img {
+.layerControlDijit .layerControlLegendImage>img {
     border: none;
     padding: 0;
 }
@@ -127,7 +133,9 @@
     padding: 0 0 0 4px;
 }
 
+
 /* temp esri/Legend overrides */
+
 .layerControlDijit .esriLegendService td {
     padding: 0;
 }
@@ -140,13 +148,16 @@
     display: none;
 }
 
-.layerControlDijit .menuLink {
-    color: #369;
-    text-decoration: none;
+/* dynamic sublayer menu */
+
+.layerControlDijit .label.has-menu:hover {
+    cursor: pointer;
 }
 
-.layerControlDijit .menuLink:hover {
-    color: #5196DB;
-    text-decoration: underline;
-    cursor: pointer;
+.layerControlDijit .label.has-menu:before {
+    color: #000;
+    content: '\f0c9';
+    font-family: FontAwesome;
+    margin-left: 3px;
+    margin-right:10px;
 }

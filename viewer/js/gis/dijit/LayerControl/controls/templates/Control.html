@@ -7,14 +7,14 @@
             <td class="layerControlTableCheck">
                 <i data-dojo-attach-point="checkNode" class="fa ${icons.unchecked} layerControlIcon"></i>
             </td>
-            <td class="layerControlTableLabel">
-                <span data-dojo-attach-point="labelNode"></span>
+            <td data-dojo-attach-point="menuClickNode" class="layerControlTableMenu">
+                <span class="control-menu" data-dojo-attach-point="menuNode">
+                  <i class="fa ${icons.menu} layerControlMenuIcon"></i>
+                  <span data-dojo-attach-point="labelNode"></span>
+                </span>
             </td>
             <td class="layerControlTableUpdate">
                 <i data-dojo-attach-point="layerUpdateNode" class="fa ${icons.update} fa-spin layerControlUpdateIcon" style="display:none;"></i>
-            </td>
-            <td data-dojo-attach-point="menuClickNode" class="layerControlTableMenu">
-                <i data-dojo-attach-point="menuNode" class="fa ${icons.menu} layerControlMenuIcon"></i>
             </td>
         </tr>
     </table>
