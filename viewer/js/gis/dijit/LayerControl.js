@@ -33,8 +33,8 @@ define([
         map: null,
         layerInfos: [],
         icons: {
-            expand: 'fa-plus-square-o',
-            collapse: 'fa-minus-square-o',
+            expand: 'fa-caret-right',
+            collapse: 'fa-caret-down',
             checked: 'fa-check-square-o',
             unchecked: 'fa-square-o',
             update: 'fa-refresh',
@@ -51,6 +51,7 @@ define([
         noLegend: null,
         noZoom: null,
         noTransparency: null,
+        menu: {},
         subLayerMenu: {},
         swipe: null,
         swiperButtonStyle: 'position:absolute;top:20px;left:120px;z-index:50;',
@@ -220,7 +221,8 @@ define([
                     swipe: null,
                     expanded: false,
                     sublayers: true,
-                    menu: this.subLayerMenu[layerInfo.type]
+                    menu: this.menu[layerInfo.type],
+                    subLayerMenu: this.subLayerMenu[layerInfo.type]
                 }, layerInfo.controlOptions)
             });
             layerControl.startup();
