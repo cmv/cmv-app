@@ -147,7 +147,13 @@ define([
             domConst.destroy(this.expandNode);
         },
         // set layer visibility and update icon
-        _setLayerVisibility: function (layer, checkNode) {
+        _setLayerVisibility: function (layer, checkNode, event) {
+
+            // prevent click event from bubbling
+            if (event.stopPropagation) {
+                event.stopPropagation();
+            }
+
             if (layer.visible) {
                 this._setLayerCheckbox(layer, checkNode);
                 layer.hide();
