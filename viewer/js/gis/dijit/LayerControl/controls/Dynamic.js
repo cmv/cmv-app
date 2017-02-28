@@ -87,24 +87,13 @@ define([
                 }));
                 menu.addChild(new MenuSeparator());
             }
-
+        },
+        _initCustomMenu: function () {
             // add custom sublayer menu items if we only have one sublayer
             if (!this._hasSublayers) {
-                array.forEach(this.controlOptions.menu, lang.hitch(this, '_addMenuItem', menu));
+                array.forEach(this.controlOptions.subLayerMenu, lang.hitch(this, '_addCustomMenuItem', this.layerMenu));
+                this.layerMenu.addChild(new MenuSeparator());
             }
-        },
-        _addMenuItem: function (menu, menuItem) {
-            //create the menu item
-            var item = new MenuItem(menuItem);
-            item.set('onClick', lang.hitch(this, function () {
-                topic.publish('layerControl/' + menuItem.topic, {
-                    layer: this.layer,
-                    subLayer: this.layer.layerInfos[0],
-                    iconNode: this.iconNode,
-                    menuItem: item
-                });
-            }));
-            menu.addChild(item);
         },
         // toggle all sublayers on/off
         _toggleAllSublayers: function (state) {

@@ -56,7 +56,13 @@ define([
             } else {
                 this._setSublayerCheckbox(false, checkNode);
             }
-            this._handlers.push(on(checkNode, 'click', lang.hitch(this, function () {
+            this._handlers.push(on(checkNode, 'click', lang.hitch(this, function (event) {
+
+                // prevent click event from bubbling
+                if (event.stopPropagation) {
+                    event.stopPropagation();
+                }
+
                 if (domAttr.get(checkNode, 'data-checked') === 'checked') {
                     this._setSublayerCheckbox(false, checkNode);
                 } else {

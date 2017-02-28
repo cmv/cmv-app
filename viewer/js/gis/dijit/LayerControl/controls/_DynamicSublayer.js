@@ -66,7 +66,13 @@ define([
             } else {
                 this._setSublayerCheckbox(false, checkNode);
             }
-            this._handlers.push(on(checkNode, 'click', lang.hitch(this, function () {
+            this._handlers.push(on(checkNode, 'click', lang.hitch(this, function (event) {
+
+                // prevent click event from bubbling
+                if (event.stopPropagation) {
+                    event.stopPropagation();
+                }
+
                 if (domAttr.get(checkNode, 'data-checked') === 'checked') {
                     this._setSublayerCheckbox(false, checkNode);
                 } else {
@@ -82,17 +88,17 @@ define([
                 this._handlers.push(this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange')));
             }
             //set up menu
-            if (this.control.controlOptions.menu &&
-                    this.control.controlOptions.menu.length) {
-                domClass.add(this.labelNode, 'menuLink');
-                domClass.add(this.iconNode, 'menuLink');
+            if (this.control.controlOptions.subLayerMenu &&
+                    this.control.controlOptions.subLayerMenu.length) {
                 this.menu = new Menu({
                     contextMenuForWindow: false,
-                    targetNodeIds: [this.labelNode],
+                    targetNodeIds: [this.menuClickNode],
                     leftClickToOpen: true
                 });
-                array.forEach(this.control.controlOptions.menu, lang.hitch(this, '_addMenuItem'));
+                array.forEach(this.control.controlOptions.subLayerMenu, lang.hitch(this, '_addMenuItem'));
                 this.menu.startup();
+            } else {
+                domClass.add(this.menuClickNode, 'hidden');
             }
         },
         _addMenuItem: function (menuItem) {
