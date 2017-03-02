@@ -7,7 +7,7 @@ define([
     'esri/arcgis/utils',
     'esri/units',
 
-    'dojo/i18n!config/nls/main'
+    'dojo/i18n!../config/nls/main'
 
 ], function (
     declare,
