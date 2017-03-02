@@ -19,7 +19,7 @@ define([
     'dojo/text!./Locale/templates/Locale.html',
     'dojo/i18n!./Locale/nls/resource',
 
-    'xstyle/css!https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.3.1/css/flag-icon.min.css',
+    'xstyle/css!flag-icon-css/css/flag-icon.min.css',
     'xstyle/css!./Locale/css/Locale.css'
 ], function (
     declare,

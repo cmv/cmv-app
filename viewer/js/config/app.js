@@ -15,6 +15,9 @@
             }, {
                 name: 'proj4js',
                 location: '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15'
+            }, {
+                name: 'flag-icon-css',
+                location: '//cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.3.1'
             }
         ]
     };
