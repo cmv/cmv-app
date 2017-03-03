@@ -9,6 +9,15 @@ define([
     return declare(null, {
 
         /**
+         * Mixes in this apps properties with the passed arguments
+         * @param  {Object} args The properties to mixin
+         * @return {undefined}
+         */
+        constructor: function (args) {
+            lang.mixin(this, args);
+        },
+
+        /**
          * A method run before anything else, can be inherited by mixins to
          * load and process the config sync or async
          * @return {undefined | Deferred} If the operation is async it should return
