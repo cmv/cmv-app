@@ -9,6 +9,10 @@ define([
 ) {
 
     return declare(null, {
+
+        // the default name of the config file to load if ?config=configName
+        // is not specified
+        defaultConfig: 'viewer',
         loadConfig: function (wait) {
 
             // this will be used to make any inherited methods 'wait'
@@ -49,7 +53,7 @@ define([
         initConfigAsync: function () {
             var returnDeferred = new Deferred();
             // get the config file from the url if present
-            var file = 'config/viewer',
+            var file = 'config/' + this.defaultConfig,
                 s = window.location.search,
                 q = s.match(/config=([^&]*)/i);
             if (q && q.length > 0) {
