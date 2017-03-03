@@ -4,7 +4,6 @@ define({
 	mapRightClickMenu: true,
 	identifyLayerInfos: true,
 	identifyTolerance: 5,
-	draggable: false,
 
 	// config object definition:
 	//	{<layer id>:{
