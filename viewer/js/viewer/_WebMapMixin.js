@@ -5,9 +5,7 @@ define([
     'dojo/dom',
 
     'esri/arcgis/utils',
-    'esri/units',
-
-    'dojo/i18n!config/nls/main'
+    'esri/units'
 
 ], function (
     declare,
@@ -16,9 +14,7 @@ define([
     dom,
 
     arcgisUtils,
-    units,
-
-    i18n
+    units
 ) {
     return declare(null, {
         startup: function () {
@@ -162,7 +158,7 @@ define([
                         id: 'directions',
                         type: 'titlePane',
                         path: 'gis/dijit/Directions',
-                        title: i18n.viewer.widgets.directions,
+                        title: 'Directions',
                         open: false,
                         position: 999,
                         options: {
@@ -186,7 +182,7 @@ define([
                         id: 'measurement',
                         type: 'titlePane',
                         path: 'gis/dijit/Measurement',
-                        title: i18n.viewer.widgets.measure,
+                        title: 'Measurement',
                         open: false,
                         position: 999,
                         options: {
