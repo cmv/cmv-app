@@ -1,0 +1,53 @@
+.cmvSearchWidget {
+	width: 100%;
+    min-width: 225px;
+	height: 410px;
+}
+
+.cmvSearchWidget .tabContainer {
+    height: 100%;
+    width: 100%;
+}
+
+.cmvSearchWidget .searchTab {
+    padding: 10px !important;
+}
+
+.cmvSearchWidget label {
+	font-weight: bold;
+	margin-left: 3px;
+}
+.cmvSearchWidget .dijitTextBox {
+	margin-bottom: 10px;
+}
+
+.cmvSearchWidget #divAttributeQuerySelect,
+.cmvSearchWidget #divAttributeQueryText,
+.cmvSearchWidget #divShapeTypeSelection,
+.cmvSearchWidget #divShapeBufferSelection {
+	margin-top: 10px;
+}
+
+.cmvSearchWidget .identifyIcon {
+	background-image: url(../images/identify.png);
+	width: 16px;
+	height: 16px;
+}
+
+.cmvSearchWidget .dijitSelect {
+	height: 30px;
+	width: 100%;
+}
+
+.cmvSearchWidget .searchFeaturesIcon {
+	width: 40px;
+	height: 40px;
+	background-repeat: no-repeat;
+	text-align: center;
+	float: left;
+	margin: 10px 11px 12px 11px;
+}
+
+.cmvSearchWidget .searchFeaturesIcon:hover {
+	background-color: #C0C0C0;
+}

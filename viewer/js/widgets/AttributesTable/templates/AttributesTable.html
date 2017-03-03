@@ -1,0 +1,24 @@
+<div data-dojo-attach-point="containerNode">
+	<div data-dojo-type="dijit/Toolbar" data-dojo-attach-point="attributesTableToolbarDijit" data-dojo-props="class:'attributesTableToolbar'">
+		<div data-dojo-type="dijit/form/DropDownButton" data-dojo-attach-point="attributesTableZoomDropDownButton" data-dojo-props="iconClass:'fa fa-search-plus fa-fw','class':'attributesTableZoomMenu'" style="display:none;">
+			<span>${i18n.menus.zoom.title}</span>
+			<div data-dojo-type="dijit/DropDownMenu" data-dojo-attach-point="attributesTableZoomMenu">
+				<div data-dojo-type="dijit/MenuItem" data-dojo-attach-point="attributesTableZoomToFeatures" data-dojo-attach-event="onClick:zoomToFeatureGraphics">${i18n.menus.zoom.zoomToFeatures}</div>
+				<div data-dojo-type="dijit/MenuItem" data-dojo-attach-point="attributesTableZoomToSelected" data-dojo-attach-event="onClick:zoomToSelectedGraphics">${i18n.menus.zoom.zoomToSelectedFeatures}</div>
+				<div data-dojo-type="dijit/MenuItem" data-dojo-attach-point="attributesTableZoomToBuffer" data-dojo-attach-event="onClick:zoomToBufferGraphics">${i18n.menus.zoom.zoomToBuffer}</div>
+			</div>
+		</div>
+		<div data-dojo-type="dijit/form/DropDownButton" data-dojo-attach-point="attributesTableClearDropDownButton" data-dojo-props="iconClass:'fa fa-times-circle fa-fw','class':'attributesTableClearMenu'">
+			<span>${i18n.menus.clear.title}</span>
+			<div data-dojo-type="dijit/DropDownMenu" data-dojo-attach-point="attributesTableClearMenu">
+				<div data-dojo-type="dijit/MenuItem" data-dojo-attach-point="attributesTableClearFeatures" data-dojo-attach-event="onClick:clearFeatures">${i18n.menus.clear.clearFeatures}</div>
+				<div data-dojo-type="dijit/MenuItem" data-dojo-attach-point="attributesTableClearSelected" data-dojo-attach-event="onClick:clearSelectedFeatures">${i18n.menus.clear.clearSelectedFeatures}</div>
+				<div data-dojo-type="dijit/MenuItem" data-dojo-attach-point="attributesTableClearGrid" data-dojo-attach-event="onClick:clearGrid">${i18n.menus.clear.clearGrid}</div>
+				<div data-dojo-type="dijit/MenuItem" data-dojo-attach-point="attributesTableClearBuffer" data-dojo-attach-event="onClick:clearBufferGraphics">${i18n.menus.clear.clearBufferGraphics}</div>
+				<div data-dojo-type="dijit/MenuItem" data-dojo-attach-point="attributesTableClearAll" data-dojo-attach-event="onClick:clearAll">${i18n.menus.clear.clearAll}</div>
+			</div>
+		</div>
+        <div data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'fa fa-download fa-fw','class':'attributesTableExportMenu'"data-dojo-attach-point="attributesTableExportButton" data-dojo-attach-event="onClick:openExport">${i18n.menus.export.title}</div>
+	</div>
+	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-attach-point="attributesTableGridDijit" data-dojo-props="class:'attributesTableGrid'"></div>
+</div>

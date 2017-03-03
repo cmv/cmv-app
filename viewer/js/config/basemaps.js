@@ -7,7 +7,7 @@ define([
         map: true, // needs a refrence to the map
         mode: 'agol', //must be either 'agol' or 'custom'
         title: 'Basemaps', // tilte for widget
-        mapStartBasemap: 'streets', // must match one of the basemap keys below
+        mapStartBasemap: 'Topo', // must match one of the basemap keys below
         //basemaps to show in menu. define in basemaps object below and reference by name here
         // TODO Is this array necessary when the same keys are explicitly included/excluded below?
         basemapsToShow: ['streets', 'satellite', 'hybrid', 'topo', 'lightGray', 'gray', 'national-geographic', 'osm', 'oceans'],

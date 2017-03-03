@@ -285,6 +285,14 @@ define([
                 }, configuredLayerInfo );
 				this.legendLayerInfos.unshift ( layerInfo ); //unshift instead of push to keep layer ordering in legend intact
 			}
+
+			// Set initial visible layers
+			if (typeof layer.visibleLayerInfos !== 'undefined' && typeof layer.visibleLayerInfos.layerIds !== 'undefined') {
+				if (typeof l.setVisibleLayers == 'function') {
+					l.setVisibleLayers(layer.visibleLayerInfos.layerIds);
+				}
+			}
+
 			//LayerControl LayerInfos array
 			this.layerControlLayerInfos.unshift({ //unshift instead of push to keep layer ordering in LayerControl intact
 				layer: l,

@@ -15,14 +15,14 @@
     <body class="dbootstrap">
         <div class="appHeader">
             <div class="headerLogo">
-                <img alt="logo" src="images/rocket-logo.png" height="54" />
+                <img alt="logo" src="images/logo.jpg" height="54" />
             </div>
             <div class="headerTitle">
                 <span id="headerTitleSpan">
-                    Configurable Map Viewer
+                    City of Houston General Plan
                 </span>
                 <div id="subHeaderTitleSpan" class="subHeaderTitle">
-                    make it your own
+                    Discover your neighborhood
                 </div>
             </div>
             <div class="search">
@@ -35,17 +35,21 @@
             </div>
         </div>
         <script type="text/javascript">
+            var path = location.pathname.replace(/[^\/]+$/, '');
             var dojoConfig = {
                 async: true,
                 packages: [{
                     name: 'viewer',
-                    location: location.pathname.replace(/[^\/]+$/, '') + 'js/viewer'
+                    location: path + 'js/viewer'
                 },{
                     name: 'config',
-                    location: location.pathname.replace(/[^\/]+$/, '') + 'js/config'
+                    location: path + 'js/config'
                 },{
                     name: 'gis',
-                    location: location.pathname.replace(/[^\/]+$/, '') + 'js/gis'
+                    location: path + 'js/gis'
+                }, {
+                    name: 'widgets',
+                    location: path + 'js/widgets'
                 }]
             };
         </script>

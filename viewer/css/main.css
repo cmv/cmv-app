@@ -8,7 +8,7 @@ body, html {
     font-size: 14px;
 }
 .appHeader {
-    background: url("../images/linen.jpg") repeat-x scroll left top transparent;
+    background-color:#bed4f0;
     height: 70px;
     margin: 0;
     padding: 0;
@@ -21,7 +21,7 @@ body, html {
     top: 8px;
 }
 .appHeader .headerTitle {
-    color: #FFFFFF;
+    color: #000;
     float: left;
     font-size: 16pt;
     font-weight: bold;
@@ -30,9 +30,8 @@ body, html {
     position: relative;
 }
 .appHeader .subHeaderTitle {
-    color: #CFCFCF;
+    color: #000;
     font-size: small;
-    padding-left: 20px;
 }
 .appHeader .search {
     float: left;
@@ -49,7 +48,7 @@ body, html {
     text-align: right;
 }
 .appHeader .headerLinks a {
-    color: #FFFFFF;
+    color: #000;
 }
 #borderContainerOuter {
     position: absolute;
