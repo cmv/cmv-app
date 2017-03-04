@@ -1,8 +1,6 @@
 # CMV - The Configurable Map Viewer
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/cmv/cmv-app.svg)](https://greenkeeper.io/)
-
-[![Read The Docs](https://img.shields.io/badge/docs-1.3.4-brightgreen.svg?style=flat)](http://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app)
+[![Read The Docs](https://img.shields.io/badge/docs-2.0.0--beta.1-brightgreen.svg?style=flat)](http://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app) [![Greenkeeper badge](https://badges.greenkeeper.io/cmv/cmv-app.svg)](https://greenkeeper.io/)
 
 ## Introduction
 [CMV](http://cmv.io/) is a community-supported open source mapping framework. CMV works with the [Esri JavaScript API](http://developers.arcgis.com/javascript/jsapi/3/), [ArcGIS Server](https://www.esri.com/software/arcgis/arcgisserver), [ArcGIS Online](https://arcgis.com/) and more.
@@ -49,7 +47,7 @@ A [resource proxy](https://github.com/Esri/resource-proxy) may be required to ac
 ## Documentation:
 Use the [documentation](http://docs.cmv.io/) for getting started and guidance on configuring your application. The initial documentation is sparse. Please help make it better by contributing over at the [cmv documentation repo](https://github.com/cmv/cmv-docs).
 
-[![Read The Docs](https://img.shields.io/badge/docs-1.3.4-brightgreen.svg?style=flat)](http://docs.cmv.io/)
+[![Read The Docs](https://img.shields.io/badge/docs-2.0.0--beta.1-brightgreen.svg?style=flat)](http://docs.cmv.io/)
 
 ## Community
 We have a gitter.im chat room. Come on by if you have questions. The community is very helpful. [https://gitter.im/cmv/cmv-app](https://gitter.im/cmv/cmv-app)
