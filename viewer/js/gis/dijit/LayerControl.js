@@ -33,8 +33,8 @@ define([
         map: null,
         layerInfos: [],
         icons: {
-            expand: 'fa-plus-square-o',
-            collapse: 'fa-minus-square-o',
+            expand: 'fa-caret-right',
+            collapse: 'fa-caret-down',
             checked: 'fa-check-square-o',
             unchecked: 'fa-square-o',
             update: 'fa-refresh',
@@ -51,6 +51,7 @@ define([
         noLegend: null,
         noZoom: null,
         noTransparency: null,
+        menu: {},
         subLayerMenu: {},
         swipe: null,
         swiperButtonStyle: 'position:absolute;top:20px;left:120px;z-index:50;',
@@ -85,6 +86,8 @@ define([
                 });
                 return;
             }
+            // add any user-defined controls - possibly for user-defined layers
+            this._controls = lang.mixin(this._controls, options.controls || {});
         },
         postCreate: function () {
             this.inherited(arguments);
@@ -204,7 +207,7 @@ define([
                 if (layer.loaded) {
                     this._applyLayerControlOptions(layerInfo.controlOptions, layer);
                 } else {
-                    layer.on('load', lang.hitch(this, '_applyLayerControlOptions', layer.controlOptions));
+                    layer.on('load', lang.hitch(this, '_applyLayerControlOptions', layerInfo.controlOptions));
                 }
             }
             var layerControl = new Control({
@@ -218,7 +221,8 @@ define([
                     swipe: null,
                     expanded: false,
                     sublayers: true,
-                    menu: this.subLayerMenu[layerInfo.type]
+                    menu: this.menu[layerInfo.type],
+                    subLayerMenu: this.subLayerMenu[layerInfo.type]
                 }, layerInfo.controlOptions)
             });
             layerControl.startup();
@@ -344,29 +348,37 @@ define([
             if (this.separated) {
                 if (this.vectorReorder) {
                     array.forEach(this._vectorContainer.getChildren(), function (child) {
-                        if (!child.getPreviousSibling()) {
-                            child._reorderUp.set('disabled', true);
-                        } else {
-                            child._reorderUp.set('disabled', false);
+                        if (child._reorderUp) {
+                            if (!child.getPreviousSibling()) {
+                                child._reorderUp.set('disabled', true);
+                            } else {
+                                child._reorderUp.set('disabled', false);
+                            }
                         }
-                        if (!child.getNextSibling()) {
-                            child._reorderDown.set('disabled', true);
-                        } else {
-                            child._reorderDown.set('disabled', false);
+                        if (child._reorderDown) {
+                            if (!child.getNextSibling()) {
+                                child._reorderDown.set('disabled', true);
+                            } else {
+                                child._reorderDown.set('disabled', false);
+                            }
                         }
                     }, this);
                 }
                 if (this.overlayReorder) {
                     array.forEach(this._overlayContainer.getChildren(), function (child) {
-                        if (!child.getPreviousSibling()) {
-                            child._reorderUp.set('disabled', true);
-                        } else {
-                            child._reorderUp.set('disabled', false);
+                        if (child._reorderUp) {
+                            if (!child.getPreviousSibling()) {
+                                child._reorderUp.set('disabled', true);
+                            } else {
+                                child._reorderUp.set('disabled', false);
+                            }
                         }
-                        if (!child.getNextSibling()) {
-                            child._reorderDown.set('disabled', true);
-                        } else {
-                            child._reorderDown.set('disabled', false);
+                        if (child._reorderDown) {
+                            if (!child.getNextSibling()) {
+                                child._reorderDown.set('disabled', true);
+                            } else {
+                                child._reorderDown.set('disabled', false);
+                            }
                         }
                     }, this);
                 }

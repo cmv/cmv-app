@@ -10,10 +10,50 @@ define([
 
     return declare(null, {
 
+        // the default name of the config file to load if ?config=configName
+        // is not specified
+        defaultConfig: 'viewer',
+        loadConfig: function (wait) {
+
+            // this will be used to make any inherited methods 'wait'
+            var waitDeferred;
+
+            if (wait) {
+                waitDeferred = new Deferred();
+
+                // if we need to wait for a previous deferred
+                // wait for it,
+                wait.then(lang.hitch(this, function () {
+
+                    // load the config
+                    this.initConfigAsync().then(lang.hitch(this, function () {
+
+                        // do some stuff
+                        this.initConfigSuccess(arguments);
+
+                        // resolve
+                        waitDeferred.resolve();
+                    }),
+                        lang.hitch(this, 'initConfigError')
+                    );
+
+                }));
+            } else {
+
+                waitDeferred = this.initConfigAsync();
+                waitDeferred.then(
+                    lang.hitch(this, 'initConfigSuccess'),
+                    lang.hitch(this, 'initConfigError')
+                );
+            }
+            // call any inherited methods or return a deferred
+            return this.inherited(arguments, [waitDeferred]) || waitDeferred;
+        },
+
         initConfigAsync: function () {
             var returnDeferred = new Deferred();
             // get the config file from the url if present
-            var file = 'config/viewer',
+            var file = 'config/' + this.defaultConfig,
                 s = window.location.search,
                 q = s.match(/config=([^&]*)/i);
             if (q && q.length > 0) {
@@ -30,7 +70,6 @@ define([
 
         initConfigSuccess: function (config) {
             this.config = config;
-
             if (config.isDebug) {
                 window.app = this; //dev only
             }
@@ -40,15 +79,6 @@ define([
                 current: config.defaultMapClickMode,
                 defaultMode: config.defaultMapClickMode
             };
-
-            // in _LayoutMixin
-            this.initLayout();
-
-            // in _MapMixin
-            this.initMapAsync().then(
-                lang.hitch(this, 'initMapComplete'),
-                lang.hitch(this, 'initMapError')
-            );
         },
 
         initConfigError: function (err) {

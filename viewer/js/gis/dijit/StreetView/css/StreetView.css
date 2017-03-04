@@ -2,6 +2,7 @@
     width: 100%;
     height: 250px;
     padding-bottom: 5px;
+    position:  relative;
 }
 
 .gis_StreetView .streetViewButton {

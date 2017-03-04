@@ -82,7 +82,7 @@ define([
         _arcgisLegendRequest: function (layer, expandNode, callback, errback) {
             var index = layer.url.toLowerCase().indexOf('/rest/');
             var soap = layer.url.substring(0, index) + layer.url.substring(index + 5, layer.url.length);
-            var url = 'http://utility.arcgis.com/sharing/tools/legend?soapUrl=' + window.escape(soap);
+            var url = 'https://utility.arcgis.com/sharing/tools/legend?soapUrl=' + window.escape(soap);
             if (!has('ie') || has('ie') > 8) {
                 url += '&returnbytes=true';
             }

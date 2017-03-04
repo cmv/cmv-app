@@ -1,4 +1,4 @@
-// http://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
+// https://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
 define({
     root: {
         selectQuery: 'Select query',
@@ -24,6 +24,10 @@ define({
         optionsLabel: 'Options',
         zoomOnSelect: 'Zoom on select',
         zoomOnDeselect: 'Zoom on deselect'
-    }
+    },
+    'es': true,
+    'fr': true,
+    'pt-br': true,
+    'pt-pt': true
 });
 

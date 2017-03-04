@@ -88,6 +88,13 @@ define([
                 menu.addChild(new MenuSeparator());
             }
         },
+        _initCustomMenu: function () {
+            // add custom sublayer menu items if we only have one sublayer
+            if (!this._hasSublayers) {
+                array.forEach(this.controlOptions.subLayerMenu, lang.hitch(this, '_addCustomMenuItem', this.layerMenu));
+                this.layerMenu.addChild(new MenuSeparator());
+            }
+        },
         // toggle all sublayers on/off
         _toggleAllSublayers: function (state) {
             array.forEach(this._sublayerControls, function (control) {

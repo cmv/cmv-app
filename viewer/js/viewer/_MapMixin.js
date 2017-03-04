@@ -23,29 +23,73 @@ define([
 
     return declare(null, {
 
+        postConfig: function () {
+            this.mapDeferred = new Deferred();
+            return this.inherited(arguments);
+        },
+
+        startup: function () {
+            this.inherited(arguments);
+            this.layoutDeferred.then(lang.hitch(this, 'initMapAsync'));
+        },
+
         initMapAsync: function () {
             var returnDeferred = new Deferred();
             var returnWarnings = [];
 
-            this._createMap();
+            this.createMap(returnWarnings).then(
+                lang.hitch(this, '_createMapResult', returnDeferred, returnWarnings)
+            );
+            returnDeferred.then(lang.hitch(this, 'initMapComplete'));
+            return returnDeferred;
+        },
 
-            if (this.config.mapOptions.basemap) {
-                this.map.on('load', lang.hitch(this, '_initLayers', returnWarnings));
-            } else {
-                this._initLayers(returnWarnings);
+        createMap: function (returnWarnings) {
+
+            // mixins override the default createMap method and return a deferred
+            var result = this.inherited(arguments);
+            if (result) {
+                return result;
             }
 
-            if (this.config.operationalLayers && this.config.operationalLayers.length > 0) {
-                on.once(this.map, 'layers-add-result', lang.hitch(this, '_onLayersAddResult', returnDeferred, returnWarnings));
+            // otherwise we can create the map
+            var mapDeferred = new Deferred(),
+                container = dom.byId(this.config.layout.map) || 'mapCenter';
+
+            this.map = new Map(container, this.config.mapOptions);
+
+            // let some other mixins modify or add map items async
+            var wait = this.inherited(arguments);
+            if (wait) {
+                wait.then(function (warnings) {
+                    if (warnings) {
+                        returnWarnings = returnWarnings.concat(warnings);
+                    }
+                    mapDeferred.resolve(returnWarnings);
+                });
+            } else {
+                mapDeferred.resolve(returnWarnings);
+            }
+            return mapDeferred;
+        },
+
+        _createMapResult: function (returnDeferred, returnWarnings) {
+            if (this.map) {
+                if (!this.config.webMapId && this.config.mapOptions && this.config.mapOptions.basemap) {
+                    this.map.on('load', lang.hitch(this, '_initLayers', returnWarnings));
+                } else {
+                    this._initLayers(returnWarnings);
+                }
+
+                if (this.config.operationalLayers && this.config.operationalLayers.length > 0) {
+                    on.once(this.map, 'layers-add-result', lang.hitch(this, '_onLayersAddResult', returnDeferred, returnWarnings));
+                } else {
+                    returnDeferred.resolve(returnWarnings);
+                }
             } else {
                 returnDeferred.resolve(returnWarnings);
             }
             return returnDeferred;
-        },
-
-        _createMap: function () {
-            var container = dom.byId(this.config.layout.map) || 'mapCenter';
-            this.map = new Map(container, this.config.mapOptions);
         },
 
         _onLayersAddResult: function (returnDeferred, returnWarnings, lyrsResult) {
@@ -60,34 +104,36 @@ define([
         _initLayers: function (returnWarnings) {
             this.layers = [];
             var layerTypes = {
-                csv: 'CSV',
-                dataadapter: 'DataAdapterFeature', //untested
-                dynamic: 'ArcGISDynamicMapService',
-                feature: 'Feature',
-                georss: 'GeoRSS',
-                image: 'ArcGISImageService',
-                imagevector: 'ArcGISImageServiceVector',
-                kml: 'KML',
-                label: 'Label', //untested
-                mapimage: 'MapImage', //untested
-                osm: 'OpenStreetMap',
-                raster: 'Raster',
-                stream: 'Stream',
-                tiled: 'ArcGISTiledMapService',
-                vectortile: 'VectorTile',
-                webtiled: 'WebTiled',
-                wfs: 'WFS',
-                wms: 'WMS',
-                wmts: 'WMTS' //untested
+                csv: 'esri/layers/CSVLayer',
+                dataadapter: 'esri/layers/DataAdapterFeatureLayer', //untested
+                dynamic: 'esri/layers/ArcGISDynamicMapServiceLayer',
+                feature: 'esri/layers/FeatureLayer',
+                georss: 'esri/layers/GeoRSSLayer',
+                image: 'esri/layers/ArcGISImageServiceLayer',
+                imagevector: 'esri/layers/ArcGISImageServiceVectorLayer',
+                kml: 'esri/layers/KMLLayer',
+                label: 'esri/layers/LabelLayer', //untested
+                mapimage: 'esri/layers/MapImageLayer', //untested
+                osm: 'esri/layers/OpenStreetMapLayer',
+                raster: 'esri/layers/RasterLayer',
+                stream: 'esri/layers/StreamLayer',
+                tiled: 'esri/layers/ArcGISTiledMapServiceLayer',
+                vectortile: 'esri/layers/VectorTileLayer',
+                webtiled: 'esri/layers/WebTiledLayer',
+                wfs: 'esri/layers/WFSLayer',
+                wms: 'esri/layers/WMSLayer',
+                wmts: 'esri/layers/WMTSLayer' //untested
             };
+            // add any user-defined layer types such as https://github.com/Esri/geojson-layer-js
+            layerTypes = lang.mixin(layerTypes, this.config.layerTypes || {});
             // loading all the required modules first ensures the layer order is maintained
             var modules = [];
             array.forEach(this.config.operationalLayers, function (layer) {
                 var type = layerTypes[layer.type];
                 if (type) {
-                    modules.push('esri/layers/' + type + 'Layer');
+                    modules.push(type);
                 } else {
-                    returnWarnings.push('Layer type "' + layer.type + '"" isnot supported: ');
+                    returnWarnings.push('Layer type "' + layer.type + '" is not supported: ');
                 }
             }, this);
 
@@ -95,7 +141,7 @@ define([
                 array.forEach(this.config.operationalLayers, function (layer) {
                     var type = layerTypes[layer.type];
                     if (type) {
-                        require(['esri/layers/' + type + 'Layer'], lang.hitch(this, '_initLayer', layer));
+                        require([type], lang.hitch(this, '_initLayer', layer));
                     }
                 }, this);
                 this.map.addLayers(this.layers);
@@ -169,18 +215,19 @@ define([
                 });
             }
 
-            this.map.on('resize', function (evt) {
-                var pnt = evt.target.extent.getCenter();
-                setTimeout(function () {
-                    evt.target.centerAt(pnt);
-                }, 100);
-            });
+            if (this.map) {
 
-            // in _LayoutsMixin
-            this.createPanes();
+                this.map.on('resize', function (evt) {
+                    var pnt = evt.target.extent.getCenter();
+                    setTimeout(function () {
+                        evt.target.centerAt(pnt);
+                    }, 100);
+                });
 
-            // in _WidgetsMixin
-            this.initWidgets();
+                // resolve the map deferred
+                this.mapDeferred.resolve(this.map);
+            }
+
         },
 
         initMapError: function (err) {

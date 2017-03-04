@@ -1,9 +1,11 @@
 # CMV - The Configurable Map Viewer
 
-[![Read The Docs](https://img.shields.io/badge/docs-1.3.4-brightgreen.svg?style=flat)](http://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app) 
+[![Greenkeeper badge](https://badges.greenkeeper.io/cmv/cmv-app.svg)](https://greenkeeper.io/)
+
+[![Read The Docs](https://img.shields.io/badge/docs-1.3.4-brightgreen.svg?style=flat)](http://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://travis-ci.org/cmv/cmv-app.svg?branch=master)](http://travis-ci.org/cmv/cmv-app)
 
 ## Introduction
-[CMV](http://cmv.io/) is a community-supported open source mapping framework. CMV works with the [Esri JavaScript API](http://docs.cmv.io/en/latest/developers.arcgis.com/javascript/jsapi/), [ArcGIS Server](http://www.esri.com/software/arcgis/arcgisserver), [ArcGIS Online](https://arcgis.com/) and more.
+[CMV](http://cmv.io/) is a community-supported open source mapping framework. CMV works with the [Esri JavaScript API](http://developers.arcgis.com/javascript/jsapi/3/), [ArcGIS Server](https://www.esri.com/software/arcgis/arcgisserver), [ArcGIS Online](https://arcgis.com/) and more.
 
 ## Make It Your Own!
 This JavaScript web app can be easily configured or used as a boilerplate/starting point for basic viewers. It also demonstrates best practices for modular design and OOP via classes in JS using dojo's great [declare](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html) system.
@@ -14,7 +16,8 @@ This JavaScript web app can be easily configured or used as a boilerplate/starti
 ![screen shot 2014-08-20 at 9 59 48 pm](https://cloud.githubusercontent.com/assets/661156/3991302/5aa2e0f2-28df-11e4-94d0-9c813937d933.png)
 
 ## Widgets Included:
-- Base Maps
+- Basemaps
+- Basemaps Gallery
 - Bookmarks
 - Directions
 - Draw
@@ -27,6 +30,7 @@ This JavaScript web app can be easily configured or used as a boilerplate/starti
 - Identify
 - Layer Control (Table of Contents)
 - Legend
+- Locale (Change the Country + Language)
 - Locate Button (Geolocation)
 - MapInfo
 - Measure
@@ -38,6 +42,9 @@ This JavaScript web app can be easily configured or used as a boilerplate/starti
 - Highly configurable UI, right or left sidebars with widgets in both, top and bottom regions for other content.
 
 Read more about the [core widgets](http://docs.cmv.io/en/latest/widgets/). In addition, there is a growing number of [widgets contributed by the CMV developer community](https://github.com/cmv/cmv-contrib-widgets).
+
+## Resource Proxy:
+A [resource proxy](https://github.com/Esri/resource-proxy) may be required to access some MapServices and other content that reside on a different domain. A proxy is not available for the Github demo.
 
 ## Documentation:
 Use the [documentation](http://docs.cmv.io/) for getting started and guidance on configuring your application. The initial documentation is sparse. Please help make it better by contributing over at the [cmv documentation repo](https://github.com/cmv/cmv-docs).

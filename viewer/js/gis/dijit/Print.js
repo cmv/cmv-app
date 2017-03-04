@@ -12,11 +12,13 @@ define([
     'dojo/dom-style',
     'dojo/dom-construct',
     'dojo/dom-class',
+    'dojo/date/locale',
     'dojo/text!./Print/templates/Print.html',
     'dojo/text!./Print/templates/PrintResult.html',
     'esri/tasks/PrintTemplate',
     'esri/tasks/PrintParameters',
     'esri/request',
+    'esri/urlUtils',
     'dojo/i18n!./Print/nls/resource',
 
     'dijit/form/Form',
@@ -30,7 +32,7 @@ define([
     'dijit/TooltipDialog',
     'dijit/form/RadioButton',
     'xstyle/css!./Print/css/Print.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, printTemplate, printResultTemplate, PrintTemplate, PrintParameters, esriRequest, i18n) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, PrintTask, Memory, lang, array, topic, Style, domConstruct, domClass, locale, printTemplate, printResultTemplate, PrintTemplate, PrintParameters, esriRequest, urlUtils, i18n) {
 
     // Print result dijit
     var PrintResultDijit = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -39,13 +41,20 @@ define([
         i18n: i18n,
         url: null,
         fileHandle: null,
+        resultOrder: 'last', // first or last
+
         postCreate: function () {
             this.inherited(arguments);
             this.fileHandle.then(lang.hitch(this, '_onPrintComplete'), lang.hitch(this, '_onPrintError'));
         },
         _onPrintComplete: function (data) {
             if (data.url) {
-                this.url = data.url;
+                var proxyRule = urlUtils.getProxyRule(data.url);
+                if (proxyRule && proxyRule.proxyUrl) {
+                    this.url = proxyRule.proxyUrl + '?' + data.url;
+                } else {
+                    this.url = data.url;
+                }
                 this.nameNode.innerHTML = '<span class="bold">' + this.docName + '</span>';
                 domClass.add(this.resultNode, 'printResultHover');
             } else {
@@ -223,9 +232,9 @@ define([
                     count: this.count.toString(),
                     icon: (form.format === 'PDF') ? this.pdfIcon : this.imageIcon,
                     docName: form.title,
-                    title: form.format + ', ' + form.layout,
+                    title: form.format + ', ' + form.layout + ', ' + locale.format(new Date(), {formatLength: 'short'}),
                     fileHandle: fileHandle
-                }).placeAt(this.printResultsNode, 'last');
+                }).placeAt(this.printResultsNode, this.resultOrder);
 
                 if (this.printTask.async) {
                     result.own(this.printTask.printGp.on('status-update', lang.hitch(result, '_handleStatusUpdate')));

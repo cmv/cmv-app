@@ -1,4 +1,3 @@
-/*global google */
 define([
     'dojo/_base/declare',
     'dijit/_WidgetBase',
@@ -17,69 +16,76 @@ define([
     'esri/geometry/Point',
     'esri/SpatialReference',
     'dijit/MenuItem',
-    '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js',
+    'proj4js/proj4',
     'dojo/i18n!./StreetView/nls/resource',
-
+    'gis/plugins/Google',
     'dijit/form/ToggleButton',
-    'xstyle/css!./StreetView/css/StreetView.css',
-    'gis/plugins/async!//maps.google.com/maps/api/js?v=3'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, domGeom, Point, SpatialReference, MenuItem, proj4, i18n) {
-
+    'xstyle/css!./StreetView/css/StreetView.css'
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, domGeom, Point, SpatialReference, MenuItem, proj4, i18n, Google) {
+    //cache google so
+    var google;
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
         templateString: template,
         i18n: i18n,
         mapClickMode: null,
 
-        panoOptions: {
-            addressControlOptions: {
-                position: google.maps.ControlPosition.TOP_RIGHT
-            },
-            linksControl: false,
-            panControl: false,
-            zoomControlOptions: {
-                style: google.maps.ZoomControlStyle.SMALL
-            },
-            enableCloseButton: false
-        },
+        panoOptions: null,
 
         // in case this changes some day
-        proj4BaseURL: 'http://spatialreference.org/',
+        proj4BaseURL: 'https://epsg.io/',
 
         //  options are ESRI, EPSG and SR-ORG
-        // See http://spatialreference.org/ for more information
+        // See http://sepsg.io/ for more information
         proj4Catalog: 'EPSG',
 
         // if desired, you can load a projection file from your server
-        // instead of using one from spatialreference.org
+        // instead of using one from epsg.io
         // i.e., http://server/projections/102642.js
-        projCustomURL: null,
+        proj4CustomURL: null,
 
         postCreate: function () {
             this.inherited(arguments);
-            this.createGraphicsLayer();
-            this.map.on('click', lang.hitch(this, 'getStreetView'));
+            //load the google api asynchronously
+            Google.load(lang.hitch(this, function (g) {
+                //store a reference to google
+                google = g;
 
-            this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
+                //init our panoOptions since they depend on google
+                this.panoOptions = {
+                    addressControlOptions: {
+                        position: google.maps.ControlPosition.TOP_RIGHT
+                    },
+                    linksControl: false,
+                    panControl: false,
+                    zoomControlOptions: {
+                        style: google.maps.ZoomControlStyle.SMALL
+                    },
+                    enableCloseButton: false
+                };
+                this.createGraphicsLayer();
+                this.map.on('click', lang.hitch(this, 'getStreetView'));
 
-            if (this.parentWidget) {
-                if (this.parentWidget.toggleable) {
-                    this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
-                        this.onLayoutChange(this.parentWidget.open);
-                    })));
+                this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
+
+                if (this.parentWidget) {
+                    if (this.parentWidget.toggleable) {
+                        this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
+                            this.onLayoutChange(this.parentWidget.open);
+                        })));
+                    }
+                    this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, 'resize')));
+                    this.own(topic.subscribe(this.parentWidget.id + '/resize/resize', lang.hitch(this, 'resize')));
                 }
-                this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, 'resize')));
-                this.own(topic.subscribe(this.parentWidget.id + '/resize/resize', lang.hitch(this, 'resize')));
-            }
 
-            // spatialreference.org uses the old
-            // Proj4js style so we need an alias
-            // https://github.com/proj4js/proj4js/issues/23
-            window.Proj4js = proj4;
+                if (!window.proj4) {
+                    window.proj4 = proj4;
+                }
 
-            if (this.mapRightClickMenu) {
-                this.addRightClickMenu();
-            }
+                if (this.mapRightClickMenu) {
+                    this.addRightClickMenu();
+                }
+            }));
         },
         createGraphicsLayer: function () {
             this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/StreetView/images/blueArrow.png'), 30, 30);
@@ -129,7 +135,7 @@ define([
             } else {
                 this.connectMapClick();
             }
-        //get map click, set up listener in post create
+            //get map click, set up listener in post create
         },
         disconnectMapClick: function () {
             this.streetViewButtonDijit.set('checked', true);
@@ -168,9 +174,9 @@ define([
                 if (wkid === 102100) {
                     wkid = 3857;
                 }
-                var key = this.proj4Catalog + ':' + wkid;
+                var key = this.proj4Catalog + ':' + String(wkid);
                 if (!proj4.defs[key]) {
-                    var url = this.proj4CustomURL || this.proj4BaseURL + 'ref/' + this.proj4Catalog.toLowerCase() + '/' + wkid + '/proj4js/';
+                    var url = this.proj4CustomURL || this.proj4BaseURL + String(wkid) + '.js';
                     require([url], lang.hitch(this, 'getStreetView', evt, true));
                     return;
                 }
@@ -254,9 +260,9 @@ define([
                 if (wkid === 102100) {
                     wkid = 3857;
                 }
-                var key = this.proj4Catalog + ':' + wkid;
+                var key = this.proj4Catalog + ':' + String(wkid);
                 if (!proj4.defs[key]) {
-                    var url = this.proj4CustomURL || this.proj4BaseURL + 'ref/' + this.proj4Catalog.toLowerCase() + '/' + wkid + '/proj4js/';
+                    var url = this.proj4CustomURL || this.proj4BaseURL + String(wkid) + '.js';
                     require([url], lang.hitch(this, 'setPlaceMarkerPosition'));
                     return;
                 }

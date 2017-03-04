@@ -16,13 +16,17 @@ define([
     'esri/tasks/IdentifyTask',
     'esri/tasks/IdentifyParameters',
     'esri/dijit/PopupTemplate',
+    'esri/layers/FeatureLayer',
+    'esri/TimeExtent',
+    'dojo/Deferred',
     'dojo/text!./Identify/templates/Identify.html',
     'dojo/i18n!./Identify/nls/resource',
+    './Identify/Formatters',
 
     'dijit/form/Form',
     'dijit/form/FilteringSelect',
     'xstyle/css!./Identify/css/Identify.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, IdentifyTemplate, i18n) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, MenuItem, lang, array, all, topic, query, domStyle, domClass, Moveable, Memory, IdentifyTask, IdentifyParameters, PopupTemplate, FeatureLayer, TimeExtent, Deferred, IdentifyTemplate, i18n, Formatters) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -33,6 +37,7 @@ define([
         mapClickMode: null,
         identifies: {},
         infoTemplates: {},
+        featureLayers: {},
         ignoreOtherGraphics: true,
         createDefaultInfoTemplates: true,
         draggable: false,
@@ -44,6 +49,19 @@ define([
             'shape_len', 'shape.stlength()',
             'shape.area', 'shape_area', 'shape.starea()'
         ],
+        /**
+         * field type mappings to their default formatter functions
+         * overriding this object will globally replace the default
+         * formatter function for the field type
+         * @type {Object<Function>}
+         */
+        defaultFormatters: {
+            'esriFieldTypeSmallInteger': Formatters.formatInt,
+            'esriFieldTypeInteger': Formatters.formatInt,
+            'esriFieldTypeSingle': Formatters.formatFloat,
+            'esriFieldTypeDouble': Formatters.formatFloat,
+            'esriFieldTypeDate': Formatters.formatDate
+        },
 
         postCreate: function () {
             this.inherited(arguments);
@@ -51,56 +69,10 @@ define([
                 this.identifies = {};
             }
             this.layers = [];
-            array.forEach(this.layerInfos, function (layerInfo) {
-                var lyrId = layerInfo.layer.id;
-                var layer = this.map.getLayer(lyrId);
-                if (layer) {
-                    var url = layer.url;
-
-                    // handle feature layers
-                    if (layer.declaredClass === 'esri.layers.FeatureLayer') {
-
-                        // If is a feature layer that does not support
-                        // Identify (Feature Service), create an
-                        // infoTemplate for the graphic features. Create
-                        // it only if one does not already exist.
-                        if (layer.capabilities && array.indexOf(layer.capabilities.toLowerCase(), 'data') < 0) {
-                            if (!layer.infoTemplate) {
-                                var infoTemplate = this.getInfoTemplate(layer, layer.layerId);
-                                if (infoTemplate) {
-                                    layer.setInfoTemplate(infoTemplate);
-                                    return;
-                                }
-                            }
-                        }
-
-                        // If it is a feature Layer, we get the base url
-                        // for the map service by removing the layerId.
-                        var lastSL = url.lastIndexOf('/' + layer.layerId);
-                        if (lastSL > 0) {
-                            url = url.substring(0, lastSL);
-                        }
-                    }
-
-                    this.layers.push({
-                        ref: layer,
-                        layerInfo: layerInfo,
-                        identifyTask: new IdentifyTask(url)
-                    });
-
-                    // rebuild the layer selection list when any layer is hidden
-                    // but only if we have a UI
-                    if (this.parentWidget) {
-                        layer.on('visibility-change', lang.hitch(this, function (evt) {
-                            if (evt.visible === false) {
-                                this.createIdentifyLayerList();
-                            }
-                        }));
-                    }
-                }
-            }, this);
+            this.addLayerInfos(this.layerInfos);
 
             this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
+            this.own(topic.subscribe('identify/addLayerInfos', lang.hitch(this, 'addLayerInfos')));
 
             this.map.on('click', lang.hitch(this, function (evt) {
                 if (this.mapClickMode === 'identify') {
@@ -122,6 +94,80 @@ define([
 
             if (this.draggable) {
                 this.setupDraggable();
+            }
+        },
+        /**
+         * handles an array of layerInfos to call addLayerInfo for each layerInfo
+         * @param {Array<layerInfo>} layerInfos The array of layer infos
+         * @returns {undefined}
+         */
+        addLayerInfos: function (layerInfos) {
+            array.forEach(layerInfos, lang.hitch(this, 'addLayerInfo'));
+        },
+        /**
+         * Initializes an infoTemplate on a layerInfo.layer object if it doesn't
+         * exist already.
+         * @param {object} layerInfo A cmv layerInfo object that contains a layer property
+         * @return {undefined}
+         */
+        addLayerInfo: function (layerInfo) {
+            var lyrId = layerInfo.layer.id, layer = this.map.getLayer(lyrId), infoTemplate;
+            if (layer) {
+                var url = layer.url;
+
+                // handle feature layers
+                if (layer.declaredClass === 'esri.layers.FeatureLayer') {
+
+                    // If is a feature layer that does not support
+                    // Identify (Feature Service), create an
+                    // infoTemplate for the graphic features. Create
+                    // it only if one does not already exist.
+                    if (layer.capabilities && array.indexOf(layer.capabilities.toLowerCase(), 'data') < 0) {
+                        if (!layer.infoTemplate) {
+                            infoTemplate = this.getInfoTemplate(layer, layer.layerId);
+                            if (infoTemplate) {
+                                layer.setInfoTemplate(infoTemplate);
+                                var fieldInfos = infoTemplate.info.fieldInfos;
+                                var formatters = array.filter(fieldInfos, function (info) {
+                                    return (info.formatter);
+                                });
+                                if (formatters.length > 0) {
+                                    layer.on('graphic-draw', lang.hitch(this, 'getFormattedFeature', layer.infoTemplate));
+                                }
+                            }
+                        }
+                    }
+
+                    // If it is a feature Layer, we get the base url
+                    // for the map service by removing the layerId.
+                    var lastSL = url.lastIndexOf('/' + layer.layerId);
+                    if (lastSL > 0) {
+                        url = url.substring(0, lastSL);
+                    }
+                } else if (layer.layerInfos) {
+                    array.forEach(layer.layerInfos, lang.hitch(this, function (subLayerInfo) {
+                        var subLayerId = subLayerInfo.id;
+                        if ((layerInfo.layerIds === null) || (array.indexOf(layerInfo.layerIds, subLayerId) >= 0)) {
+                            this.getFeatureLayerForDynamicSublayer(layer, subLayerId);
+                        }
+                    }));
+                }
+
+                this.layers.push({
+                    ref: layer,
+                    layerInfo: layerInfo,
+                    identifyTask: new IdentifyTask(url)
+                });
+
+                // rebuild the layer selection list when any layer is hidden
+                // but only if we have a UI
+                if (this.parentWidget) {
+                    layer.on('visibility-change', lang.hitch(this, function (evt) {
+                        if (evt.visible === false) {
+                            this.createIdentifyLayerList();
+                        }
+                    }));
+                }
             }
         },
         addRightClickMenu: function () {
@@ -157,8 +203,27 @@ define([
             }
         },
         executeIdentifyTask: function (evt) {
+
+
+            var mapPoint = evt.mapPoint;
+            var identifyParams = this.createIdentifyParams(mapPoint);
+            var identifies = [];
+            var identifiedlayers = [];
+            var selectedLayer = this.getSelectedLayer();
+
+
             if (!this.checkForGraphicInfoTemplate(evt)) {
-                return;
+                // return;
+                var layer = array.filter(this.layers, function (l) {
+                    return l.ref.id === evt.graphic._layer.id;
+                })[0];
+                if (!layer) {
+                    return;
+                }
+                identifiedlayers.push(layer);
+                var d = new Deferred();
+                identifies.push(d.promise);
+                d.resolve([{feature: evt.graphic}]);
             }
 
             this.map.infoWindow.hide();
@@ -169,20 +234,18 @@ define([
                 return;
             }
 
-            var mapPoint = evt.mapPoint;
-            var identifyParams = this.createIdentifyParams(mapPoint);
-            var identifies = [];
-            var identifiedlayers = [];
-            var selectedLayer = this.getSelectedLayer();
 
-            array.forEach(this.layers, lang.hitch(this, function (layer) {
-                var layerIds = this.getLayerIds(layer, selectedLayer);
+            array.forEach(this.layers, lang.hitch(this, function (lyr) {
+                var layerIds = this.getLayerIds(lyr, selectedLayer);
                 if (layerIds.length > 0) {
                     var params = lang.clone(identifyParams);
-                    params.layerDefinitions = layer.ref.layerDefinitions;
+                    params.layerDefinitions = lyr.ref.layerDefinitions;
                     params.layerIds = layerIds;
-                    identifies.push(layer.identifyTask.execute(params));
-                    identifiedlayers.push(layer);
+                    if (lyr.ref.timeInfo && lyr.ref.timeInfo.timeExtent && this.map.timeExtent) {
+                        params.timeExtent = new TimeExtent(this.map.timeExtent.startTime, this.map.timeExtent.endTime);
+                    }
+                    identifies.push(lyr.identifyTask.execute(params));
+                    identifiedlayers.push(lyr);
                 }
             }));
 
@@ -293,15 +356,32 @@ define([
                     if (result.feature.infoTemplate === undefined) {
                         var infoTemplate = this.getInfoTemplate(ref, null, result);
                         if (infoTemplate) {
+                            if (result.layerId && ref.layerInfos && infoTemplate.info.showAttachments) {
+                                result.feature._layer = this.getFeatureLayerForDynamicSublayer(ref, result.layerId);
+                            }
                             result.feature.setInfoTemplate(infoTemplate);
                         } else {
                             return;
                         }
                     }
-                    fSet.push(result.feature);
+                    var feature = this.getFormattedFeature(result.feature.infoTemplate, result.feature);
+                    fSet.push(feature);
                 }, this);
             }, this);
             this.map.infoWindow.setFeatures(fSet);
+        },
+        getFormattedFeature: function (infoTemplate, feature) {
+            if (feature.graphic) {
+                feature = feature.graphic;
+            }
+            if (feature && infoTemplate && infoTemplate.info) {
+                array.forEach(infoTemplate.info.fieldInfos, function (info) {
+                    if (typeof info.formatter === 'function') {
+                        feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes, lang.clone(feature.geometry));
+                    }
+                });
+            }
+            return feature;
         },
         identifyError: function (err) {
             this.map.infoWindow.hide();
@@ -315,43 +395,41 @@ define([
         },
 
         getInfoTemplate: function (layer, layerId, result) {
-            var popup = null,
-                content = null;
+            var popup, config;
             if (result) {
-                layerId = result.layerId;
+                layerId = result.layerId || layer.layerId;
             } else if (layerId === null) {
                 layerId = layer.layerId;
             }
 
-            // see if we have a Popup config defined for this layer
-            if (this.identifies.hasOwnProperty(layer.id)) {
-                if (this.identifies[layer.id].hasOwnProperty(layerId)) {
-                    popup = this.identifies[layer.id][layerId];
-                    if (popup) {
-                        if (typeof (popup.declaredClass) !== 'string') { // has it been created already?
-                            if (popup.content) {
-                                content = popup.content;
-                            }
-                            popup = new PopupTemplate(popup);
-                            if (content) {
-                                popup.setContent(content);
-                            }
-                            this.identifies[layer.id][layerId] = popup;
-                        }
+            var ids = this.identifies;
+            if (ids.hasOwnProperty(layer.id)) {
+                if (ids[layer.id].hasOwnProperty(layerId)) {
+                    popup = ids[layer.id][layerId];
+                    if (popup instanceof PopupTemplate) {
+                        return popup;
                     }
                 }
+            } else {
+                ids[layer.id] = {};
             }
 
-            // if no Popup config found, create one with all attributes or layer fields
-            if (!popup) {
-                popup = this.createDefaultInfoTemplate(layer, layerId, result);
+            // by mixin in the users config with the default props we can
+            // generate a config object that provides the basics automatically
+            // while letting the user override only the parts they want...like mediaInfos
+            config = lang.mixin(this.createDefaultInfoTemplate(layer, layerId, result), ids[layer.id][layerId] || {});
+
+            popup = ids[layer.id][layerId] = new PopupTemplate(config);
+            if (config.content) {
+                popup.setContent(config.content);
             }
 
-            return popup;
+            return ids[layer.id][layerId];
         },
 
         createDefaultInfoTemplate: function (layer, layerId, result) {
-            var popup = null, fieldInfos = [];
+            var popup = null,
+                fieldInfos = [];
 
             var layerName = this.getLayerName(layer);
             if (result) {
@@ -366,14 +444,14 @@ define([
                         if (attributes.hasOwnProperty(prop)) {
                             this.addDefaultFieldInfo(fieldInfos, {
                                 fieldName: prop,
-                                label: prop.replace(/_/g, ' '),
+                                label: this.makeSentenceCase(prop),
                                 visible: true
                             });
                         }
                     }
                 }
 
-            // from the outFields of the layer
+                // from the outFields of the layer
             } else if (layer._outFields && (layer._outFields.length) && (layer._outFields[0] !== '*')) {
 
                 var fields = layer.fields;
@@ -390,31 +468,43 @@ define([
                     }
                 }));
 
-            // from the fields layer
+                // from the fields layer
             } else if (layer.fields) {
 
                 array.forEach(layer.fields, lang.hitch(this, function (field) {
                     this.addDefaultFieldInfo(fieldInfos, {
                         fieldName: field.name,
-                        label: field.alias,
+                        label: field.alias === field.name ? this.makeSentenceCase(field.name) : field.alias,
                         visible: true
                     });
                 }));
             }
 
             if (fieldInfos.length > 0) {
-                popup = new PopupTemplate({
+                popup = {
                     title: layerName,
                     fieldInfos: fieldInfos,
                     showAttachments: (layer.hasAttachments)
-                });
-                if (!this.identifies[layer.id]) {
-                    this.identifies[layer.id] = {};
-                }
-                this.identifies[layer.id][layerId] = popup;
+                };
             }
 
             return popup;
+        },
+        /**
+         * converts a string to a nice sentence case format
+         * @url http://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
+         * @param  {string} str The string to convert
+         * @return {string}     The converted string
+         */
+        makeSentenceCase: function (str) {
+            if (!str.length) {
+                return '';
+            }
+            str = str.toLowerCase().replace(/_/g, ' ').split(' ');
+            for (var i = 0; i < str.length; i++) {
+                str[i] = str[i].charAt(0).toUpperCase() + (str[i].substr(1).length ? str[i].substr(1) : '');
+            }
+            return (str.length ? str.join(' ') : str);
         },
 
         addDefaultFieldInfo: function (fieldInfos, field) {
@@ -489,8 +579,10 @@ define([
             if (layerInfo.subLayerIds !== null) {
                 return false;
             }
-            // only include sublayers that are currently visible
-            if (array.indexOf(ref.visibleLayers, layerInfo.id) < 0) {
+
+            if (this.isDefaultLayerVisibility(ref) && !this.checkVisibilityRecursive(ref, layerInfo.id)) {
+                return false;
+            } else if (array.indexOf(ref.visibleLayers, layerInfo.id) < 0) {
                 return false;
             }
             // only include sublayers that are within the current map scale
@@ -518,6 +610,44 @@ define([
             return true;
         },
 
+        /**
+         * recursively check all a layer's parent(s) layers for visibility
+         * this only needs to be done if the layers visibleLayers array is
+         * set to the default visibleLayers. After setVisibleLayers
+         * is called the first time group layers are NOT included.
+         * @param  {esri/layers/DynamicMapServiceLayer} layer The layer reference
+         * @param  {Integer} id   The sublayer id to check for visibility
+         * @return {Boolean}      Whether or not the sublayer is visible based on its parent(s) visibility
+         */
+        checkVisibilityRecursive: function (layer, id) {
+            var layerInfos = array.filter(layer.layerInfos, function (layerInfo) {
+                return (layerInfo.id === id);
+            });
+            if (layerInfos.length > 0) {
+                var info = layerInfos[0];
+                if (layer.visibleLayers.indexOf(id) !== -1 &&
+                    (info.parentLayerId === -1 || this.checkVisibilityRecursive(layer, info.parentLayerId))) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        /**
+         * check each defaultVisibility and if its not in the visibleLayers
+         * array, then the layer has non-default layer visibility
+         * @param  {esri/layers/DynamicMapServiceLayer} layer The layer reference
+         * @return {Boolean}       Whether or not we're operating with the default visibleLayers array or not
+         */
+        isDefaultLayerVisibility: function (layer) {
+            for (var i = 0; i < layer.layerInfos.length; i++) {
+                var item = layer.layerInfos[i];
+                if (item.defaultVisibility && layer.visibleLayers.indexOf(item.id) === -1) {
+                    return false;
+                }
+            }
+            return true;
+        },
+
         getLayerName: function (layer) {
             var name = null;
             if (layer.layerInfo) {
@@ -538,6 +668,17 @@ define([
                 }
             }
             return name;
+        },
+
+        getFeatureLayerForDynamicSublayer: function (layer, layerId) {
+            if (!layer.layerInfos) {
+                return false;
+            }
+            var key = layer.url + '/' + layerId;
+            if (!this.featureLayers.hasOwnProperty(key)) {
+                this.featureLayers[key] = new FeatureLayer(key);
+            }
+            return this.featureLayers[key];
         },
 
         layerVisibleAtCurrentScale: function (layer) {

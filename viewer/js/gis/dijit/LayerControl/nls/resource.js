@@ -1,6 +1,6 @@
 // internationalization for LayerControl
 //
-// http://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
+// https://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
 //
 // if you would like to add a locale please create an issue at
 // https://github.com/cmv/cmv-app/issues and someone will assist
@@ -19,5 +19,9 @@ define({
         layerSwipeScope: 'Scope',
         dynamicSublayersOn: 'Turn On All Sublayers',
         dynamicSublayersOff: 'Turn Off All Sublayers'
-    }
+    },
+    'es': true,
+    'fr': true,
+    'pt-br': true,
+    'pt-pt': true
 });

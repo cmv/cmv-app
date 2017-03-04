@@ -21,5 +21,9 @@ define ({
                 message: 'There was a problem getting your location: '
             }
         }
-    }
+    },
+    'es': true,
+    'fr': true,
+    'pt-br': true,
+    'pt-pt': true
 });

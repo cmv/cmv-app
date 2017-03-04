@@ -1,4 +1,4 @@
-// http://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
+// https://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
 define({
     root: {
         title: 'Title',
@@ -38,6 +38,10 @@ define({
             },
             errorMessage: 'Error, try again'
         }
-    }
+    },
+    'es': true,
+    'fr': true,
+    'pt-br': true,
+    'pt-pt': true
 });
 

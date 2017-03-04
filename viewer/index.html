@@ -11,12 +11,13 @@
         <meta name="author" content="cmv.io">
         <link rel="shortcut icon" href="./favicon.png">
         <title>Configurable Map Viewer</title>
-        <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.16compact/esri/css/esri.css">
-        <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="css/theme/dbootstrap/dbootstrap.css">
+        <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/3.20compact/esri/css/esri.css">
+        <link rel="stylesheet" type="text/css" href="css/theme/flat/flat.css">
+        <link rel="stylesheet" type="text/css" href="css/cmv-theme-overrides.css">
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
     </head>
-    <body class="dbootstrap">
+    <body class="cmv flat">
         <div class="appHeader">
             <div class="headerLogo">
                 <img alt="logo" src="images/rocket-logo.png" height="54" />
@@ -38,10 +39,18 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+            var s = window.location.search, q = s.match(/locale=([^&]*)/i);
+            var locale = (q && q.length > 0) ? q[1] : null;
+            window.dojoConfig = {
+                locale: locale,
+                async: true
+            };
+        </script>
         <!--[if lt IE 9]>
-            <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.3/es5-shim.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.3/es5-shim.min.js"></script>
         <![endif]-->
-        <script src="//js.arcgis.com/3.16compact/"></script>
+        <script src="https://js.arcgis.com/3.20compact/"></script>
         <script src="js/config/app.js"></script>
     </body>
 </html>

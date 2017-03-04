@@ -9,17 +9,18 @@ define([
     'dojo/_base/lang',
     'dojo/aspect',
     'dojo/text!./Help/templates/HelpDialog.html',
+    'dojo/i18n!./Help/nls/resource',
     'dijit/form/Button',
     'dijit/layout/TabContainer',
     'dijit/layout/ContentPane',
     'xstyle/css!./Help/css/Help.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin, domConstruct, on, lang, aspect, template) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin, domConstruct, on, lang, aspect, template, i18n) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin], {
         widgetsInTemplate: true,
         templateString: template,
-        title: 'Help',
-        html: '<a href="#">Help</a>',
+        i18n: i18n,
+        html: '<a href="#">link</a>'.replace('link', i18n.link),
         domTarget: 'helpDijit',
         draggable: false,
         baseClass: 'helpDijit',

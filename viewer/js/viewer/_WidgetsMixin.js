@@ -2,6 +2,8 @@ define([
     'dojo/_base/declare',
     'dojo/_base/array',
     'dojo/_base/lang',
+    'dojo/promise/all',
+    'dojo/Deferred',
 
     'put-selector',
 
@@ -15,6 +17,8 @@ define([
     declare,
     array,
     lang,
+    promiseAll,
+    Deferred,
 
     put,
 
@@ -32,16 +36,54 @@ define([
         identifyLayerInfos: [],
         layerControlLayerInfos: [],
 
-        initWidgets: function () {
+        widgets: {},
+        widgetTypes: ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map', 'layer', 'layout', 'loading'],
+        postConfig: function (wait) {
+
+            var waitDeferred;
+            if (wait) {
+                waitDeferred = new Deferred();
+
+                wait.then(lang.hitch(this, function () {
+                    // load loading widgets
+                    promiseAll(this.createWidgets(['loading'])).then(waitDeferred.resolve);
+                }));
+            } else {
+                var deferreds = this.createWidgets(['loading']);
+                if (deferreds && deferreds.length) {
+                    waitDeferred = promiseAll(deferreds);
+                }
+            }
+
+            return this.inherited(arguments) || waitDeferred;
+        },
+        startup: function () {
+            this.inherited(arguments);
+            if (this.mapDeferred) {
+                this.mapDeferred.then(lang.hitch(this, 'createWidgets', ['map', 'layer']));
+            }
+            if (this.layoutDeferred) {
+                promiseAll([this.mapDeferred, this.layoutDeferred])
+                    .then(lang.hitch(this, 'createWidgets', null));
+            }
+        },
+
+        createWidgets: function (widgetTypes) {
             var widgets = [],
                 paneWidgets;
 
+            widgetTypes = widgetTypes || this.widgetTypes;
             for (var key in this.config.widgets) {
                 if (this.config.widgets.hasOwnProperty(key)) {
                     var widget = lang.clone(this.config.widgets[key]);
-                    if (widget.include) {
-                        widget.position = (typeof (widget.position) !== 'undefined') ? widget.position : 10000;
+                    widget.widgetKey = widget.widgetKey || widget.id || key;
+                    if (widget.include && (!this.widgets[widget.widgetKey]) && (array.indexOf(widgetTypes, widget.type) >= 0)) {
+                        widget.position = (typeof(widget.position) !== 'undefined') ? widget.position : 10000;
+                        if ((widget.type === 'titlePane' || widget.type === 'contentPane') && !widget.placeAt) {
+                            widget.placeAt = 'left';
+                        }
                         widgets.push(widget);
+                        this.widgets[key] = true; // will be replaced by actual widget once created
                     }
                 }
             }
@@ -54,11 +96,14 @@ define([
             }
 
             for (var pane in this.panes) {
-                if (this.panes.hasOwnProperty(pane) && (pane !== 'outer' || pane !== 'center')) {
+                if (this.panes.hasOwnProperty(pane) && pane !== 'outer' && pane !== 'center') {
                     paneWidgets = getPaneWidgets(pane);
                     paneWidgets.sort(function (a, b) {
                         return a.position - b.position;
                     });
+                    if (paneWidgets.length > 0 && paneWidgets[0].position !== 0) {
+                        paneWidgets[0].position = 0;
+                    }
                     array.forEach(paneWidgets, function (paneWidget, i) {
                         this.widgetLoader(paneWidget, i);
                     }, this);
@@ -70,23 +115,29 @@ define([
             paneWidgets.sort(function (a, b) {
                 return a.position - b.position;
             });
-
+            var deferreds = [];
             array.forEach(paneWidgets, function (paneWidget, i) {
-                this.widgetLoader(paneWidget, i);
+                var def = this.widgetLoader(paneWidget, i);
+                if (def) {
+                    deferreds.push(def);
+                }
             }, this);
+            return deferreds;
         },
 
         widgetLoader: function (widgetConfig, position) {
             var parentId, pnl;
 
+            var widgetTypes = this.widgetTypes;
+            // add any user-defined widget types
+            widgetTypes = widgetTypes.concat(this.config.widgetTypes || []);
             // only proceed for valid widget types
-            var widgetTypes = ['titlePane', 'contentPane', 'floating', 'domNode', 'invisible', 'map'];
             if (array.indexOf(widgetTypes, widgetConfig.type) < 0) {
                 this.handleError({
                     source: 'Controller',
                     error: 'Widget type "' + widgetConfig.type + '" (' + widgetConfig.title + ') at position ' + position + ' is not supported.'
                 });
-                return;
+                return null;
             }
 
             if (position) {
@@ -94,8 +145,8 @@ define([
             }
 
             // build a titlePane or floating widget as the parent
-            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating') && (widgetConfig.id && widgetConfig.id.length > 0)) {
-                parentId = widgetConfig.id + '_parent';
+            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
+                parentId = widgetConfig.widgetKey + '_parent';
                 if (widgetConfig.type === 'titlePane') {
                     pnl = this._createTitlePaneWidget(parentId, widgetConfig);
                 } else if (widgetConfig.type === 'contentPane') {
@@ -104,18 +155,52 @@ define([
                     pnl = this._createFloatingWidget(parentId, widgetConfig);
                 }
                 widgetConfig.parentWidget = pnl;
+                this._showWidgetLoader(pnl);
             }
 
             // 2 ways to use require to accommodate widgets that may have an optional separate configuration file
-            if (typeof (widgetConfig.options) === 'string') {
-                require([widgetConfig.options, widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig));
+            var deferred = new Deferred();
+            if (typeof(widgetConfig.options) === 'string') {
+                require([widgetConfig.options, widgetConfig.path], lang.hitch(this, function (options, WidgetClass) {
+                    deferred.resolve();
+                    this.createWidget(widgetConfig, options, WidgetClass);
+                }));
             } else {
-                require([widgetConfig.path], lang.hitch(this, 'createWidget', widgetConfig, widgetConfig.options));
+                require([widgetConfig.path], lang.hitch(this, function (WidgetClass) {
+                    deferred.resolve();
+                    this.createWidget(widgetConfig, widgetConfig.options, WidgetClass);
+                }));
             }
+            return deferred;
         },
 
         createWidget: function (widgetConfig, options, WidgetClass) {
+            var key = widgetConfig.widgetKey;
+            if (!key) {
+                return;
+            }
+
             // set any additional options
+            options = this._setWidgetOptions(widgetConfig, options);
+
+            // create the widget
+            var pnl = options.parentWidget;
+            var widgets = this.widgets;
+            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
+                widgets[key] = new WidgetClass(options, put('div')).placeAt(pnl.containerNode);
+            } else if (widgetConfig.type === 'domNode') {
+                widgets[key] = new WidgetClass(options, widgetConfig.srcNodeRef);
+            } else {
+                widgets[key] = new WidgetClass(options);
+            }
+            // start up the widget
+            if (widgets[key] && widgets[key].startup && !widgets[key]._started) {
+                widgets[key].startup();
+            }
+            this._hideWidgetLoader(pnl);
+        },
+
+        _setWidgetOptions: function (widgetConfig, options) {
             if (widgetConfig.id) {
                 options.id = widgetConfig.id + '_widget';
             }
@@ -151,20 +236,20 @@ define([
             if (options.identifyLayerInfos) {
                 options.layerInfos = this.identifyLayerInfos;
             }
+            return options;
+        },
 
-            // create the widget
-            var pnl = options.parentWidget;
-            if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
-                this[widgetConfig.id] = new WidgetClass(options, put('div')).placeAt(pnl.containerNode);
-            } else if (widgetConfig.type === 'domNode') {
-                this[widgetConfig.id] = new WidgetClass(options, widgetConfig.srcNodeRef);
-            } else {
-                this[widgetConfig.id] = new WidgetClass(options);
+        _showWidgetLoader: function (pnl) {
+            if (pnl && pnl.containerNode) {
+                pnl.loadingNode = put(pnl.containerNode, 'div.widgetLoader i.fa.fa-spinner.fa-pulse.fa-fw').parentNode;
             }
+        },
 
-            // start up the widget
-            if (this[widgetConfig.id] && this[widgetConfig.id].startup && !this[widgetConfig.id]._started) {
-                this[widgetConfig.id].startup();
+        _hideWidgetLoader: function (pnl) {
+            if (pnl && pnl.loadingNode) {
+                require(['dojo/domReady!'], function () {
+                    put(pnl.loadingNode, '!');
+                });
             }
         },
 
@@ -172,6 +257,7 @@ define([
             var tp,
                 options = lang.mixin({
                     title: widgetConfig.title || 'Widget',
+                    iconClass: widgetConfig.iconClass,
                     open: widgetConfig.open || false,
                     canFloat: widgetConfig.canFloat || false,
                     resizable: widgetConfig.resizable || false
@@ -180,7 +266,7 @@ define([
                 options.id = parentId;
             }
             var placeAt = widgetConfig.placeAt;
-            if (typeof (placeAt) === 'string') {
+            if (typeof(placeAt) === 'string') {
                 placeAt = this.panes[placeAt];
             }
             if (!placeAt) {
@@ -220,8 +306,8 @@ define([
             }
             var placeAt = widgetConfig.placeAt;
             if (!placeAt) {
-                placeAt = this.panes.sidebar;
-            } else if (typeof (placeAt) === 'string') {
+                placeAt = this.panes.left;
+            } else if (typeof(placeAt) === 'string') {
                 placeAt = this.panes[placeAt];
             }
             if (placeAt) {

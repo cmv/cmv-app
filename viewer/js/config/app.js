@@ -12,6 +12,12 @@
             }, {
                 name: 'config',
                 location: path + 'js/config'
+            }, {
+                name: 'proj4js',
+                location: '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15'
+            }, {
+                name: 'flag-icon-css',
+                location: '//cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.8.0'
             }
         ]
     };
@@ -30,6 +36,7 @@
         'viewer/_MapMixin', // build and manage the Map
         'viewer/_WidgetsMixin' // build and manage the Widgets
 
+        // 'viewer/_WebMapMixin' // for WebMaps
         //'config/_customMixin'
 
     ], function (
@@ -41,16 +48,32 @@
         _MapMixin,
         _WidgetsMixin
 
+        // _WebMapMixin
         //_MyCustomMixin
 
     ) {
-        var controller = new (declare([
-            _ControllerBase,
-            _ConfigMixin,
+        var App = declare([
+
+            // add custom mixins here...note order may be important and
+            // overriding certain methods incorrectly may break the app
+            // First on the list are last called last, for instance the startup
+            // method on _ControllerBase is called FIRST, and _LayoutMixin is called LAST
+            // for the most part they are interchangeable, except _ConfigMixin
+            // and _ControllerBase
+            //
             _LayoutMixin,
+            _WidgetsMixin,
+            // _WebMapMixin,
             _MapMixin,
-            _WidgetsMixin
-        ]))();
-        controller.startup();
+
+            // configMixin should be right before _ControllerBase so it is
+            // called first to initialize the config object
+            _ConfigMixin,
+
+            // controller base needs to be last
+            _ControllerBase
+        ]);
+        var app = new App();
+        app.startup();
     });
 })();

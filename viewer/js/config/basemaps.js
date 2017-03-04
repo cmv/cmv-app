@@ -1,12 +1,12 @@
 define([
-    //'esri/dijit/Basemap',
-    //'esri/dijit/BasemapLayer'
-], function (/* Basemap, BasemapLayer */) {
+    'esri/dijit/Basemap',
+    'esri/dijit/BasemapLayer',
+    'dojo/i18n!./nls/main'
+], function (Basemap, BasemapLayer, i18n) {
 
     return {
         map: true, // needs a reference to the map
-        mode: 'agol', // mut be either 'agol' or 'custom'
-        title: 'Basemaps', // title for widget
+        //mode: 'agol', // mut be either 'agol' or 'custom'
 
         /* optional starting basemap
         / otherwise uses the basemap from the map
@@ -22,47 +22,21 @@ define([
 
         // define all valid basemaps here.
         basemaps: {
-            streets: {
-                title: 'Streets'
-            },
-            'streets-night-vector': { // requires v3.16 or higher
-                title: 'Streets (Night)'
-            },
-            'streets-navigation-vector': { // requires v3.16 or higher
-                title: 'Streets (Navigation)'
-            },
-            'streets-relief-vector': { // requires v3.16 or higher
-                title: 'Street (Relief)'
-            },
-            satellite: {
-                title: 'Satellite'
-            },
-            hybrid: {
-                title: 'Hybrid'
-            },
-            topo: {
-                title: 'Topo'
-            },
-            'terrain': {
-                title: 'Terrain'
-            },
-            'gray-vector': { // requires v3.16 or higher
-                title: 'Gray'
-            },
-            'dark-gray-vector': { // requires v3.16 or higher
-                title: 'Dark Gray'
-            },
-            oceans: {
-                title: 'Oceans'
-            },
-            'national-geographic': {
-                title: 'Nat Geo'
-            },
-            osm: {
-                title: 'Open Street Map'
-            },
-            LandsatShaded: {
-                title: 'Landsat Shaded',
+            streets: {},
+            'streets-night-vector': {}, // requires v3.16 or higher
+            'streets-navigation-vector': {}, // requires v3.16 or higher
+            'streets-relief-vector': {}, // requires v3.16 or higher
+            satellite: {},
+            hybrid: {},
+            topo: {},
+            terrain: {},
+            'gray-vector': {}, // requires v3.16 or higher
+            'dark-gray-vector': {}, // requires v3.16 or higher
+            oceans: {},
+            'national-geographic': {},
+            osm: {},
+            landsatShaded: {
+                title: i18n.basemaps.landsatShaded,
                 basemap: {
                     baseMapLayers: [
                         {
@@ -71,8 +45,8 @@ define([
                     ]
                 }
             },
-            EarthAtNight: {
-                title: 'Earth at Night',
+            earthAtNight: {
+                title: i18n.basemaps.earthAtNight,
                 basemap: {
                     baseMapLayers: [
                         {
@@ -81,15 +55,28 @@ define([
                     ]
                 }
             },
-            DavidRumseyMap1812: {
-                title: 'David Rumsey 1812',
+            davidRumseyMap1812: {
+                title: i18n.basemaps.davidRumseyMap1812,
                 basemap: {
                     baseMapLayers: [
                         {
-                            url: 'http://tiles.arcgis.com/tiles/IEuSomXfi6iB7a25/arcgis/rest/services/World_Globe_1812/MapServer'
+                            url: 'https://tiles.arcgis.com/tiles/IEuSomXfi6iB7a25/arcgis/rest/services/World_Globe_1812/MapServer'
                         }
                     ]
                 }
+            },
+            mapboxPirates: {
+                title: 'Pirates (mapbox.com)',
+                basemap: new Basemap({
+                    id: 'mapboxPirates',
+                    layers: [new BasemapLayer({
+                        url: 'https://${subDomain}.tiles.mapbox.com/v3/aj.Sketchy2/${level}/${col}/${row}.png',
+                        copyright: 'mapbox, 2016',
+                        id: 'mapboxPirates',
+                        subDomains: ['a', 'b', 'c', 'd'],
+                        type: 'WebTiledLayer'
+                    })]
+                })
             }
 
             // additional examples of vector tile basemaps (requires v3.16 or higher)
@@ -141,7 +128,7 @@ define([
                     ]
                 }
             },
-            darkGrayVector: {
+            'dark-gray-vector': {
                 title: 'Dark Gray Canvas',
                 basemap: {
                     baseMapLayers: [
@@ -163,7 +150,7 @@ define([
                     ]
                 }
             },
-            streetsNightVector: {
+            'streets-night-vector': {
                 title: 'Streets Night',
                 basemap: {
                     baseMapLayers: [
@@ -252,7 +239,7 @@ define([
                 basemap: new Basemap({
                     id: 'stamenToner',
                     layers: [new BasemapLayer({
-                        url: 'http://tile.stamen.com/toner/${level}/${col}/${row}.png',
+                        url: 'https://tile.stamen.com/toner/${level}/${col}/${row}.png',
                         copyright: 'stamen, 2016',
                         id: 'stamenToner',
                         type: 'WebTiledLayer'
@@ -264,7 +251,7 @@ define([
                 basemap: new Basemap({
                     id: 'stamenTerrain',
                     layers: [new BasemapLayer({
-                        url: 'http://tile.stamen.com/terrain/${level}/${col}/${row}.png',
+                        url: 'https://tile.stamen.com/terrain/${level}/${col}/${row}.png',
                         copyright: 'stamen, 2016',
                         id: 'stamenTerrain',
                         type: 'WebTiledLayer'
@@ -276,26 +263,13 @@ define([
                 basemap: new Basemap({
                     id: 'stamenWatercolor',
                     layers: [new BasemapLayer({
-                        url: 'http://tile.stamen.com/watercolor/${level}/${col}/${row}.png',
+                        url: 'https://tile.stamen.com/watercolor/${level}/${col}/${row}.png',
                         copyright: 'stamen, 2016',
                         id: 'stamenWatercolor',
                         type: 'WebTiledLayer'
                     })]
                 })
             },
-            mapboxPirates: {
-                title: 'Pirates (mapbox.com)',
-                basemap: new Basemap({
-                    id: 'mapboxPirates',
-                    layers: [new BasemapLayer({
-                        url: 'https://${subDomain}.tiles.mapbox.com/v3/aj.Sketchy2/${level}/${col}/${row}.png',
-                        copyright: 'mapbox, 2016',
-                        id: 'mapboxPirates',
-                        subDomains: ['a', 'b', 'c', 'd'],
-                        type: 'WebTiledLayer'
-                    })]
-                })
-            }
             */
         }
     };

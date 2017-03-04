@@ -1,0 +1,14 @@
+.cmvLocaleDijit label {
+    font-weight: bold;
+}
+.flag-icon {
+    width: 20px;
+    height: 15px;
+    margin-right: 5px;
+    margin-top: -1px;
+    border: 1px solid #DDD;
+}
+
+.localeMenuPopup {
+    max-height: 300px;
+}
