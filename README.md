@@ -11,7 +11,7 @@ This JavaScript web app can be easily configured or used as a boilerplate/starti
 ## Try The Demo:
 [https://demo.cmv.io/](https://demo.cmv.io/)
 
-![screen shot 2014-08-20 at 9 59 48 pm](https://cloud.githubusercontent.com/assets/661156/3991302/5aa2e0f2-28df-11e4-94d0-9c813937d933.png)
+[![Screenshot](https://cloud.githubusercontent.com/assets/200780/23583081/e38becbc-00ee-11e7-86da-13b0bf91ad8d.png)](https://demo.cmv.io/)
 
 ## Widgets Included:
 - Basemaps
