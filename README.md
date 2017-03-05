@@ -1,4 +1,4 @@
-# CMV <img src="https://cmv.io/images/rocket-logo.png" width="45" /> The Configurable Map Viewer
+# CMV <img src="viewer/images/rocket-logo.png" width="45" /> The Configurable Map Viewer
 
 [![Read The Docs](https://img.shields.io/badge/docs-2.0.0--beta.1-brightgreen.svg?style=flat)](https://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/cmv/cmv-app.svg?branch=master)](https://travis-ci.org/cmv/cmv-app) [![Greenkeeper badge](https://badges.greenkeeper.io/cmv/cmv-app.svg)](https://greenkeeper.io/)
 
