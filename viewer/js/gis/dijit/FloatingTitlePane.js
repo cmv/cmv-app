@@ -6,6 +6,7 @@ define([
     'dojo/dnd/Moveable',
     'dojo/aspect',
     'dojo/topic',
+    'dojo/sniff',
     'dojo/_base/window',
     'dojo/window',
     'dojo/dom-geometry',
@@ -13,14 +14,32 @@ define([
     'dojo/dom-construct',
     'dojo/dom-attr',
     'dojo/dom-class',
+    'dojox/layout/ResizeHandle',
+    'xstyle/css!dojox/layout/resources/ResizeHandle.css',
     'xstyle/css!./FloatingTitlePane/css/FloatingTitlePane.css'
-], function (declare, TitlePane, on, lang, Moveable, aspect, topic, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass) {
+], function (declare, TitlePane, on, lang, Moveable, aspect, topic, has, win, winUtils, domGeom, domStyle, domConstruct, domAttr, domClass, ResizeHandle) {
+
     return declare([TitlePane], {
         sidebarPosition: null,
+
+        canFloat: false,
+        isFloating: false,
+        isDragging: false,
+        dragDelay: 3,
+
+        resizable: false,
+        resizeOptions: {},
+        isResizing: false,
+
         postCreate: function () {
             if (this.canFloat) {
                 this.createDomNodes();
                 this.own(on(window, 'resize', lang.hitch(this, '_endDrag')));
+            }
+            if (this.iconClass) {
+                this.iconNode = domConstruct.create('span', {
+                    'class': 'titlePaneIcon fa fa-fw ' + this.iconClass
+                }, this.titleNode, 'before');
             }
             this.own(topic.subscribe('titlePane/event', lang.hitch(this, '_updateWidgetSidebarPosition')));
             this.own(aspect.after(this, 'toggle', lang.hitch(this, '_afterToggle')));
@@ -29,13 +48,21 @@ define([
         startup: function () {
             if (this.titleBarNode && this.canFloat) {
                 this._moveable = new Moveable(this.domNode, {
-                    delay: 5,
-                    handle: this.titleBarNode
+                    handle: this.titleBarNode,
+                    delay: this.dragDelay
                 });
+                if (this.dragDelay > 0) {
+                    this._moveable.mover.prototype.onMouseUp = function (e) {
+                        this.destroy();
+                        e.preventDefault();
+                        e.stopPropagation();
+                    };
+                }
+                this._titleBarHeight = domStyle.get(this.titleBarNode, 'height');
                 aspect.after(this._moveable, 'onMove', lang.hitch(this, '_dragging'), true);
                 aspect.after(this._moveable, 'onMoveStop', lang.hitch(this, '_endDrag'), true);
                 aspect.after(this._moveable, 'onMoveStart', lang.hitch(this, '_startDrag'), true);
-                
+
                 // ensure that dragging the movable stops no matter
                 // when/where the mouse is released or a touch is completed
                 on(document, 'mouseup, touchend', lang.hitch(this, '_endDrag'));
@@ -57,36 +84,42 @@ define([
                 this._dockWidget();
                 evt.stopImmediatePropagation();
             })));
+
+            if (this.resizable) {
+                var resOptions = lang.mixin({
+                    targetId: this.id,
+                    activeResize: true,
+                    intermediateChanges: true,
+                    startTopic: this.id + '/resize/start',
+                    endTopic: this.id + '/resize/end'
+                }, this.resizeOptions);
+                this._resizer = new ResizeHandle(resOptions).placeAt(this.id);
+                domStyle.set(this._resizer.resizeHandle, 'display', 'none');
+                on(this._resizer, 'resize', lang.hitch(this, '_resizing'), true);
+                this.own(topic.subscribe(this.id + '/resize/start', lang.hitch(this, '_startResize')));
+                this.own(topic.subscribe(this.id + '/resize/end', lang.hitch(this, '_endResize')));
+            }
         },
+
+        /* Methods related to Toggling the TitleBar */
         toggle: function () {
-            if (this.isFloating && this.isDragging) {
+            if ((this.isFloating && this.isDragging) || this.resizing) {
                 return;
             }
             this.inherited(arguments);
         },
-        _dockWidget: function () {
-            if (!this.isDragging) {
-                domAttr.remove(this.domNode, 'style');
-                domStyle.set(this.dockHandleNode, 'display', 'none');
-                domStyle.set(this.moveHandleNode, 'display', 'inline');
-                var dockedWidgets = this.sidebar.getChildren();
-                if (this.sidebarPosition > dockedWidgets.length || this.sidebarPosition < 0) {
-                    this.sidebarPosition = dockedWidgets.length;
-                }
-                this.placeAt(this.sidebar, this.sidebarPosition);
-                this.isFloating = false;
-                this._updateTopic('dock');
-            }
+        _afterToggle: function () {
+            var evt = this.open ? 'open' : 'close';
+            this._updateTopic(evt);
         },
+
+        /* Methods for Dragging */
         _dragging: function () {
             this.isDragging = true;
-        },
-        _startDrag: function (mover) {
             if (!this.titleCursor) {
                 this.titleCursor = domStyle.get(this.titleBarNode, 'cursor');
             }
             domStyle.set(this.titleBarNode, 'cursor', 'move');
-
             if (!this.isFloating) {
                 this._checkSidebarPosition();
                 domStyle.set(this.dockHandleNode, 'display', 'inline');
@@ -99,12 +132,18 @@ define([
                 }, computedStyle);
                 this.isFloating = true;
                 this.placeAt(win.body());
-                var titleHeight = domStyle.get(this.titleBarNode, 'height');
                 domStyle.set(this.domNode, {
-                    top: (mover.marginBox.t - titleHeight) + 'px'
+                    top: (this._moverBox.t - this._titleBarHeight) + 'px'
                 });
+
+                if (this.resizable && this._resizer && this._resizer.resizeHandle) {
+                    domStyle.set(this._resizer.resizeHandle, 'display', 'block');
+                }
                 this._updateTopic('undock');
             }
+        },
+        _startDrag: function (mover) {
+            this._moverBox = mover.marginBox;
         },
         _endDrag: function () {
             // summary:
@@ -140,6 +179,28 @@ define([
                     left: l + 'px',
                     top: t + 'px'
                 });
+            }
+        },
+
+        /* Methods for Docking and Undocking */
+        _dockWidget: function () {
+            if (!this.isDragging) {
+                domAttr.remove(this.domNode, 'style');
+                domStyle.set(this.dockHandleNode, 'display', 'none');
+                domStyle.set(this.moveHandleNode, 'display', 'inline');
+                var dockedWidgets = this.sidebar.getChildren();
+                if (this.sidebarPosition > dockedWidgets.length || this.sidebarPosition < 0) {
+                    this.sidebarPosition = dockedWidgets.length;
+                }
+                this.placeAt(this.sidebar, this.sidebarPosition);
+                this.isFloating = false;
+                this._updateTopic('dock');
+            }
+            if (this.resizable && this._resizer && this._resizer.resizeHandle) {
+                domStyle.set(this._resizer.resizeHandle, 'display', 'none');
+                if (this._initialDimensions) {
+                    topic.publish(this.id + '/resize/resize', this._initialDimensions);
+                }
             }
         },
         _updateWidgetSidebarPosition: function (msg) {
@@ -185,6 +246,30 @@ define([
                 }
             }
         },
+
+        /* Methods for Resizing */
+        _resizing: function (evt) {
+            this.isResizing = true;
+            var newDim = this._resizer._getNewCoords(evt, this, 'margin');
+            if (newDim) {
+                topic.publish(this.id + '/resize/resize', {
+                    h: this._resizeDimensions.h + (newDim.h - this._resizer.startSize.h),
+                    w: this._resizeDimensions.w + (newDim.w - this._resizer.startSize.w)
+                });
+            }
+        },
+        _startResize: function () {
+            this.isResizing = true;
+            this._resizeDimensions = domGeom.getContentBox(this.containerNode);
+            if (!this._initialDimensions) {
+                this._initialDimensions = this._resizeDimensions;
+            }
+        },
+        _endResize: function () {
+            this.isResizing = false;
+            domStyle.set(this.domNode, 'height', 'auto');
+        },
+
         _updateTopic: function (msg) {
             topic.publish('titlePane/event', {
                 category: 'Titlepane Event',
@@ -194,10 +279,6 @@ define([
                 sidebarPosition: this.sidebarPosition,
                 value: msg
             });
-        },
-        _afterToggle: function () {
-            var evt = this.open ? 'open' : 'close';
-            this._updateTopic(evt);
         }
     });
 });

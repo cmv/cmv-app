@@ -12,5 +12,9 @@ define ({
             currentDrawMode: 'Current draw mode:',
             currentDrawModeNone: 'None'
         }
-    }
+    },
+    'es': true,
+    'fr': true,
+    'pt-br': true,
+    'pt-pt': true
 });

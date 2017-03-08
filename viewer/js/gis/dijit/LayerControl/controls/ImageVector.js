@@ -13,6 +13,7 @@ define([
     _Control,
     legendUtil
 ) {
+
     var ImageVectorControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
         _esriLayerType: 'imagevector', // constant

@@ -13,6 +13,7 @@ define([
     _Control,
     legendUtil
 ) {
+
     var StreamControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
         _esriLayerType: 'raster', // constant

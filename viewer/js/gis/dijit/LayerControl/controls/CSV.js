@@ -13,6 +13,7 @@ define([
     _Control,
     legendUtil
 ) {
+
     var CSVControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'vector', // constant
         _esriLayerType: 'csv', // constant

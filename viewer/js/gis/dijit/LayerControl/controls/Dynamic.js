@@ -39,6 +39,7 @@ define([
     legendUtil,
     i18n
 ) {
+
     var DynamicControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
         _esriLayerType: 'dynamic', // constant
@@ -87,6 +88,13 @@ define([
                 menu.addChild(new MenuSeparator());
             }
         },
+        _initCustomMenu: function () {
+            // add custom sublayer menu items if we only have one sublayer
+            if (!this._hasSublayers) {
+                array.forEach(this.controlOptions.subLayerMenu, lang.hitch(this, '_addCustomMenuItem', this.layerMenu));
+                this.layerMenu.addChild(new MenuSeparator());
+            }
+        },
         // toggle all sublayers on/off
         _toggleAllSublayers: function (state) {
             array.forEach(this._sublayerControls, function (control) {
@@ -98,29 +106,40 @@ define([
         _createSublayers: function (layer) {
             // check for single sublayer - if so no sublayer/folder controls
             if (layer.layerInfos.length > 1) {
+                var allLayers = array.map(layer.layerInfos, function (l) {
+                    return l.id;
+                });
                 array.forEach(layer.layerInfos, lang.hitch(this, function (info) {
+                    // see if there was any override needed from the subLayerInfos array in the controlOptions
+                    var sublayerInfo = array.filter(this.controlOptions.subLayerInfos, function (sli) {
+                        return sli.id === info.id;
+                    }).shift();
+                    lang.mixin(info, sublayerInfo);
                     var pid = info.parentLayerId,
                         slids = info.subLayerIds,
                         controlId = layer.id + '-' + info.id + '-sublayer-control',
                         control;
-                    if (pid === -1 && slids === null) {
-                        // it's a top level sublayer
-                        control = new DynamicSublayer({
-                            id: controlId,
-                            control: this,
-                            sublayerInfo: info,
-                            icons: this.icons
-                        });
-                        domConst.place(control.domNode, this.expandNode, 'last');
-                    } else if (pid === -1 && slids !== null) {
-                        // it's a top level folder
-                        control = new DynamicFolder({
-                            id: controlId,
-                            control: this,
-                            sublayerInfo: info,
-                            icons: this.icons
-                        });
-                        domConst.place(control.domNode, this.expandNode, 'last');
+                    // it's a top level
+                    if (pid === -1 || allLayers.indexOf(pid) === -1) {
+                        if (slids === null) {
+                            // it's a top level sublayer
+                            control = new DynamicSublayer({
+                                id: controlId,
+                                control: this,
+                                sublayerInfo: info,
+                                icons: this.icons
+                            });
+                            domConst.place(control.domNode, this.expandNode, 'last');
+                        } else if (slids !== null) {
+                            // it's a top level folder
+                            control = new DynamicFolder({
+                                id: controlId,
+                                control: this,
+                                sublayerInfo: info,
+                                icons: this.icons
+                            });
+                            domConst.place(control.domNode, this.expandNode, 'last');
+                        }
                     } else if (pid !== -1 && slids !== null) {
                         // it's a nested folder
                         control = new DynamicFolder({
