@@ -624,6 +624,27 @@ define([
                 path: 'gis/dijit/Help',
                 title: i18n.viewer.widgets.help,
                 options: {}
+            },
+            configSwitch: {
+                include: true,
+                id: 'configSwitch',
+                //type: 'titlePane',
+                type: 'domNode',
+                srcNodeRef: 'configSwitcher',
+                path: 'gis/dijit/ConfigSwitch',
+                title: 'Switch Config',
+                options: {
+                    configs: [
+                        {
+                            label: 'Default Config',
+                            src: 'viewer'
+                        },
+                        {
+                            label: 'Alternative Config',
+                            src: 'viewer-alternative'
+                        }
+                    ]
+                }
             }
 
         }
