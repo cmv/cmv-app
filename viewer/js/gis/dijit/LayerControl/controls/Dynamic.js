@@ -214,9 +214,9 @@ define([
             array.forEach(this.layer.layerInfos, function (info) {
                 if (array.indexOf(visLayers, info.id) !== -1) {
                     visibleIds.push(info.id);
-                }
-                if (info.parentLayerId !== -1 && array.indexOf(visibleIds, info.parentLayerId) === -1) {
-                    visibleIds.push(info.parentLayerId);
+                    if (info.parentLayerId !== -1 && array.indexOf(visibleIds, info.parentLayerId) === -1) {
+                        visibleIds.push(info.parentLayerId);
+                    }
                 }
             });
             array.forEach(this._sublayerControls, function (control) {
