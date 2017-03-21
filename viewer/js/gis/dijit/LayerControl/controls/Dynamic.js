@@ -243,7 +243,7 @@ define([
             if (!setLayers.length) {
                 setLayers.push(-1);
             }
-            return setLayers
+            return setLayers;
         },
         _onSetVisibleLayers: function (visLayers) {
             array.forEach(this._sublayerControls, function (control) {
