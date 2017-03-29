@@ -37,6 +37,7 @@ define([
         mapClickMode: null,
         identifies: {},
         infoTemplates: {},
+        hideEmptyPopop: false,
         featureLayers: {},
         ignoreOtherGraphics: true,
         createDefaultInfoTemplates: true,
@@ -368,7 +369,11 @@ define([
                     fSet.push(feature);
                 }, this);
             }, this);
-            this.map.infoWindow.setFeatures(fSet);
+            if (this.hideEmptyPopop && fSet.length === 0) {
+                this.map.infoWindow.hide();
+            } else {
+                this.map.infoWindow.setFeatures(fSet);
+            }
         },
         getFormattedFeature: function (infoTemplate, feature) {
             if (feature.graphic) {
