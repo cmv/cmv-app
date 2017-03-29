@@ -22,6 +22,7 @@ define({
         },
         viewer: {
             operationalLayers: {
+                population: 'Population density',
                 damageAssessment: 'Damage Assessment',
                 louisvillePubSafety: 'Louisville Public Safety',
                 restaurants: 'Restaurants',

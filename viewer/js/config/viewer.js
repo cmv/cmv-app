@@ -177,6 +177,13 @@ define([
             }
         }, {
             type: 'dynamic',
+            url: 'https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer',
+            title: i18n.viewer.operationalLayers.population,
+            options: {
+                id: 'population'
+            }
+        }, {
+            type: 'dynamic',
             url: 'https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
             title: i18n.viewer.operationalLayers.louisvillePubSafety,
             options: {

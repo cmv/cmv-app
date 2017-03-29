@@ -397,7 +397,7 @@ define([
         getInfoTemplate: function (layer, layerId, result) {
             var popup, config;
             if (result) {
-                layerId = result.layerId || layer.layerId;
+                layerId = typeof result.layerId === 'number' ? result.layerId : layer.layerId;
             } else if (layerId === null) {
                 layerId = layer.layerId;
             }

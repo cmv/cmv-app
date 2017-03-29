@@ -34,6 +34,21 @@ define([
         // for details on pop-up definition see: https://developers.arcgis.com/javascript/jshelp/intro_popuptemplate.html
 
         identifies: {
+            population: {
+                0: {
+                    fieldInfos: [{
+                        visible: true,
+                        fieldName: 'Pixel value',
+                        alias: 'Population'
+                    }, {
+                        visible: true,
+                        fieldName: 'Rounded Value',
+                        formatter: function (none, attrs) {
+                            return Math.round(attrs['Pixel value'] * 100) / 100;
+                        }
+                    }]
+                }
+            },
             louisvillePubSafety: {
                 2: {
                     title: i18n.identify.louisvillePubSafety.policeStation,
