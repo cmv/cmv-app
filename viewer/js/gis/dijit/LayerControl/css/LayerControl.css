@@ -45,8 +45,7 @@
     line-height: 15px;
 }
 
-.layerControlDijit .layerControlTableCheck,
-.layerControlDijit .layerControlTableMenu {
+.layerControlDijit .layerControlTableCheck, .layerControlDijit .layerControlTableMenu {
     cursor: pointer;
     width: 19px;
     height: 16px;
@@ -54,10 +53,14 @@
 }
 
 .layerControlDijit .layerControlTableLabel {
+    cursor: pointer;
     font-size: 15px;
     height: 16px;
     line-height: 16px;
-    cursor: default;
+}
+
+.layerControlDijit .layerControlTableMenu {
+    cursor: pointer;
 }
 
 .layerControlDijit .layerControlTableUpdate {
@@ -65,6 +68,14 @@
     height: 16px;
     line-height: 16px;
     text-align: center;
+}
+
+.layerControlDijit .layerControlHidden {
+    display: none;
+}
+
+.layerControlDijit .layerControlVisible {
+    display: block;
 }
 
 .layerControlDijit .layerControlIndent {
@@ -92,7 +103,9 @@
     color: #BBB;
 }
 
+
 /* not in use - retain for links */
+
 .layerControlDijit .layerControlClick {
     cursor: pointer;
     color: #1f78af;
@@ -111,7 +124,7 @@
     vertical-align: middle;
 }
 
-.layerControlDijit .layerControlLegendImage > img {
+.layerControlDijit .layerControlLegendImage>img {
     border: none;
     padding: 0;
 }
@@ -120,7 +133,9 @@
     padding: 0 0 0 4px;
 }
 
+
 /* temp esri/Legend overrides */
+
 .layerControlDijit .esriLegendService td {
     padding: 0;
 }
@@ -133,13 +148,12 @@
     display: none;
 }
 
-.layerControlDijit .menuLink {
-    color: #369;
-    text-decoration: none;
+/* sublayer menu */
+
+.layerControlDijit .layerControlSublayer .layerControlTable td.layerControlTableMenu {
+    padding-right: 20px;
 }
 
-.layerControlDijit .menuLink:hover {
-    color: #5196DB;
-    text-decoration: underline;
-    cursor: pointer;
+.layerControlDijit .menuClickNode.hidden {
+    display: none;
 }

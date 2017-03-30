@@ -1,19 +1,20 @@
 define([
-   'dojo/_base/declare',
-   'dijit/_WidgetBase',
-   'dijit/_TemplatedMixin',
-   'esri/dijit/Directions',
-   'dojo/text!./Directions/templates/Directions.html',
-   'dojo/_base/lang',
-   'dijit/Menu',
-   'dijit/MenuItem',
-   'dijit/PopupMenuItem',
-   'dijit/MenuSeparator',
-   'esri/geometry/Point',
-   'esri/SpatialReference',
-   'dojo/topic',
-   'dojo/i18n!./Directions/nls/resource'
-], function (declare, _WidgetBase, _TemplatedMixin, Directions, template, lang, Menu, MenuItem, PopupMenuItem, MenuSeparator, Point, SpatialReference, topic, i18n) {
+    'dojo/_base/declare',
+    'dijit/_WidgetBase',
+    'dijit/_TemplatedMixin',
+    'esri/dijit/Directions',
+    'dojo/text!./Directions/templates/Directions.html',
+    'dojo/_base/lang',
+    'dijit/Menu',
+    'dijit/MenuItem',
+    'dijit/PopupMenuItem',
+    'dijit/MenuSeparator',
+    'esri/geometry/Point',
+    'esri/SpatialReference',
+    'dojo/topic',
+    'dojo/i18n!./Directions/nls/resource',
+    'dojo/dom-style'
+], function (declare, _WidgetBase, _TemplatedMixin, Directions, template, lang, Menu, MenuItem, PopupMenuItem, MenuSeparator, Point, SpatialReference, topic, i18n, domStyle) {
 
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
@@ -25,14 +26,16 @@ define([
             }, this.options), this.directionsNode);
             this.directions.startup();
 
-             //temp fix for 3.12 and 3.13 map click button.
+            //temp fix for 3.12 and 3.13 map click button.
             if (this.directions._activateButton) {
-                this.directions._activateButton.style.display = 'none';
+                domStyle.set(this.directions._activateButton, 'display', 'none');
             } else if (this.directions._activateButtonNode) {
-                this.directions._activateButtonNode.style.display = 'none';
-                this.directions._addDestinationNode.style['float'] = 'inherit';
-                this.directions._optionsButtonNode.style['float'] = 'inherit';
-                this.directions._optionsButtonNode.style.marginRight = '5px';
+                domStyle.set(this.directions._activateButtonNode, 'display', 'none');
+                domStyle.set(this.directions._addDestinationNode, 'float', 'inherit');
+                domStyle.set(this.directions._optionsButtonNode, {
+                    'float': 'inherit',
+                    marginRight: '5px'
+                });
             }
 
             if (this.mapRightClickMenu) {

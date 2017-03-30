@@ -11,6 +11,7 @@ define([
     _Contained,
     _Control
 ) {
+
     var WebTiledControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
         _esriLayerType: 'webtiled', // constant

@@ -2,42 +2,42 @@
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-attach-point="containerNode" class="helpContainer">
         <div class="helpNode">
             <div data-dojo-type="dijit/layout/TabContainer" class="helpTabContainer">
-                <div data-dojo-type="dijit/layout/ContentPane" title="Navigation">
+                <div data-dojo-type="dijit/layout/ContentPane" title="${i18n.navigation.title}">
                     <table>
                         <tbody>
                             <tr>
                                 <td>
-                                    Map navigation using mouse and keyboard:
+                                    ${i18n.navigation.description}
                                     <ul class="listdbootstrapFix">
                                         <li>
-                                            Drag to pan
+                                            ${i18n.navigation.pan1}
                                         </li>
                                         <li>
-                                            SHIFT + Click to recenter
+                                            ${i18n.navigation.recenter}
                                         </li>
                                         <li>
-                                            SHIFT + Drag to zoom in
+                                            ${i18n.navigation.zoomIn1}
                                         </li>
                                         <li>
-                                            SHIFT + CTRL + Drag to zoom out
+                                            ${i18n.navigation.zoomOut1}
                                         </li>
                                         <li>
-                                            Mouse Scroll Forward to zoom in
+                                            ${i18n.navigation.zoomIn2}
                                         </li>
                                         <li>
-                                            Mouse Scroll Backward to zoom out
+                                            ${i18n.navigation.zoomOut2}
                                         </li>
                                         <li>
-                                            Use Arrow keys to pan
+                                            ${i18n.navigation.pan2}
                                         </li>
                                         <li>
-                                            + key to zoom in a level
+                                            ${i18n.navigation.zoomInLevel}
                                         </li>
                                         <li>
-                                            - key to zoom out a level
+                                            ${i18n.navigation.zoomOutLevel}
                                         </li>
                                         <li>
-                                            Double Click to Center and Zoom in
+                                            ${i18n.navigation.zoomCenter}
                                         </li>
                                     </ul>
                                 </td>
@@ -45,35 +45,34 @@
                         </tbody>
                     </table>
                 </div>
-                <div data-dojo-type="dijit/layout/ContentPane" title="Search">
-                    A variety of searches can be performed in the search box:
+                <div data-dojo-type="dijit/layout/ContentPane" title="${i18n.search.title}">
+                    ${i18n.search.description}
                     <ul class="listdbootstrapFix">
                         <li>
-                            Search by Address
+                            ${i18n.search.address}
                         </li>
                         <li>
-                            Search by Place Name
+                            ${i18n.search.place}
                         </li>
                         <li>
-                            Search By Zip Code, County, etc.
+                            ${i18n.search.etc}
                         </li>
                     </ul>
                 </div>
-                <div data-dojo-type="dijit/layout/ContentPane" title="Tools">
-                    In addition to Search capabilities, the following tools are provided:
+                <div data-dojo-type="dijit/layout/ContentPane" title="${i18n.tools.title}">
+                    ${i18n.tools.description}
                     <ul class="listdbootstrapFix">
                         <li>
-                            Measure
+                            ${i18n.tools.measure.title}
                         </li>
                         <div>
-                            The measure tool provides the capabilities to draw a point, line, or polygon
-                            on the map and specify the unit of measurement.
+                            ${i18n.tools.measure.description}
                         </div>
                         <li>
-                            Print
+                            ${i18n.tools.print.title}
                         </li>
                         <div>
-                            This map can be exported to varouis formats and layouts
+                            ${i18n.tools.print.description}
                         </div>
                     </ul>
                 </div>

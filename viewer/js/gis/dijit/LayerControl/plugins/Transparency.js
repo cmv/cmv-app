@@ -20,6 +20,7 @@ define([
     HorizontalSlider,
     HorizontalRuleLabels
 ) {
+
     return declare(PopupMenuItem, {
         layer: null,
         constructor: function (options) {

@@ -19,6 +19,7 @@ define([
 
     'xstyle/css!./Geocoder/css/Geocoder.css'
 ], function (declare, _WidgetBase, _TemplatedMixin, a11yclick, lang, on, domClass, domStyle, Geocoder, MenuItem, SimpleMarkerSymbol, Graphic, InfoTemplate, GraphicsLayer, template, i18n) {
+
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         i18n: i18n,
@@ -127,6 +128,7 @@ define([
             this.map.infoWindow.clearFeatures();
             this.map.infoWindow.setTitle(graphic.getTitle());
             this.map.infoWindow.setContent(graphic.getContent());
+            this.map.infoWindow.setFeatures([graphic]);
 
             var screenPnt = this.map.toScreen(res.location);
             this.map.infoWindow.show(screenPnt, this.map.getInfoWindowAnchor(screenPnt));

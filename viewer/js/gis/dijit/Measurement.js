@@ -35,10 +35,8 @@ define([
                     this.connectMapClick();
                 }
                 // a measurement tool is active
-            } else {
-                if (this.mapClickMode !== 'measure') {
-                    this.disconnectMapClick();
-                }
+            } else if (this.mapClickMode !== 'measure') {
+                this.disconnectMapClick();
             }
         },
         disconnectMapClick: function () {
