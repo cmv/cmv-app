@@ -177,10 +177,11 @@ define([
             }
         }, {
             type: 'dynamic',
-            url: 'https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer',
-            title: i18n.viewer.operationalLayers.population,
+            url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/SampleWorldCities/MapServer',
+            title: i18n.viewer.operationalLayers.cities,
             options: {
-                id: 'population'
+                id: 'cities',
+                visible: false
             }
         }, {
             type: 'dynamic',
