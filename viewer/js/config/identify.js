@@ -1,7 +1,8 @@
 define([
     'dojo/i18n!./nls/main',
-    'dojo/_base/lang'
-], function (i18n, lang) {
+    'dojo/_base/lang',
+    'dojo/number'
+], function (i18n, lang, number) {
 
     var linkTemplate = '<a href="{url}" target="_blank">{text}</a>';
     function directionsFormatter (noValue, attributes) {
@@ -10,23 +11,6 @@ define([
             text: 'Get Directions'
         });
     }
-
-    /**
-     * A simple number formatter that adds commas to a number
-     * @param  {number} num The number to commafy
-     * @return {String}     The formatted number
-     */
-    function commafy (num) {
-        var str = num.toString().split('.');
-        if (str[0].length >= 5) {
-            str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
-        }
-        if (str[1] && str[1].length >= 5) {
-            str[1] = str[1].replace(/(\d{3})/g, '$1 ');
-        }
-        return str.join('.');
-    }
-
 
     return {
         map: true,
@@ -62,7 +46,9 @@ define([
                         visible: true,
                         fieldName: 'POP',
                         label: 'Population',
-                        formatter: commafy
+                        formatter: function (value) {
+                            return number.format(value);
+                        }
                     }]
                 }
             },
