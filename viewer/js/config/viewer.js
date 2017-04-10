@@ -159,7 +159,7 @@ define([
             }
         }, {
             type: 'feature',
-            url: 'https://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
+            url: 'https://sampleserver6.arcgisonline.com/ArcGIS/rest/services/SF311/FeatureServer/0',
             title: i18n.viewer.operationalLayers.sf311Incidents,
             options: {
                 id: 'sf311Incidents',
