@@ -177,14 +177,6 @@ define([
             }
         }, {
             type: 'dynamic',
-            url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/SampleWorldCities/MapServer',
-            title: i18n.viewer.operationalLayers.cities,
-            options: {
-                id: 'cities',
-                visible: false
-            }
-        }, {
-            type: 'dynamic',
             url: 'https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/PublicSafety/PublicSafetyOperationalLayers/MapServer',
             title: i18n.viewer.operationalLayers.louisvillePubSafety,
             options: {
@@ -231,6 +223,14 @@ define([
                     label: 'Say Hello',
                     iconClass: 'fa fa-smile-o'
                 }]
+            }
+        }, {
+            type: 'dynamic',
+            url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/SampleWorldCities/MapServer',
+            title: i18n.viewer.operationalLayers.cities,
+            options: {
+                id: 'cities',
+                visible: false
             }
         /*
         //examples of vector tile layers (beta in v3.15)
