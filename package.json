@@ -11,7 +11,7 @@
         "csslint": "1.0.x",
         "eslint": "~3.19.0",
         "grunt": "1.0.x",
-        "grunt-contrib-clean": "1.0.x",
+        "grunt-contrib-clean": "~1.1.0",
         "grunt-contrib-compress": "~1.4.1",
         "grunt-contrib-connect": "1.0.x",
         "grunt-contrib-copy": "1.0.x",
