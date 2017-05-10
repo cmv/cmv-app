@@ -16,7 +16,7 @@
         "grunt-contrib-connect": "1.0.x",
         "grunt-contrib-copy": "1.0.x",
         "grunt-contrib-csslint": "~2.0.x",
-        "grunt-contrib-cssmin": "~2.0.0",
+        "grunt-contrib-cssmin": "~2.2.0",
         "grunt-contrib-uglify": "~2.3.0",
         "grunt-contrib-watch": "1.0.x",
         "grunt-eslint": "19.0.x",
