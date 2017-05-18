@@ -61,6 +61,7 @@ define([
         _overlayContainer: null,
         _swiper: null,
         _swipeLayerToggleHandle: null,
+        _groupedLayerInfos: {},
         _controls: {
             dynamic: './LayerControl/controls/Dynamic',
             feature: './LayerControl/controls/Feature',
@@ -75,7 +76,8 @@ define([
             webtiled: './LayerControl/controls/WebTiled',
             imagevector: './LayerControl/controls/ImageVector',
             raster: './LayerControl/controls/Raster',
-            stream: './LayerControl/controls/Stream'
+            stream: './LayerControl/controls/Stream',
+            grouped: './LayerControl/controls/Grouped'
         },
         constructor: function (options) {
             options = options || {};
@@ -165,6 +167,30 @@ define([
                         require([control], lang.hitch(this, '_addControl', layerInfo));
                     }
                 }, this);
+
+                for (var key in this._groupedLayerInfos) {
+                    if (this._groupedLayerInfos.hasOwnProperty(key)) {
+                        var control = this._controls.grouped;
+                        var hasAnyVisibleLayer = this._groupedLayerInfos[key].some(function (layerDetail) {
+                            return layerDetail.layerInfo.layer.visible;
+                        });
+
+                        var layerInfo = {
+                            title: key,
+                            layer: {
+                                id: key.replace(/\s/g, ''),
+                                loaded: true,
+                                minScale: 0,
+                                maxScale: 0,
+                                _params: {},
+                                visible: hasAnyVisibleLayer // initial visibility depends on grouped layers
+                            },
+                            layerDetails: this._groupedLayerInfos[key]
+                        };
+                        require([control], lang.hitch(this, '_addControl', layerInfo));
+                    }
+                }
+
                 this._checkReorder();
             }));
         },
@@ -214,6 +240,7 @@ define([
                 controller: this,
                 layer: layer,
                 layerTitle: layerInfo.title,
+                layerDetails: layerInfo.layerDetails,
                 controlOptions: lang.mixin({
                     noLegend: null,
                     noZoom: null,
@@ -236,6 +263,23 @@ define([
             } else {
                 this.addChild(layerControl, position);
             }
+            this._storeGroupedLayerInfo(layerInfo, layerControl);
+        },
+        _storeGroupedLayerInfo: function (layerInfo, layerControl) {
+            var groupID = layerInfo.layer._params.groupID;
+            if (!groupID) {
+                // Not a grouped layer
+                return;
+            }
+
+            if (!this._groupedLayerInfos.hasOwnProperty(groupID)) {
+                this._groupedLayerInfos[groupID] = [];
+            }
+
+            this._groupedLayerInfos[groupID].push({
+                layerInfo: layerInfo,
+                layerControl: layerControl
+            });
         },
         _applyLayerControlOptions: function (controlOptions, layer) {
             if (typeof controlOptions.includeUnspecifiedLayers === 'undefined' && typeof controlOptions.subLayerInfos === 'undefined' && typeof controlOptions.excludedLayers === 'undefined') {

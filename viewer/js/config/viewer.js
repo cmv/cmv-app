@@ -146,7 +146,8 @@ define([
                 opacity: 1.0,
                 visible: true,
                 outFields: ['*'],
-                mode: 0
+                mode: 0,
+                groupID: 'Grouped Feature Layers'
             },
             editorLayerInfos: {
                 disableGeometryUpdate: false
@@ -166,7 +167,8 @@ define([
                 opacity: 1.0,
                 visible: true,
                 outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
-                mode: 0
+                mode: 0,
+                groupID: 'Grouped Feature Layers'
             },
             layerControlLayerInfos: {
                 menu: [{
