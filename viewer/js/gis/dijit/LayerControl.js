@@ -78,7 +78,9 @@ define([
             imagevector: './LayerControl/controls/ImageVector',
             raster: './LayerControl/controls/Raster',
             stream: './LayerControl/controls/Stream',
-            grouped: './LayerControl/controls/Grouped'
+            grouped: './LayerControl/controls/Grouped',
+            graphics: './LayerControl/controls/Graphics',
+            osm: './LayerControl/controls/OpenStreetMap'
         },
         constructor: function (options) {
             options = options || {};
