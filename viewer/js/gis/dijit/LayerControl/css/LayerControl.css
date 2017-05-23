@@ -1,13 +1,8 @@
 .layerControlDijit .vectorLayerContainer {}
 
-.layerControlDijit .vectorLabelContainer {
-    font-size: 15px;
-    font-weight: 600;
-    padding-bottom: 4px;
-}
-
 .layerControlDijit .overlayLayerContainer {}
 
+.layerControlDijit .vectorLabelContainer,
 .layerControlDijit .overlayLabelContainer {
     font-size: 15px;
     font-weight: 600;
@@ -31,43 +26,32 @@
 }
 
 .layerControlDijit .layerControlTable tr {
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 .layerControlDijit .layerControlTable td {
     padding: 0;
 }
 
-.layerControlDijit .layerControlTableExpand {
+.layerControlDijit .layerControlTableExpand,
+.layerControlDijit .layerControlTableCheck,
+.layerControlDijit .layerControlTableMenu,
+.layerControlDijit .layerControlTableLabel {
     cursor: pointer;
-    width: 18px;
-    height: 15px;
-    line-height: 15px;
 }
 
-.layerControlDijit .layerControlTableCheck, .layerControlDijit .layerControlTableMenu {
-    cursor: pointer;
-    width: 19px;
-    height: 16px;
-    line-height: 16px;
+.layerControlDijit .layerControlTableExpand,
+.layerControlDijit .layerControlTableCheck,
+.layerControlDijit .layerControlTableMenu,
+.layerControlDijit .layerControlTableUpdate {
+    text-align: center;
 }
 
 .layerControlDijit .layerControlTableLabel {
-    cursor: pointer;
     font-size: 15px;
-    height: 16px;
     line-height: 16px;
-}
-
-.layerControlDijit .layerControlTableMenu {
-    cursor: pointer;
-}
-
-.layerControlDijit .layerControlTableUpdate {
-    width: 21px;
-    height: 16px;
-    line-height: 16px;
-    text-align: center;
+    padding-top: 2px;
+    width: 100%;
 }
 
 .layerControlDijit .layerControlHidden {
@@ -79,27 +63,79 @@
 }
 
 .layerControlDijit .layerControlIndent {
-    padding-left: 22px;
+    padding-left: 20px;
 }
 
 .layerControlDijit .layerControlIcon {
-    font-size: 17px;
+    font-size: 18px;
+    margin-right: 4px;
+}
+
+.layerControlDijit .layerControlTableExpand .layerControlIcon {
+    margin-right: 0;
+    width: 1em;
+}
+
+.layerControlDijit .layerControlIndent .layerControlTableExpand .layerControlIcon {
+    margin-right: 4px;
+}
+
+.layerControlDijit .layerControlIndent .layerControlIndent .layerControlTableExpand .layerControlIcon,
+.layerControlDijit .layerControlSublayer .layerControlTableExpand .layerControlIcon {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.layerControlDijit .layerControlTableCheck .layerControlIcon {
+    font-size: 12px;
+    height: 13px;
+    width: 13px;
+}
+
+.layerControlDijit .layer-folder {
+    color: #666;
+}
+
+.layerControlDijit .layerControlTableCheck .fa-border {
+    border-color: #333;
+    border-radius: 3px;
+    padding: 0.15em 0.1875em 0.1125em;
+}
+
+
+.layerControlDijit .layerControlTableCheck .layerControlIcon-Folder {
+    color: #333;
+}
+
+.layerControlDijit .layerControlTableCheck .layerControlIcon-Checked {
+    color: #090;
+}
+
+.layerControlDijit .layerControlTableCheck .layerControlIcon-Unchecked:before {
+    color: transparent;
+}
+
+.layerControlDijit .layerControlTableCheck .layerControlIcon-Indeterminate {
+    color: #666;
 }
 
 .layerControlDijit .layerControlUpdateIcon {
+    color: #666;
     font-size: 12px;
 }
 
 .layerControlDijit .layerControlMenuIcon {
     font-size: 15px;
     color: #666;
+    margin-left: 4px;
 }
 
 .layerControlDijit .layerControlMenuIcon:hover {
     color: #111;
 }
 
-.layerControlDijit .layerControlCheckIconOutScale {
+.layerControlDijit .layerControlTableCheck .layerControlCheckIconOutScale {
+    border-color: #BBB;
     color: #BBB;
 }
 
@@ -118,6 +154,10 @@
 
 .layerControlDijit .layerControlClick:hover {
     text-decoration: underline;
+}
+
+.layerControlDijit .layerControlLegendTable {
+    margin: 4px 0;
 }
 
 .layerControlDijit .layerControlLegendTable tr {
@@ -151,7 +191,7 @@
 /* sublayer menu */
 
 .layerControlDijit .layerControlSublayer .layerControlTable td.layerControlTableMenu {
-    padding-right: 20px;
+    padding-right: 16px;
 }
 
 .layerControlDijit .menuClickNode.hidden {
