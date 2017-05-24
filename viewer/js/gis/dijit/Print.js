@@ -216,6 +216,7 @@ define([
                 template.format = form.format;
                 template.layout = form.layout;
                 template.preserveScale = eval(form.preserveScale); //turns a string 'true' into true
+                template.outScale = form.outScale;
                 template.label = form.title;
                 template.exportOptions = mapOnlyForm;
                 template.layoutOptions = {

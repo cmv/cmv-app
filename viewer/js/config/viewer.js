@@ -156,6 +156,9 @@ define([
                 layerInfo: {
                     title: i18n.viewer.operationalLayers.restaurants
                 }
+            },
+            layerControlLayerInfos: {
+                layerGroup: 'Grouped Feature Layers'
             }
         }, {
             type: 'feature',
@@ -164,11 +167,12 @@ define([
             options: {
                 id: 'sf311Incidents',
                 opacity: 1.0,
-                visible: true,
+                visible: false,
                 outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
                 mode: 0
             },
             layerControlLayerInfos: {
+                layerGroup: 'Grouped Feature Layers',
                 menu: [{
                     topic: 'hello',
                     label: 'Say Hello Custom',

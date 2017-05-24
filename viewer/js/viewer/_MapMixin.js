@@ -109,10 +109,10 @@ define([
                 dynamic: 'esri/layers/ArcGISDynamicMapServiceLayer',
                 feature: 'esri/layers/FeatureLayer',
                 georss: 'esri/layers/GeoRSSLayer',
+                graphics: 'esri/layers/GraphicsLayer',
                 image: 'esri/layers/ArcGISImageServiceLayer',
                 imagevector: 'esri/layers/ArcGISImageServiceVectorLayer',
                 kml: 'esri/layers/KMLLayer',
-                label: 'esri/layers/LabelLayer', //untested
                 mapimage: 'esri/layers/MapImageLayer', //untested
                 osm: 'esri/layers/OpenStreetMapLayer',
                 raster: 'esri/layers/RasterLayer',

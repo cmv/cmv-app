@@ -33,14 +33,15 @@ define([
         map: null,
         layerInfos: [],
         icons: {
-            expand: 'fa-caret-right',
-            collapse: 'fa-caret-down',
-            checked: 'fa-check-square-o',
-            unchecked: 'fa-square-o',
-            update: 'fa-refresh',
-            menu: 'fa-bars',
-            folder: 'fa-folder-o',
-            folderOpen: 'fa-folder-open-o'
+            expand: 'fa-caret-right fa-fw layerControlIcon-Expand',
+            collapse: 'fa-caret-down fa-fw layerControlIcon-Collapse',
+            checked: 'fa-check fa-fw fa-border layerControlIcon-Checked',
+            unchecked: 'fa-square fa-fw fa-border layerControlIcon-Unchecked',
+            indeterminate: 'fa-minus fa-fw fa-border layerControlIcon-Indeterminate',
+            update: 'fa-refresh layerControlIcon-Update',
+            menu: 'fa-bars layerControlIcon-Menu',
+            folder: 'fa-folder-o fa-fw layerControlIcon-Folder',
+            folderOpen: 'fa-folder-open-o fa-fw layerControlIcon-Folder layerControlIcon-FolderOpen'
         },
         separated: false,
         overlayReorder: false,
@@ -61,6 +62,7 @@ define([
         _overlayContainer: null,
         _swiper: null,
         _swipeLayerToggleHandle: null,
+        _groupedLayerInfos: {},
         _controls: {
             dynamic: './LayerControl/controls/Dynamic',
             feature: './LayerControl/controls/Feature',
@@ -75,7 +77,10 @@ define([
             webtiled: './LayerControl/controls/WebTiled',
             imagevector: './LayerControl/controls/ImageVector',
             raster: './LayerControl/controls/Raster',
-            stream: './LayerControl/controls/Stream'
+            stream: './LayerControl/controls/Stream',
+            grouped: './LayerControl/controls/Grouped',
+            graphics: './LayerControl/controls/Graphics',
+            osm: './LayerControl/controls/OpenStreetMap'
         },
         constructor: function (options) {
             options = options || {};
@@ -137,10 +142,16 @@ define([
             var modules = [];
             // push layer control mods
             array.forEach(layerInfos, function (layerInfo) {
+                layerInfo.controlOptions = layerInfo.controlOptions || {};
                 // check if control is excluded
                 var controlOptions = layerInfo.controlOptions;
-                if (controlOptions && controlOptions.exclude === true) {
+                if (controlOptions.exclude === true) {
                     return;
+                }
+                // if layerGroups are used, disallow re-ordering
+                if (controlOptions.layerGroup) {
+                    this.overlayReorder = false;
+                    this.vectorReorder = false;
                 }
                 var mod = this._controls[layerInfo.type];
                 if (mod) {
@@ -157,7 +168,7 @@ define([
                 array.forEach(layerInfos, function (layerInfo) {
                     // exclude from widget
                     var controlOptions = layerInfo.controlOptions;
-                    if (controlOptions && controlOptions.exclude === true) {
+                    if (controlOptions.exclude === true) {
                         return;
                     }
                     var control = this._controls[layerInfo.type];
@@ -165,6 +176,33 @@ define([
                         require([control], lang.hitch(this, '_addControl', layerInfo));
                     }
                 }, this);
+
+                for (var key in this._groupedLayerInfos) {
+                    if (this._groupedLayerInfos.hasOwnProperty(key)) {
+                        var layerDetails = this._groupedLayerInfos[key];
+                        if (layerDetails && layerDetails.length > 1) {
+                            var control = this._controls.grouped;
+                            var layerInfo = {
+                                title: key,
+                                type: 'grouped',
+                                controlOptions: {},
+                                layer: {
+                                    id: key.replace(/\s/g, ''),
+                                    loaded: true,
+                                    getMap: lang.hitch(this, function () {
+                                        return this.map;
+                                    }),
+                                    minScale: 0,
+                                    maxScale: 0,
+                                    _params: {}
+                                },
+                                layerDetails: layerDetails
+                            };
+                            require([control], lang.hitch(this, '_addControl', layerInfo));
+                        }
+                    }
+                }
+
                 this._checkReorder();
             }));
         },
@@ -203,7 +241,7 @@ define([
         // create layer control and add to appropriate _container
         _addControl: function (layerInfo, Control) {
             var layer = (typeof layerInfo.layer === 'string') ? this.map.getLayer(layerInfo.layer) : layerInfo.layer;
-            if (layerInfo.controlOptions && (layerInfo.type === 'dynamic' || layerInfo.type === 'feature')) {
+            if (layerInfo.type === 'dynamic' || layerInfo.type === 'feature') {
                 if (layer.loaded) {
                     this._applyLayerControlOptions(layerInfo.controlOptions, layer);
                 } else {
@@ -214,6 +252,7 @@ define([
                 controller: this,
                 layer: layer,
                 layerTitle: layerInfo.title,
+                layerDetails: layerInfo.layerDetails,
                 controlOptions: lang.mixin({
                     noLegend: null,
                     noZoom: null,
@@ -221,14 +260,21 @@ define([
                     swipe: null,
                     expanded: false,
                     sublayers: true,
+                    layerGroup: null,
                     menu: this.menu[layerInfo.type],
                     subLayerMenu: this.subLayerMenu[layerInfo.type]
                 }, layerInfo.controlOptions)
             });
             layerControl.startup();
             var position = layerInfo.position || 0;
+            var layerType = layerControl._layerType;
+            if (layerType === 'grouped') {
+                if (layerControl.layerDetails && layerControl.layerDetails.length > 0) {
+                    layerControl._layerType = layerControl.layerDetails[0].layerControl._layerType;
+                }
+            }
             if (this.separated) {
-                if (layerControl._layerType === 'overlay') {
+                if (layerType === 'overlay') {
                     this._overlayContainer.addChild(layerControl, position);
                 } else {
                     this._vectorContainer.addChild(layerControl, position);
@@ -236,6 +282,22 @@ define([
             } else {
                 this.addChild(layerControl, position);
             }
+            this._storeGroupedLayerInfo(layerInfo, layerControl);
+        },
+        _storeGroupedLayerInfo: function (layerInfo, layerControl) {
+            if (!layerInfo.controlOptions.layerGroup) {
+                // Not a grouped layer
+                return;
+            }
+            var layerGroup = layerInfo.controlOptions.layerGroup;
+            if (!this._groupedLayerInfos.hasOwnProperty(layerGroup)) {
+                this._groupedLayerInfos[layerGroup] = [];
+            }
+
+            this._groupedLayerInfos[layerGroup].push({
+                layerInfo: layerInfo,
+                layerControl: layerControl
+            });
         },
         _applyLayerControlOptions: function (controlOptions, layer) {
             if (typeof controlOptions.includeUnspecifiedLayers === 'undefined' && typeof controlOptions.subLayerInfos === 'undefined' && typeof controlOptions.excludedLayers === 'undefined') {
