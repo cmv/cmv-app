@@ -1,6 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
     'dojo/on',
     'dojo/topic',
     'dojo/html',
@@ -14,6 +15,7 @@ define([
 ], function (
     declare,
     lang,
+    array,
     on,
     topic,
     html,
@@ -32,7 +34,7 @@ define([
 
         // create and legend
         _layerTypePreInit: function () {
-            this.layerDetails.forEach(lang.hitch(this, function (layerDetail) {
+            array.forEach(this.layerDetails, lang.hitch(this, function (layerDetail) {
                 domConstruct.place(layerDetail.layerControl.domNode, this.expandNode, 'first');
             }));
         },
@@ -42,13 +44,13 @@ define([
         },
 
         hasAnyVisibleLayer: function () {
-            return this.layerDetails.some(function (layerDetail) {
+            return array.some(this.layerDetails, function (layerDetail) {
                 return layerDetail.layerInfo.layer.visible;
             });
         },
 
         hasAnyInvisibleLayer: function () {
-            return this.layerDetails.some(function (layerDetail) {
+            return array.some(this.layerDetails, function (layerDetail) {
                 return !layerDetail.layerInfo.layer.visible;
             });
         },
@@ -99,13 +101,16 @@ define([
                         this.toggleVisibility();
                     }
                 }
+                this._setLayerCheckbox();
             }));
         },
 
         toggleVisibility: function () {
             var layer = this.layer;
             layer.visible = !layer.visible;
-
+            if (this.hasAnyVisibleLayer() && this.hasAnyInvisibleLayer()) {
+                layer.visible = true;
+            }
             this._setLayerCheckbox(layer, this.checkNode);
             topic.publish('layerControl/layerToggle', {
                 id: layer.id,
@@ -115,15 +120,38 @@ define([
         },
 
         _setLayerVisibility: function (layerDetails, checkNode, event) {
-            this.toggleSelfVisibility();
+            this.toggleVisibility();
 
             var _arguments = arguments;
             // Calls _setLayerVisibility for each grouped layer
-            layerDetails.forEach(lang.hitch(this, function (layerDetail) {
+            array.forEach(layerDetails, lang.hitch(this, function (layerDetail) {
                 if (this.layer.visible !== layerDetail.layerInfo.layer.visible) {
                     this.inherited(_arguments, [layerDetail.layerInfo.layer, layerDetail.layerControl.checkNode, event]);
                 }
             }));
+            this._setLayerCheckbox();
+        },
+
+        // overrides the method in _Control
+        _setLayerCheckbox: function () {
+            var checkNode = this.checkNode,
+                i = this.icons;
+
+            domClass.remove(checkNode, i.checked);
+            domClass.remove(checkNode, i.unchecked);
+            domClass.remove(checkNode, i.indeterminate);
+
+            var hasVisible = this.hasAnyVisibleLayer();
+            var hasHidden = this.hasAnyInvisibleLayer();
+
+            // indeterminate - both visible and invisible layers in group
+            if (hasVisible && hasHidden) {
+                domClass.add(checkNode, i.indeterminate);
+            } else if (hasVisible) {
+                domClass.add(checkNode, i.checked);
+            } else {
+                domClass.add(checkNode, i.unchecked);
+            }
         }
     });
     return GroupedControl;
