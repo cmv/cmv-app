@@ -1,14 +1,26 @@
-.selectedIcon:before {
-    font-family: FontAwesome;
-    content: "\f046";
+.basemapWidget .selectedIcon:before {
+  font-family: FontAwesome;
+  content: "\f046";
 }
 
-.emptyIcon:before {
-    font-family: FontAwesome;
-    content: "\f096";
+.basemapWidget .emptyIcon:before {
+  font-family: FontAwesome;
+  content: "\f096";
 }
 
-.basemapsIcon:before {
-    font-family: FontAwesome;
-    content: "\f009";
+.basemapWidget .basemapsIcon:before {
+  font-family: FontAwesome;
+  content: "\f009";
+}
+
+
+/* condense dropdown on small screens */
+
+@media (max-width: 768px) {
+  .cmv .map .basemapWidget .dijitDropDownButton .dijitButtonNode {
+    padding: 4px 8px;
+  }
+  .cmv .map .basemapWidget .dijitButtonText {
+    display: none;
+  }
 }
