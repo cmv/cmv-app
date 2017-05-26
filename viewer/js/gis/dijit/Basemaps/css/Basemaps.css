@@ -12,3 +12,12 @@
     font-family: FontAwesome;
     content: "\f009";
 }
+
+
+/* condense dropdown on small screens */
+
+@media screen and (max-width: 600px) {
+  #basemaps_widget .dijitButtonText {
+    display: none;
+  }
+}
