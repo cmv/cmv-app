@@ -1,14 +1,14 @@
-.selectedIcon:before {
+.basemapWidget .selectedIcon:before {
   font-family: FontAwesome;
   content: "\f046";
 }
 
-.emptyIcon:before {
+.basemapWidget .emptyIcon:before {
   font-family: FontAwesome;
   content: "\f096";
 }
 
-.basemapsIcon:before {
+.basemapWidget .basemapsIcon:before {
   font-family: FontAwesome;
   content: "\f009";
 }
