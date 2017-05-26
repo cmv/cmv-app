@@ -1,23 +1,26 @@
 .selectedIcon:before {
-    font-family: FontAwesome;
-    content: "\f046";
+  font-family: FontAwesome;
+  content: "\f046";
 }
 
 .emptyIcon:before {
-    font-family: FontAwesome;
-    content: "\f096";
+  font-family: FontAwesome;
+  content: "\f096";
 }
 
 .basemapsIcon:before {
-    font-family: FontAwesome;
-    content: "\f009";
+  font-family: FontAwesome;
+  content: "\f009";
 }
 
 
 /* condense dropdown on small screens */
 
-@media screen and (max-width: 600px) {
-  #basemaps_widget .dijitButtonText {
+@media (max-width: 768px) {
+  .cmv .map .basemapWidget .dijitDropDownButton .dijitButtonNode {
+    padding: 4px 8px;
+  }
+  .cmv .map .basemapWidget .dijitButtonText {
     display: none;
   }
 }
