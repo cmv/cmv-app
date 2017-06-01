@@ -4,10 +4,9 @@ define([
     'dojo/dom',
     'dojo/sniff',
 
-    'dojo/Deferred',
-
     'put-selector',
-    'module'
+
+    './sidebar/Sidebar'
 
 ], function (
     declare,
@@ -15,10 +14,7 @@ define([
     dom,
     has,
 
-    Deferred,
-
     put,
-    module,
 
     Sidebar
 ) {
@@ -26,36 +22,19 @@ define([
     return declare(null, {
 
         postConfig: function () {
+            this.inherited(arguments);
             this.config.layout = this.config.layout || {};
             this._checkForSidebarLayout();
 
             if (this.config.layout.sidebar) {
-                this.inherited(arguments);
-
                 this.config.panes = this.mixinDeep(this.config.panes || {}, {
                     left: {
                         collapsible: false,
                         style: 'display:none !important'
                     }
                 });
-
-                var deferred = new Deferred();
-                var modulesPath = module.uri.substring(0, module.uri.lastIndexOf('/')) + '/sidebar';
-                window.dojoConfig.packages.push({
-                    name: 'sidebar',
-                    main: 'Sidebar',
-                    location: modulesPath
-                });
-                require(window.dojoConfig, [
-                    'sidebar/Sidebar'
-                ], lang.hitch(this, function (sidebar) {
-                    Sidebar = sidebar;
-                    this.mapDeferred.then(lang.hitch(this, '_createSidebar'));
-                    deferred.resolve();
-                }));
-                return deferred;
+                this.mapDeferred.then(lang.hitch(this, '_createSidebar'));
             }
-            return this.inherited(arguments);
         },
 
         _checkForSidebarLayout: function () {
@@ -99,7 +78,7 @@ define([
         },
 
         _createSidebar: function () {
-            var mapContainer = dom.byId(this.config.layout.map || 'mapCenter');
+            var mapContainer = dom.byId(this.map.id);
             //create controls div
             var mapControlsNode = put(this.map.root, 'div.sidebar-map');
             //move the slider into the controls div
