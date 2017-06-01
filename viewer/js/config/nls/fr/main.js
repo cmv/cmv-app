@@ -44,6 +44,7 @@ define({
             legend: 'Légende',
             locale: 'Lieu',
             print: 'Impression',
+            search: 'Rechercher',
             streetview: 'Google StreetView'
         }
     }
