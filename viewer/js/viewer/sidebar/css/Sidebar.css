@@ -114,6 +114,7 @@
 }
 
 .cmv .sidebar-widget .sidebar-widget-content {
+    padding: 5px;
     position:  relative;
 }
 
@@ -136,6 +137,30 @@
     transition: left 300ms;
 }
 
+@media (max-width: 320px) {
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 100px;
+    }
+}
+
+@media (min-width: 321px) and (max-width: 400px) {
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 140px;
+    }
+}
+
+@media (min-width: 401px) and (max-width: 767px) {
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 160px;
+    }
+}
+
+@media (max-width: 767px) {
+    .cmv .sidebar-widget .sidebar-widget-content {
+        zoom: 1.25;
+    }
+}
+
 @media (min-width: 768px) and (max-width: 991px) {
     .cmv .sidebar {
         width: 300px;
@@ -156,7 +181,7 @@
         left: 360px;
     }
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
-        width: 150px;
+        width: 140px;
     }
 }
 
@@ -180,11 +205,11 @@
         left: 375px !important;
     }
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
-        width: 200px;
+        width: 190px;
     }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1200px) and (max-width: 1800px) {
     .cmv .sidebar {
         width: 400px;
     }
@@ -204,7 +229,31 @@
         left: 425px !important;
     }
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
-        width: 250px;
+        width: 240px;
+    }
+}
+
+@media (min-width: 1800px) {
+    .cmv .sidebar {
+        width: 450px;
+    }
+    .cmv .map .sidebar-map {
+        left: 450px;
+    }
+    .cmv .map .cmv-widget-mapinfo {
+        left: 450px;
+    }
+    .cmv .map .cmv-widgets-left {
+        left: 464px;
+    }
+    .cmv .map .cmv-widget-geocoder {
+        left: 510px;
+    }
+    .cmv .map .scalebar_bottom-left {
+        left: 475px !important;
+    }
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 290px;
     }
 }
 
