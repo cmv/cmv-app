@@ -66,13 +66,14 @@
             // for the most part they are interchangeable, except _ConfigMixin
             // and _ControllerBase
             //
+
+            // Mixin for Mobile Sidebar
+            _SidebarMixin,
+
             _LayoutMixin,
             _WidgetsMixin,
             // _WebMapMixin,
             _MapMixin,
-
-            // Mixin for Mobile Sidebar
-            _SidebarMixin,
 
             // configMixin should be right before _ControllerBase so it is
             // called first to initialize the config object
