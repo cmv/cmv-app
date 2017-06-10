@@ -3,16 +3,18 @@ define([
     'dojo/_base/lang',
     'dojo/dom',
     'dojo/sniff',
+    'dojo/Deferred',
+    'module',
 
-    'put-selector',
-
-    './sidebar/Sidebar'
+    'put-selector'
 
 ], function (
     declare,
     lang,
     dom,
     has,
+    Deferred,
+    module,
 
     put,
 
@@ -22,19 +24,28 @@ define([
     return declare(null, {
 
         postConfig: function () {
-            this.inherited(arguments);
             this.config.layout = this.config.layout || {};
             this._checkForSidebarLayout();
 
             if (this.config.layout.sidebar) {
+                this.inherited(arguments);
                 this.config.panes = this.mixinDeep(this.config.panes || {}, {
                     left: {
                         collapsible: false,
                         style: 'display:none !important'
                     }
                 });
-                this.mapDeferred.then(lang.hitch(this, '_createSidebar'));
+                var deferred = new Deferred();
+                require([
+                    module.uri.substring(0, module.uri.lastIndexOf('/')) + '/sidebar/Sidebar.js'
+                ], lang.hitch(this, function (sidebar) {
+                    Sidebar = sidebar;
+                    this.mapDeferred.then(lang.hitch(this, '_createSidebar'));
+                    deferred.resolve();
+                }));
+                return deferred;
             }
+            return this.inherited(arguments);
         },
 
         _checkForSidebarLayout: function () {
