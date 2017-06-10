@@ -66,7 +66,7 @@ define([
 
         loadConfig: function () {
             this.detectTouchDevices();
-            this.inherited(arguments);
+            return this.inherited(arguments);
         },
 
         postConfig: function () {
