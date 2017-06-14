@@ -2,6 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/array',
     'dojo/_base/lang',
+    'dojo/aspect',
     'dojo/promise/all',
     'dojo/Deferred',
 
@@ -17,6 +18,7 @@ define([
     declare,
     array,
     lang,
+    aspect,
     promiseAll,
     Deferred,
 
@@ -158,20 +160,31 @@ define([
                 this._showWidgetLoader(pnl);
             }
 
-            // 2 ways to use require to accommodate widgets that may have an optional separate configuration file
             var deferred = new Deferred();
+            if ((widgetConfig.type === 'titlePane') && (widgetConfig.loadOnOpen !== false) && !pnl.get('open')) {
+                widgetConfig.delayHandle = aspect.after(pnl, 'toggle', lang.hitch(this, '_loadWidget', widgetConfig, deferred));
+            } else {
+                this._loadWidget(widgetConfig, deferred);
+            }
+            return deferred;
+        },
+
+        _loadWidget: function (widgetConfig, deferred) {
+            // 2 ways to use require to accommodate widgets that may have an optional separate configuration file
             if (typeof(widgetConfig.options) === 'string') {
                 require([widgetConfig.options, widgetConfig.path], lang.hitch(this, function (options, WidgetClass) {
-                    deferred.resolve();
                     this.createWidget(widgetConfig, options, WidgetClass);
+                    deferred.resolve();
                 }));
             } else {
                 require([widgetConfig.path], lang.hitch(this, function (WidgetClass) {
-                    deferred.resolve();
                     this.createWidget(widgetConfig, widgetConfig.options, WidgetClass);
+                    deferred.resolve();
                 }));
             }
-            return deferred;
+            if (widgetConfig.delayHandle) {
+                widgetConfig.delayHandle.remove();
+            }
         },
 
         createWidget: function (widgetConfig, options, WidgetClass) {
