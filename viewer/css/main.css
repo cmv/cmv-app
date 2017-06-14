@@ -97,6 +97,31 @@ body, html {
     overflow: hidden;
     background: url("../images/noisy_grid.png") #fff;
 }
+.cmv-widget {
+    position:absolute;
+    z-index:40;
+}
+.cmv-widget-mapinfo {
+    bottom: 0;
+    left: 0;
+}
+.cmv-widget-basemaps {
+    right: 20px;
+    top: 20px;
+}
+.cmv-widget-growler {
+    right: 20px;
+    top: 60px;
+    width: 250px;
+}
+.cmv-widgets-left {
+    left: 19px;
+    top: 87px;
+}
+.cmv-widget-geocoder {
+    left: 64px;
+    top: 20px;
+}
 .panetop {
     border-top: 1px solid #B5BCC7;
 }
