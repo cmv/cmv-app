@@ -1,0 +1,308 @@
+.cmv .sidebar {
+    bottom: 0;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+    height: auto;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 40;
+}
+
+.cmv .sidebar.collapsed {
+    height: auto;
+    width: 40px;
+}
+
+.cmv .sidebar-tabs {
+    background-color: #fff;
+    color: #444;
+    height: 100%;
+    margin: 0;
+    overflow-y: auto;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: 40px;
+    z-index: 41;
+}
+
+.cmv .sidebar-tabs.active {
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.cmv .sidebar-tabs > li {
+    cursor: pointer;
+    float: none;
+    font-size: 14pt;
+    height: 40px;
+    overflow: hidden;
+    transition: all 80ms;
+    width: 100%;
+}
+
+.cmv .sidebar-tabs > li:hover {
+    background-color: #444;
+    color: #fff;
+}
+
+.cmv .sidebar-tabs > li.active {
+    background-color: #444;
+    color: #fff;
+}
+
+.cmv .sidebar-tabs > li > a {
+    color: inherit;
+    display: block;
+    height: 100%;
+    line-height: 40px;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+}
+
+.cmv .sidebar-content {
+    background-color: #fff;
+    bottom: 0;
+    left: 40px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.cmv .sidebar-pane {
+    display: none;
+    right: 0;
+    width: 100%;
+}
+
+.cmv .sidebar-pane.active {
+    display: block;
+}
+
+.cmv .sidebar-pane-title {
+    background-color: #eee;
+    color: #333;
+    border-bottom: 1px solid #333;
+    font-size: 16px;
+    font-weight: bold;
+    height: 28px;
+    left: 0;
+    padding: 12px 10px 0 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.cmv .sidebar .sidebar-pane-title .sidebar-closeIcon {
+    cursor: pointer;
+    float: right;
+}
+
+.cmv .sidebar-widget {
+    bottom: 0;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 10px;
+    position: absolute;
+    right: 0;
+    top: 40px;
+}
+
+.cmv .sidebar-widget .sidebar-widget-content {
+    padding: 5px;
+    position:  relative;
+}
+
+
+/* esri map widgets */
+.cmv .map .sidebar-map {
+    left: 40px;
+    position: absolute;
+    top: 0;
+}
+
+.cmv .map .cmv-widget-geocoder {
+    top: 15px;
+}
+
+.cmv .sidebar,
+.cmv .map .sidebar-map,
+.cmv .map .cmv-widget,
+.cmv .map .scalebar_bottom-left {
+    transition: left 300ms;
+}
+
+@media (max-width: 320px) {
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 100px;
+    }
+}
+
+@media (min-width: 321px) and (max-width: 400px) {
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 140px;
+    }
+}
+
+@media (min-width: 401px) and (max-width: 767px) {
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 160px;
+    }
+}
+
+@media (max-width: 767px) {
+    .cmv .sidebar-widget .sidebar-widget-content {
+        zoom: 1.25;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .cmv .sidebar {
+        width: 300px;
+    }
+    .cmv .map .sidebar-map {
+        left: 300px;
+    }
+    .cmv .map .cmv-widget-mapinfo {
+        left: 300px;
+    }
+    .cmv .map .cmv-widgets-left {
+        left: 314px;
+    }
+    .cmv .map .scalebar_bottom-left {
+        left: 325px !important;
+    }
+    .cmv .map .cmv-widget-geocoder {
+        left: 360px;
+    }
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 140px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .cmv .sidebar {
+        width: 350px;
+    }
+    .cmv .map .sidebar-map {
+        left: 350px;
+    }
+    .cmv .map .cmv-widget-mapinfo {
+        left: 350px;
+    }
+    .cmv .map .cmv-widgets-left {
+        left: 364px;
+    }
+    .cmv .map .cmv-widget-geocoder {
+        left: 410px;
+    }
+    .cmv .map .scalebar_bottom-left {
+        left: 375px !important;
+    }
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 190px;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1800px) {
+    .cmv .sidebar {
+        width: 400px;
+    }
+    .cmv .map .sidebar-map {
+        left: 400px;
+    }
+    .cmv .map .cmv-widget-mapinfo {
+        left: 400px;
+    }
+    .cmv .map .cmv-widgets-left {
+        left: 414px;
+    }
+    .cmv .map .cmv-widget-geocoder {
+        left: 460px;
+    }
+    .cmv .map .scalebar_bottom-left {
+        left: 425px !important;
+    }
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 240px;
+    }
+}
+
+@media (min-width: 1800px) {
+    .cmv .sidebar {
+        width: 450px;
+    }
+    .cmv .map .sidebar-map {
+        left: 450px;
+    }
+    .cmv .map .cmv-widget-mapinfo {
+        left: 450px;
+    }
+    .cmv .map .cmv-widgets-left {
+        left: 464px;
+    }
+    .cmv .map .cmv-widget-geocoder {
+        left: 510px;
+    }
+    .cmv .map .scalebar_bottom-left {
+        left: 475px !important;
+    }
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 290px;
+    }
+}
+
+.cmv .sidebar-collapsed .sidebar-map {
+    left: 40px;
+}
+
+.cmv .sidebar-collapsed .cmv-widget-mapinfo {
+    left: 40px;
+}
+
+.cmv .sidebar-collapsed .cmv-widgets-left {
+    left: 54px;
+}
+
+.cmv .sidebar-collapsed .cmv-widget-geocoder {
+    left: 100px;
+}
+
+.cmv .sidebar-collapsed .scalebar_bottom-left {
+    left: 65px !important;
+}
+
+/* simple zoom slider: positioning */
+.cmv .map .esriSimpleSliderTL {
+    left: 15px;
+    top: 15px;
+}
+
+.cmv .map .esriSimpleSliderTR {
+    right: 15px;
+    top: 15px;
+}
+
+/* simple zoom slider: horizontal */
+
+.cmv .map .esriSimpleSliderHorizontal {
+    top: 10px;
+}
+
+.cmv .map .esriSimpleSliderHorizontal.esriSimpleSliderBL {
+    left: 10px;
+}
+
+.cmv .map .esriSimpleSliderHorizontal.esriSimpleSliderBR {
+    right: 10px;
+}
+
+.cmv .map .cmv-widget-basemaps {
+    right: 10px;
+    top: 10px;
+}
