@@ -3,13 +3,13 @@
 }
 
 .cmv .dijitTitlePane {
-    margin-bottom: 2px;
     background-color: #FFF;
+    margin-bottom: 2px;
 }
 
 .cmv .dijitTitlePaneTitle {
-    color: #666;
     background-color: #F5F5F5;
+    color: #666;
 }
 
 .cmv .dijitTitlePaneTitleOpen {
@@ -25,13 +25,6 @@
     outline: none !important;
 }
 
-/* icons for the sidebar */
-.cmv .dijitTitlePane .dijitTitlePaneTitle .titlePaneIcon {
-    margin: 0 0 0 8px;
-    padding-top: 2px;
-}
-/* end custom icons */
-
 /* esri popup window overrides */
 
 .cmv .esriPopup .sizer {
@@ -41,32 +34,38 @@
 .cmv .esriPopup .esriPopupWrapper {
     background-color: #FFFFFF;
 }
+
 .cmv .esriPopup .attachmentsSection div {
     font-weight: bold;
 }
+
 .cmv .esriPopup .contentPane table.attrTable {
-    width: 100%;
     border-collapse: collapse;
+    width: 100%;
 }
+
 .cmv .esriPopup .contentPane table.attrTable td {
     padding: 2px;
 }
+
 .cmv .esriPopup .contentPane table.attrTable td.attrName {
-    text-align: right;
-    font-weight: bold;
     color: #333333;
-    width: 40%;
+    font-weight: bold;
     padding-right: 5px;
+    text-align: right;
+    width: 40%;
 }
+
 .cmv .esriPopup .contentPane table.attrTable td.attrValue {
     width: 60%;
 }
+
 .cmv .esriPopup .contentPane table.attrTable tr {
-    vertical-align: top;
     border-bottom: 1px solid rgb(221, 221, 221);
+    vertical-align: top;
 }
 .cmv .esriPopup .contentPane table.attrTable tr:nth-child(odd) {
-    background-color: none;
+    background-color: transparent;
 }
 .cmv .esriPopup .contentPane table.attrTable tr:nth-child(even) {
     background-color: rgb(238, 238, 238);
@@ -79,24 +78,23 @@
 .cmv .esriPopupMobile {
     z-index: 999;
 }
-.cmv .esriMobileNavigationBar {
-    background-color: #666666;
-    background: url("../images/linen.jpg") repeat-x scroll left top transparent;
-    color: #FFFFFF;
-}
+
+.cmv .esriMobileNavigationBar,
 .cmv .esriPopupMobile .titlePane {
-    background-color: #666666;
     background: url("../images/linen.jpg") repeat-x scroll left top transparent;
+    background-color: #666666;
     color: #FFFFFF;
 }
+
 .cmv .esriPopupMobile .pointer.bottom{
-    background:url("../images/pointertop.png");
     -webkit-transform: rotate(180deg);
     -moz-transform: rotate(180deg);
     -o-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
     transform: rotate(180deg);
 }
+
+.cmv .esriPopupMobile .pointer.bottom,
 .cmv .esriPopupMobile .pointer.top {
     background:url("../images/pointertop.png");
 }
@@ -117,11 +115,12 @@
     background-repeat: repeat-x;
     border: 1px solid #BBB;
     border-bottom: 1px solid #A8A8A8;
-    padding: 0px 12px;
     color: #000;
     letter-spacing: 0;
+    padding: 0 12px;
     text-transform: none;
 }
+
 .cmv .simpleDirections .esriStopsGetDirections:before {
     content: '\f277';
     font-family: 'FontAwesome';
@@ -156,9 +155,9 @@
     background-image: -ms-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
     background-image: linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
     background-repeat: repeat-x;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
-    border-top-color: #444;
     border-color: #666;
+    border-top-color: #444;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
     -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
 }
 
@@ -185,15 +184,16 @@
 }
 
 .flat .dijitTabContainerTop-tabs .dijitTabChecked:before {
-    height: 3px;
     background-color: #666;
-    top: -1px;
+    height: 3px;
     left: -1px;
     right: -1px;
+    top: -1px;
 }
 
 .flat .dijitTitlePaneTitle {
     border: 1px solid #DDD;
+    border-bottom: none;
     -webkit-border-radius: 4px;
     border-radius: 4px;
     padding: 8px 15px;
@@ -209,20 +209,56 @@
     border-top: none;
 }
 
+.flat .dijitButton .dijitButtonNode .dijitIcon.fa,
+.flat .dijitDropDownButton .dijitButtonNode .dijitIcon.fa,
+.flat .dijitComboButton .dijitButtonNode .dijitIcon.fa {
+    margin-top: 4px;
+}
+
+.flat .dijitButton .dijitButtonNode,
+.flat .dijitDropDownButton .dijitButtonNode,
+.flat .dijitComboButton .dijitButtonNode,
+.flat .dijitToggleButton .dijitButtonNode,
+.flat .dijitComboBox .dijitButtonNode,
+.flat .dijitSpinnerButtonContainer.dijitButtonNode,
+.flat .dijitSelect .dijitButtonNode {
+    background-color: #E6E6E6;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #e6e6e6));
+    background-image: -webkit-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: -moz-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: -o-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: -ms-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-repeat: repeat-x;
+    border-bottom-color: #A8A8A8;
+    border-color: #BBB;
+    padding: 4px 12px;
+}
+
+.flat .dijitComboBox .dijitArrowButton,
+.flat .dijitSelect .dijitArrowButton {
+    padding: 4px;
+}
+
+.flat .dijitSpinner .dijitSpinnerButtonContainer {
+  padding: 0;
+}
+
 .flat .dijitButtonHover .dijitButtonNode,
 .flat .dijitDropDownButtonHover .dijitButtonNode,
 .flat .dijitComboButton .dijitButtonNodeHover,
 .flat .dijitComboButton .dijitDownArrowButtonHover,
 .flat .dijitToggleButtonHover .dijitButtonNode,
 .flat .dijitDropDownButtonActive .dijitButtonNode {
-    background-position: 0 -15px;
-    text-decoration: none;
-    transition: background-position 0.1s linear;
-    -moz-transition: background-position 0.1s linear;
-    -ms-transition: background-position 0.1s linear;
-    -o-transition: background-position 0.1s linear;
-    -webkit-transition: background-position 0.1s linear;
+  background-position: 0 -15px;
+  text-decoration: none;
+  transition: background-position 0.1s linear;
+  -moz-transition: background-position 0.1s linear;
+  -ms-transition: background-position 0.1s linear;
+  -o-transition: background-position 0.1s linear;
+  -webkit-transition: background-position 0.1s linear;
 }
+
 .flat .dijitButtonActive .dijitButtonNode,
 .flat .dijitComboButton .dijitButtonNodeActive,
 .flat .dijitToggleButtonActive .dijitButtonNode,
@@ -235,11 +271,12 @@
     background-image: -ms-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
     background-image: linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
     background-repeat: repeat-x;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
-    border-top-color: #444;
     border-color: #666;
+    border-top-color: #444;
     -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
 }
+
 .flat .dijitButtonDisabled .dijitButtonNode,
 .flat .dijitDropDownButtonDisabled .dijitButtonNode,
 .flat .dijitComboButtonDisabled .dijitButtonNode,
@@ -247,24 +284,25 @@
 .flat .dijitComboBoxDisabled .dijitButtonNode,
 .flat .dijitSpinnerDisabled .dijitButtonNode,
 .flat .dijitSelectDisabled .dijitButtonNode {
-    background-image: none;
-    box-shadow: none;
-    cursor: not-allowed;
-    filter: alpha(opacity=65);
-    opacity: 0.65;
-    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=65);
-    -webkit-box-shadow: none;
+  background-image: none;
+  -webkit-box-shadow:none;
+  box-shadow: none;
+  cursor: not-allowed;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=65);
+  filter: alpha(opacity=65);
+  opacity: 0.65;
 }
 
 .flat .success .dijitButtonNode {
     background: #409843;
-    color: #FFF;
     border-color: #39883c;
+    color: #FFF;
 }
+
 .flat .danger .dijitButtonNode {
     background: #e32d29;
-    color: #FFF;
     border-color: #d4201b;
+    color: #FFF;
 }
 
 .flat .dijitTextBoxHover,
