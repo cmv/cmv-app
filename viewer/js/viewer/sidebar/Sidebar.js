@@ -15,6 +15,8 @@ define([
 
     'put-selector/put',
 
+    'viewer/sidebar/SidebarTab',
+
     'dojo/text!./templates/Sidebar.html',
 
     'xstyle/css!./css/Sidebar.css',
@@ -38,16 +40,13 @@ define([
 
     put,
 
+    SidebarTab,
+
     template
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         baseClass: 'sidebar',
-
-        defaultTabParams: {
-            title: 'Title',
-            iconClass: 'fa-bars'
-        },
 
         viewPadding: {
             top: 0,
@@ -76,7 +75,6 @@ define([
             // resize tab and any widgets within the tab when it is opened
             on(this.domNode, 'transitionend, oTransitionEnd, webkitTransitionEnd, animationend, webkitAnimationEnd', lang.hitch(this, '_resizeActiveTab'));
 
-
             // resize tab and any widgets within the tab when the browser is resized
             on(window, 'resize', lang.hitch(this, function () {
                 window.setTimeout(lang.hitch(this, '_resizeActiveTab'), 300); // 300ms to wait for the animation to complete
@@ -85,66 +83,37 @@ define([
         },
 
         createTab: function (options) {
-            options = lang.mixin(lang.clone(this.defaultTabParams), options || {});
-            var tab = {
-                id: options.id,
-                buttonNode: null,
-                containerNode: null,
-                titleNode: null,
-                closeBtnNode: null,
-                contentNode: null
-            };
-            //create and place dom elements for the tab button and pane
-            tab.buttonNode = put(this.tabsButtonNode, 'li a[role=tab] i.fa.' + options.iconClass + '<<');
-            tab.containerNode = put(this.tabsContainerNode, 'div.' + this.baseClass + '-pane');
-            tab.titleNode = put(tab.containerNode, 'div.' + this.baseClass + '-pane-title $', options.title);
+            options = options || {};
+            options.open = options.open || false;
+            options.baseClass = this.baseClass;
+            options.showCloseIcon = this.showCloseIcon;
+            options.tabsContainerNode = this.tabsContainerNode;
+            options.tabsButtonNode = this.tabsButtonNode;
 
-            if (this.showCloseIcon) {
-                tab.closeBtnNode = put(tab.titleNode, 'i.fa.fa-chevron-left.' + this.baseClass + '-closeIcon');
-                // listen for the tab close button click
-                on(tab.closeBtnNode, 'click', lang.hitch(this, 'tabClickHandler', tab));
+            var tab = new SidebarTab(options);
+            tab.watch('open', lang.hitch(this, 'checkTabs', tab));
+            if (options.open) {
+                tab.openTab();
             }
 
-            // listen for the tab button click
-            on(tab.buttonNode, 'click', lang.hitch(this, 'tabClickHandler', tab));
-
-            //keep a reference to this tab
             this.tabs.push(tab);
-
-            //return the tabs pane node
             return tab;
         },
 
-        openTab: function (tab) {
+        checkTabs: function (tab) {
             array.forEach(this.tabs, function (childTab) {
-                put(childTab.buttonNode, '!active');
-                put(childTab.containerNode, '!active');
-                put(childTab.contentNode, '!active');
+                if (childTab.get('id') !== tab.get('id')) {
+                    childTab.closeTab(true);
+                }
             });
-            put(tab.buttonNode, '.active');
-            put(tab.containerNode, '.active');
-            put(tab.contentNode, '.active');
-            put(this.tabsButtonNode, '.active');
-            put(this.domNode, '!collapsed');
-            put(this.mapContainer, '!sidebar-collapsed');
-        },
-
-        closeTab: function () {
-            array.forEach(this.tabs, function (tab) {
-                put(tab.buttonNode, '!active');
-                put(tab.containerNode, '!active');
-                put(tab.contentNode, '!active');
-            }, this);
-            put(this.tabsButtonNode, '!active');
-            put(this.domNode, '.collapsed');
-            put(this.mapContainer, '.sidebar-collapsed');
-        },
-
-        tabClickHandler: function (tab) {
-            if (domClass.contains(tab.buttonNode, 'active')) {
-                this.closeTab(tab);
+            if (tab.get('open')) {
+                domClass.add(this.tabsButtonNode, 'active');
+                domClass.remove(this.domNode, 'collapsed');
+                domClass.remove(this.mapContainer, 'sidebar-collapsed');
             } else {
-                this.openTab(tab);
+                domClass.remove(this.tabsButtonNode, 'active');
+                domClass.add(this.domNode, 'collapsed');
+                domClass.add(this.mapContainer, 'sidebar-collapsed');
             }
         },
 

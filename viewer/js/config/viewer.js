@@ -349,7 +349,7 @@ define([
                 title: i18n.viewer.widgets.identify,
                 iconClass: 'fa-info-circle',
                 open: false,
-                loadOnOpen: false,
+                preload: true,
                 position: 3,
                 options: 'config/identify'
             },

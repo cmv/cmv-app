@@ -147,22 +147,26 @@ define([
             }
 
             // build a titlePane or floating widget as the parent
+            widgetConfig.watched = widgetConfig.watched || 'open';
             if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
                 parentId = widgetConfig.widgetKey + '_parent';
                 if (widgetConfig.type === 'titlePane') {
                     pnl = this._createTitlePaneWidget(parentId, widgetConfig);
                 } else if (widgetConfig.type === 'contentPane') {
                     pnl = this._createContentPaneWidget(parentId, widgetConfig);
+                    widgetConfig.preload = true;
                 } else if (widgetConfig.type === 'floating') {
                     pnl = this._createFloatingWidget(parentId, widgetConfig);
                 }
                 widgetConfig.parentWidget = pnl;
+                widgetConfig.preload = (widgetConfig.preload) || pnl.get(widgetConfig.watched) || (typeof(pnl.watch) !== 'function');
                 this._showWidgetLoader(pnl);
             }
 
             var deferred = new Deferred();
-            if ((widgetConfig.type === 'titlePane') && (widgetConfig.loadOnOpen !== false) && !pnl.get('open')) {
-                widgetConfig.delayHandle = aspect.after(pnl, 'toggle', lang.hitch(this, '_loadWidget', widgetConfig, deferred));
+            widgetConfig.preload = (typeof(widgetConfig.preload) === 'undefined') ? true : widgetConfig.preload;
+            if (!widgetConfig.preload) {
+                widgetConfig.watchHandle = pnl.watch(widgetConfig.watched, lang.hitch(this, '_loadWidget', widgetConfig, deferred));
             } else {
                 this._loadWidget(widgetConfig, deferred);
             }
@@ -182,8 +186,9 @@ define([
                     deferred.resolve();
                 }));
             }
-            if (widgetConfig.delayHandle) {
-                widgetConfig.delayHandle.remove();
+            if (widgetConfig.watchHandle) {
+                widgetConfig.watchHandle.unwatch();
+                widgetConfig.watchHandle.remove();
             }
         },
 
