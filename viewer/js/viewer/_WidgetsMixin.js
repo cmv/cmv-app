@@ -295,7 +295,8 @@ define([
 
         _createFloatingWidget: function (parentId, widgetConfig) {
             var options = lang.mixin({
-                title: widgetConfig.title
+                title: widgetConfig.title,
+                iconClass: widgetConfig.iconClass
             }, widgetConfig.paneOptions || {});
             if (parentId) {
                 options.id = parentId;
