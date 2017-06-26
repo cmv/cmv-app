@@ -1,6 +1,5 @@
 define({
     root: {
-        link: 'Help',
         navigation: {
             title: 'Navigation',
             description: 'Map navigation using mouse and keyboard:',
