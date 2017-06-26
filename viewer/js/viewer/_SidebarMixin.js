@@ -37,7 +37,7 @@ define([
                 });
                 var deferred = new Deferred();
                 require([
-                    module.uri.substring(0, module.uri.lastIndexOf('/')) + '/sidebar/Sidebar.js'
+                    'viewer/sidebar/Sidebar'
                 ], lang.hitch(this, function (sidebar) {
                     Sidebar = sidebar;
                     this.mapDeferred.then(lang.hitch(this, '_createSidebar'));
@@ -112,17 +112,7 @@ define([
                 iconClass: widgetConfig.iconClass
             };
 
-            var tab = this.sidebar.createTab(tabOptions);
-            tab.contentNode = put(tab.containerNode, 'div.sidebar-widget div.sidebar-widget-content');
-
-            var node = put(tab.contentNode, 'div');
-            widgetConfig.type = 'domNode';
-            widgetConfig.srcNodeRef = node;
-            this.createWidgets([
-                {
-                    options: widgetConfig
-                }
-            ]);
+            return this.sidebar.createTab(tabOptions);
         }
 
     });
