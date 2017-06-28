@@ -4,8 +4,6 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'gis/dijit/_FloatingWidgetMixin',
-    'dojo/dom-construct',
-    'dojo/on',
     'dojo/_base/lang',
     'dojo/aspect',
     'dojo/text!./Help/templates/HelpDialog.html',
@@ -14,26 +12,19 @@ define([
     'dijit/layout/TabContainer',
     'dijit/layout/ContentPane',
     'xstyle/css!./Help/css/Help.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin, domConstruct, on, lang, aspect, template, i18n) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin, lang, aspect, template, i18n) {
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _FloatingWidgetMixin], {
         widgetsInTemplate: true,
         templateString: template,
         i18n: i18n,
-        html: '<a href="#">link</a>'.replace('link', i18n.link),
-        domTarget: 'helpDijit',
-        draggable: false,
         baseClass: 'helpDijit',
         postCreate: function () {
             this.inherited(arguments);
-            this.parentWidget.draggable = this.draggable;
             if (this.parentWidget.toggleable) {
                 this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
                     this.containerNode.resize();
                 })));
-            } else {
-                var help = domConstruct.place(this.html, this.domTarget);
-                on(help, 'click', lang.hitch(this.parentWidget, 'show'));
             }
         },
         onOpen: function () {

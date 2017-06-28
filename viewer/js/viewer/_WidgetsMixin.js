@@ -2,6 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/array',
     'dojo/_base/lang',
+    'dojo/aspect',
     'dojo/promise/all',
     'dojo/Deferred',
 
@@ -17,6 +18,7 @@ define([
     declare,
     array,
     lang,
+    aspect,
     promiseAll,
     Deferred,
 
@@ -75,7 +77,7 @@ define([
             widgetTypes = widgetTypes || this.widgetTypes;
             for (var key in this.config.widgets) {
                 if (this.config.widgets.hasOwnProperty(key)) {
-                    var widget = lang.clone(this.config.widgets[key]);
+                    var widget = this.config.widgets[key];
                     widget.widgetKey = widget.widgetKey || widget.id || key;
                     if (widget.include && (!this.widgets[widget.widgetKey]) && (array.indexOf(widgetTypes, widget.type) >= 0)) {
                         widget.position = (typeof(widget.position) !== 'undefined') ? widget.position : 10000;
@@ -145,33 +147,49 @@ define([
             }
 
             // build a titlePane or floating widget as the parent
+            widgetConfig.watched = widgetConfig.watched || 'open';
             if ((widgetConfig.type === 'titlePane' || widgetConfig.type === 'contentPane' || widgetConfig.type === 'floating')) {
                 parentId = widgetConfig.widgetKey + '_parent';
                 if (widgetConfig.type === 'titlePane') {
                     pnl = this._createTitlePaneWidget(parentId, widgetConfig);
                 } else if (widgetConfig.type === 'contentPane') {
                     pnl = this._createContentPaneWidget(parentId, widgetConfig);
+                    widgetConfig.preload = true;
                 } else if (widgetConfig.type === 'floating') {
                     pnl = this._createFloatingWidget(parentId, widgetConfig);
                 }
                 widgetConfig.parentWidget = pnl;
+                widgetConfig.preload = (widgetConfig.preload) || pnl.get(widgetConfig.watched) || (typeof(pnl.watch) !== 'function');
                 this._showWidgetLoader(pnl);
             }
 
-            // 2 ways to use require to accommodate widgets that may have an optional separate configuration file
             var deferred = new Deferred();
+            widgetConfig.preload = (typeof(widgetConfig.preload) === 'undefined') ? true : widgetConfig.preload;
+            if (!widgetConfig.preload) {
+                widgetConfig.watchHandle = pnl.watch(widgetConfig.watched, lang.hitch(this, '_loadWidget', widgetConfig, deferred));
+            } else {
+                this._loadWidget(widgetConfig, deferred);
+            }
+            return deferred;
+        },
+
+        _loadWidget: function (widgetConfig, deferred) {
+            // 2 ways to use require to accommodate widgets that may have an optional separate configuration file
             if (typeof(widgetConfig.options) === 'string') {
                 require([widgetConfig.options, widgetConfig.path], lang.hitch(this, function (options, WidgetClass) {
-                    deferred.resolve();
                     this.createWidget(widgetConfig, options, WidgetClass);
+                    deferred.resolve();
                 }));
             } else {
                 require([widgetConfig.path], lang.hitch(this, function (WidgetClass) {
-                    deferred.resolve();
                     this.createWidget(widgetConfig, widgetConfig.options, WidgetClass);
+                    deferred.resolve();
                 }));
             }
-            return deferred;
+            if (widgetConfig.watchHandle) {
+                widgetConfig.watchHandle.unwatch();
+                widgetConfig.watchHandle.remove();
+            }
         },
 
         createWidget: function (widgetConfig, options, WidgetClass) {
@@ -282,7 +300,8 @@ define([
 
         _createFloatingWidget: function (parentId, widgetConfig) {
             var options = lang.mixin({
-                title: widgetConfig.title
+                title: widgetConfig.title,
+                iconClass: widgetConfig.iconClass
             }, widgetConfig.paneOptions || {});
             if (parentId) {
                 options.id = parentId;

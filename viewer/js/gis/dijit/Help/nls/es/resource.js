@@ -1,5 +1,4 @@
 define ({
-    link: 'Ayuda',
     navigation: {
         title: 'Navegación',
         description: 'Mapa de navegación a través del ratón y el teclado:',

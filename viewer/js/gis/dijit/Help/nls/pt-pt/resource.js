@@ -1,5 +1,4 @@
 define({
-    link: 'Ajuda',
     navigation: {
         title: 'Navegação',
         description: 'Navegação no mapa usando o rato e o teclado',
