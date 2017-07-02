@@ -26,6 +26,6 @@
         "body-parser": "~1.17.0",
         "proxypage": "*"
     },
-    "engine": "node >= 4",
+    "engine": "node >= 6",
     "dojoBuild": "package.js"
 }
