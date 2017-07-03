@@ -77,7 +77,7 @@ define([
             widgetTypes = widgetTypes || this.widgetTypes;
             for (var key in this.config.widgets) {
                 if (this.config.widgets.hasOwnProperty(key)) {
-                    var widget = lang.clone(this.config.widgets[key]);
+                    var widget = this.config.widgets[key];
                     widget.widgetKey = widget.widgetKey || widget.id || key;
                     if (widget.include && (!this.widgets[widget.widgetKey]) && (array.indexOf(widgetTypes, widget.type) >= 0)) {
                         widget.position = (typeof(widget.position) !== 'undefined') ? widget.position : 10000;
