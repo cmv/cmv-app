@@ -73,13 +73,13 @@ define([
                         this.own(aspect.after(this.parentWidget, 'toggle', lang.hitch(this, function () {
                             this.onLayoutChange(this.parentWidget.open);
                         })));
+
+                        // trigger layout change since parentWidget might
+                        // already be open
+                        this.onLayoutChange(this.parentWidget.open);
                     }
                     this.own(aspect.after(this.parentWidget, 'resize', lang.hitch(this, 'resize')));
                     this.own(topic.subscribe(this.parentWidget.id + '/resize/resize', lang.hitch(this, 'resize')));
-
-                    // trigger layout change since parentWidget might
-                    // already be open
-                    this.onLayoutChange(this.parentWidget.open);
                 }
 
                 if (!window.proj4) {
