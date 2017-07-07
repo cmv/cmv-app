@@ -7,8 +7,9 @@ define([
     'esri/layers/ImageParameters',
     'gis/plugins/Google',
     'dojo/i18n!./nls/main',
-    'dojo/topic'
-], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters, GoogleMapsLoader, i18n, topic) {
+    'dojo/topic',
+    'dojo/sniff'
+], function (units, Extent, esriConfig, /*urlUtils,*/ GeometryService, ImageParameters, GoogleMapsLoader, i18n, topic, has) {
 
     // url to your proxy page, must be on same machine hosting you app. See proxy folder for readme.
     esriConfig.defaults.io.proxyUrl = 'proxy/proxy.ashx';
@@ -120,6 +121,18 @@ define([
             pageTitle: i18n.viewer.titles.pageTitle
         },
 
+        layout: {
+            /*  possible options for sidebar layout:
+                    true - always use mobile sidebar, false - never use mobile sidebar,
+                    'mobile' - use sidebar for phones and tablets, 'phone' - use sidebar for phones,
+                    'touch' - use sidebar for all touch devices, 'tablet' - use sidebar for tablets only (not sure why you'd do this?),
+                    other feature detection supported by dojo/sniff and dojo/has- http://dojotoolkit.org/reference-guide/1.10/dojo/sniff.html
+
+                default value is 'phone'
+            */
+            //sidebar: 'phone'
+        },
+
         // user-defined layer types
         /*
         layerTypes: {
@@ -156,19 +169,23 @@ define([
                 layerInfo: {
                     title: i18n.viewer.operationalLayers.restaurants
                 }
+            },
+            layerControlLayerInfos: {
+                layerGroup: 'Grouped Feature Layers'
             }
         }, {
             type: 'feature',
-            url: 'https://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0',
+            url: 'https://sampleserver6.arcgisonline.com/ArcGIS/rest/services/SF311/FeatureServer/0',
             title: i18n.viewer.operationalLayers.sf311Incidents,
             options: {
                 id: 'sf311Incidents',
                 opacity: 1.0,
-                visible: true,
+                visible: false,
                 outFields: ['req_type', 'req_date', 'req_time', 'address', 'district'],
                 mode: 0
             },
             layerControlLayerInfos: {
+                layerGroup: 'Grouped Feature Layers',
                 menu: [{
                     topic: 'hello',
                     label: 'Say Hello Custom',
@@ -223,6 +240,14 @@ define([
                     label: 'Say Hello',
                     iconClass: 'fa fa-smile-o'
                 }]
+            }
+        }, {
+            type: 'dynamic',
+            url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/SampleWorldCities/MapServer',
+            title: i18n.viewer.operationalLayers.cities,
+            options: {
+                id: 'cities',
+                visible: false
             }
         /*
         //examples of vector tile layers (beta in v3.15)
@@ -294,15 +319,18 @@ define([
             },
             search: {
                 include: true,
-                type: 'domNode',
+                type: has('phone') ? 'titlePane' : 'domNode',
                 path: 'esri/dijit/Search',
                 srcNodeRef: 'geocoderButton',
+                title: i18n.viewer.widgets.search,
+                iconClass: 'fa-search',
+                position: 0,
                 options: {
                     map: true,
                     visible: true,
                     enableInfoWindow: false,
-                    enableButtonMode: true,
-                    expanded: false
+                    enableButtonMode: has('phone') ? false : true,
+                    expanded: has('phone') ? true : false
                 }
             },
             basemaps: {
@@ -321,6 +349,7 @@ define([
                 title: i18n.viewer.widgets.identify,
                 iconClass: 'fa-info-circle',
                 open: false,
+                preload: true,
                 position: 3,
                 options: 'config/identify'
             },
@@ -372,7 +401,7 @@ define([
                 }
             },
             overviewMap: {
-                include: true,
+                include: has('phone') ? false : true,
                 id: 'overviewMap',
                 type: 'map',
                 path: 'esri/dijit/OverviewMap',
@@ -552,7 +581,7 @@ define([
                 }
             },
             editor: {
-                include: true,
+                include: has('phone') ? false : true,
                 id: 'editor',
                 type: 'titlePane',
                 path: 'gis/dijit/Editor',
@@ -605,24 +634,30 @@ define([
             },
             locale: {
                 include: true,
+                type: has('phone') ? 'titlePane' : 'domNode',
                 id: 'locale',
-                //type: 'titlePane',
-                //position: 0,
-                //open: true,
-                type: 'domNode',
+                position: 0,
                 srcNodeRef: 'geocodeDijit',
                 path: 'gis/dijit/Locale',
                 title: i18n.viewer.widgets.locale,
+                iconClass: 'fa-flag',
                 options: {
-                    style: 'margin-left: 30px;'
+                    style: has('phone') ? null : 'margin-left: 30px;'
                 }
             },
             help: {
-                include: true,
+                include: has('phone') ? false : true,
                 id: 'help',
                 type: 'floating',
                 path: 'gis/dijit/Help',
                 title: i18n.viewer.widgets.help,
+                iconClass: 'fa-info-circle',
+                paneOptions: {
+                    draggable: false,
+                    html: '<a href="#"><i class="fa fa-fw fa-info-circle"></i>link</a>'.replace('link', i18n.viewer.widgets.help),
+                    domTarget: 'helpDijit',
+                    style: 'height:345px;width:450px;'
+                },
                 options: {}
             }
 

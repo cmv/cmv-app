@@ -1,7 +1,8 @@
 define([
     'dojo/i18n!./nls/main',
-    'dojo/_base/lang'
-], function (i18n, lang) {
+    'dojo/_base/lang',
+    'dojo/number'
+], function (i18n, lang, number) {
 
     var linkTemplate = '<a href="{url}" target="_blank">{text}</a>';
     function directionsFormatter (noValue, attributes) {
@@ -10,6 +11,7 @@ define([
             text: 'Get Directions'
         });
     }
+
     return {
         map: true,
         mapClickMode: true,
@@ -34,6 +36,22 @@ define([
         // for details on pop-up definition see: https://developers.arcgis.com/javascript/jshelp/intro_popuptemplate.html
 
         identifies: {
+            cities: {
+                0: {
+                    fieldInfos: [{
+                        visible: true,
+                        fieldName: 'CITY_NAME',
+                        label: 'Name'
+                    }, {
+                        visible: true,
+                        fieldName: 'POP',
+                        label: 'Population',
+                        formatter: function (value) {
+                            return number.format(value);
+                        }
+                    }]
+                }
+            },
             louisvillePubSafety: {
                 2: {
                     title: i18n.identify.louisvillePubSafety.policeStation,

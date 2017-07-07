@@ -44,7 +44,7 @@ define([
         widgetsInTemplate: true,
         i18n: i18n,
         title: i18n.title,
-
+        baseClass: 'basemapWidget',
         basemaps: {},
         currentBasemap: null,
         mapStartBasemap: null,

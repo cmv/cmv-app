@@ -177,14 +177,16 @@ define([
                 layer.hide();
                 topic.publish('layerControl/layerToggle', {
                     id: layer.id,
-                    visible: layer.visible
+                    visible: layer.visible,
+                    params: layer._params
                 });
             } else {
                 this._setLayerCheckbox(layer, checkNode);
                 layer.show();
                 topic.publish('layerControl/layerToggle', {
                     id: layer.id,
-                    visible: layer.visible
+                    visible: layer.visible,
+                    params: layer._params
                 });
             }
             if (layer.minScale !== 0 || layer.maxScale !== 0) {

@@ -1,5 +1,4 @@
 define ({
-    link: 'Aide',
     navigation: {
         title: 'Navigation',
         description: 'Navigation dans la carte en utilisant la souris et le clavier:',

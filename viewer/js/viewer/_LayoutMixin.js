@@ -63,6 +63,12 @@ define([
             }
         },
         collapseButtons: {},
+
+        loadConfig: function () {
+            this.detectTouchDevices();
+            return this.inherited(arguments);
+        },
+
         postConfig: function () {
             this.layoutDeferred = new Deferred();
             return this.inherited(arguments);
@@ -73,7 +79,7 @@ define([
 
             this.addTopics();
             this.addTitles();
-            this.detectTouchDevices();
+            this.setPhoneInfoWindow();
             this.initPanes();
 
             this.mapDeferred.then(lang.hitch(this, 'createPanes'));
@@ -321,7 +327,6 @@ define([
             this.positionSideBarToggle(id);
         },
 
-        // simple feature detection. kinda like dojox/mobile without the overhead
         detectTouchDevices: function () {
             if (has('touch') && (has('ios') || has('android') || has('bb'))) {
                 has.add('mobile', true);
@@ -330,11 +335,13 @@ define([
                 } else {
                     has.add('tablet', true);
                 }
+            }
+        },
 
-                // use the mobile popup for phones
-                if (has('phone') && !this.config.mapOptions.infoWindow) {
-                    this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
-                }
+        setPhoneInfoWindow: function () {
+            // use the mobile popup for phones
+            if (has('phone') && !this.config.mapOptions.infoWindow) {
+                this.config.mapOptions.infoWindow = new PopupMobile(null, put('div'));
             }
 
         }
