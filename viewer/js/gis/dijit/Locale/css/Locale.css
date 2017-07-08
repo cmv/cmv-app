@@ -2,11 +2,11 @@
     font-weight: bold;
 }
 .flag-icon {
-    width: 20px;
+    border: 1px solid #DDD;
     height: 15px;
     margin-right: 5px;
     margin-top: -1px;
-    border: 1px solid #DDD;
+    width: 20px;
 }
 
 .localeMenuPopup {

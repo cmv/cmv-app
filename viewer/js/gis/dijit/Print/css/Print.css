@@ -18,8 +18,8 @@
 }
 
 .gis_PrintDijit .printResultError {
-    font-weight: bold;
     color: red;
+    font-weight: bold;
 }
 
 .gis_PrintDijit .printResultHover table:hover {
@@ -30,7 +30,7 @@
 .gis_PrintDijit .buttonActionBar {
     /*background-color: #F2F2F2;
     border: 1px solid #CDCDCD;*/
-    padding: 3px 0px 2px 0px;
+    padding: 3px 0 2px 0;
     text-align: right;
     width: 100%;
 }
@@ -42,7 +42,7 @@
 }
 
 .gis_PrintDijit .resultsContainer {
-    width: 100%;
-    margin-top: 10px;
     margin-bottom: 5px;
+    margin-top: 10px;
+    width: 100%;
 }
