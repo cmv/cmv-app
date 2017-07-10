@@ -85,8 +85,8 @@
 
 .cmv .sidebar-pane-title {
     background-color: #eee;
-    color: #333;
     border-bottom: 1px solid #333;
+    color: #333;
     font-size: 16px;
     font-weight: bold;
     height: 28px;

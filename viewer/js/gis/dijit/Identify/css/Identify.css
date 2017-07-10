@@ -1,19 +1,21 @@
 .gis_IdentifyDijit {
     width: 100%;
 }
+
 .floatingWidget .gis_IdentifyDijit .formContainer {
-	min-width: 300px;
-	padding: 10px;
+    min-width: 300px;
+    padding: 10px;
 }
+
 .gis_IdentifyDijit .identifySelect {
-	width:100%;
-	margin-top: 5px;
+    margin-top: 5px;
+    width: 100%;
 }
 
 .esriPopup .loading {
-	height:20px;
-	width:20px;
-	margin:0px;
-	background-image: url('../images/loading.gif');
-	background-size:  20px 20px;
+    background-image: url('../images/loading.gif');
+    background-size: 20px 20px;
+    height: 20px;
+    margin: 0;
+    width: 20px;
 }
