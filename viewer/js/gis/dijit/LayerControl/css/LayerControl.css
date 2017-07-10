@@ -2,8 +2,7 @@
 
 .layerControlDijit .overlayLayerContainer {}
 
-.layerControlDijit .vectorLabelContainer,
-.layerControlDijit .overlayLabelContainer {
+.layerControlDijit .vectorLabelContainer, .layerControlDijit .overlayLabelContainer {
     font-size: 15px;
     font-weight: 600;
     padding-bottom: 4px;
@@ -33,17 +32,11 @@
     padding: 0;
 }
 
-.layerControlDijit .layerControlTableExpand,
-.layerControlDijit .layerControlTableCheck,
-.layerControlDijit .layerControlTableMenu,
-.layerControlDijit .layerControlTableLabel {
+.layerControlDijit .layerControlTableExpand, .layerControlDijit .layerControlTableCheck, .layerControlDijit .layerControlTableMenu, .layerControlDijit .layerControlTableLabel {
     cursor: pointer;
 }
 
-.layerControlDijit .layerControlTableExpand,
-.layerControlDijit .layerControlTableCheck,
-.layerControlDijit .layerControlTableMenu,
-.layerControlDijit .layerControlTableUpdate {
+.layerControlDijit .layerControlTableExpand, .layerControlDijit .layerControlTableCheck, .layerControlDijit .layerControlTableMenu, .layerControlDijit .layerControlTableUpdate {
     text-align: center;
 }
 
@@ -80,8 +73,7 @@
     margin-right: 4px;
 }
 
-.layerControlDijit .layerControlIndent .layerControlIndent .layerControlTableExpand .layerControlIcon,
-.layerControlDijit .layerControlSublayer .layerControlTableExpand .layerControlIcon {
+.layerControlDijit .layerControlIndent .layerControlIndent .layerControlTableExpand .layerControlIcon, .layerControlDijit .layerControlSublayer .layerControlTableExpand .layerControlIcon {
     margin-left: 4px;
     margin-right: 4px;
 }
@@ -101,7 +93,6 @@
     border-radius: 3px;
     padding: 0.15em 0.1875em 0.1125em;
 }
-
 
 .layerControlDijit .layerControlTableCheck .layerControlIcon-Folder {
     color: #333;
@@ -125,8 +116,8 @@
 }
 
 .layerControlDijit .layerControlMenuIcon {
-    font-size: 15px;
     color: #666;
+    font-size: 15px;
     margin-left: 4px;
 }
 
@@ -143,8 +134,8 @@
 /* not in use - retain for links */
 
 .layerControlDijit .layerControlClick {
-    cursor: pointer;
     color: #1f78af;
+    cursor: pointer;
     text-decoration: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -187,6 +178,7 @@
 .layerControlDijit .esriLegendServiceLabel {
     display: none;
 }
+
 
 /* sublayer menu */
 
