@@ -111,7 +111,8 @@ define([
          * @return {undefined}
          */
         addLayerInfo: function (layerInfo) {
-            var lyrId = layerInfo.layer.id, layer = this.map.getLayer(lyrId), infoTemplate;
+            var lyrId = layerInfo.layer.id, layer = this.map.getLayer(lyrId),
+                infoTemplate = null;
             if (layer) {
                 var url = layer.url;
 
@@ -180,7 +181,10 @@ define([
             }));
         },
         setupDraggable: function () {
-            var popups, handles, pointers, movable;
+            var popups = null,
+                handles = null,
+                pointers = null,
+                movable = null;
             // the popup, handle (title) and pointers (arrows)
             popups = query('div.esriPopup');
             handles = query('div.esriPopup div.titlePane div.title');
@@ -203,14 +207,11 @@ define([
             }
         },
         executeIdentifyTask: function (evt) {
-
-
             var mapPoint = evt.mapPoint;
             var identifyParams = this.createIdentifyParams(mapPoint);
             var identifies = [];
             var identifiedlayers = [];
             var selectedLayer = this.getSelectedLayer();
-
 
             if (!this.checkForGraphicInfoTemplate(evt)) {
                 // return;
@@ -233,7 +234,6 @@ define([
             if (evt.shiftKey || evt.ctrlKey || evt.altKey) {
                 return;
             }
-
 
             array.forEach(this.layers, lang.hitch(this, function (lyr) {
                 var layerIds = this.getLayerIds(lyr, selectedLayer);
@@ -353,35 +353,66 @@ define([
                 var ref = identifiedlayers[i].ref;
                 array.forEach(response, function (result) {
                     result.feature.geometry.spatialReference = this.map.spatialReference; //temp workaround for ags identify bug. remove when fixed.
-                    if (result.feature.infoTemplate === undefined) {
+                    var feature = result.feature;
+                    if (typeof feature.infoTemplate === 'undefined') {
                         var infoTemplate = this.getInfoTemplate(ref, null, result);
                         if (infoTemplate) {
                             if (result.layerId && ref.layerInfos && infoTemplate.info.showAttachments) {
                                 result.feature._layer = this.getFeatureLayerForDynamicSublayer(ref, result.layerId);
                             }
-                            result.feature.setInfoTemplate(infoTemplate);
+                            var featureInfoTemplate = this.buildExpressionInfos(lang.clone(infoTemplate), feature);
+                            feature.setInfoTemplate(featureInfoTemplate);
                         } else {
                             return;
                         }
                     }
-                    var feature = this.getFormattedFeature(result.feature.infoTemplate, result.feature);
+                    if (feature && feature.infoTemplate && feature.infoTemplate.info) {
+                        feature = this.getFormattedFeature(feature);
+                    }
                     fSet.push(feature);
                 }, this);
             }, this);
             this.map.infoWindow.setFeatures(fSet);
         },
-        getFormattedFeature: function (infoTemplate, feature) {
+        getFormattedFeature: function (feature) {
+            var infoTemplate = feature.infoTemplate;
             if (feature.graphic) {
                 feature = feature.graphic;
             }
-            if (feature && infoTemplate && infoTemplate.info) {
-                array.forEach(infoTemplate.info.fieldInfos, function (info) {
-                    if (typeof info.formatter === 'function') {
-                        feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes, lang.clone(feature.geometry));
+            array.forEach(infoTemplate.info.fieldInfos, function (info) {
+                if (typeof info.formatter === 'function') {
+                    feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes, lang.clone(feature.geometry));
+                }
+            });
+            return feature;
+        },
+        buildExpressionInfos: function (infoTemplate, feature) {
+            if (feature.graphic) {
+                feature = feature.graphic;
+            }
+            if (feature && infoTemplate && infoTemplate.info && (typeof infoTemplate.getExpressionInfo === 'function')) {
+                var info = infoTemplate.info;
+                var expressionInfos = info.expressionInfos || [];
+                array.forEach(info.fieldInfos, function (fieldInfo) {
+                    if (typeof fieldInfo.formatter === 'function' && fieldInfo.useExpression !== false) {
+                        var name = fieldInfo.fieldName.toLowerCase() + '-formatted';
+                        var expression = 'return \'' + fieldInfo.formatter(feature.attributes[fieldInfo.fieldName], feature.attributes, lang.clone(feature.geometry)) + '\'';
+                        fieldInfo.fieldName = 'expression/' + name;
+                        expressionInfos = array.filter(expressionInfos, function (expressionInfo) {
+                            return (expressionInfo.name !== name);
+                        });
+                        expressionInfos.push({
+                            name: name,
+                            title: fieldInfo.label || ' ',
+                            expression: expression
+                        });
+                        fieldInfo.formatter = null;
                     }
                 });
+                info.expressionInfos = expressionInfos;
+                infoTemplate = new PopupTemplate(info);
             }
-            return feature;
+            return infoTemplate;
         },
         identifyError: function (err) {
             this.map.infoWindow.hide();
@@ -395,7 +426,8 @@ define([
         },
 
         getInfoTemplate: function (layer, layerId, result) {
-            var popup, config;
+            var popup = null,
+                config = null;
             if (result) {
                 layerId = typeof result.layerId === 'number' ? result.layerId : layer.layerId;
             } else if (layerId === null) {
