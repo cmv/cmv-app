@@ -32,6 +32,11 @@ define([
         _layerType: 'grouped', // constant
         _esriLayerType: null, // constant
 
+        constructor: function () {
+            this.inherited(arguments);
+            this.icons.expand = this.icons.groupFolder || this.icons.folder;
+            this.icons.collapse = this.icons.groupFolderOpen || this.icons.folderOpen;
+        },
         // create and legend
         _layerTypePreInit: function () {
             array.forEach(this.layerDetails, lang.hitch(this, function (layerDetail) {
