@@ -3,6 +3,7 @@ define([
     'dojo/_base/lang',
     'dojo/_base/array',
     'dojo/on',
+    'dojo/query',
     'dojo/dom-class',
     'dojo/dom-style',
     'dojo/dom-attr',
@@ -16,6 +17,7 @@ define([
     lang,
     array,
     on,
+    query,
     domClass,
     domStyle,
     domAttr,
@@ -50,12 +52,9 @@ define([
             }
             var checkNode = this.checkNode;
             domAttr.set(checkNode, 'data-sublayer-id', this.sublayerInfo.id);
+            domAttr.set(checkNode, 'data-layer-folder', true);
             domClass.add(checkNode, this.control.layer.id + '-layerControlSublayerCheck');
-            if (array.indexOf(this.control.layer.visibleLayers, this.sublayerInfo.id) !== -1) {
-                this._setSublayerCheckbox(true, checkNode);
-            } else {
-                this._setSublayerCheckbox(false, checkNode);
-            }
+
             this._handlers.push(on(checkNode, 'click', lang.hitch(this, function (event) {
 
                 // prevent click event from bubbling
@@ -63,12 +62,11 @@ define([
                     event.stopPropagation();
                 }
 
-                if (domAttr.get(checkNode, 'data-checked') === 'checked') {
-                    this._setSublayerCheckbox(false, checkNode);
+                if (!this._hasAnyInvisibleLayer()) {
+                    this._setFolderCheckbox(false, checkNode);
                 } else {
-                    this._setSublayerCheckbox(true, checkNode);
+                    this._setFolderCheckbox(true, checkNode);
                 }
-                this.control._setVisibleLayers();
                 this._checkboxScaleRange();
             })));
             html.set(this.labelNode, this.sublayerInfo.name);
@@ -99,18 +97,129 @@ define([
                 }
             })));
         },
-        // set checkbox based on layer so it's always in sync
-        _setSublayerCheckbox: function (checked, checkNode) {
+        // toggles visibility of all sublayers
+        _setFolderCheckbox: function (checked, checkNode, isChildFolder) {
+            var i = this.icons,
+                dataChecked = (checked) ? 'checked' : 'unchecked',
+                slNodes = this._getSubLayerNodes();
             checkNode = checkNode || this.checkNode;
-            var i = this.icons;
-            if (checked) {
-                domAttr.set(checkNode, 'data-checked', 'checked');
-                domClass.replace(checkNode, i.checked, i.unchecked);
-            } else {
-                domAttr.set(checkNode, 'data-checked', 'unchecked');
-                domClass.replace(checkNode, i.unchecked, i.checked);
+            array.forEach(slNodes, lang.hitch(this, function (node) {
+
+                // child is folder
+                if (domAttr.get(node, 'data-layer-folder')) {
+                    var folderControl = this._getFolderControl(node);
+                    if (folderControl) {
+                        folderControl._setFolderCheckbox(checked, node, true);
+                    }
+                // child is sub layer
+                } else {
+                    domAttr.set(node, 'data-checked', dataChecked);
+                    if (checked) {
+                        domClass.replace(node, i.checked, i.unchecked);
+                    } else {
+                        domClass.replace(node, i.unchecked, i.checked);
+                    }
+                }
+            }));
+
+            // wait until all folders in hierarchy have been
+            // processed before setting the layer's visible layers
+            if (!isChildFolder) {
+                this.control._setVisibleLayers();
             }
         },
+
+        _hasAnyVisibleLayer: function () {
+            var slNodes = this._getSubLayerNodes();
+            return array.some(slNodes, lang.hitch(this, function (node) {
+                if (domAttr.get(node, 'data-layer-folder')) {
+                    var folderControl = this._getFolderControl(node);
+                    if (folderControl) {
+                        return folderControl._hasAnyVisibleLayer();
+                    }
+                    return true;
+                }
+                return (domAttr.get(node, 'data-checked') === 'checked');
+            }));
+        },
+
+        _hasAnyInvisibleLayer: function () {
+            var slNodes = this._getSubLayerNodes();
+            return array.some(slNodes, lang.hitch(this, function (node) {
+                if (domAttr.get(node, 'data-layer-folder')) {
+                    var folderControl = this._getFolderControl(node);
+                    if (folderControl) {
+                        return folderControl._hasAnyInvisibleLayer();
+                    }
+                    return true;
+                }
+                return (domAttr.get(node, 'data-checked') !== 'checked');
+            }));
+        },
+
+        _getSubLayerNodes: function () {
+            var layerIds = this.control.controlOptions.layerIds;
+            var subLayerInfos = [];
+            if (this.control.controlOptions.subLayerInfos && !this.control.controlOptions.includeUnspecifiedLayers) {
+                subLayerInfos = array.map(this.control.controlOptions.subLayerInfos, function (sli) {
+                    return sli.id;
+                });
+            }
+
+            var subLayerNodes = query('.' + this.control.layer.id + '-layerControlSublayerCheck', this.domNode);
+            return array.filter(subLayerNodes, lang.hitch(this, function (node) {
+                var subLayerID = parseInt(domAttr.get(node, 'data-sublayer-id'), 10);
+                // is the sublayer contained in this folder
+                if (array.indexOf(this.sublayerInfo.subLayerIds, subLayerID) < 0) {
+                    return false;
+                // is the sublayer included in layer's layerIds (if they are defined)
+                } else if (layerIds.length && array.indexOf(layerIds, subLayerID) < 0) {
+                    return false;
+                // is the sublayer included in layer's subLayerInfos (if they are defined)
+                } else if (subLayerInfos.length && array.indexOf(subLayerInfos, subLayerID) < 0) {
+                    return false;
+                }
+                return true;
+            }));
+        },
+
+        _getFolderControl: function (node) {
+            var subLayerID = parseInt(domAttr.get(node, 'data-sublayer-id'), 10);
+            var controls = array.filter(this.control._folderControls, function (control) {
+                return (control.sublayerInfo.id === subLayerID);
+            });
+            if (controls.length) {
+                return controls[0];
+            }
+            return null;
+        },
+
+        // set visibility of folder (group layer) based on the visibility
+        // of children sub-layers and folders
+        _checkFolderVisibility: function () {
+            var checkNode = this.checkNode,
+                i = this.icons;
+
+            var hasVisible = this._hasAnyVisibleLayer();
+            var hasHidden = this._hasAnyInvisibleLayer();
+
+            domClass.remove(checkNode, i.checked);
+            domClass.remove(checkNode, i.unchecked);
+            domClass.remove(checkNode, i.indeterminate);
+
+            // indeterminate - both visible and invisible layers in group
+            if (hasVisible && hasHidden) {
+                domAttr.set(checkNode, 'data-checked', 'indeterminate');
+                domClass.add(checkNode, i.indeterminate);
+            } else if (hasVisible) {
+                domAttr.set(checkNode, 'data-checked', 'checked');
+                domClass.add(checkNode, i.checked);
+            } else {
+                domAttr.set(checkNode, 'data-checked', 'unchecked');
+                domClass.add(checkNode, i.unchecked);
+            }
+        },
+
         // check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function () {
             var node = this.checkNode,
