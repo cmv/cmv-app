@@ -203,6 +203,10 @@ define([
                     }
                 }
 
+                // re-initialize the groupedLayerInfos once
+                // the grouped layers have been added.
+                this._groupedLayerInfos = {};
+
                 this._checkReorder();
             }));
         },
