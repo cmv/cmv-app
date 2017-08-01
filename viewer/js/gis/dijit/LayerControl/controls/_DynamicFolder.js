@@ -158,7 +158,7 @@ define([
         },
 
         _getSubLayerNodes: function () {
-            var layerIds = this.control.controlOptions.layerIds;
+            var layerIds = this.control.controlOptions.layerIds || [];
             var subLayerInfos = [];
             if (this.control.controlOptions.subLayerInfos && !this.control.controlOptions.includeUnspecifiedLayers) {
                 subLayerInfos = array.map(this.control.controlOptions.subLayerInfos, function (sli) {
