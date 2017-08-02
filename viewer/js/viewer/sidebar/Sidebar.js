@@ -129,6 +129,9 @@ define([
         },
 
         _viewPaddingHandler: function (extent) {
+            if (extent.spatialReference !== this.map.extent.spatialReference) {
+                return [extent];
+            }
             var map = this.map,
                 vp = this.viewPadding,
                 w = map.width - vp.left - vp.right,
