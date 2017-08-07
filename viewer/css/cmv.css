@@ -587,14 +587,18 @@ body {
     background-color: #F5F5F5;
 }
 
-/* background colors for expand pane when collapsed */
-.cmv .cmv-ui .cmvExpandPane .dijitTitlePaneTitle {
+/* expand pane widget */
+.cmvExpandPane.dijitTitlePane {
     border: 1px solid #666;
+}
+
+.cmv .cmv-ui .cmvExpandPane .dijitTitlePaneTitle {
+    border-width: 0 0 1px 0;
 }
 
 .cmv .cmv-ui .cmvExpandPane .dijitTitlePaneTitle.dijitClosed {
     background-color: #fff;
-    border-radius: 4px;
+    border-width: 0;
 }
 
 .cmv .cmv-ui .cmvExpandPane .dijitTitlePaneTitle.dijitClosed:hover {
