@@ -12,7 +12,7 @@ define([
             this.canFloat = false;
             this.inherited(arguments);
             if (this.domNode && this.paneClass) {
-                domClass.add(this.domNode, this.paneClass + ' ' + this.id);
+                domClass.add(this.domNode, this.paneClass);
             }
         }
     });
