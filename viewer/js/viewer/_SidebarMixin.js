@@ -100,10 +100,18 @@ define([
             }, put(this.map.root, 'div'));
             this.sidebar.startup();
 
+            this._origCreateTitlePaneWidget = lang.clone(this._createTitlePaneWidget);
             this._createTitlePaneWidget = this._createTabPaneWidget;
         },
 
         _createTabPaneWidget: function (parentId, widgetConfig) {
+            // if not a pane widget (placed elsewhere), use the original method
+            if (!this.panes[widgetConfig.placeAt]) {
+                return this._origCreateTitlePaneWidget(parentId, widgetConfig);
+            }
+
+            // show the sidebar now that a widget is being added
+            this.sidebar.show();
             var tabOptions = widgetConfig.tabOptions || {
                 id: parentId,
                 title: widgetConfig.title,
