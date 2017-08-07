@@ -51,10 +51,12 @@ body {
     border-top: none;
 }
 
+.flat .dijitEditorIcon.fa,
+.flat .dijitIcon.fa,
 .flat .dijitButton .dijitButtonNode .dijitIcon.fa,
 .flat .dijitDropDownButton .dijitButtonNode .dijitIcon.fa,
 .flat .dijitComboButton .dijitButtonNode .dijitIcon.fa {
-    margin-top: 4px;
+    font-family: FontAwesome;
 }
 
 .flat .dijitButton .dijitButtonNode,
