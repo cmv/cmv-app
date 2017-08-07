@@ -15,6 +15,10 @@
     width: 40px;
 }
 
+.cmv .sidebar.hidden {
+    display: none;
+}
+
 .cmv .sidebar-tabs {
     background-color: #fff;
     color: #444;
