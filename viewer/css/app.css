@@ -1,5 +1,5 @@
 @import url('./theme/flat/flat.css'); /* dojo's flat theme */
-@import url('./cmv-theme-overrides.css'); /* the start of cmv theme */
+@import url('./cmv.css'); /* the start of cmv theme */
 
 .appHeader {
     background: url("../images/linen.jpg") repeat-x scroll left top transparent;
