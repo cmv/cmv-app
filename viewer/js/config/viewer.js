@@ -312,16 +312,18 @@ define([
             growler: {
                 include: true,
                 id: 'growler',
-                type: 'domNode',
+                type: 'layout',
                 path: 'gis/dijit/Growler',
-                srcNodeRef: 'growlerDijit',
-                options: {}
+                placeAt: document.body,
+                options: {
+                    style: 'position:absolute;top:15px;' + (has('phone') ? 'left:50%;transform:translate(-50%,0);' : 'right:15px;')
+                }
             },
             search: {
                 include: true,
                 type: has('phone') ? 'titlePane' : 'domNode',
                 path: 'esri/dijit/Search',
-                srcNodeRef: 'geocoderButton',
+                placeAt: '.cmv-ui-widget-search',
                 title: i18n.viewer.widgets.search,
                 iconClass: 'fa-search',
                 position: 0,
@@ -336,9 +338,10 @@ define([
             basemaps: {
                 include: true,
                 id: 'basemaps',
-                type: 'domNode',
+                type: 'ui',
                 path: 'gis/dijit/Basemaps',
-                srcNodeRef: 'basemapsDijit',
+                placeAt: 'top-right',
+                position: 'first',
                 options: 'config/basemaps'
             },
             identify: {
@@ -385,9 +388,10 @@ define([
             locateButton: {
                 include: true,
                 id: 'locateButton',
-                type: 'domNode',
+                type: 'ui',
                 path: 'gis/dijit/LocateButton',
-                srcNodeRef: 'locateButton',
+                placeAt: 'top-left',
+                position: 'last',
                 options: {
                     map: true,
                     publishGPSPosition: true,
@@ -418,9 +422,9 @@ define([
             homeButton: {
                 include: true,
                 id: 'homeButton',
-                type: 'domNode',
+                type: 'ui',
                 path: 'esri/dijit/HomeButton',
-                srcNodeRef: 'homeButton',
+                placeAt: 'top-left',
                 options: {
                     map: true,
                     extent: new Extent({
