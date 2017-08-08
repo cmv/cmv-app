@@ -35,21 +35,10 @@ define([
         templateString: folderTemplate,
         _expandClickHandler: null,
         _handlers: [],
+
         postCreate: function () {
             this.inherited(arguments);
-            // Should the control be visible or hidden (depends on subLayerInfos)?
-            if (this.control.controlOptions.subLayerInfos && !this.control.controlOptions.includeUnspecifiedLayers) {
-                var subLayerInfos = array.map(this.control.controlOptions.subLayerInfos, function (sli) {
-                    return sli.id;
-                });
-                if (array.indexOf(subLayerInfos, this.sublayerInfo.id) < 0) {
-                    domClass.add(this.domNode, 'layerControlHidden');
-                }
-            }
-            // Should the control be visible or hidden?
-            if (this.control.controlOptions.layerIds && array.indexOf(this.control.controlOptions.layerIds, this.sublayerInfo.id) < 0) {
-                domClass.add(this.domNode, 'layerControlHidden');
-            }
+            this._checkHideControl();
             var checkNode = this.checkNode;
             domAttr.set(checkNode, 'data-sublayer-id', this.sublayerInfo.id);
             domAttr.set(checkNode, 'data-layer-folder', true);
@@ -76,6 +65,7 @@ define([
                 this._handlers.push(this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange')));
             }
         },
+
         // add on event to expandClickNode
         _expandClick: function () {
             var i = this.icons;
@@ -97,7 +87,8 @@ define([
                 }
             })));
         },
-        // toggles visibility of all sublayers
+
+        // toggles visibility of all sub layers
         _setFolderCheckbox: function (checked, checkNode, isChildFolder) {
             var i = this.icons,
                 dataChecked = (checked) ? 'checked' : 'unchecked',
@@ -183,6 +174,20 @@ define([
             }));
         },
 
+        _getSubLayerControls: function () {
+            var parentLayerId = this.sublayerInfo.id;
+            return array.filter(this.control._sublayerControls, function (control) {
+                return (control.parentLayerId === parentLayerId);
+            });
+        },
+
+        _getFolderControls: function () {
+            var parentLayerId = this.sublayerInfo.id;
+            return array.filter(this.control._folderControls, function (control) {
+                return (control.parentLayerId === parentLayerId);
+            });
+        },
+
         _getFolderControl: function (node) {
             var subLayerID = parseInt(domAttr.get(node, 'data-sublayer-id'), 10);
             var controls = array.filter(this.control._folderControls, function (control) {
@@ -231,6 +236,28 @@ define([
                 domClass.add(node, 'layerControlCheckIconOutScale');
             }
         },
+
+
+        _checkHideControl: function () {
+            // Should the control be visible or hidden (depends on subLayerInfos)?
+            if (this.control.controlOptions.subLayerInfos && !this.control.controlOptions.includeUnspecifiedLayers) {
+                var subLayerInfos = array.map(this.control.controlOptions.subLayerInfos, function (sli) {
+                    return sli.id;
+                });
+                if (array.indexOf(subLayerInfos, this.sublayerInfo.id) < 0) {
+                    domClass.add(this.domNode, 'layerControlHidden');
+                }
+            }
+            // Should the control be visible or hidden?
+            if (this.control.controlOptions.layerIds && array.indexOf(this.control.controlOptions.layerIds, this.sublayerInfo.id) < 0) {
+                domClass.add(this.domNode, 'layerControlHidden');
+            }
+        },
+
+        _isVisible: function () {
+            return (domAttr.get(this.checkNode, 'data-checked') === 'checked');
+        },
+
         destroy: function () {
             this.inherited(arguments);
             this._handlers.forEach(function (h) {
