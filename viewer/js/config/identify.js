@@ -61,7 +61,8 @@ define([
                       // the result
                         fieldName: 'Directions',
                         visible: true,
-                        formatter: directionsFormatter
+                        formatter: directionsFormatter,
+                        useExpression: false
                     }, {
                         fieldName: 'Name',
                         visible: true
