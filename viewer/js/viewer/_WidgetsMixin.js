@@ -207,7 +207,7 @@ define([
             this._placeWidget(widget, pnl, widgetConfig);
 
             // start up the widget
-            if (widget && widget.startup && !widget._started) {
+            if (widget && (typeof widget.startup === 'function') && !widget._started) {
                 widget.startup();
             }
             this.widgets[key] = widget;
@@ -321,12 +321,16 @@ define([
             }
 
             // add a class
-            domClass.add(pnl.domNode, pnl.id);
+            if (pnl.domNode) {
+                domClass.add(pnl.domNode, pnl.id);
+            }
             var placeAt = this._getPlaceAt(widgetConfig);
-            if (placeAt) {
+            if (placeAt && (typeof pnl.placeAt === 'function')) {
                 pnl.placeAt(placeAt);
             }
-            pnl.startup();
+            if ((typeof pnl.startup === 'function') && !pnl._started) {
+                pnl.startup();
+            }
             this._showWidgetLoader(pnl);
 
             widgetConfig.preload = (widgetConfig.preload) || pnl.get(widgetConfig.watched) || (typeof pnl.watch !== 'function');
