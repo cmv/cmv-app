@@ -132,7 +132,7 @@
 
 .cmv .sidebar,
 .cmv .map .sidebar-map,
-.cmv .map .cmv-ui,
+.cmv .map .cmv-ui-map *,
 .cmv .map .scalebar_bottom-left {
     transition: left 300ms;
 }
@@ -167,10 +167,12 @@
     }
     .cmv .map .sidebar-map,
     .cmv .map .cmv-ui-top-left,
+    .cmv .map .cmv-ui-center-left,
     .cmv .map .cmv-ui-bottom-left {
         left: 70%;
     }
     .cmv .map .cmv-ui-inset .cmv-ui-top-left,
+    .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
         left: calc(70% + 15px);
     }
@@ -185,14 +187,17 @@
     }
     .cmv .map .sidebar-map,
     .cmv .map .cmv-ui-top-left,
+    .cmv .map .cmv-ui-center-left,
     .cmv .map .cmv-ui-bottom-left {
         left: 300px;
     }
     .cmv .map .cmv-ui-inset .cmv-ui-top-left,
+    .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
         left: 315px;
     }
-    .cmv .map .cmv-widget-search {
+    .cmv .map .cmv-ui-inset .cmv-ui-top-center,
+    .cmv .map .cmv-ui-inset .cmv-ui-bottom-center {
         left: 360px;
     }
     .cmv .map .scalebar_bottom-left {
@@ -209,14 +214,17 @@
     }
     .cmv .map .sidebar-map,
     .cmv .map .cmv-ui-top-left,
+    .cmv .map .cmv-ui-center-left,
     .cmv .map .cmv-ui-bottom-left {
         left: 350px;
     }
     .cmv .map .cmv-ui-inset .cmv-ui-top-left,
+    .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
         left: 365px;
     }
-    .cmv .map .cmv-widget-search {
+    .cmv .map .cmv-ui-inset .cmv-ui-top-center,
+    .cmv .map .cmv-ui-inset .cmv-ui-bottom-center {
         left: 410px;
     }
     .cmv .map .scalebar_bottom-left {
@@ -233,14 +241,17 @@
     }
     .cmv .map .sidebar-map,
     .cmv .map .cmv-ui-top-left,
+    .cmv .map .cmv-ui-center-left,
     .cmv .map .cmv-ui-bottom-left {
         left: 400px;
     }
     .cmv .map .cmv-ui-inset .cmv-ui-top-left,
+    .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
         left: 415px;
     }
-    .cmv .cmv-widget-search {
+    .cmv .map .cmv-ui-inset .cmv-ui-top-center,
+    .cmv .map .cmv-ui-inset .cmv-ui-bottom-center {
         left: 460px;
     }
     .cmv .map .scalebar_bottom-left {
@@ -257,14 +268,17 @@
     }
     .cmv .map .sidebar-map,
     .cmv .map .cmv-ui-top-left,
+    .cmv .map .cmv-ui-center-left,
     .cmv .map .cmv-ui-bottom-left {
         left: 450px;
     }
     .cmv .map .cmv-ui-inset .cmv-ui-top-left,
+    .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
         left: 465px;
     }
-    .cmv .cmv-widget-search {
+    .cmv .map .cmv-ui-inset .cmv-ui-top-center,
+    .cmv .map .cmv-ui-inset .cmv-ui-bottom-center {
         left: 510px;
     }
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
@@ -274,16 +288,25 @@
 
 .cmv .sidebar-collapsed .sidebar-map,
 .cmv .sidebar-collapsed .cmv-ui-top-left,
+.cmv .sidebar-collapsed .cmv-ui-center-left,
 .cmv .sidebar-collapsed .cmv-ui-bottom-left {
     left: 40px;
 }
 
+.cmv .sidebar-collapsed .cmv-ui-top-center,
+.cmv .sidebar-collapsed .cmv-ui-center-center,
+.cmv .sidebar-collapsed .cmv-ui-bottom-center {
+    left: calc(50% - 40px);
+}
+
 .cmv .sidebar-collapsed .cmv-ui-inset .cmv-ui-top-left,
+.cmv .sidebar-collapsed .cmv-ui-inset .cmv-ui-center-left,
 .cmv .sidebar-collapsed .cmv-ui-inset .cmv-ui-bottom-left {
     left: 55px;
 }
 
-.cmv .sidebar-collapsed .cmv-widget-search {
+.cmv .sidebar-collapsed .cmv-ui-inset .cmv-ui-top-center,
+.cmv .sidebar-collapsed .cmv-ui-inset .cmv-ui-bottom-center {
     left: 100px;
 }
 

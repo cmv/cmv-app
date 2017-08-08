@@ -321,9 +321,9 @@ define([
             },
             search: {
                 include: true,
-                type: has('phone') ? 'titlePane' : 'domNode',
+                type: has('phone') ? 'titlePane' : 'ui',
                 path: 'esri/dijit/Search',
-                placeAt: '.cmv-ui-widget-search',
+                placeAt: has('phone') ? null : 'top-center',
                 title: i18n.viewer.widgets.search,
                 iconClass: 'fa-search',
                 position: 0,

@@ -413,118 +413,167 @@ body {
 /* end dojo panes */
 
 /* placement of map ui widgets */
+
+/* map positioning */
+
 .cmv .cmv-ui-top-left,
+.cmv .cmv-ui-top-center,
 .cmv .cmv-ui-top-right,
+.cmv .cmv-ui-center-left,
+.cmv .cmv-ui-center-center,
+.cmv .cmv-ui-center-right,
 .cmv .cmv-ui-bottom-left,
+.cmv .cmv-ui-bottom-center,
 .cmv .cmv-ui-bottom-right {
     display: flex;
     position: absolute;
     z-index: 40;
 }
 
-.cmv .cmv-ui-top-left {
-    left: 0;
-    top: 0;
-}
-
-.cmv .cmv-ui-top-right {
-    right: 0;
-    top: 0;
-}
-
-.cmv .cmv-ui-bottom-left {
-    bottom: 0;
-    left: 0;
-}
-
-.cmv .cmv-ui-bottom-right {
-    bottom: 0;
-    right: 0;
-}
-
-/*
-    TODO - this assumes zoom buttons in top left
-*/
-.cmv .cmv-ui-inset .cmv-ui-top-left {
-    left: 15px;
-    top: 90px;
-}
-
-.cmv .cmv-ui-inset .cmv-ui-top-right {
-    right: 15px;
-    top: 15px;
-}
-
-.cmv .cmv-ui-inset .cmv-ui-bottom-left {
-    bottom: 15px;
-    left: 15px;
-}
-
-.cmv .cmv-ui-inset .cmv-ui-bottom-right {
-    bottom: 15px;
-    right: 15px;
-}
-
-.cmv .cmv-ui-top-left > *,
-.cmv .cmv-ui-top-right > *,
-.cmv .cmv-ui-bottom-left > *,
-.cmv .cmv-ui-bottom-right > * {
-    max-height: 100%;
-    max-width: 100%;
-}
-
 .cmv .cmv-ui-top-left,
+.cmv .cmv-ui-top-center,
 .cmv .cmv-ui-top-right {
-    flex-flow: column
-}
-
-.cmv .cmv-ui-top-left {
-    align-items: flex-start
-}
-
-.cmv .cmv-ui-top-right {
-    align-items: flex-end
+    top: 0;
 }
 
 .cmv .cmv-ui-bottom-left,
+.cmv .cmv-ui-bottom-center,
+.cmv .cmv-ui-bottom-right {
+    bottom: 0;
+}
+
+.cmv .cmv-ui-top-left,
+.cmv .cmv-ui-center-left,
+.cmv .cmv-ui-bottom-left {
+    left: 0;
+}
+
+.cmv .cmv-ui-top-right,
+.cmv .cmv-ui-center-right,
+.cmv .cmv-ui-bottom-right {
+    right: 0;
+}
+
+.cmv .cmv-ui-top-center,
+.cmv .cmv-ui-center-center,
+.cmv .cmv-ui-bottom-center {
+    left: 50%;
+    transform: translate(50%, 0);
+}
+
+.cmv .cmv-ui-center-left,
+.cmv .cmv-ui-center-center,
+.cmv .cmv-ui-center-right {
+    top: 50%;
+    transform: translate(0, 50%);
+}
+/* end map positioning */
+
+/* inset positioning */
+.cmv .cmv-ui-inset .cmv-ui-top-left,
+.cmv .cmv-ui-inset .cmv-ui-center-left,
+.cmv .cmv-ui-inset .cmv-ui-bottom-left {
+    left: 15px;
+}
+
+.cmv .cmv-ui-inset .cmv-ui-bottom-left,
+.cmv .cmv-ui-inset .cmv-ui-bottom-center,
+.cmv .cmv-ui-inset .cmv-ui-bottom-right {
+    bottom: 15px;
+}
+
+.cmv .cmv-ui-inset .cmv-ui-top-center,
+.cmv .cmv-ui-inset .cmv-ui-top-right {
+    top: 15px;
+}
+
+.cmv .cmv-ui-inset .cmv-ui-top-right,
+.cmv .cmv-ui-inset .cmv-ui-center-right,
+.cmv .cmv-ui-inset .cmv-ui-bottom-right {
+    right: 15px;
+}
+
+/*
+    TODO - these two assume zoom buttons in top left
+*/
+.cmv .cmv-ui-inset .cmv-ui-top-left {
+    top: 90px;
+}
+
+.cmv .cmv-ui-inset .cmv-ui-top-center {
+    left: 60px;
+    max-width: calc(100% - 80px);
+    transform: none;
+}
+
+/* end inset positioning */
+
+/* map widget flow */
+
+.cmv .cmv-ui-top-left,
+.cmv .cmv-ui-top-center,
+.cmv .cmv-ui-top-right,
+.cmv .cmv-ui-center-left,
+.cmv .cmv-ui-center-center,
+.cmv .cmv-ui-center-right {
+    flex-flow: column;
+}
+
+.cmv .cmv-ui-top-left,
+.cmv .cmv-ui-top-center {
+    align-items: flex-start;
+}
+
+.cmv .cmv-ui-top-right {
+    align-items: flex-end;
+}
+
+.cmv .cmv-ui-bottom-left,
+.cmv .cmv-ui-bottom-center,
 .cmv .cmv-ui-bottom-right {
     align-items: flex-end;
     flex-flow: row;
 }
 
 .cmv .cmv-ui-bottom-right {
-    flex-flow: row-reverse
+    flex-flow: row-reverse;
 }
 
+/* end map widget flow */
+
+/* map widget margins */
+
 .cmv .cmv-ui-top-left > *,
-.cmv .cmv-ui-bottom-left > * {
+.cmv .cmv-ui-top-center > *,
+.cmv .cmv-ui-center-left > *,
+.cmv .cmv-ui-center-center > *,
+.cmv .cmv-ui-bottom-left > *,
+.cmv .cmv-ui-bottom-center > * {
     margin-right: 10px;
 }
 
 .cmv .cmv-ui-top-right > *,
+.cmv .cmv-ui-center-right > *,
 .cmv .cmv-ui-bottom-right > * {
     margin-left: 10px;
 }
 
 .cmv .cmv-ui-top-left > *,
-.cmv .cmv-ui-top-right > * {
+.cmv .cmv-ui-top-center > *,
+.cmv .cmv-ui-top-right > *,
+.cmv .cmv-ui-center-left > *,
+.cmv .cmv-ui-center-center > *,
+.cmv .cmv-ui-center-right > * {
     margin-bottom: 10px;
 }
 
 .cmv .cmv-ui-bottom-left > *,
+.cmv .cmv-ui-bottom-center > *,
 .cmv .cmv-ui-bottom-right > * {
     margin-top: 10px;
 }
 
-/* placement end map ui widgets */
-
-/* specific placement for the search widget */
-.cmv .cmv-ui .cmv-ui-widget-search {
-    left: 60px;
-    max-width: calc(100% - 74px);
-    position: absolute;
-    top: 15px;
-}
+/* end map widget margins */
 
 /* map ui widgets */
 .cmv .cmv-ui .HomeButton,

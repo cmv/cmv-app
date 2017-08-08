@@ -364,8 +364,13 @@ define([
                         placeAt = widgetConfig.uiOptions.position || placeAt;
                     }
 
-                    // convert 4.x-style shortcuts to a css selector
-                    var posShortCuts = ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'manual'];
+                    // convert 4.x-style shortcuts to a css selector.
+                    var posShortCuts = [
+                        'top-left', 'top-center', 'top-right',
+                        'center-left', 'center-center', 'center-right',
+                        'bottom-left', 'bottom-center', 'bottom-right',
+                        'manual'
+                    ];
                     if (array.indexOf(posShortCuts, placeAt) >= 0) {
                         if (placeAt === 'manual') {
                             // if you don't want the top-left, you must provide
