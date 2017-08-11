@@ -104,20 +104,15 @@ define([
             this._createTitlePaneWidget = this._createTabPaneWidget;
         },
 
-        _createTabPaneWidget: function (parentId, widgetConfig) {
+        _createTabPaneWidget: function (widgetConfig) {
             // if not a pane widget (placed elsewhere), use the original method
             if (!this.panes[widgetConfig.placeAt]) {
-                return this._origCreateTitlePaneWidget(parentId, widgetConfig);
+                return this._origCreateTitlePaneWidget(widgetConfig);
             }
 
             // show the sidebar now that a widget is being added
             this.sidebar.show();
-            var tabOptions = widgetConfig.tabOptions || {
-                id: parentId,
-                title: widgetConfig.title,
-                iconClass: widgetConfig.iconClass
-            };
-
+            var tabOptions = widgetConfig.tabOptions || widgetConfig.paneOptions;
             return this.sidebar.createTab(tabOptions);
         }
 

@@ -6,7 +6,6 @@ define([
     'dojo/promise/all',
     'dojo/Deferred',
     'dojo/dom-construct',
-    'dojo/dom-class',
     'dojo/query',
 
     'dijit/Menu',
@@ -24,7 +23,6 @@ define([
     promiseAll,
     Deferred,
     domConstruct,
-    domClass,
     domQuery,
 
     Menu,
@@ -261,11 +259,8 @@ define([
             }
         },
 
-        _createTitlePaneWidget: function (parentId, widgetConfig) {
+        _createTitlePaneWidget: function (widgetConfig) {
             var options = lang.mixin({
-                id: parentId,
-                title: widgetConfig.title || 'Widget',
-                iconClass: widgetConfig.iconClass,
                 open: widgetConfig.open || false,
                 canFloat: widgetConfig.canFloat || false,
                 resizable: widgetConfig.resizable || false,
@@ -278,19 +273,12 @@ define([
             return new FloatingTitlePane(options);
         },
 
-        _createFloatingWidget: function (parentId, widgetConfig) {
-            var options = lang.mixin({
-                id: parentId,
-                title: widgetConfig.title,
-                iconClass: widgetConfig.iconClass
-            }, widgetConfig.paneOptions || {});
-            return new FloatingWidgetDialog(options);
+        _createFloatingWidget: function (widgetConfig) {
+            return new FloatingWidgetDialog(widgetConfig.paneOptions);
         },
 
-        _createContentPaneWidget: function (parentId, widgetConfig) {
+        _createContentPaneWidget: function (widgetConfig) {
             var options = lang.mixin({
-                id: parentId,
-                title: widgetConfig.title,
                 region: widgetConfig.region || 'center'
             }, widgetConfig.paneOptions || {});
             if (widgetConfig.className) {
@@ -300,30 +288,34 @@ define([
         },
 
         _createParentWidget: function (widgetConfig, position) {
-            var parentId = null,
+            var parentId = widgetConfig.widgetKey + '_parent',
                 pnl = null;
+
             widgetConfig.position = position;
             widgetConfig.srcNodeRef = widgetConfig.srcNodeRef || domConstruct.create('div');
-            parentId = widgetConfig.widgetKey + '_parent';
+
+            widgetConfig.paneOptions = lang.mixin({
+                id: parentId,
+                title: widgetConfig.title,
+                class: parentId,
+                iconClass: widgetConfig.iconClass
+            }, widgetConfig.paneOptions || {});
+
             switch (widgetConfig.type) {
             case 'titlePane':
             case 'expandPane':
-                pnl = this._createTitlePaneWidget(parentId, widgetConfig);
+                pnl = this._createTitlePaneWidget(widgetConfig);
                 break;
             case 'contentPane':
-                pnl = this._createContentPaneWidget(parentId, widgetConfig);
+                pnl = this._createContentPaneWidget(widgetConfig);
                 widgetConfig.preload = true;
                 break;
             case 'floating':
-                pnl = this._createFloatingWidget(parentId, widgetConfig);
+                pnl = this._createFloatingWidget(widgetConfig);
                 break;
             default:
             }
 
-            // add a class
-            if (pnl.domNode) {
-                domClass.add(pnl.domNode, pnl.id);
-            }
             var placeAt = this._getPlaceAt(widgetConfig);
             if (placeAt && (typeof pnl.placeAt === 'function')) {
                 pnl.placeAt(placeAt);
