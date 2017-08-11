@@ -15,6 +15,10 @@
     width: 40px;
 }
 
+.cmv .sidebar.hidden {
+    display: none;
+}
+
 .cmv .sidebar-tabs {
     background-color: #fff;
     color: #444;
@@ -126,13 +130,9 @@
     top: 0;
 }
 
-.cmv .map .cmv-widget-geocoder {
-    top: 15px;
-}
-
 .cmv .sidebar,
 .cmv .map .sidebar-map,
-.cmv .map .cmv-widget,
+.cmv .map .cmv-ui-map *,
 .cmv .map .scalebar_bottom-left {
     transition: left 300ms;
 }
@@ -161,48 +161,66 @@
     }
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 552px) and (max-width: 767px) {
     .cmv .sidebar {
-        width: 300px;
+        width: 70%;
     }
-    .cmv .map .sidebar-map {
-        left: 300px;
+    .cmv .map .sidebar-map,
+    .cmv .map .cmv-ui-top-left,
+    .cmv .map .cmv-ui-center-left,
+    .cmv .map .cmv-ui-bottom-left {
+        left: 70%;
     }
-    .cmv .map .cmv-widget-mapinfo {
-        left: 300px;
-    }
-    .cmv .map .cmv-widgets-left {
-        left: 314px;
+    .cmv .map .cmv-ui-inset .cmv-ui-top-left,
+    .cmv .map .cmv-ui-inset .cmv-ui-center-left,
+    .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
+        left: calc(70% + 15px);
     }
     .cmv .map .scalebar_bottom-left {
-        left: 325px !important;
-    }
-    .cmv .map .cmv-widget-geocoder {
-        left: 360px;
-    }
-    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
-        width: 140px;
+        left: calc(70% + 25px) !important;
     }
 }
 
-@media (min-width: 992px) and (max-width: 1199px) {
+@media (min-width: 768px) and (max-width: 991px) {
     .cmv .sidebar {
-        width: 350px;
+        width: 40%;
     }
-    .cmv .map .sidebar-map {
-        left: 350px;
+    .cmv .map .sidebar-map,
+    .cmv .map .cmv-ui-top-left,
+    .cmv .map .cmv-ui-center-left,
+    .cmv .map .cmv-ui-bottom-left {
+        left: 40%;
     }
-    .cmv .map .cmv-widget-mapinfo {
-        left: 350px;
-    }
-    .cmv .map .cmv-widgets-left {
-        left: 364px;
-    }
-    .cmv .map .cmv-widget-geocoder {
-        left: 410px;
+    .cmv .map .cmv-ui-inset .cmv-ui-top-left,
+    .cmv .map .cmv-ui-inset .cmv-ui-center-left,
+    .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
+        left: calc(40% + 15px);
     }
     .cmv .map .scalebar_bottom-left {
-        left: 375px !important;
+        left: calc(40% + 25px) !important;
+    }
+    .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
+        width: 90px;
+    }
+}
+
+@media (min-width: 992px) {
+    .cmv .sidebar {
+        width: 30%;
+    }
+    .cmv .map .sidebar-map,
+    .cmv .map .cmv-ui-top-left,
+    .cmv .map .cmv-ui-center-left,
+    .cmv .map .cmv-ui-bottom-left {
+        left: 30%;
+    }
+    .cmv .map .cmv-ui-inset .cmv-ui-top-left,
+    .cmv .map .cmv-ui-inset .cmv-ui-center-left,
+    .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
+        left: calc(30% + 15px);
+    }
+    .cmv .map .scalebar_bottom-left {
+        left: calc(30% + 25px) !important;
     }
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
         width: 190px;
@@ -210,99 +228,41 @@
 }
 
 @media (min-width: 1200px) and (max-width: 1800px) {
-    .cmv .sidebar {
-        width: 400px;
-    }
-    .cmv .map .sidebar-map {
-        left: 400px;
-    }
-    .cmv .map .cmv-widget-mapinfo {
-        left: 400px;
-    }
-    .cmv .map .cmv-widgets-left {
-        left: 414px;
-    }
-    .cmv .map .cmv-widget-geocoder {
-        left: 460px;
-    }
-    .cmv .map .scalebar_bottom-left {
-        left: 425px !important;
-    }
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
         width: 240px;
     }
 }
 
 @media (min-width: 1800px) {
-    .cmv .sidebar {
-        width: 450px;
-    }
-    .cmv .map .sidebar-map {
-        left: 450px;
-    }
-    .cmv .map .cmv-widget-mapinfo {
-        left: 450px;
-    }
-    .cmv .map .cmv-widgets-left {
-        left: 464px;
-    }
-    .cmv .map .cmv-widget-geocoder {
-        left: 510px;
-    }
-    .cmv .map .scalebar_bottom-left {
-        left: 475px !important;
-    }
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
         width: 290px;
     }
 }
 
-.cmv .sidebar-collapsed .sidebar-map {
+.cmv .sidebar-collapsed .sidebar-map,
+.cmv .sidebar-collapsed .cmv-ui-top-left,
+.cmv .sidebar-collapsed .cmv-ui-center-left,
+.cmv .sidebar-collapsed .cmv-ui-bottom-left {
     left: 40px;
 }
 
-.cmv .sidebar-collapsed .cmv-widget-mapinfo {
-    left: 40px;
+.cmv .sidebar-collapsed .cmv-ui-top-center,
+.cmv .sidebar-collapsed .cmv-ui-center-center,
+.cmv .sidebar-collapsed .cmv-ui-bottom-center {
+    left: calc(50% - 40px);
 }
 
-.cmv .sidebar-collapsed .cmv-widgets-left {
-    left: 54px;
+.cmv .sidebar-collapsed .cmv-ui-inset .cmv-ui-top-left,
+.cmv .sidebar-collapsed .cmv-ui-inset .cmv-ui-center-left,
+.cmv .sidebar-collapsed .cmv-ui-inset .cmv-ui-bottom-left {
+    left: 55px;
 }
 
-.cmv .sidebar-collapsed .cmv-widget-geocoder {
+.cmv .sidebar-collapsed .cmv-ui-inset .cmv-ui-top-center,
+.cmv .sidebar-collapsed .cmv-ui-inset .cmv-ui-bottom-center {
     left: 100px;
 }
 
 .cmv .sidebar-collapsed .scalebar_bottom-left {
     left: 65px !important;
-}
-
-/* simple zoom slider: positioning */
-.cmv .map .esriSimpleSliderTL {
-    left: 15px;
-    top: 15px;
-}
-
-.cmv .map .esriSimpleSliderTR {
-    right: 15px;
-    top: 15px;
-}
-
-/* simple zoom slider: horizontal */
-
-.cmv .map .esriSimpleSliderHorizontal {
-    top: 10px;
-}
-
-.cmv .map .esriSimpleSliderHorizontal.esriSimpleSliderBL {
-    left: 10px;
-}
-
-.cmv .map .esriSimpleSliderHorizontal.esriSimpleSliderBR {
-    right: 10px;
-}
-
-.cmv .map .cmv-widget-basemaps {
-    right: 10px;
-    top: 10px;
 }
