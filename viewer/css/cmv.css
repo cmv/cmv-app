@@ -1,0 +1,918 @@
+body, html {
+    font-size: 14px;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* makes the flat theme more like dbootstrap */
+.flat {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.flat a,
+.flat a:hover {
+    text-decoration: none;
+}
+
+.flat .dijitTitlePane {
+    border-color: #E0E0E0;
+}
+
+.flat .dijitTabContainerTop-tabs .dijitTabChecked:before {
+    background-color: #666;
+    height: 3px;
+    left: -1px;
+    right: -1px;
+    top: -1px;
+}
+
+.flat .dijitTitlePaneTitle {
+    border: 1px solid #DDD;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    padding: 8px 15px;
+}
+
+.flat .dijitDialogTitleBar {
+    background-color: #F5F5F5;
+    color: #666;
+}
+
+.flat .dijitTitlePaneContentOuter {
+    border: 1px solid #DDD;
+    border-top: none;
+}
+
+.flat .dijitEditorIcon.fa,
+.flat .dijitIcon.fa,
+.flat .dijitButton .dijitButtonNode .dijitIcon.fa,
+.flat .dijitDropDownButton .dijitButtonNode .dijitIcon.fa,
+.flat .dijitComboButton .dijitButtonNode .dijitIcon.fa {
+    font-family: FontAwesome;
+}
+
+.flat .dijitButton .dijitButtonNode,
+.flat .dijitDropDownButton .dijitButtonNode,
+.flat .dijitComboButton .dijitButtonNode,
+.flat .dijitToggleButton .dijitButtonNode,
+.flat .dijitComboBox .dijitButtonNode,
+.flat .dijitSpinnerButtonContainer.dijitButtonNode,
+.flat .dijitSelect .dijitButtonNode {
+    background-color: #E6E6E6;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #e6e6e6));
+    background-image: -webkit-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: -moz-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: -o-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: -ms-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-repeat: repeat-x;
+    border-bottom-color: #A8A8A8;
+    border-color: #BBB;
+    padding: 4px 12px;
+}
+
+.flat .dijitComboBox .dijitArrowButton,
+.flat .dijitSelect .dijitArrowButton {
+    padding: 4px;
+}
+
+.flat .dijitSpinner .dijitSpinnerButtonContainer {
+  padding: 0;
+}
+
+.flat .dijitButtonHover .dijitButtonNode,
+.flat .dijitDropDownButtonHover .dijitButtonNode,
+.flat .dijitComboButton .dijitButtonNodeHover,
+.flat .dijitComboButton .dijitDownArrowButtonHover,
+.flat .dijitToggleButtonHover .dijitButtonNode,
+.flat .dijitDropDownButtonActive .dijitButtonNode {
+  background-position: 0 -15px;
+  text-decoration: none;
+  transition: background-position 0.1s linear;
+  -moz-transition: background-position 0.1s linear;
+  -ms-transition: background-position 0.1s linear;
+  -o-transition: background-position 0.1s linear;
+  -webkit-transition: background-position 0.1s linear;
+}
+
+.flat .dijitButtonActive .dijitButtonNode,
+.flat .dijitComboButton .dijitButtonNodeActive,
+.flat .dijitToggleButtonActive .dijitButtonNode,
+.flat .dijitToggleButtonChecked .dijitButtonNode,
+.flat .dijitComboButton .dijitArrowButton.dijitHasDropDownOpen {
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #fff), color-stop(1, #e6e6e6));
+    background-image: -webkit-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-image: -moz-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-image: -o-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-image: -ms-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-image: linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-repeat: repeat-x;
+    border-color: #666;
+    border-top-color: #444;
+    -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
+}
+
+.flat .dijitButtonDisabled .dijitButtonNode,
+.flat .dijitDropDownButtonDisabled .dijitButtonNode,
+.flat .dijitComboButtonDisabled .dijitButtonNode,
+.flat .dijitToggleButtonDisabled .dijitButtonNode,
+.flat .dijitComboBoxDisabled .dijitButtonNode,
+.flat .dijitSpinnerDisabled .dijitButtonNode,
+.flat .dijitSelectDisabled .dijitButtonNode {
+  background-image: none;
+  -webkit-box-shadow:none;
+  box-shadow: none;
+  cursor: not-allowed;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=65);
+  filter: alpha(opacity=65);
+  opacity: 0.65;
+}
+
+.flat .success .dijitButtonNode {
+    background: #409843;
+    border-color: #39883c;
+    color: #FFF;
+}
+
+.flat .danger .dijitButtonNode {
+    background: #e32d29;
+    border-color: #d4201b;
+    color: #FFF;
+}
+
+.flat .dijitTextBoxHover,
+.flat .dijitTextBoxFocused,
+.flat .dijitCheckBoxChecked,
+.flat .dijitCheckBoxHover,
+.flat .dijitCheckBoxCheckedHover,
+.flat .dijitRadio,
+.flat .dijitRadioIcon,
+.flat .dijitRadioHover {
+    border-color: #666;
+}
+.flat .dijitCheckBoxChecked,
+.flat .dijitRadio:after,
+.flat .dijitRadioIcon:after {
+    background-color: #999;
+}
+/* end flat theme overrides */
+
+.cmv .dijitToolbar .dijitButtonContents {
+    padding: 1px !important;
+}
+
+.cmv .dijitTitlePane {
+    background-color: #FFF;
+    margin-bottom: 2px;
+}
+
+.cmv .dijitTitlePaneTitle {
+    background-color: #F5F5F5;
+    color: #666;
+}
+
+.cmv .dijitTitlePaneTitleOpen {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.cmv .titlePaneBottomFix {
+    margin-bottom: -1px;
+}
+
+.cmv .titlePaneRightFix {
+    margin-right: -1px;
+}
+
+.cmv label {
+    font-weight: bold;
+}
+
+.cmv :focus {
+    outline: none !important;
+}
+
+.cmv .floatingWidget_underlay {
+    display: none
+}
+
+#help_parent_underlay {
+    display: block;
+}
+
+.cmv .widgetLoader {
+    color: #333;
+    display: block;
+    font-size: 18px;
+    left: 0;
+    margin: 4px;
+    text-align: center;
+    top: 0;
+    width: 100%;
+}
+
+/* dojo panes */
+.cmv #borderContainerOuter {
+    background-color: #FFFFFF;
+    border: none;
+    bottom: 0;
+    flex: 1;
+    left: 0;
+    padding: 0;
+    bottom: 0;
+}
+
+.cmv #sidebarLeft,
+.cmv #sidebarRight,
+.cmv #sidebarBottom,
+.cmv #sidebarTop,
+.cmv .panetop,
+.cmv .panebottom,
+.cmv .paneleft,
+.cmv .paneright,
+.cmv .sidebarCollapseButtonHorz,
+.cmv .sidebarCollapseButtonVert,
+.cmv .sidebarleftCollapseButton,
+.cmv .sidebarrightCollapseButton,
+.cmv .sidebarbottomCollapseButton,
+.cmv .sidebartopCollapseButton {
+    border: 0 solid #B5BCC7;
+}
+
+.cmv #sidebarLeft,
+.cmv #sidebarRight,
+.cmv #sidebarBottom,
+.cmv #sidebarTop {
+    margin: 0;
+    overflow: auto;
+    overflow-x: hidden;
+    padding: 4px;
+}
+
+.cmv #sidebarLeft,
+.cmv #sidebarRight {
+    max-width: calc(100vw - 25px);
+}
+
+.cmv #sidebarLeft {
+    border-right-width: 1px;
+    width: 334px;
+}
+
+.cmv #sidebarRight {
+    border-left-width: 1px;
+    width: 300px;
+}
+
+.cmv #sidebarBottom {
+    border-top-width: 1px;
+    height: 100px;
+}
+
+.cmv #sidebarTop {
+    border-bottom-width: 1px;
+    height: 50px;
+}
+
+.cmv #mapCenter {
+    background: url("../images/noisy_grid.png") #fff;
+    overflow: hidden;
+    padding: 0;
+}
+
+.cmv .panetop {
+    border-top-width: 1px;
+}
+
+.cmv .panebottom {
+    border-bottom-width: 1px;
+}
+
+.cmv .paneleft {
+    border-left-width: 1px;
+}
+
+.cmv .paneright {
+    border-right-width: 1px;
+}
+
+.cmv #mapCenter {
+    background-color: #ddd;
+    overflow: hidden;
+    padding: 0;
+}
+.cmv .sidebarCollapseButton {
+    background-color: white;
+    color: #666666;
+    cursor: pointer;
+    font-family: FontAwesome;
+    font-size: 1.3em;
+    position: absolute;
+    z-index: 40;
+}
+
+.cmv .sidebarCollapseButtonHorz {
+    border-bottom-width: 1px;
+    border-top-width: 1px;
+    height: 25px;
+    top: 48%;
+    top: -webkit-calc(50% - 12px);
+    top: -moz-calc(50% - 12px);
+    top: -o-calc(50% - 12px);
+    top: calc(50% - 12px);
+    width: 16px;
+}
+
+.cmv .sidebarCollapseButtonVert {
+    border-left-width: 1px;
+    border-right-width: 1px;
+    height: 18px;
+    left: 48%;
+    left: -webkit-calc(50% - 12px);
+    left: -moz-calc(50% - 12px);
+    left: -o-calc(50% - 12px);
+    left: calc(50% - 12px);
+    width: 25px;
+}
+
+.cmv .sidebarleftCollapseButton {
+    border-radius: 0 5px 5px 0;
+    border-right-width: 1px;
+    left: -1px;
+}
+
+.cmv .sidebarrightCollapseButton {
+    border-left-width: 1px;
+    border-radius: 5px 0 0 5px;
+    right: -1px;
+}
+
+.cmv .sidebarbottomCollapseButton {
+    border-radius: 5px 5px 0 0;
+    border-top-width: 1px;
+    bottom: -1px;
+}
+
+.cmv .sidebartopCollapseButton {
+    border-bottom-width: 1px;
+    border-radius: 0 0 5px 5px;
+    top: -1px;
+}
+
+.cmv .sidebarCollapseButton .open:before,
+.cmv .sidebarCollapseButton .close:before {
+    font-family: FontAwesome;
+}
+
+.cmv .sidebarCollapseButtonHorz .button {
+    padding-left: 2px;
+    padding-top: 4px;
+}
+
+.cmv .sidebarCollapseButtonVert .button {
+    margin-top: -2px;
+    padding-left: 4px;
+}
+
+.cmv .sidebarleftCollapseButton .open:before {
+    content: "\f054";
+}
+
+.cmv .sidebarleftCollapseButton .close:before {
+    content: "\f053";
+}
+
+.cmv .sidebarrightCollapseButton .open:before {
+    content: "\f053";
+}
+
+.cmv .sidebarrightCollapseButton .close:before {
+    content: "\f054";
+}
+
+.cmv .sidebarbottomCollapseButton .open:before {
+    content: "\f077";
+}
+
+.cmv .sidebarbottomCollapseButton .close:before {
+    content: "\f078";
+}
+
+.cmv .sidebartopCollapseButton .open:before {
+    content: "\f078";
+}
+
+.cmv .sidebartopCollapseButton .close:before {
+    content: "\f077";
+}
+
+/* end dojo panes */
+
+/* placement of map ui widgets */
+
+/* map positioning */
+
+.cmv .cmv-ui-top-left,
+.cmv .cmv-ui-top-center,
+.cmv .cmv-ui-top-right,
+.cmv .cmv-ui-center-left,
+.cmv .cmv-ui-center-center,
+.cmv .cmv-ui-center-right,
+.cmv .cmv-ui-bottom-left,
+.cmv .cmv-ui-bottom-center,
+.cmv .cmv-ui-bottom-right {
+    display: flex;
+    position: absolute;
+    z-index: 40;
+}
+
+.cmv .cmv-ui-top-left,
+.cmv .cmv-ui-top-center,
+.cmv .cmv-ui-top-right {
+    top: 0;
+}
+
+.cmv .cmv-ui-bottom-left,
+.cmv .cmv-ui-bottom-center,
+.cmv .cmv-ui-bottom-right {
+    bottom: 0;
+}
+
+.cmv .cmv-ui-top-left,
+.cmv .cmv-ui-center-left,
+.cmv .cmv-ui-bottom-left {
+    left: 0;
+}
+
+.cmv .cmv-ui-top-right,
+.cmv .cmv-ui-center-right,
+.cmv .cmv-ui-bottom-right {
+    right: 0;
+}
+
+.cmv .cmv-ui-top-center,
+.cmv .cmv-ui-center-center,
+.cmv .cmv-ui-bottom-center {
+    left: 50%;
+    transform: translate(50%, 0);
+}
+
+.cmv .cmv-ui-center-left,
+.cmv .cmv-ui-center-center,
+.cmv .cmv-ui-center-right {
+    top: 50%;
+    transform: translate(0, 50%);
+}
+/* end map positioning */
+
+/* inset positioning */
+.cmv .cmv-ui-inset .cmv-ui-top-left,
+.cmv .cmv-ui-inset .cmv-ui-center-left,
+.cmv .cmv-ui-inset .cmv-ui-bottom-left {
+    left: 15px;
+}
+
+.cmv .cmv-ui-inset .cmv-ui-bottom-left,
+.cmv .cmv-ui-inset .cmv-ui-bottom-center,
+.cmv .cmv-ui-inset .cmv-ui-bottom-right {
+    bottom: 15px;
+}
+
+.cmv .cmv-ui-inset .cmv-ui-top-center,
+.cmv .cmv-ui-inset .cmv-ui-top-right {
+    top: 15px;
+}
+
+.cmv .cmv-ui-inset .cmv-ui-top-right,
+.cmv .cmv-ui-inset .cmv-ui-center-right,
+.cmv .cmv-ui-inset .cmv-ui-bottom-right {
+    right: 15px;
+}
+
+/*
+    TODO - these two assume zoom buttons in top left
+*/
+.cmv .cmv-ui-inset .cmv-ui-top-left {
+    top: 90px;
+}
+
+.cmv .cmv-ui-inset .cmv-ui-top-center {
+    left: 60px;
+    max-width: calc(100% - 80px);
+    transform: none;
+}
+
+/* end inset positioning */
+
+/* map widget flow */
+
+.cmv .cmv-ui-top-left,
+.cmv .cmv-ui-top-center,
+.cmv .cmv-ui-top-right,
+.cmv .cmv-ui-center-left,
+.cmv .cmv-ui-center-center,
+.cmv .cmv-ui-center-right {
+    flex-flow: column;
+}
+
+.cmv .cmv-ui-top-left,
+.cmv .cmv-ui-top-center {
+    align-items: flex-start;
+}
+
+.cmv .cmv-ui-top-right {
+    align-items: flex-end;
+}
+
+.cmv .cmv-ui-bottom-left,
+.cmv .cmv-ui-bottom-center,
+.cmv .cmv-ui-bottom-right {
+    align-items: flex-end;
+    flex-flow: row;
+}
+
+.cmv .cmv-ui-bottom-right {
+    flex-flow: row-reverse;
+}
+
+/* end map widget flow */
+
+/* map widget margins */
+
+.cmv .cmv-ui-top-left > *,
+.cmv .cmv-ui-top-center > *,
+.cmv .cmv-ui-center-left > *,
+.cmv .cmv-ui-center-center > *,
+.cmv .cmv-ui-bottom-left > *,
+.cmv .cmv-ui-bottom-center > * {
+    margin-right: 10px;
+    transition: left 300ms;
+}
+
+.cmv .cmv-ui-top-right > *,
+.cmv .cmv-ui-center-right > *,
+.cmv .cmv-ui-bottom-right > * {
+    margin-left: 10px;
+    transition: right 300ms;
+}
+
+.cmv .cmv-ui-top-left > *,
+.cmv .cmv-ui-top-center > *,
+.cmv .cmv-ui-top-right > *,
+.cmv .cmv-ui-center-left > *,
+.cmv .cmv-ui-center-center > *,
+.cmv .cmv-ui-center-right > * {
+    margin-bottom: 10px;
+}
+
+.cmv .cmv-ui-bottom-left > *,
+.cmv .cmv-ui-bottom-center > *,
+.cmv .cmv-ui-bottom-right > * {
+    margin-top: 10px;
+}
+
+/* end map widget margins */
+
+/* map widget sizing - also see media queries */
+.cmv .cmv-ui-inset .cmv-ui-top-left > *,
+.cmv .cmv-ui-inset .cmv-ui-top-right > *,
+.cmv .cmv-ui-inset .cmv-ui-center-left > *,
+.cmv .cmv-ui-inset .cmv-ui-center-right > *,
+.cmv .cmv-ui-inset .cmv-ui-bottom-left > *,
+.cmv .cmv-ui-inset .cmv-ui-bottom-right > * {
+    max-width: calc(100vw - 40px);
+}
+/* end map widget sizing */
+
+/* map ui widgets */
+.cmv .cmv-ui .HomeButton,
+.cmv .cmv-ui .LocateButton {
+    background-color: transparent;
+    border: none;
+    height: auto;
+    width: auto;
+}
+
+.cmv .cmv-ui .HomeButton .home,
+.cmv .cmv-ui .LocateButton .zoomLocateButton {
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #666;
+    border-radius: 4px;
+    color: #666;
+    font-family: FontAwesome;
+    font-size: 20px;
+    height: 27px;
+    overflow: hidden;
+    padding: 6px 0 0 0;
+    text-align: center;
+    width: 30px;
+}
+
+.cmv .cmv-ui .HomeButton .home:active,
+.cmv .cmv-ui .HomeButton .home:hover,
+.cmv .cmv-ui .LocateButton .zoomLocateButton:active,
+.cmv .cmv-ui .LocateButton .zoomLocateButton:hover {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.cmv .cmv-ui .HomeButton .home:before {
+    content: '\f015';
+}
+
+.cmv .cmv-ui .LocateButton .zoomLocateButton:before {
+    content: '\f14e';
+}
+
+.cmv .cmv-ui .LocateButton .tracking:before {
+    content: '\f0c8';
+}
+
+/* basemap widget */
+.cmv .cmv-ui .basemapWidget .dijitDropDownButton {
+    margin: 0;
+}
+
+.cmv .cmv-ui .basemapWidget .dijitButtonNode {
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #666;
+    border-radius: 4px;
+}
+
+.cmv .cmv-ui .basemapWidget .dijitButtonNode:hover {
+    background-color: #F5F5F5;
+}
+
+/* expand pane widget */
+.cmvExpandPane.dijitTitlePane {
+    border: 1px solid #666;
+}
+
+.cmv .cmv-ui .cmvExpandPane .dijitTitlePaneTitle {
+    border-width: 0 0 1px 0;
+}
+
+.cmv .cmv-ui .cmvExpandPane .dijitTitlePaneTitle.dijitClosed {
+    background-color: #fff;
+    border-width: 0;
+}
+
+.cmv .cmv-ui .cmvExpandPane .dijitTitlePaneTitle.dijitClosed:hover {
+    background-color: #F5F5F5;
+}
+
+/* end map ui widgets */
+
+/* esri simple slider overrides */
+
+.cmv .esriSimpleSliderTL {
+    left: 15px;
+    top: 15px;
+}
+
+.cmv .esriSimpleSliderTR {
+    right: 15px;
+    top: 15px;
+}
+
+.cmv .esriSimpleSliderRL {
+    right: 15px;
+    top: 15px;
+}
+
+.cmv .esriSimpleSliderBL {
+    left: 15px;
+}
+
+.cmv .esriSimpleSliderBR {
+    right: 15px;
+}
+.cmv .esriSimpleSliderVertical .esriSimpleSliderIncrementButton {
+    border-color: #666;
+}
+
+.cmv .map .esriSimpleSliderHorizontal {
+    top: 15px;
+}
+
+.cmv .map .esriSimpleSliderHorizontal.esriSimpleSliderBL {
+    left: 15px;
+}
+
+.cmv .map .esriSimpleSliderHorizontal.esriSimpleSliderBR {
+    right: 15px;
+}
+
+/* end esri simple slider overrides */
+
+/* esri popup window overrides */
+
+.cmv .esriPopup .sizer {
+    width: 325px;
+}
+
+.cmv .esriPopup .esriPopupWrapper {
+    background-color: #FFFFFF;
+}
+
+.cmv .esriPopup .attachmentsSection div {
+    font-weight: bold;
+}
+
+.cmv .esriPopup .contentPane table.attrTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.cmv .esriPopup .contentPane table.attrTable td {
+    padding: 2px;
+}
+
+.cmv .esriPopup .contentPane table.attrTable td.attrName {
+    color: #333;
+    font-weight: bold;
+    padding-right: 5px;
+    text-align: right;
+    width: 40%;
+}
+
+.cmv .esriPopup .contentPane table.attrTable td.attrValue {
+    width: 60%;
+}
+
+.cmv .esriPopup .contentPane table.attrTable tr {
+    border-bottom: 1px solid rgb(221, 221, 221);
+    vertical-align: top;
+}
+.cmv .esriPopup .contentPane table.attrTable tr:nth-child(odd) {
+    background-color: transparent;
+}
+.cmv .esriPopup .contentPane table.attrTable tr:nth-child(even) {
+    background-color: rgb(238, 238, 238);
+}
+
+/* end esri popup window overrides */
+
+/* esri mobile popup overrides */
+
+.cmv .esriPopupMobile {
+    z-index: 999;
+}
+
+.cmv .esriMobileNavigationBar,
+.cmv .esriPopupMobile .titlePane {
+    background: url("../images/linen.jpg") repeat-x scroll left top transparent;
+    background-color: #666666;
+    color: #FFFFFF;
+}
+
+.cmv .esriPopupMobile .pointer.bottom{
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.cmv .esriPopupMobile .pointer.bottom,
+.cmv .esriPopupMobile .pointer.top {
+    background:url("../images/pointertop.png");
+}
+
+/* end esri mobile popup overrides */
+
+/* esri directions widget overrides */
+.cmv .simpleDirections .esriStopsGetDirections,
+.cmv .simpleDirections .esriResultsPrint,
+.simpleDirections .esriActivateButton {
+    background-color: #E6E6E6;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #e6e6e6));
+    background-image: -webkit-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: -moz-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: -o-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: -ms-linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-repeat: repeat-x;
+    border: 1px solid #BBB;
+    border-bottom: 1px solid #A8A8A8;
+    color: #000;
+    letter-spacing: 0;
+    padding: 0 12px;
+    text-transform: none;
+}
+
+.cmv .simpleDirections .esriStopsGetDirections:before {
+    content: '\f277';
+    font-family: 'FontAwesome';
+    margin-right: 8px;
+}
+
+.cmv .simpleDirections .esriResultsPrint {
+    padding: 8px;
+}
+
+.cmv .simpleDirections .esriResultsPrint:before {
+    content: '\f02f';
+    font-family: 'FontAwesome';
+    font-size: 14px;
+}
+
+.cmv .simpleDirections .esriActivateButton {
+    padding: 8px;
+}
+
+.cmv .simpleDirections .esriActivateButton:before {
+    content: '\f041';
+    font-family: 'FontAwesome';
+    font-size: 14px;
+}
+
+.cmv .esriDirectionsPressedButton {
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #fff), color-stop(1, #e6e6e6));
+    background-image: -webkit-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-image: -moz-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-image: -o-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-image: -ms-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-image: linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-repeat: repeat-x;
+    border-color: #666;
+    border-top-color: #444;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
+}
+
+.cmv .simpleDirections .esriLinkButton {
+    color: #000;
+    letter-spacing: 0;
+    text-transform: none;
+}
+/* end esri directions widget overrides */
+
+/*
+    media queries bootstrap style
+    https://getbootstrap.com/css/#grid-media-queries
+*/
+@media screen and (max-width: 991px) {
+    /* adjust the l/r sidebars on small and extra-small devices. */
+    #sidebarLeft {
+        width: 225px;
+    }
+    #sidebarRight {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    /* hide the sidebars by default on extra-small devices (phones) */
+    #sidebarLeft,
+    #sidebarBottom,
+    #sidebarTop {
+        display: none;
+    }
+}
+
+@media (min-width: 552px) and (max-width: 767px) {
+    .cmv .cmv-ui-inset .cmv-ui-top-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-top-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-right > * {
+        max-width: 70vw;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .cmv .cmv-ui-inset .cmv-ui-top-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-top-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-right > * {
+        max-width: 50vw;
+    }
+}
+
+@media (min-width: 992px) {
+    .cmv .cmv-ui-inset .cmv-ui-top-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-top-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-right > * {
+        max-width: 30vw
+    }
+}
+
+/* end media queries bootstrap style */
