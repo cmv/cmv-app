@@ -258,6 +258,11 @@ body {
     padding: 4px;
 }
 
+.cmv #sidebarLeft,
+.cmv #sidebarRight {
+    max-width: calc(100vw - 25px);
+}
+
 .cmv #sidebarLeft {
     border-right-width: 1px;
     width: 334px;
@@ -550,12 +555,14 @@ body {
 .cmv .cmv-ui-bottom-left > *,
 .cmv .cmv-ui-bottom-center > * {
     margin-right: 10px;
+    transition: left 300ms;
 }
 
 .cmv .cmv-ui-top-right > *,
 .cmv .cmv-ui-center-right > *,
 .cmv .cmv-ui-bottom-right > * {
     margin-left: 10px;
+    transition: right 300ms;
 }
 
 .cmv .cmv-ui-top-left > *,
@@ -574,6 +581,17 @@ body {
 }
 
 /* end map widget margins */
+
+/* map widget sizing - also see media queries */
+.cmv .cmv-ui-inset .cmv-ui-top-left > *,
+.cmv .cmv-ui-inset .cmv-ui-top-right > *,
+.cmv .cmv-ui-inset .cmv-ui-center-left > *,
+.cmv .cmv-ui-inset .cmv-ui-center-right > *,
+.cmv .cmv-ui-inset .cmv-ui-bottom-left > *,
+.cmv .cmv-ui-inset .cmv-ui-bottom-right > * {
+    max-width: calc(100vw - 40px);
+}
+/* end map widget sizing */
 
 /* map ui widgets */
 .cmv .cmv-ui .HomeButton,
@@ -848,12 +866,10 @@ body {
 @media screen and (max-width: 991px) {
     /* adjust the l/r sidebars on small and extra-small devices. */
     #sidebarLeft {
-        max-width: 95%;
-        width: 204px;
+        width: 225px;
     }
     #sidebarRight {
         display: none;
-        max-width: 95%;
     }
 }
 
@@ -865,4 +881,38 @@ body {
         display: none;
     }
 }
+
+@media (min-width: 552px) and (max-width: 767px) {
+    .cmv .cmv-ui-inset .cmv-ui-top-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-top-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-right > * {
+        max-width: 70vw;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .cmv .cmv-ui-inset .cmv-ui-top-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-top-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-right > * {
+        max-width: 50vw;
+    }
+}
+
+@media (min-width: 992px) {
+    .cmv .cmv-ui-inset .cmv-ui-top-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-top-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-center-right > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-left > *,
+    .cmv .cmv-ui-inset .cmv-ui-bottom-right > * {
+        max-width: 30vw
+    }
+}
+
 /* end media queries bootstrap style */

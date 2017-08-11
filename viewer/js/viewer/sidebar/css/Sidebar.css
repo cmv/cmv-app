@@ -183,52 +183,44 @@
 
 @media (min-width: 768px) and (max-width: 991px) {
     .cmv .sidebar {
-        width: 300px;
+        width: 40%;
     }
     .cmv .map .sidebar-map,
     .cmv .map .cmv-ui-top-left,
     .cmv .map .cmv-ui-center-left,
     .cmv .map .cmv-ui-bottom-left {
-        left: 300px;
+        left: 40%;
     }
     .cmv .map .cmv-ui-inset .cmv-ui-top-left,
     .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
-        left: 315px;
-    }
-    .cmv .map .cmv-ui-inset .cmv-ui-top-center,
-    .cmv .map .cmv-ui-inset .cmv-ui-bottom-center {
-        left: 360px;
+        left: calc(40% + 15px);
     }
     .cmv .map .scalebar_bottom-left {
-        left: 325px !important;
+        left: calc(40% + 25px) !important;
     }
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
         width: 90px;
     }
 }
 
-@media (min-width: 992px) and (max-width: 1199px) {
+@media (min-width: 992px) {
     .cmv .sidebar {
-        width: 350px;
+        width: 30%;
     }
     .cmv .map .sidebar-map,
     .cmv .map .cmv-ui-top-left,
     .cmv .map .cmv-ui-center-left,
     .cmv .map .cmv-ui-bottom-left {
-        left: 350px;
+        left: 30%;
     }
     .cmv .map .cmv-ui-inset .cmv-ui-top-left,
     .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
-        left: 365px;
-    }
-    .cmv .map .cmv-ui-inset .cmv-ui-top-center,
-    .cmv .map .cmv-ui-inset .cmv-ui-bottom-center {
-        left: 410px;
+        left: calc(30% + 15px);
     }
     .cmv .map .scalebar_bottom-left {
-        left: 375px !important;
+        left: calc(30% + 25px) !important;
     }
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
         width: 190px;
@@ -236,51 +228,12 @@
 }
 
 @media (min-width: 1200px) and (max-width: 1800px) {
-    .cmv .sidebar {
-        width: 400px;
-    }
-    .cmv .map .sidebar-map,
-    .cmv .map .cmv-ui-top-left,
-    .cmv .map .cmv-ui-center-left,
-    .cmv .map .cmv-ui-bottom-left {
-        left: 400px;
-    }
-    .cmv .map .cmv-ui-inset .cmv-ui-top-left,
-    .cmv .map .cmv-ui-inset .cmv-ui-center-left,
-    .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
-        left: 415px;
-    }
-    .cmv .map .cmv-ui-inset .cmv-ui-top-center,
-    .cmv .map .cmv-ui-inset .cmv-ui-bottom-center {
-        left: 460px;
-    }
-    .cmv .map .scalebar_bottom-left {
-        left: 425px !important;
-    }
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
         width: 240px;
     }
 }
 
 @media (min-width: 1800px) {
-    .cmv .sidebar {
-        width: 450px;
-    }
-    .cmv .map .sidebar-map,
-    .cmv .map .cmv-ui-top-left,
-    .cmv .map .cmv-ui-center-left,
-    .cmv .map .cmv-ui-bottom-left {
-        left: 450px;
-    }
-    .cmv .map .cmv-ui-inset .cmv-ui-top-left,
-    .cmv .map .cmv-ui-inset .cmv-ui-center-left,
-    .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
-        left: 465px;
-    }
-    .cmv .map .cmv-ui-inset .cmv-ui-top-center,
-    .cmv .map .cmv-ui-inset .cmv-ui-bottom-center {
-        left: 510px;
-    }
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
         width: 290px;
     }
