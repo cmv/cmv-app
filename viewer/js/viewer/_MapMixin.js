@@ -227,7 +227,6 @@ define([
             });
 
             if (visibleLayers.length > 0 && groupRemoved) {
-                console.log(originalVisibleLayers, visibleLayers);
                 layer.setVisibleLayers(visibleLayers);
             }
         },
