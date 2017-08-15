@@ -149,7 +149,7 @@ define([
         },
 
         _initLayer: function (layer, Layer) {
-            var l;
+            var l = null;
             if (layer.url) {
                 l = new Layer(layer.url, layer.options);
             } else {
@@ -194,6 +194,10 @@ define([
                 }
             }
 
+            if (layer.type === 'dynamic') {
+                on(l, 'load', lang.hitch(this, 'removeGroupLayers'));
+            }
+
             if (layer.type === 'dynamic' || layer.type === 'feature') {
                 var idOptions = {
                     layer: l,
@@ -207,6 +211,27 @@ define([
                 }
             }
         },
+
+        removeGroupLayers: function (res) {
+            var visibleLayers = [], groupRemoved = false, layer = res.layer,
+                originalVisibleLayers = layer.visibleLayers || layer._defaultVisibleLayers;
+            array.forEach(originalVisibleLayers, function (subLayerId) {
+                var subLayerInfo = array.filter(layer.layerInfos, function (sli) {
+                    return sli.id === subLayerId;
+                })[0];
+                if (subLayerInfo && subLayerInfo.subLayerIds === null) {
+                    visibleLayers.push(subLayerId);
+                } else {
+                    groupRemoved = true;
+                }
+            });
+
+            if (visibleLayers.length > 0 && groupRemoved) {
+                console.log(originalVisibleLayers, visibleLayers);
+                layer.setVisibleLayers(visibleLayers);
+            }
+        },
+
         initMapComplete: function (warnings) {
             if (warnings && warnings.length > 0) {
                 this.handleError({
