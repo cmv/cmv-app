@@ -75,7 +75,7 @@ define([
                 break;
             default:
                 // perhaps they've configured something we don't expect
-                if (typeof(sidebar) === 'string') {
+                if (typeof sidebar === 'string') {
                     if (has(sidebar)) {
                         sidebar = true;
                     }
@@ -92,8 +92,6 @@ define([
             var mapContainer = dom.byId(this.map.id);
             //create controls div
             var mapControlsNode = put(this.map.root, 'div.sidebar-map');
-            //move the slider into the controls div
-            put(mapControlsNode, '>', this.map._slider);
             //create sidebar
             this.sidebar = new Sidebar({
                 map: this.map,
@@ -102,16 +100,19 @@ define([
             }, put(this.map.root, 'div'));
             this.sidebar.startup();
 
+            this._origCreateTitlePaneWidget = lang.clone(this._createTitlePaneWidget);
             this._createTitlePaneWidget = this._createTabPaneWidget;
         },
 
-        _createTabPaneWidget: function (parentId, widgetConfig) {
-            var tabOptions = widgetConfig.tabOptions || {
-                id: parentId,
-                title: widgetConfig.title,
-                iconClass: widgetConfig.iconClass
-            };
+        _createTabPaneWidget: function (widgetConfig) {
+            // if not a pane widget (placed elsewhere), use the original method
+            if (!this.panes[widgetConfig.placeAt]) {
+                return this._origCreateTitlePaneWidget(widgetConfig);
+            }
 
+            // show the sidebar now that a widget is being added
+            this.sidebar.show();
+            var tabOptions = widgetConfig.tabOptions || widgetConfig.paneOptions;
             return this.sidebar.createTab(tabOptions);
         }
 

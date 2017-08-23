@@ -1,0 +1,95 @@
+@import url('./theme/flat/flat.css'); /* dojo's flat theme */
+@import url('./cmv.css'); /* the start of cmv theme */
+
+.appHeader {
+    background: url("../images/linen.jpg") repeat-x scroll left top transparent;
+    height: 60px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.appHeader .headerLogo {
+    height: calc(100% - 10px);
+    left: 15px;
+}
+
+.appHeader .headerTitle {
+    color: #FFFFFF;
+    font-size: 16pt;
+    font-weight: bold;
+    left: 30px;
+}
+
+.appHeader .subHeaderTitle {
+    color: #CFCFCF;
+    font-size: small;
+    padding-left: 20px;
+}
+
+.appHeader .search {
+    left: 60px;
+}
+
+.appHeader .headerLinks {
+    color: #FFFFFF;
+    float: right;
+    right: 15px;
+    text-align: right;
+}
+
+.appHeader .headerLinks a {
+    color: #FFFFFF;
+}
+
+.appHeader .headerLogo,
+.appHeader .headerTitle,
+.appHeader .search {
+    float: left;
+}
+
+.appHeader .headerLogo,
+.appHeader .headerTitle,
+.appHeader .search,
+.appHeader .headerLinks {
+    position: relative;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+#sidebarLeft {
+    width: 334px;
+}
+
+#sidebarRight {
+    width: 300px;
+}
+
+#sidebarBottom {
+    height: 100px;
+}
+
+#sidebarTop {
+    height: 50px;
+}
+
+
+/*
+    media queries bootstrap style
+    https://getbootstrap.com/css/#grid-media-queries
+*/
+@media screen and (max-width: 767px) {
+    /* no search widget in app header */
+    .appHeader .search {
+        display: none;
+    }
+    /* no logo in app header */
+    .appHeader .headerLogo {
+        display: none;
+    }
+    /* move the title when no logo */
+    .appHeader .headerTitle {
+        left: 10px;
+    }
+}
+/* end media queries bootstrap style */
