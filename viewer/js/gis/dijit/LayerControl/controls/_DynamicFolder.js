@@ -52,7 +52,7 @@ define([
                     event.stopPropagation();
                 }
 
-                if(this.control.controlOptions.triStateTree){
+                if (this.control.controlOptions.triStateTree) {
                     if (!this._hasAnyInvisibleLayer()) {
                         this._setFolderCheckbox(false, checkNode);
                     } else {
@@ -99,7 +99,7 @@ define([
             var i = this.icons;
             checkNode = checkNode || this.checkNode;
             
-            if(this.control.controlOptions.triStateTree) {
+            if (this.control.controlOptions.triStateTree) {
                 var slNodes = this._getSubLayerNodes(),
                     dataChecked = (checked) ? 'checked' : 'unchecked';
                 array.forEach(slNodes, lang.hitch(this, function (node) {
@@ -132,7 +132,7 @@ define([
                 }
             }
 
-            if(!noPublish){
+            if (!noPublish) {
                 this.control._setVisibleLayers();
             }
         },

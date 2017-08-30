@@ -94,7 +94,7 @@ define([
             }
             // add any user-defined controls - possibly for user-defined layers
             this._controls = lang.mixin(this._controls, options.controls || {});
-            if(options.triStateTree){
+            if (options.triStateTree) {
                 triStateTree = true;
             }
         },

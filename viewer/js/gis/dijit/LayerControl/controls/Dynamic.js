@@ -56,7 +56,7 @@ define([
                 // we have sublayer controls
                 this._hasSublayers = true;
                 this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);
-                this.layer.setAllVisibleLayers = lang.hitch(this, function(allVisibleLayers) {
+                this.layer.setAllVisibleLayers = lang.hitch(this, function (allVisibleLayers) {
                     this.layer.allVisibleLayers = allVisibleLayers;
                     this._onSetVisibleLayers(allVisibleLayers, true);
                     this._setVisibleLayers(allVisibleLayers);
@@ -117,7 +117,7 @@ define([
                     return l.id;
                 });
                 array.forEach(layer.layerInfos, lang.hitch(this, '_createControl', layer, allLayers));
-                if(this.controlOptions.triStateTree){
+                if (this.controlOptions.triStateTree) {
                     array.forEach(this._folderControls, function (control) {
                         control._checkFolderVisibility();
                     });
@@ -238,20 +238,21 @@ define([
                 array.forEach(subLayers, lang.hitch(this, function (subLayer) {
                     if (subLayer._isVisible()) {
                         allVisibleLayers.push(subLayer.sublayerInfo.id);
-                        if(this.controlOptions.triStateTree){
+                        if (this.controlOptions.triStateTree) {
                             visibleLayers.push(subLayer.sublayerInfo.id);
                             return;
                         }
                     }
                     var currentLayer = subLayer;
                     var oldLayer = null;
-                    while(currentLayer._isVisible() && currentLayer.sublayerInfo.parentLayerId !== -1 && oldLayer != currentLayer) {
+                    function checkParent (f) {
+                        if (f.sublayerInfo.id === currentLayer.sublayerInfo.parentLayerId) {
+                            currentLayer = f;
+                        }
+                    }
+                    while (currentLayer._isVisible() && currentLayer.sublayerInfo.parentLayerId !== -1 && oldLayer !== currentLayer) {
                         oldLayer = currentLayer;
-                        array.forEach(this._folderControls, function (f) {
-                            if (f.sublayerInfo.id === currentLayer.sublayerInfo.parentLayerId) {
-                                currentLayer = f;
-                            }
-                        });
+                        array.forEach(this._folderControls, checkParent);
                     }
                     if (currentLayer._isVisible()) {
                         visibleLayers.push(subLayer.sublayerInfo.id);
@@ -263,7 +264,7 @@ define([
                 visibleLayers.push(-1);
             }
             
-            if(this.controlOptions.triStateTree){
+            if (this.controlOptions.triStateTree) {
                 array.forEach(this._folderControls, function (control) {
                     control._checkFolderVisibility();
                 });
@@ -301,7 +302,7 @@ define([
                 control._setFolderCheckbox(viz, null, noPublish);
             });
             
-            if(this.controlOptions.triStateTree){
+            if (this.controlOptions.triStateTree) {
                 // finally, set the folder UI (state of checkbox) based on
                 // the sub layers and folders within the parent folder
                 array.forEach(this._folderControls, function (control) {
