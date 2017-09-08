@@ -12,7 +12,6 @@ define([
         declaredClass: 'gis.dijit.FloatingWidget',
         title: 'Floating Widget',
         draggable: true,
-        'class': 'floatingWidget',
         postCreate: function () {
             if (this.iconClass) {
                 this.iconNode = domConstruct.create('span', {
