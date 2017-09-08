@@ -297,7 +297,7 @@ define([
             widgetConfig.paneOptions = lang.mixin({
                 id: parentId,
                 title: widgetConfig.title,
-                class: parentId,
+                class: parentId + ' ' + widgetConfig.type + 'Widget',
                 iconClass: widgetConfig.iconClass
             }, widgetConfig.paneOptions || {});
 
