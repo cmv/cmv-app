@@ -47,3 +47,6 @@ __Environment:__
 | CMV Version | 
 | Browser                 |
 | Operating system |
+
+<!-- Love cmv-app? Please consider supporting our collective:
+👉  https://opencollective.com/cmv-app/donate -->

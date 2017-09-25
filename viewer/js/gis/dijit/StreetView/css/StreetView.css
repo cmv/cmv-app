@@ -1,13 +1,13 @@
 .gis_StreetView {
-    width: 100%;
     height: 250px;
     padding-bottom: 5px;
     position:  relative;
+    width: 100%;
 }
 
 .gis_StreetView .streetViewButton {
-    position: absolute;
     left: 4px;
+    position: absolute;
     top: 4px;
     z-index: 9;
 }
@@ -18,22 +18,22 @@
 
 .gis_StreetView .streetViewPano {
     border: 1px solid #CCC;
-    width: 100%;
     height: 100%;
+    width: 100%;
 }
 
 .floatingWidget .gis_StreetView .streetViewPano {
-    width: 400px;
     height: 275px;
+    width: 400px;
 }
 
 .gis_StreetView .streetViewInstructions,
 .gis_StreetView .noStreetViewResults {
     background-color: black;
-    width: 100%;
     height: 100%;
-    z-index: 2;
     position: absolute;
+    width: 100%;
+    z-index: 2;
 }
 .gis_StreetView .noStreetViewResults {
     display: none;
@@ -43,8 +43,8 @@
 .gis_StreetView .noStreetViewResultsText {
     background-color: black;
     color: white;
-    z-index: 2;
+    padding: 10px;
     position: absolute;
     top: 50px;
-    padding: 10px;
+    z-index: 2;
 }

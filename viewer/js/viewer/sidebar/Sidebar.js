@@ -62,11 +62,11 @@ define([
         postCreate: function () {
             this.inherited(arguments);
 
+            // start hidden until a widget is added
+            this.hide();
+
             this.tabs = [];
             if (this.collapseSyncNode) {
-                if (domClass.contains(this.domNode, 'collapsed')) {
-                    put(this.mapContainer, '.sidebar-collapsed');
-                }
                 //wire up css transition callback covering all event name bases
                 on(this.collapseSyncNode, 'transitionend, oTransitionEnd, webkitTransitionEnd, animationend, webkitAnimationEnd', lang.hitch(this, '_setViewPadding'));
             }
@@ -80,6 +80,24 @@ define([
                 window.setTimeout(lang.hitch(this, '_resizeActiveTab'), 300); // 300ms to wait for the animation to complete
             }));
 
+        },
+
+        show: function () {
+            domClass.remove(this.domNode, 'hidden');
+            if (this.collapseSyncNode) {
+                //move the slider into the controls div
+                put(this.collapseSyncNode, '>', this.map._slider);
+
+                if (domClass.contains(this.domNode, 'collapsed')) {
+                    domClass.add(this.mapContainer, 'sidebar-collapsed');
+                }
+            }
+
+        },
+
+        hide: function () {
+            domClass.add(this.domNode, 'hidden');
+            domClass.remove(this.mapContainer, 'sidebar-collapsed');
         },
 
         createTab: function (options) {
@@ -129,6 +147,9 @@ define([
         },
 
         _viewPaddingHandler: function (extent) {
+            if (extent.spatialReference !== this.map.extent.spatialReference) {
+                return [extent];
+            }
             var map = this.map,
                 vp = this.viewPadding,
                 w = map.width - vp.left - vp.right,
