@@ -1,6 +1,6 @@
 # CMV <img src="viewer/images/rocket-logo.png" width="45" /> The Configurable Map Viewer
 
-[![Read The Docs](https://img.shields.io/badge/docs-2.0.0--beta.2-brightgreen.svg?style=flat)](https://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/cmv/cmv-app.svg?branch=master)](https://travis-ci.org/cmv/cmv-app) [![Greenkeeper badge](https://badges.greenkeeper.io/cmv/cmv-app.svg)](https://greenkeeper.io/)
+[![Backers on Open Collective](https://opencollective.com/cmv-app/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/cmv-app/sponsors/badge.svg)](#sponsors) [![Read The Docs](https://img.shields.io/badge/docs-2.0.0--beta.2-brightgreen.svg?style=flat)](https://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/cmv/cmv-app.svg?branch=master)](https://travis-ci.org/cmv/cmv-app) [![Greenkeeper badge](https://badges.greenkeeper.io/cmv/cmv-app.svg)](https://greenkeeper.io/)
 
 ## Introduction
 [CMV](https://cmv.io/) is a community-supported open source mapping framework. CMV works with the [Esri JavaScript API](https://developers.arcgis.com/javascript/jsapi/3/), [ArcGIS Server](https://www.esri.com/software/arcgis/arcgisserver), [ArcGIS Online](https://arcgis.com/) and more.
@@ -76,6 +76,36 @@ There are many ways to contribute to CMV:
 7. __Propose a Feature__ - If there is a feature you would like to request, add it to the [issues list](https://github.com/cmv/cmv-app/issues) for consideration.
 
 8. __Submit an Issue__ - If you find a possible bug, please submit an issue in the [issues log](https://github.com/cmv/cmv-app/issues?state=open).
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute]](CONTRIBUTING.md).
+<a href="graphs/contributors"><img src="https://opencollective.com/cmv-app/contributors.svg?width=890" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/cmv-app#backer)]
+
+<a href="https://opencollective.com/cmv-app#backers" target="_blank"><img src="https://opencollective.com/cmv-app/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/cmv-app#sponsor)]
+
+<a href="https://opencollective.com/cmv-app/sponsor/0/website" target="_blank"><img src="https://opencollective.com/cmv-app/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/cmv-app/sponsor/1/website" target="_blank"><img src="https://opencollective.com/cmv-app/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/cmv-app/sponsor/2/website" target="_blank"><img src="https://opencollective.com/cmv-app/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/cmv-app/sponsor/3/website" target="_blank"><img src="https://opencollective.com/cmv-app/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/cmv-app/sponsor/4/website" target="_blank"><img src="https://opencollective.com/cmv-app/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/cmv-app/sponsor/5/website" target="_blank"><img src="https://opencollective.com/cmv-app/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/cmv-app/sponsor/6/website" target="_blank"><img src="https://opencollective.com/cmv-app/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/cmv-app/sponsor/7/website" target="_blank"><img src="https://opencollective.com/cmv-app/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/cmv-app/sponsor/8/website" target="_blank"><img src="https://opencollective.com/cmv-app/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/cmv-app/sponsor/9/website" target="_blank"><img src="https://opencollective.com/cmv-app/sponsor/9/avatar.svg"></a>
+
+
 
 ## License
 
