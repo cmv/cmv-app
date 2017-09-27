@@ -31,6 +31,7 @@ define([
         control: null,
         sublayerInfo: null,
         icons: null,
+        triStateTree: false,
         // ^args
         templateString: folderTemplate,
         _expandClickHandler: null,
@@ -51,11 +52,16 @@ define([
                     event.stopPropagation();
                 }
 
-                if (!this._hasAnyInvisibleLayer()) {
-                    this._setFolderCheckbox(false, checkNode);
+                if (this.control.controlOptions.triStateTree) {
+                    if (!this._hasAnyInvisibleLayer()) {
+                        this._setFolderCheckbox(false, checkNode);
+                    } else {
+                        this._setFolderCheckbox(true, checkNode);
+                    }
                 } else {
-                    this._setFolderCheckbox(true, checkNode);
+                    this._setFolderCheckbox(!this._isVisible(), checkNode);
                 }
+                
                 this._checkboxScaleRange();
             })));
             html.set(this.labelNode, this.sublayerInfo.name);
@@ -89,33 +95,44 @@ define([
         },
 
         // toggles visibility of all sub layers
-        _setFolderCheckbox: function (checked, checkNode, isChildFolder) {
-            var i = this.icons,
-                dataChecked = (checked) ? 'checked' : 'unchecked',
-                slNodes = this._getSubLayerNodes();
+        _setFolderCheckbox: function (checked, checkNode, noPublish) {
+            var i = this.icons;
             checkNode = checkNode || this.checkNode;
-            array.forEach(slNodes, lang.hitch(this, function (node) {
-
-                // child is folder
-                if (domAttr.get(node, 'data-layer-folder')) {
-                    var folderControl = this._getFolderControl(node);
-                    if (folderControl) {
-                        folderControl._setFolderCheckbox(checked, node, true);
-                    }
-                // child is sub layer
-                } else {
-                    domAttr.set(node, 'data-checked', dataChecked);
-                    if (checked) {
-                        domClass.replace(node, i.checked, i.unchecked);
+            
+            if (this.control.controlOptions.triStateTree) {
+                var slNodes = this._getSubLayerNodes(),
+                    dataChecked = (checked) ? 'checked' : 'unchecked';
+                array.forEach(slNodes, lang.hitch(this, function (node) {
+                    // child is folder
+                    if (domAttr.get(node, 'data-layer-folder')) {
+                        var folderControl = this._getFolderControl(node);
+                        if (folderControl) {
+                            folderControl._setFolderCheckbox(checked, node, true);
+                        }
+                    // child is sub layer
                     } else {
-                        domClass.replace(node, i.unchecked, i.checked);
+                        domAttr.set(node, 'data-checked', dataChecked);
+                        if (checked) {
+                            domClass.replace(node, i.checked, i.unchecked);
+                        } else {
+                            domClass.replace(node, i.unchecked, i.checked);
+                        }
                     }
-                }
-            }));
+                }));
+            } else {
+                domClass.remove(checkNode, i.checked);
+                domClass.remove(checkNode, i.unchecked);
 
-            // wait until all folders in hierarchy have been
-            // processed before setting the layer's visible layers
-            if (!isChildFolder) {
+                if (checked) {
+                    domAttr.set(checkNode, 'data-checked', 'checked');
+                    domClass.add(checkNode, i.checked);
+                } else {
+                    domAttr.set(checkNode, 'data-checked', 'unchecked');
+                    domClass.add(checkNode, i.unchecked);
+                }
+            }
+
+            if (!noPublish) {
                 this.control._setVisibleLayers();
             }
         },
@@ -198,7 +215,7 @@ define([
             }
             return null;
         },
-
+        
         // set visibility of folder (group layer) based on the visibility
         // of children sub-layers and folders
         _checkFolderVisibility: function () {

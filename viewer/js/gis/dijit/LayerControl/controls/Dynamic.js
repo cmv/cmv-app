@@ -56,6 +56,11 @@ define([
                 // we have sublayer controls
                 this._hasSublayers = true;
                 this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);
+                this.layer.setAllVisibleLayers = lang.hitch(this, function (allVisibleLayers) {
+                    this.layer.allVisibleLayers = allVisibleLayers;
+                    this._onSetVisibleLayers(allVisibleLayers, true);
+                    this._setVisibleLayers(allVisibleLayers);
+                });
             }
         },
         // create sublayers and legend
@@ -112,10 +117,11 @@ define([
                     return l.id;
                 });
                 array.forEach(layer.layerInfos, lang.hitch(this, '_createControl', layer, allLayers));
-
-                array.forEach(this._folderControls, function (control) {
-                    control._checkFolderVisibility();
-                });
+                if (this.controlOptions.triStateTree) {
+                    array.forEach(this._folderControls, function (control) {
+                        control._checkFolderVisibility();
+                    });
+                }
             }
         },
 
@@ -209,33 +215,60 @@ define([
             // remove aspect handler
             this._visLayersHandler.remove();
             var layer = this.layer,
-                visibleLayers = [];
+                visibleLayers = [],
+                allVisibleLayers = [];
 
             // get visibility of sub layers not in folders
             array.forEach(this._sublayerControls, function (subLayer) {
                 if (subLayer._isVisible() && subLayer.parentLayerId === -1) {
                     visibleLayers.push(subLayer.sublayerInfo.id);
+                    allVisibleLayers.push(subLayer.sublayerInfo.id);
                 }
             });
 
+            array.forEach(this._folderControls, lang.hitch(this, function (folder) {
+                if (folder._isVisible() || (this.controlOptions.triStateTree && folder._hasAnyVisibleLayer())) {
+                    allVisibleLayers.push(folder.sublayerInfo.id);
+                }
+            }));
+
             // get visibility of sub layers that are contained within a folder
-            array.forEach(this._folderControls, function (folder) {
+            array.forEach(this._folderControls, lang.hitch(this, function (folder) {
                 var subLayers = folder._getSubLayerControls();
-                array.forEach(subLayers, function (subLayer) {
+                array.forEach(subLayers, lang.hitch(this, function (subLayer) {
                     if (subLayer._isVisible()) {
+                        allVisibleLayers.push(subLayer.sublayerInfo.id);
+                        if (this.controlOptions.triStateTree) {
+                            visibleLayers.push(subLayer.sublayerInfo.id);
+                            return;
+                        }
+                    }
+                    var currentLayer = subLayer;
+                    var oldLayer = null;
+                    function checkParent (f) {
+                        if (f.sublayerInfo.id === currentLayer.sublayerInfo.parentLayerId) {
+                            currentLayer = f;
+                        }
+                    }
+                    while (currentLayer._isVisible() && currentLayer.sublayerInfo.parentLayerId !== -1 && oldLayer !== currentLayer) {
+                        oldLayer = currentLayer;
+                        array.forEach(this._folderControls, checkParent);
+                    }
+                    if (currentLayer._isVisible()) {
                         visibleLayers.push(subLayer.sublayerInfo.id);
                     }
-
-                });
-            });
+                }));
+            }));
 
             if (!visibleLayers.length) {
                 visibleLayers.push(-1);
             }
-
-            array.forEach(this._folderControls, function (control) {
-                control._checkFolderVisibility();
-            });
+            
+            if (this.controlOptions.triStateTree) {
+                array.forEach(this._folderControls, function (control) {
+                    control._checkFolderVisibility();
+                });
+            }
 
             layer.setVisibleLayers(visibleLayers);
             layer.refresh();
@@ -244,28 +277,38 @@ define([
                 id: layer.id,
                 visibleLayers: visibleLayers
             });
+            
+            topic.publish('layerControl/setAllVisibleLayers', {
+                id: layer.id,
+                allVisibleLayers: allVisibleLayers
+            });
+
+            this.layer.allVisibleLayers = allVisibleLayers;
+
             // set aspect handler
             this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);
         },
-        _onSetVisibleLayers: function (visLayers) {
+        _onSetVisibleLayers: function (visLayers, noPublish) {
             // set the sub layer visibility first
             array.forEach(this._sublayerControls, function (control) {
                 var viz = (array.indexOf(visLayers, control.sublayerInfo.id) !== -1);
-                control._setSublayerCheckbox(viz);
+                control._setSublayerCheckbox(viz, null, noPublish);
             });
 
             // setting the folder (group layer) visibility will change
             // visibility for all children sub layer and folders
             array.forEach(this._folderControls, function (control) {
                 var viz = (array.indexOf(visLayers, control.sublayerInfo.id) !== -1);
-                control._setFolderCheckbox(viz);
+                control._setFolderCheckbox(viz, null, noPublish);
             });
-
-            // finally, set the folder UI (state of checkbox) based on
-            // the sub layers and folders within the parent folder
-            array.forEach(this._folderControls, function (control) {
-                control._checkFolderVisibility();
-            });
+            
+            if (this.controlOptions.triStateTree) {
+                // finally, set the folder UI (state of checkbox) based on
+                // the sub layers and folders within the parent folder
+                array.forEach(this._folderControls, function (control) {
+                    control._checkFolderVisibility();
+                });
+            }
         }
     });
     return DynamicControl;
