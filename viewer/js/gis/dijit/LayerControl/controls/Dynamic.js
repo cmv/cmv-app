@@ -56,11 +56,6 @@ define([
                 // we have sublayer controls
                 this._hasSublayers = true;
                 this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);
-                this.layer.setAllVisibleLayers = lang.hitch(this, function (allVisibleLayers) {
-                    this.layer.allVisibleLayers = allVisibleLayers;
-                    this._onSetVisibleLayers(allVisibleLayers, true);
-                    this._setVisibleLayers(allVisibleLayers);
-                });
             }
         },
         // create sublayers and legend
@@ -282,8 +277,6 @@ define([
                 id: layer.id,
                 allVisibleLayers: allVisibleLayers
             });
-
-            this.layer.allVisibleLayers = allVisibleLayers;
 
             // set aspect handler
             this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);

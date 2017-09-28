@@ -31,7 +31,6 @@ define([
         control: null,
         sublayerInfo: null,
         icons: null,
-        triStateTree: false,
         // ^args
         templateString: folderTemplate,
         _expandClickHandler: null,
