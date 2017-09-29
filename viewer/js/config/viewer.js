@@ -69,6 +69,18 @@ define([
         });
     });
 
+    // simple clustering example now. should be replaced with a layerControl plugin
+    topic.subscribe('layerControl/toggleClustering', function (event) {
+        var layer = event.layer;
+        if (layer.getFeatureReduction()) {
+            if (layer.isFeatureReductionEnabled()) {
+                layer.disableFeatureReduction();
+            } else {
+                layer.enableFeatureReduction();
+            }
+        }
+    });
+
     return {
         // used for debugging your app
         isDebug: true,
@@ -159,6 +171,10 @@ define([
                 opacity: 1.0,
                 visible: true,
                 outFields: ['*'],
+                featureReduction: {
+                    type: 'cluster',
+                    clusterRadius: 60
+                },
                 mode: 0
             },
             editorLayerInfos: {
@@ -171,7 +187,13 @@ define([
                 }
             },
             layerControlLayerInfos: {
-                layerGroup: 'Grouped Feature Layers'
+                layerGroup: 'Grouped Feature Layers',
+                menu: [{
+                    id: 'toggle-clustering-menu',
+                    topic: 'toggleClustering',
+                    label: 'Toggle Clustering',
+                    iconClass: 'fa fa-toggle-on'
+                }]
             }
         }, {
             type: 'feature',
