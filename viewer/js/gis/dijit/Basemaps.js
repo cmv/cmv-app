@@ -127,6 +127,7 @@ define([
 
         buildMenu: function () {
             this.menu = new DropDownMenu({
+                class: this.baseClass + '-menu',
                 style: 'display: none;'
             });
             array.forEach(this.basemapsToShow, function (basemap) {
