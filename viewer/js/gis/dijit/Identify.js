@@ -188,7 +188,7 @@ define([
         },
         removeLayerInfo: function (layerInfo) {
             var lyrId = layerInfo.id;
-            var layers = [], listener = null;
+            var layers = [], listeners = null;
             array.forEach(this.layers, function (layer) {
                 if (layer.ref.id !== lyrId) {
                     layers.push(layer);
