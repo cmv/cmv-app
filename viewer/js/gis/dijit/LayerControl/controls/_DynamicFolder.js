@@ -51,7 +51,7 @@ define([
                     event.stopPropagation();
                 }
 
-                if (this.control.controlOptions.triStateTree) {
+                if (this.control.controlOptions.ignoreDynamicGroupVisibility) {
                     if (!this._hasAnyInvisibleLayer()) {
                         this._setFolderCheckbox(false, checkNode);
                     } else {
@@ -98,9 +98,9 @@ define([
             var i = this.icons;
             checkNode = checkNode || this.checkNode;
             
-            if (this.control.controlOptions.triStateTree) {
                 var slNodes = this._getSubLayerNodes(),
                     dataChecked = (checked) ? 'checked' : 'unchecked';
+            if (this.control.controlOptions.ignoreDynamicGroupVisibility) {
                 array.forEach(slNodes, lang.hitch(this, function (node) {
                     // child is folder
                     if (domAttr.get(node, 'data-layer-folder')) {

@@ -48,7 +48,7 @@ define([
         overlayLabel: false,
         vectorReorder: false,
         vectorLabel: false,
-        triStateTree: false,
+        ignoreDynamicGroupVisibility: null, // ignore visibility of group layers in dynamic layers?
         noMenu: null,
         noLegend: null,
         noZoom: null,
@@ -262,10 +262,10 @@ define([
                     noLegend: null,
                     noZoom: null,
                     noTransparency: null,
-                    triStateTree: this.triStateTree,
                     swipe: null,
                     expanded: false,
-                    sublayers: true,
+                    sublayers: true, // used by dynamic layers only
+                    ignoreDynamicGroupVisibility: this.ignoreDynamicGroupVisibility, // used by dynamic layers only
                     layerGroup: null,
                     menu: this.menu[layerInfo.type],
                     subLayerMenu: this.subLayerMenu[layerInfo.type]

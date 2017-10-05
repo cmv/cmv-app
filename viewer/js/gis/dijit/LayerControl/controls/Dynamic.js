@@ -112,7 +112,7 @@ define([
                     return l.id;
                 });
                 array.forEach(layer.layerInfos, lang.hitch(this, '_createControl', layer, allLayers));
-                if (this.controlOptions.triStateTree) {
+                if (this.controlOptions.ignoreDynamicGroupVisibility) {
                     array.forEach(this._folderControls, function (control) {
                         control._checkFolderVisibility();
                     });
@@ -211,7 +211,8 @@ define([
             this._visLayersHandler.remove();
             var layer = this.layer,
                 visibleLayers = [],
-                allVisibleLayers = [];
+                allVisibleLayers = [],
+                ignoreDynamicGroupVisibility = this.controlOptions.ignoreDynamicGroupVisibility;
 
             // get visibility of sub layers not in folders
             array.forEach(this._sublayerControls, function (subLayer) {
@@ -221,8 +222,9 @@ define([
                 }
             });
 
+            // get visibility of folders
             array.forEach(this._folderControls, lang.hitch(this, function (folder) {
-                if (folder._isVisible() || (this.controlOptions.triStateTree && folder._hasAnyVisibleLayer())) {
+                if (folder._isVisible() || (ignoreDynamicGroupVisibility && folder._hasAnyVisibleLayer())) {
                     allVisibleLayers.push(folder.sublayerInfo.id);
                 }
             }));
@@ -233,7 +235,7 @@ define([
                 array.forEach(subLayers, lang.hitch(this, function (subLayer) {
                     if (subLayer._isVisible()) {
                         allVisibleLayers.push(subLayer.sublayerInfo.id);
-                        if (this.controlOptions.triStateTree) {
+                        if (ignoreDynamicGroupVisibility) {
                             visibleLayers.push(subLayer.sublayerInfo.id);
                             return;
                         }
@@ -258,8 +260,7 @@ define([
             if (!visibleLayers.length) {
                 visibleLayers.push(-1);
             }
-            
-            if (this.controlOptions.triStateTree) {
+            if (ignoreDynamicGroupVisibility) {
                 array.forEach(this._folderControls, function (control) {
                     control._checkFolderVisibility();
                 });
@@ -272,7 +273,7 @@ define([
                 id: layer.id,
                 visibleLayers: visibleLayers
             });
-            
+
             topic.publish('layerControl/setAllVisibleLayers', {
                 id: layer.id,
                 allVisibleLayers: allVisibleLayers
@@ -294,8 +295,8 @@ define([
                 var viz = (array.indexOf(visLayers, control.sublayerInfo.id) !== -1);
                 control._setFolderCheckbox(viz, null, noPublish);
             });
-            
-            if (this.controlOptions.triStateTree) {
+
+            if (this.controlOptions.ignoreDynamicGroupVisibility) {
                 // finally, set the folder UI (state of checkbox) based on
                 // the sub layers and folders within the parent folder
                 array.forEach(this._folderControls, function (control) {
