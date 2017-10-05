@@ -60,7 +60,7 @@ define([
                 } else {
                     this._setFolderCheckbox(!this._isVisible(), checkNode);
                 }
-                
+
                 this._checkboxScaleRange();
             })));
             html.set(this.labelNode, this.sublayerInfo.name);
@@ -95,11 +95,11 @@ define([
 
         // toggles visibility of all sub layers
         _setFolderCheckbox: function (checked, checkNode, noPublish) {
-            var i = this.icons;
+            var i = this.icons,
+                dataChecked = (checked) ? 'checked' : 'unchecked',
+                slNodes = this._getSubLayerNodes();
             checkNode = checkNode || this.checkNode;
-            
-                var slNodes = this._getSubLayerNodes(),
-                    dataChecked = (checked) ? 'checked' : 'unchecked';
+
             if (this.control.controlOptions.ignoreDynamicGroupVisibility) {
                 array.forEach(slNodes, lang.hitch(this, function (node) {
                     // child is folder
@@ -119,15 +119,11 @@ define([
                     }
                 }));
             } else {
-                domClass.remove(checkNode, i.checked);
-                domClass.remove(checkNode, i.unchecked);
-
+                domAttr.set(checkNode, 'data-checked', dataChecked);
                 if (checked) {
-                    domAttr.set(checkNode, 'data-checked', 'checked');
-                    domClass.add(checkNode, i.checked);
+                    domClass.replace(checkNode, i.checked, i.unchecked);
                 } else {
-                    domAttr.set(checkNode, 'data-checked', 'unchecked');
-                    domClass.add(checkNode, i.unchecked);
+                    domClass.replace(checkNode, i.unchecked, i.checked);
                 }
             }
 
@@ -214,7 +210,7 @@ define([
             }
             return null;
         },
-        
+
         // set visibility of folder (group layer) based on the visibility
         // of children sub-layers and folders
         _checkFolderVisibility: function () {
