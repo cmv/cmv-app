@@ -21,7 +21,7 @@ __Description:__
 
 __Steps to reproduce:__
 
-1. Include a JS Bin (or equivalent) link if possible. [You can use this as a starting point](http://jsbin.com/cedarenohe/1/edit?js,output). Alternatively create a [Gist](gist.github.com)
+1. Include a JS Bin (or equivalent) link if possible. [You can use this as a starting point](http://jsbin.com/purinunuda/edit?html,output). Alternatively create a [Gist](gist.github.com)
 2. Detail the exact steps taken to produce the problem
 3. Include a gif if possible; you can use LICEcap to make a gif: http://www.cockos.com/licecap/
 4. Check the browser console for errors (Use F12 to access the console)
