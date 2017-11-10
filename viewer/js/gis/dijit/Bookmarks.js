@@ -1,13 +1,13 @@
 define([
 	'dojo/_base/declare',
 	'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',
+        'dijit/_TemplatedMixin',
+        'dijit/_WidgetsInTemplateMixin',
    	'esri/dijit/Bookmarks',
-    'dojo/text!./Bookmarks/templates/Bookmarks.html',
+        'dojo/text!./Bookmarks/templates/Bookmarks.html',
 	'dojo/json',
 	'dojo/cookie',
-    'dojo/_base/lang',
+        'dojo/_base/lang',
 	'xstyle/css!./Bookmarks/css/Bookmarks.css'
 ], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Bookmarks, template, json, cookie, lang) {
 
