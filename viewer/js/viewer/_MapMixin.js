@@ -29,6 +29,8 @@ define([
         },
 
         startup: function () {
+            // ignore visibility of group layers in dynamic layers?
+            this.ignoreDynamicGroupVisibility = (this.config.ignoreDynamicGroupVisibility === false) ? false : true;
             this.inherited(arguments);
             this.layoutDeferred.then(lang.hitch(this, 'initMapAsync'));
         },
@@ -175,11 +177,14 @@ define([
             }
 
             //LayerControl LayerInfos array
+            var layerControlOptions = lang.mixin({
+                ignoreDynamicGroupVisibility: this.ignoreDynamicGroupVisibility
+            }, layer.layerControlLayerInfos);
             this.layerControlLayerInfos.unshift({ //unshift instead of push to keep layer ordering in LayerControl intact
                 layer: l,
                 type: layer.type,
                 title: layer.title,
-                controlOptions: layer.layerControlLayerInfos
+                controlOptions: layerControlOptions
             });
 
             if (layer.type === 'feature') {
@@ -194,14 +199,15 @@ define([
                 }
             }
 
-            if (layer.type === 'dynamic') {
+            if (layer.type === 'dynamic' && this.ignoreDynamicGroupVisibility) {
                 on(l, 'load', lang.hitch(this, 'removeGroupLayers'));
             }
 
             if (layer.type === 'dynamic' || layer.type === 'feature') {
                 var idOptions = {
                     layer: l,
-                    title: layer.title
+                    title: layer.title,
+                    ignoreDynamicGroupVisibility: this.ignoreDynamicGroupVisibility
                 };
                 if (layer.identifyLayerInfos) {
                     lang.mixin(idOptions, layer.identifyLayerInfos);

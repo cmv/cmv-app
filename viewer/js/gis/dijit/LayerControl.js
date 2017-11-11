@@ -48,7 +48,6 @@ define([
         overlayLabel: false,
         vectorReorder: false,
         vectorLabel: false,
-        ignoreDynamicGroupVisibility: null, // ignore visibility of group layers in dynamic layers?
         noMenu: null,
         noLegend: null,
         noZoom: null,
@@ -265,7 +264,6 @@ define([
                     swipe: null,
                     expanded: false,
                     sublayers: true, // used by dynamic layers only
-                    ignoreDynamicGroupVisibility: this.ignoreDynamicGroupVisibility, // used by dynamic layers only
                     layerGroup: null,
                     menu: this.menu[layerInfo.type],
                     subLayerMenu: this.subLayerMenu[layerInfo.type]

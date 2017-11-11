@@ -159,6 +159,9 @@ define([
         ],
         */
 
+        // ignore the visibility of group layers in dynamic layers? default = true
+        //ignoreDynamicGroupVisibility: false,
+
         // operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: 'dynamic', 'tiled', 'feature'.
         // The 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
         // 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
