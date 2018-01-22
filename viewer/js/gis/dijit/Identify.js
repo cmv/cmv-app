@@ -40,6 +40,7 @@ define([
         featureLayers: {},
         ignoreOtherGraphics: true,
         createDefaultInfoTemplates: true,
+        showPopup: true,
         draggable: false,
         layerSeparator: '||',
         allLayersId: '***',
@@ -73,6 +74,7 @@ define([
 
             this.own(topic.subscribe('mapClickMode/currentSet', lang.hitch(this, 'setMapClickMode')));
             this.own(topic.subscribe('identify/addLayerInfos', lang.hitch(this, 'addLayerInfos')));
+            this.own(topic.subscribe('identify/removeLayerInfos', lang.hitch(this, 'removeLayerInfos')));
 
             this.map.on('click', lang.hitch(this, function (evt) {
                 if (this.mapClickMode === 'identify') {
@@ -111,7 +113,8 @@ define([
          * @return {undefined}
          */
         addLayerInfo: function (layerInfo) {
-            var lyrId = layerInfo.layer.id, layer = this.map.getLayer(lyrId), infoTemplate;
+            var lyrId = layerInfo.layer.id, layer = this.map.getLayer(lyrId),
+                infoTemplate = null;
             if (layer) {
                 var url = layer.url;
 
@@ -140,9 +143,11 @@ define([
 
                     // If it is a feature Layer, we get the base url
                     // for the map service by removing the layerId.
-                    var lastSL = url.lastIndexOf('/' + layer.layerId);
-                    if (lastSL > 0) {
-                        url = url.substring(0, lastSL);
+                    if (url) {
+                        var lastSL = url.lastIndexOf('/' + layer.layerId);
+                        if (lastSL > 0) {
+                            url = url.substring(0, lastSL);
+                        }
                     }
                 } else if (layer.layerInfos) {
                     array.forEach(layer.layerInfos, lang.hitch(this, function (subLayerInfo) {
@@ -153,21 +158,55 @@ define([
                     }));
                 }
 
-                this.layers.push({
-                    ref: layer,
-                    layerInfo: layerInfo,
-                    identifyTask: new IdentifyTask(url)
-                });
-
                 // rebuild the layer selection list when any layer is hidden
                 // but only if we have a UI
+                var listeners = [];
                 if (this.parentWidget) {
-                    layer.on('visibility-change', lang.hitch(this, function (evt) {
+                    var listener = layer.on('visibility-change', lang.hitch(this, function (evt) {
                         if (evt.visible === false) {
                             this.createIdentifyLayerList();
                         }
                     }));
+                    listeners.push(listener);
                 }
+
+                this.layers.push({
+                    ref: layer,
+                    layerInfo: layerInfo,
+                    identifyTask: (url) ? new IdentifyTask(url) : null,
+                    listeners: listeners
+                });
+            }
+        },
+        /**
+         * handles an array of layerInfos to call removeLayerInfo for each layerInfo
+         * @param {Array<layerInfo>} layerInfos The array of layer infos
+         * @returns {undefined}
+         */
+        removeLayerInfos: function (layerInfos) {
+            array.forEach(layerInfos, lang.hitch(this, 'removeLayerInfo'));
+        },
+        removeLayerInfo: function (layerInfo) {
+            var lyrId = layerInfo.id;
+            var layers = [], listeners = null;
+            array.forEach(this.layers, function (layer) {
+                if (layer.ref.id !== lyrId) {
+                    layers.push(layer);
+                } else {
+                    listeners = layer.listeners;
+                }
+            });
+
+            if (layers.length !== this.layers.length) {
+                this.layers = layers;
+            }
+            // remove any listeners
+            if (listeners) {
+                array.forEach(listeners, function (listener) {
+                    if (listener.remove) {
+                        listener.remove();
+                    }
+                });
             }
         },
         addRightClickMenu: function () {
@@ -180,7 +219,10 @@ define([
             }));
         },
         setupDraggable: function () {
-            var popups, handles, pointers, movable;
+            var popups = null,
+                handles = null,
+                pointers = null,
+                movable = null;
             // the popup, handle (title) and pointers (arrows)
             popups = query('div.esriPopup');
             handles = query('div.esriPopup div.titlePane div.title');
@@ -203,14 +245,11 @@ define([
             }
         },
         executeIdentifyTask: function (evt) {
-
-
             var mapPoint = evt.mapPoint;
             var identifyParams = this.createIdentifyParams(mapPoint);
             var identifies = [];
             var identifiedlayers = [];
             var selectedLayer = this.getSelectedLayer();
-
 
             if (!this.checkForGraphicInfoTemplate(evt)) {
                 // return;
@@ -218,6 +257,12 @@ define([
                     return l.ref.id === evt.graphic._layer.id;
                 })[0];
                 if (!layer) {
+                    topic.publish('identify/results', {
+                        features: [{feature: evt.graphic}]
+                    });
+                    if (!this.showPopup) {
+                        this.map.infoWindow.hide();
+                    }
                     return;
                 }
                 identifiedlayers.push(layer);
@@ -234,7 +279,6 @@ define([
                 return;
             }
 
-
             array.forEach(this.layers, lang.hitch(this, function (lyr) {
                 var layerIds = this.getLayerIds(lyr, selectedLayer);
                 if (layerIds.length > 0) {
@@ -249,10 +293,18 @@ define([
                 }
             }));
 
+            topic.publish('identify/execute', {
+                event: evt,
+                identifies: identifies,
+                identifiedlayers: identifiedlayers
+            });
+
             if (identifies.length > 0) {
-                this.map.infoWindow.setTitle(this.i18n.mapInfoWindow.identifyingTitle);
-                this.map.infoWindow.setContent('<div class="loading"></div>');
-                this.map.infoWindow.show(mapPoint);
+                if (this.showPopup) {
+                    this.map.infoWindow.setTitle(this.i18n.mapInfoWindow.identifyingTitle);
+                    this.map.infoWindow.setContent('<div class="loading"></div>');
+                    this.map.infoWindow.show(mapPoint);
+                }
                 all(identifies).then(lang.hitch(this, 'identifyCallback', identifiedlayers), lang.hitch(this, 'identifyError'));
             }
         },
@@ -353,40 +405,79 @@ define([
                 var ref = identifiedlayers[i].ref;
                 array.forEach(response, function (result) {
                     result.feature.geometry.spatialReference = this.map.spatialReference; //temp workaround for ags identify bug. remove when fixed.
-                    if (result.feature.infoTemplate === undefined) {
+                    var feature = result.feature;
+                    if (typeof feature.infoTemplate === 'undefined') {
                         var infoTemplate = this.getInfoTemplate(ref, null, result);
                         if (infoTemplate) {
                             if (result.layerId && ref.layerInfos && infoTemplate.info.showAttachments) {
                                 result.feature._layer = this.getFeatureLayerForDynamicSublayer(ref, result.layerId);
                             }
-                            result.feature.setInfoTemplate(infoTemplate);
+                            var featureInfoTemplate = this.buildExpressionInfos(lang.clone(infoTemplate), feature);
+                            feature.setInfoTemplate(featureInfoTemplate);
                         } else {
                             return;
                         }
                     }
-                    var feature = this.getFormattedFeature(result.feature.infoTemplate, result.feature);
+                    if (feature && feature.infoTemplate && feature.infoTemplate.info) {
+                        feature = this.getFormattedFeature(feature);
+                    }
                     fSet.push(feature);
                 }, this);
             }, this);
             this.map.infoWindow.setFeatures(fSet);
+            topic.publish('identify/results', {
+                features: fSet,
+                responseArray: responseArray,
+                identifiedlayers: identifiedlayers
+            });
         },
-        getFormattedFeature: function (infoTemplate, feature) {
+        getFormattedFeature: function (feature) {
+            var infoTemplate = feature.infoTemplate;
             if (feature.graphic) {
                 feature = feature.graphic;
             }
-            if (feature && infoTemplate && infoTemplate.info) {
-                array.forEach(infoTemplate.info.fieldInfos, function (info) {
-                    if (typeof info.formatter === 'function') {
-                        feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes, lang.clone(feature.geometry));
+            array.forEach(infoTemplate.info.fieldInfos, function (info) {
+                if (typeof info.formatter === 'function') {
+                    feature.attributes[info.fieldName] = info.formatter(feature.attributes[info.fieldName], feature.attributes, lang.clone(feature.geometry));
+                }
+            });
+            return feature;
+        },
+        buildExpressionInfos: function (infoTemplate, feature) {
+            if (feature.graphic) {
+                feature = feature.graphic;
+            }
+            if (feature && infoTemplate && infoTemplate.info && (typeof infoTemplate.getExpressionInfo === 'function')) {
+                var info = infoTemplate.info;
+                var expressionInfos = info.expressionInfos || [];
+                array.forEach(info.fieldInfos, function (fieldInfo) {
+                    if (typeof fieldInfo.formatter === 'function' && fieldInfo.useExpression !== false) {
+                        var name = fieldInfo.fieldName.toLowerCase() + '-formatted';
+                        var expression = 'return \'' + fieldInfo.formatter(feature.attributes[fieldInfo.fieldName], feature.attributes, lang.clone(feature.geometry)) + '\'';
+                        fieldInfo.fieldName = 'expression/' + name;
+                        expressionInfos = array.filter(expressionInfos, function (expressionInfo) {
+                            return (expressionInfo.name !== name);
+                        });
+                        expressionInfos.push({
+                            name: name,
+                            title: fieldInfo.label || ' ',
+                            expression: expression
+                        });
+                        fieldInfo.formatter = null;
                     }
                 });
+                info.expressionInfos = expressionInfos;
+                infoTemplate = new PopupTemplate(info);
             }
-            return feature;
+            return infoTemplate;
         },
         identifyError: function (err) {
             this.map.infoWindow.hide();
             topic.publish('viewer/handleError', {
                 source: 'Identify',
+                error: err
+            });
+            topic.publish('identify/error', {
                 error: err
             });
         },
@@ -395,7 +486,8 @@ define([
         },
 
         getInfoTemplate: function (layer, layerId, result) {
-            var popup, config;
+            var popup = null,
+                config = null;
             if (result) {
                 layerId = typeof result.layerId === 'number' ? result.layerId : layer.layerId;
             } else if (layerId === null) {

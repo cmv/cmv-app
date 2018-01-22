@@ -1,0 +1,20 @@
+engines:
+    eslint:
+        enabled: true
+        channel: "eslint-3"
+    csslint:
+        enabled: true
+    fixme:
+        enabled: true
+ratings:
+    paths:
+        - "viewer/js/viewer/**/*.js"
+        - "viewer/js/gis/**/*.js"
+        - "**.js"
+        - "viewer/js/viewer/**/*.css"
+        - "viewer/js/gis/**/*.css"
+        - "**.css"
+exclude_paths:
+    - "viewer/css/themes/*"
+    - "**/**.min.css"
+    - "**/**.min.js"
