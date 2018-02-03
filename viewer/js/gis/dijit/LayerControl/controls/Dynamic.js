@@ -53,7 +53,7 @@ define([
             if (this.layer.layerInfos.length > 1 && this.controlOptions.sublayers) {
                 // we have sublayer controls
                 this._hasSublayers = true;
-                this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);
+                this._aspectSetVisibleLayers();
             }
         },
         // create sublayers and legend
@@ -180,11 +180,15 @@ define([
             //   i.e. layer 3 (the group) is not in array but it's sublayers are; sublayers will show
             //   so check and if group is off also remove the sublayers
             var layer = this.layer,
-                setLayers = [];
+                setLayers = [],
+                visibleLayers = [];
             array.forEach(query('.' + layer.id + '-layerControlSublayerCheck'), function (i) {
                 if (domAttr.get(i, 'data-checked') === 'checked') {
-                    setLayers.push(parseInt(domAttr.get(i, 'data-sublayer-id'), 10));
+                    visibleLayers.push(parseInt(domAttr.get(i, 'data-sublayer-id'), 10));
                 }
+            });
+            array.forEach(visibleLayers, function (visibleLayer) {
+                setLayers.push(visibleLayer);
             });
             array.forEach(layer.layerInfos, function (info) {
                 if (info.subLayerIds !== null && array.indexOf(setLayers, info.id) === -1) {
@@ -204,23 +208,46 @@ define([
             layer.refresh();
             topic.publish('layerControl/setVisibleLayers', {
                 id: layer.id,
-                visibleLayers: setLayers
+                visibleLayers: visibleLayers
             });
             // set aspect handler
-            this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);
+            this._aspectSetVisibleLayers();
         },
-        _onSetVisibleLayers: function (visLayers) {
-            var visibleIds = [];
-            array.forEach(this.layer.layerInfos, function (info) {
-                if (array.indexOf(visLayers, info.id) !== -1) {
-                    visibleIds.push(info.id);
-                }
-                if (info.parentLayerId !== -1 && array.indexOf(visibleIds, info.parentLayerId) === -1) {
-                    visibleIds.push(info.parentLayerId);
+        _aspectSetVisibleLayers: function () {
+            var self = this;
+            this._visLayersHandler = aspect.around(this.layer, 'setVisibleLayers', lang.hitch(this, function (originalSetVisibleLayers) {
+                return function (visibleLayers) {
+                    var setLayers = lang.hitch(self, self._visibleLayersToSetLayers)(visibleLayers);
+                    originalSetVisibleLayers.apply(this, [setLayers]);
+                    lang.hitch(self, self._onSetVisibleLayers)(visibleLayers);
+                };
+            }));
+        },
+        _visibleLayersToSetLayers: function (visibleLayers) {
+            var layer = this.layer,
+                setLayers = [];
+            array.forEach(visibleLayers, function (visibleLayer) {
+                setLayers.push(visibleLayer);
+            });
+            array.forEach(layer.layerInfos, function (info) {
+                if (info.subLayerIds !== null && array.indexOf(setLayers, info.id) === -1) {
+                    array.forEach(info.subLayerIds, function (sub) {
+                        if (array.indexOf(setLayers, sub) !== -1) {
+                            setLayers.splice(array.indexOf(setLayers, sub), 1);
+                        }
+                    });
+                } else if (info.subLayerIds !== null && array.indexOf(setLayers, info.id) !== -1) {
+                    setLayers.splice(array.indexOf(setLayers, info.id), 1);
                 }
             });
+            if (!setLayers.length) {
+                setLayers.push(-1);
+            }
+            return setLayers;
+        },
+        _onSetVisibleLayers: function (visLayers) {
             array.forEach(this._sublayerControls, function (control) {
-                if (array.indexOf(visibleIds, control.sublayerInfo.id) !== -1) {
+                if (array.indexOf(visLayers, control.sublayerInfo.id) !== -1) {
                     control._setSublayerCheckbox(true);
                 } else {
                     control._setSublayerCheckbox(false);
