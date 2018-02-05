@@ -53,7 +53,6 @@ define([
     //in a real world example, these topics would be used
     //in their own widget to listen for layer menu click events
     topic.subscribe('layerControl/hello', function (event) {
-        console.log(arguments);
         topic.publish('growler/growl', {
             title: 'Hello!',
             message: event.layer._titleForLegend + ' ' +
