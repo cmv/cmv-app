@@ -38,7 +38,7 @@ define([
             }
             if (this.iconClass) {
                 this.iconNode = domConstruct.create('span', {
-                    'class': 'titlePaneIcon fa fa-fw ' + this.iconClass
+                    'class': 'titlePaneIcon ' + this.iconClass
                 }, this.titleNode, 'before');
             }
             this.own(topic.subscribe('titlePane/event', lang.hitch(this, '_updateWidgetSidebarPosition')));

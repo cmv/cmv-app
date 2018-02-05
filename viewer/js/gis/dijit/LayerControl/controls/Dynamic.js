@@ -79,10 +79,12 @@ define([
             if (this._hasSublayers && this.controlOptions.allSublayerToggles !== false) {
                 menu.addChild(new MenuItem({
                     label: i18n.dynamicSublayersOn,
+                    iconClass: 'far fa-fw fa-check-square',
                     onClick: lang.hitch(this, '_toggleAllSublayers', true)
                 }));
                 menu.addChild(new MenuItem({
                     label: i18n.dynamicSublayersOff,
+                    iconClass: 'far fa-fw fa-square',
                     onClick: lang.hitch(this, '_toggleAllSublayers', false)
                 }));
                 menu.addChild(new MenuSeparator());

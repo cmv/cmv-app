@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="buttonActionBar">
-        <div data-dojo-type="dijit/form/DropDownButton" data-dojo-props="iconClass:'fa fa-cog fa-fw',showLabel:true" data-dojo-attach-point="layoutDropDownDijit">
+        <div data-dojo-type="dijit/form/DropDownButton" data-dojo-props="iconClass:'fas fa-cog fa-fw',showLabel:true" data-dojo-attach-point="layoutDropDownDijit">
             <span>
                 ${i18n.settings}
             </span>
@@ -139,14 +139,14 @@
                 </div>
             </div>
         </div>
-        <div data-dojo-type="dijit/form/Button" data-dojo-props="busyLabel:'${i18n.printButton.busyLabel}',iconClass:'fa fa-print fa-fw'" data-dojo-attach-event="onClick:print" data-dojo-attach-point="printButtonDijit">
+        <div data-dojo-type="dijit/form/Button" data-dojo-props="busyLabel:'${i18n.printButton.busyLabel}',iconClass:'fas fa-print fa-fw'" data-dojo-attach-event="onClick:print" data-dojo-attach-point="printButtonDijit">
             ${i18n.printButton.label}
         </div>
     </div>
     <div data-dojo-attach-point="printResultsNode" class="resultsContainer">
     </div>
     <div data-dojo-attach-point="clearActionBarNode" class="buttonActionBar" style="display:none;padding:0;">
-        <div data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'fa fa-history fa-fw'" data-dojo-attach-event="onClick:clearResults">
+        <div data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'fas fa-undo fa-fw'" data-dojo-attach-event="onClick:clearResults">
             ${i18n.clearHistoryButton.label}
         </div>
     </div>

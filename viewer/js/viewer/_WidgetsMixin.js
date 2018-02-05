@@ -247,7 +247,7 @@ define([
 
         _showWidgetLoader: function (pnl) {
             if (pnl && pnl.containerNode) {
-                pnl.loadingNode = domConstruct.create('div', {className: 'widgetLoader', innerHTML: '<i class="fa fa-spinner fa-pulse fa-fw"></i>'}, pnl.containerNode, 'first');
+                pnl.loadingNode = domConstruct.create('div', {className: 'widgetLoader', innerHTML: '<i class="fas fa-spinner fa-pulse fa-fw"></i>'}, pnl.containerNode, 'first');
             }
         },
 

@@ -15,7 +15,7 @@ define([
         postCreate: function () {
             if (this.iconClass) {
                 this.iconNode = domConstruct.create('span', {
-                    'class': 'titlePaneIcon fa fa-fw ' + this.iconClass
+                    'class': 'titlePaneIcon ' + this.iconClass
                 }, this.titleNode, 'before');
             }
             if (this.html && this.domTarget) {

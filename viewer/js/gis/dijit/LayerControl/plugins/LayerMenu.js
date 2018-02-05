@@ -30,6 +30,7 @@ define([
             if ((layerType === 'vector' && controller.vectorReorder) || (layerType === 'overlay' && controller.overlayReorder)) {
                 control._reorderUp = new MenuItem({
                     label: i18n.moveUp,
+                    iconClass: 'fas fa-fw fa-sort-up',
                     onClick: function () {
                         controller._moveUp(control);
                     }
@@ -37,6 +38,7 @@ define([
                 self.addChild(control._reorderUp);
                 control._reorderDown = new MenuItem({
                     label: i18n.moveDown,
+                    iconClass: 'fas fa-fw fa-sort-down',
                     onClick: function () {
                         controller._moveDown(control);
                     }
@@ -52,6 +54,7 @@ define([
             if ((controlOptions.noZoom !== true && controller.noZoom !== true) || (controller.noZoom === true && controlOptions.noZoom === false)) {
                 self.addChild(new MenuItem({
                     label: i18n.zoomTo,
+                    iconClass: 'fas fa-fw fa-search',
                     onClick: function () {
                         controller._zoomToLayer(layer);
                     }
@@ -61,6 +64,7 @@ define([
             if ((controlOptions.noTransparency !== true && controller.noTransparency !== true) || (controller.noTransparency === true && controlOptions.noTransparency === false)) {
                 self.addChild(new Transparency({
                     label: i18n.transparency,
+                    iconClass: 'fas fa-fw fa-adjust',
                     layer: layer
                 }));
             }
@@ -69,12 +73,14 @@ define([
                 var swipeMenu = new Menu();
                 swipeMenu.addChild(new MenuItem({
                     label: i18n.layerSwipeVertical,
+                    iconClass: 'fas fa-fw fa-sort fa-rotate-90',
                     onClick: function () {
                         controller._swipeLayer(layer, 'vertical');
                     }
                 }));
                 swipeMenu.addChild(new MenuItem({
                     label: i18n.layerSwipeHorizontal,
+                    iconClass: 'fas fa-fw fa-sort',
                     onClick: function () {
                         controller._swipeLayer(layer, 'horizontal');
                     }
@@ -82,6 +88,7 @@ define([
                 if (controlOptions.swipeScope === true) {
                     swipeMenu.addChild(new MenuItem({
                         label: i18n.layerSwipeScope,
+                        iconClass: 'fas fa-fw fa-circle',
                         onClick: function () {
                             controller._swipeLayer(layer, 'scope');
                         }
@@ -89,6 +96,7 @@ define([
                 }
                 self.addChild(new PopupMenuItem({
                     label: i18n.layerSwipe,
+                    iconClass: 'fas fa-fw fa-sort',
                     popup: swipeMenu
                 }));
             }
@@ -98,6 +106,7 @@ define([
                 self.addChild(new MenuSeparator());
                 self.addChild(new MenuItem({
                     label: i18n.metadata,
+                    iconClass: 'fas fa-fw fa-info-circle',
                     onClick: function () {
                         window.open(layer.url, '_blank');
                     }
@@ -108,6 +117,7 @@ define([
                 self.addChild(new MenuSeparator());
                 self.addChild(new MenuItem({
                     label: i18n.metadata,
+                    iconClass: 'fas fa-fw fa-info-circle',
                     onClick: function () {
                         window.open(controlOptions.metadataUrl, '_blank');
                     }

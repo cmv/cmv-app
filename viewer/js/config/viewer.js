@@ -53,6 +53,7 @@ define([
     //in a real world example, these topics would be used
     //in their own widget to listen for layer menu click events
     topic.subscribe('layerControl/hello', function (event) {
+        console.log(arguments);
         topic.publish('growler/growl', {
             title: 'Hello!',
             message: event.layer._titleForLegend + ' ' +
@@ -192,7 +193,7 @@ define([
                     id: 'toggle-clustering-menu',
                     topic: 'toggleClustering',
                     label: 'Toggle Clustering',
-                    iconClass: 'fa fa-toggle-on'
+                    iconClass: 'fas fa-fw fa-toggle-on'
                 }]
             }
         }, {
@@ -211,7 +212,7 @@ define([
                 menu: [{
                     topic: 'hello',
                     label: 'Say Hello Custom',
-                    iconClass: 'fa fa-smile-o'
+                    iconClass: 'far fa-fw fa-smile'
                 }]
             }
         }, {
@@ -260,7 +261,7 @@ define([
                 subLayerMenu: [{
                     topic: 'hello',
                     label: 'Say Hello',
-                    iconClass: 'fa fa-smile-o'
+                    iconClass: 'far fa-fw fa-smile'
                 }]
             }
         }, {
@@ -347,7 +348,7 @@ define([
                 path: 'esri/dijit/Search',
                 placeAt: has('phone') ? null : 'top-center',
                 title: i18n.viewer.widgets.search,
-                iconClass: 'fa-search',
+                iconClass: 'fas fa-search',
                 position: 0,
                 options: {
                     map: true,
@@ -372,7 +373,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/Identify',
                 title: i18n.viewer.widgets.identify,
-                iconClass: 'fa-info-circle',
+                iconClass: 'fas fa-info-circle',
                 open: false,
                 preload: true,
                 position: 3,
@@ -466,7 +467,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/Legend',
                 title: i18n.viewer.widgets.legend,
-                iconClass: 'fa-picture-o',
+                iconClass: 'far fa-fw fa-images',
                 open: false,
                 position: 1,
                 options: {
@@ -480,7 +481,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/LayerControl',
                 title: i18n.viewer.widgets.layerControl,
-                iconClass: 'fa-th-list',
+                iconClass: 'fas fa-fw fa-th-list',
                 open: false,
                 position: 0,
                 options: {
@@ -494,7 +495,7 @@ define([
                     menu: {
                         feature: [{
                             topic: 'hello',
-                            iconClass: 'fa fa-smile-o',
+                            iconClass: 'fas fa-fw fa-smile',
                             label: 'Say Hello'
                         }]
                     },
@@ -503,7 +504,7 @@ define([
                     subLayerMenu: {
                         dynamic: [{
                             topic: 'goodbye',
-                            iconClass: 'fa fa-frown-o',
+                            iconClass: 'fas fa-fw fa-frown',
                             label: 'Say goodbye'
                         }]
                     }
@@ -515,7 +516,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/Bookmarks',
                 title: i18n.viewer.widgets.bookmarks,
-                iconClass: 'fa-bookmark',
+                iconClass: 'fas fa-fw fa-bookmark',
                 open: false,
                 position: 2,
                 options: 'config/bookmarks'
@@ -527,7 +528,7 @@ define([
                 canFloat: true,
                 path: 'gis/dijit/Find',
                 title: i18n.viewer.widgets.find,
-                iconClass: 'fa-search',
+                iconClass: 'fas fa-fw fa-search',
                 open: false,
                 position: 3,
                 options: 'config/find'
@@ -539,7 +540,7 @@ define([
                 canFloat: true,
                 path: 'gis/dijit/Draw',
                 title: i18n.viewer.widgets.draw,
-                iconClass: 'fa-paint-brush',
+                iconClass: 'fas fa-fw fa-paint-brush',
                 open: false,
                 position: 4,
                 options: {
@@ -554,7 +555,7 @@ define([
                 canFloat: true,
                 path: 'gis/dijit/Measurement',
                 title: i18n.viewer.widgets.measure,
-                iconClass: 'fa-expand',
+                iconClass: 'fas fa-fw fa-expand',
                 open: false,
                 position: 5,
                 options: {
@@ -571,7 +572,7 @@ define([
                 canFloat: true,
                 path: 'gis/dijit/Print',
                 title: i18n.viewer.widgets.print,
-                iconClass: 'fa-print',
+                iconClass: 'fas fa-fw fa-print',
                 open: false,
                 position: 6,
                 options: {
@@ -590,7 +591,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/Directions',
                 title: i18n.viewer.widgets.directions,
-                iconClass: 'fa-map-signs',
+                iconClass: 'fas fa-fw fa-map-signs',
                 open: false,
                 position: 7,
                 options: {
@@ -612,7 +613,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/Editor',
                 title: i18n.viewer.widgets.editor,
-                iconClass: 'fa-pencil',
+                iconClass: 'fas fa-fw fa-pencil-alt',
                 open: false,
                 position: 8,
                 options: {
@@ -642,7 +643,7 @@ define([
                 position: 9,
                 path: 'gis/dijit/StreetView',
                 title: i18n.viewer.widgets.streetview,
-                iconClass: 'fa-street-view',
+                iconClass: 'fas fa-fw fa-street-view',
                 paneOptions: {
                     resizable: true,
                     resizeOptions: {
@@ -666,7 +667,7 @@ define([
                 srcNodeRef: 'geocodeDijit',
                 path: 'gis/dijit/Locale',
                 title: i18n.viewer.widgets.locale,
-                iconClass: 'fa-flag',
+                iconClass: 'fas fa-fw fa-flag',
                 options: {
                     style: has('phone') ? null : 'margin-left: 30px;'
                 }
@@ -677,10 +678,10 @@ define([
                 type: 'floating',
                 path: 'gis/dijit/Help',
                 title: i18n.viewer.widgets.help,
-                iconClass: 'fa-info-circle',
+                iconClass: 'fas fa-fw fa-info-circle',
                 paneOptions: {
                     draggable: false,
-                    html: '<a href="#"><i class="fa fa-fw fa-info-circle"></i>link</a>'.replace('link', i18n.viewer.widgets.help),
+                    html: '<a href="#"><i class="fas fa-fw fa-info-circle"></i>link</a>'.replace('link', i18n.viewer.widgets.help),
                     domTarget: 'helpDijit',
                     style: 'height:345px;width:450px;'
                 },

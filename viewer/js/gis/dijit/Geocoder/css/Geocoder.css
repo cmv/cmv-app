@@ -19,7 +19,8 @@
 .gis_GeocoderDijit .zoomSearchButton:after {
     color: #444444;
     content: '\f002';
-    font-family: FontAwesome;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
     font-size: 16px;
 }
 

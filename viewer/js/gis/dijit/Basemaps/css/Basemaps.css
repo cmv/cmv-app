@@ -1,21 +1,23 @@
 .basemapWidget-menu .selectedIcon:before,
 .basemapWidget-menu .emptyIcon:before,
 .basemapWidget .basemapsIcon:before {
-  font-family: FontAwesome;
+  font-family: 'Font Awesome\ 5 Free';
 }
 
 .basemapWidget-menu .selectedIcon:before {
-  content: "\f046";
+  content: "\f14a";
+  font-weight: 400;
 }
 
 .basemapWidget-menu .emptyIcon:before {
-  content: "\f096";
+  content: "\f0c8";
+  font-weight: 400;
 }
 
 .basemapWidget .basemapsIcon:before {
   content: "\f009";
+  font-weight: 900;
 }
-
 
 /* condense dropdown on small screens */
 
