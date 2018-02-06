@@ -40,8 +40,8 @@ define([
             indeterminate: 'fas fa-minus fa-fw fa-border layerControlIcon-Indeterminate',
             update: 'fas fa-refresh layerControlIcon-Update',
             menu: 'fas fa-bars layerControlIcon-Menu',
-            folder: 'far fa-folder fa-fw layerControlIcon-Folder',
-            folderOpen: 'far fa-folder-open fa-fw layerControlIcon-Folder layerControlIcon-FolderOpen'
+            folder: 'fas fa-folder fa-fw layerControlIcon-Folder',
+            folderOpen: 'fas fa-folder-open fa-fw layerControlIcon-Folder layerControlIcon-FolderOpen'
         },
         separated: false,
         overlayReorder: false,
