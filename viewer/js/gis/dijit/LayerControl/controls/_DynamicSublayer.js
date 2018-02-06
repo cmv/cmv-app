@@ -32,10 +32,11 @@ define([
         TemplatedMixin,
         sublayerTemplate,
         i18n
-        ) {
+) {
     var _DynamicSublayer = declare([WidgetBase, TemplatedMixin], {
         control: null,
         sublayerInfo: null,
+        parentLayerId: null,
         menu: null,
         icons: null,
         // ^args
@@ -43,6 +44,7 @@ define([
         i18n: i18n,
         _expandClickHandler: null,
         _handlers: [],
+
         postCreate: function () {
             this.inherited(arguments);
             // Should the control be visible or hidden (depends on subLayerInfos)?
@@ -61,11 +63,11 @@ define([
             var checkNode = this.checkNode;
             domAttr.set(checkNode, 'data-sublayer-id', this.sublayerInfo.id);
             domClass.add(checkNode, this.control.layer.id + '-layerControlSublayerCheck');
-            if (array.indexOf(this.control.layer.visibleLayers, this.sublayerInfo.id) !== -1) {
-                this._setSublayerCheckbox(true, checkNode);
-            } else {
-                this._setSublayerCheckbox(false, checkNode);
-            }
+
+            this.parentLayerId = this.sublayerInfo.parentLayerId;
+            var layerViz = (array.indexOf(this.control.layer.visibleLayers, this.sublayerInfo.id) !== -1);
+            this._setSublayerCheckbox(layerViz, checkNode);
+
             this._handlers.push(on(checkNode, 'click', lang.hitch(this, function (event) {
 
                 // prevent click event from bubbling
@@ -87,6 +89,7 @@ define([
                 this._checkboxScaleRange();
                 this._handlers.push(this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange')));
             }
+
             //set up menu
             if (this.control.controlOptions.subLayerMenu &&
                     this.control.controlOptions.subLayerMenu.length) {
@@ -101,6 +104,7 @@ define([
                 domClass.add(this.menuClickNode, 'hidden');
             }
         },
+
         _addMenuItem: function (menuItem) {
             //create the menu item
             var item = new MenuItem(menuItem);
@@ -115,6 +119,7 @@ define([
             this.menu.addChild(item);
         },
         // add on event to expandClickNode
+
         _expandClick: function () {
             var i = this.icons;
             this._expandClickHandler = on(this.expandClickNode, 'click', lang.hitch(this, function () {
@@ -136,6 +141,7 @@ define([
             }));
             this._handlers.push(this._expandClickHandler);
         },
+
         // set checkbox based on layer so it's always in sync
         _setSublayerCheckbox: function (checked, checkNode) {
             checkNode = checkNode || this.checkNode;
@@ -148,6 +154,7 @@ define([
                 domClass.replace(checkNode, i.unchecked, i.checked);
             }
         },
+
         // check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function () {
             var node = this.checkNode,
@@ -159,6 +166,11 @@ define([
                 domClass.add(node, 'layerControlCheckIconOutScale');
             }
         },
+
+        _isVisible: function () {
+            return (domAttr.get(this.checkNode, 'data-checked') === 'checked');
+        },
+
         destroy: function () {
             this.inherited(arguments);
             this._handlers.forEach(function (h) {

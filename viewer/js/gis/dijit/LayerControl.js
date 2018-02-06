@@ -40,8 +40,8 @@ define([
             indeterminate: 'fa-minus fa-fw fa-border layerControlIcon-Indeterminate',
             update: 'fa-refresh layerControlIcon-Update',
             menu: 'fa-bars layerControlIcon-Menu',
-            folder: 'fa-folder-o fa-fw layerControlIcon-Folder',
-            folderOpen: 'fa-folder-open-o fa-fw layerControlIcon-Folder layerControlIcon-FolderOpen'
+            folder: 'fa-folder fa-fw layerControlIcon-Folder',
+            folderOpen: 'fa-folder-open fa-fw layerControlIcon-Folder layerControlIcon-FolderOpen'
         },
         separated: false,
         overlayReorder: false,
@@ -203,6 +203,10 @@ define([
                     }
                 }
 
+                // re-initialize the groupedLayerInfos once
+                // the grouped layers have been added.
+                this._groupedLayerInfos = {};
+
                 this._checkReorder();
             }));
         },
@@ -259,7 +263,7 @@ define([
                     noTransparency: null,
                     swipe: null,
                     expanded: false,
-                    sublayers: true,
+                    sublayers: true, // used by dynamic layers only
                     layerGroup: null,
                     menu: this.menu[layerInfo.type],
                     subLayerMenu: this.subLayerMenu[layerInfo.type]

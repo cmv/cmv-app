@@ -380,17 +380,18 @@ define([
                             layerIds = [ref.layerId];
                         }
                     } else if (ref.layerInfos) {
-                        layerIds = this.getLayerInfos(ref, selectedIds);
+                        layerIds = this.getLayerInfos(layer, selectedIds);
                     }
                 }
             }
             return layerIds;
         },
 
-        getLayerInfos: function (ref, selectedIds) {
-            var layerIds = [];
+        getLayerInfos: function (layer, selectedIds) {
+            var layerIds = [],
+                ref = layer.ref;
             array.forEach(ref.layerInfos, lang.hitch(this, function (layerInfo) {
-                if (!this.includeSubLayer(layerInfo, ref, selectedIds)) {
+                if (!this.includeSubLayer(layerInfo, layer, selectedIds)) {
                     return;
                 }
                 layerIds.push(layerInfo.id);
@@ -629,7 +630,7 @@ define([
                         }
                     } else { // dynamic layer
                         array.forEach(ref.layerInfos, lang.hitch(this, function (layerInfo) {
-                            if (!this.includeSubLayer(layerInfo, ref, selectedIds)) {
+                            if (!this.includeSubLayer(layerInfo, layer, selectedIds)) {
                                 return;
                             }
                             identifyItems.push({
@@ -666,13 +667,14 @@ define([
             this.identifyLayerDijit.set('value', id);
         },
 
-        includeSubLayer: function (layerInfo, ref, selectedIds) {
+        includeSubLayer: function (layerInfo, layer, selectedIds) {
             // exclude group layers
             if (layerInfo.subLayerIds !== null) {
                 return false;
             }
 
-            if (this.isDefaultLayerVisibility(ref) && !this.checkVisibilityRecursive(ref, layerInfo.id)) {
+            var ref = layer.ref;
+            if (this.isDefaultLayerVisibility(ref) && !this.checkVisibilityRecursive(layer, layerInfo.id)) {
                 return false;
             } else if (array.indexOf(ref.visibleLayers, layerInfo.id) < 0) {
                 return false;
@@ -707,18 +709,18 @@ define([
          * this only needs to be done if the layers visibleLayers array is
          * set to the default visibleLayers. After setVisibleLayers
          * is called the first time group layers are NOT included.
-         * @param  {esri/layers/DynamicMapServiceLayer} layer The layer reference
+         * @param  {object} layer layerInfo reference
          * @param  {Integer} id   The sublayer id to check for visibility
          * @return {Boolean}      Whether or not the sublayer is visible based on its parent(s) visibility
          */
         checkVisibilityRecursive: function (layer, id) {
-            var layerInfos = array.filter(layer.layerInfos, function (layerInfo) {
+            var ref = layer.ref;
+            var layerInfos = array.filter(ref.layerInfos, function (layerInfo) {
                 return (layerInfo.id === id);
             });
             if (layerInfos.length > 0) {
                 var info = layerInfos[0];
-                if (layer.visibleLayers.indexOf(id) !== -1 &&
-                    (info.parentLayerId === -1 || this.checkVisibilityRecursive(layer, info.parentLayerId))) {
+                if ((ref.visibleLayers.indexOf(id) !== -1) && (layer.layerInfo.ignoreDynamicGroupVisibility || info.parentLayerId === -1 || this.checkVisibilityRecursive(layer, info.parentLayerId))) {
                     return true;
                 }
             }

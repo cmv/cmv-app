@@ -88,14 +88,14 @@
     color: #666;
 }
 
+.layerControlDijit .layerControlTableExpand .layerControlIcon-Folder {
+    color: #F4D57A;
+}
+
 .layerControlDijit .layerControlTableCheck .fa-border {
     border-color: #333;
     border-radius: 3px;
     padding: 0.15em 0.1875em 0.1125em;
-}
-
-.layerControlDijit .layerControlTableCheck .layerControlIcon-Folder {
-    color: #333;
 }
 
 .layerControlDijit .layerControlTableCheck .layerControlIcon-Checked {
