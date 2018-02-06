@@ -43,7 +43,7 @@ define([
         _expandClickHandler: null, // the click handler for the expandNode
         constructor: function (params) {
             if (params.controller) {
-                this.icons = params.controller.icons;
+                this.icons = lang.clone(params.controller.icons);
             } // if not you've got bigger problems
             this._handlers = [];
         },

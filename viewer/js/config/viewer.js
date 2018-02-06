@@ -159,6 +159,9 @@ define([
         ],
         */
 
+        // ignore the visibility of group layers in dynamic layers? default = true
+        //ignoreDynamicGroupVisibility: false,
+
         // operationalLayers: Array of Layers to load on top of the basemap: valid 'type' options: 'dynamic', 'tiled', 'feature'.
         // The 'options' object is passed as the layers options for constructor. Title will be used in the legend only. id's must be unique and have no spaces.
         // 3 'mode' options: MODE_SNAPSHOT = 0, MODE_ONDEMAND = 1, MODE_SELECTION = 2
@@ -223,7 +226,9 @@ define([
                 opacity: 1.0,
                 visible: true,
                 imageParameters: buildImageParameters({
-                    layerIds: [0, 2, 4, 5, 8, 10, 12, 21],
+                    // include only sub layer ids.
+                    // group layers omitted
+                    layerIds: [2, 4, 5, 8, 12, 21],
                     layerOption: 'show'
                 })
             },
@@ -231,6 +236,7 @@ define([
                 layerIds: [2, 4, 5, 8, 12, 21]
             },
             layerControlLayerInfos: {
+                // group layers included to maintain folder hierarchy, not visibility.
                 layerIds: [0, 2, 4, 5, 8, 9, 10, 12, 21]
             },
             legendLayerInfos: {

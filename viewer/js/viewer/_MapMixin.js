@@ -29,6 +29,8 @@ define([
         },
 
         startup: function () {
+            // ignore visibility of group layers in dynamic layers?
+            this.ignoreDynamicGroupVisibility = (this.config.ignoreDynamicGroupVisibility === false) ? false : true;
             this.inherited(arguments);
             this.layoutDeferred.then(lang.hitch(this, 'initMapAsync'));
         },
@@ -149,7 +151,7 @@ define([
         },
 
         _initLayer: function (layer, Layer) {
-            var l;
+            var l = null;
             if (layer.url) {
                 l = new Layer(layer.url, layer.options);
             } else {
@@ -175,11 +177,14 @@ define([
             }
 
             //LayerControl LayerInfos array
+            var layerControlOptions = lang.mixin({
+                ignoreDynamicGroupVisibility: this.ignoreDynamicGroupVisibility
+            }, layer.layerControlLayerInfos);
             this.layerControlLayerInfos.unshift({ //unshift instead of push to keep layer ordering in LayerControl intact
                 layer: l,
                 type: layer.type,
                 title: layer.title,
-                controlOptions: layer.layerControlLayerInfos
+                controlOptions: layerControlOptions
             });
 
             if (layer.type === 'feature') {
@@ -194,10 +199,15 @@ define([
                 }
             }
 
+            if (layer.type === 'dynamic' && this.ignoreDynamicGroupVisibility) {
+                on(l, 'load', lang.hitch(this, 'removeGroupLayers'));
+            }
+
             if (layer.type === 'dynamic' || layer.type === 'feature') {
                 var idOptions = {
                     layer: l,
-                    title: layer.title
+                    title: layer.title,
+                    ignoreDynamicGroupVisibility: this.ignoreDynamicGroupVisibility
                 };
                 if (layer.identifyLayerInfos) {
                     lang.mixin(idOptions, layer.identifyLayerInfos);
@@ -207,6 +217,26 @@ define([
                 }
             }
         },
+
+        removeGroupLayers: function (res) {
+            var visibleLayers = [], groupRemoved = false, layer = res.layer,
+                originalVisibleLayers = layer.visibleLayers || layer._defaultVisibleLayers;
+            array.forEach(originalVisibleLayers, function (subLayerId) {
+                var subLayerInfo = array.filter(layer.layerInfos, function (sli) {
+                    return sli.id === subLayerId;
+                })[0];
+                if (subLayerInfo && subLayerInfo.subLayerIds === null) {
+                    visibleLayers.push(subLayerId);
+                } else {
+                    groupRemoved = true;
+                }
+            });
+
+            if (visibleLayers.length > 0 && groupRemoved) {
+                layer.setVisibleLayers(visibleLayers);
+            }
+        },
+
         initMapComplete: function (warnings) {
             if (warnings && warnings.length > 0) {
                 this.handleError({

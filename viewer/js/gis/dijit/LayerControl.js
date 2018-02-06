@@ -203,6 +203,10 @@ define([
                     }
                 }
 
+                // re-initialize the groupedLayerInfos once
+                // the grouped layers have been added.
+                this._groupedLayerInfos = {};
+
                 this._checkReorder();
             }));
         },
@@ -259,7 +263,7 @@ define([
                     noTransparency: null,
                     swipe: null,
                     expanded: false,
-                    sublayers: true,
+                    sublayers: true, // used by dynamic layers only
                     layerGroup: null,
                     menu: this.menu[layerInfo.type],
                     subLayerMenu: this.subLayerMenu[layerInfo.type]

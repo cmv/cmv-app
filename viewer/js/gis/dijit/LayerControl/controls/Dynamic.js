@@ -43,11 +43,13 @@ define([
     var DynamicControl = declare([_WidgetBase, _TemplatedMixin, _Contained, _Control], {
         _layerType: 'overlay', // constant
         _esriLayerType: 'dynamic', // constant
-        //_sublayerControls: [], // sublayer/folder controls
+        _sublayerControls: [], // sublayer controls
+        _folderControls: [], // folder controls
         _hasSublayers: false, // true when sublayers created
         _visLayersHandler: null,
         constructor: function () {
             this._sublayerControls = [];
+            this._folderControls = [];
         },
         _layerTypePreInit: function () {
             if (this.layer.layerInfos.length > 1 && this.controlOptions.sublayers) {
@@ -61,15 +63,15 @@ define([
             var isLegend = legendUtil.isLegend(this.controlOptions.noLegend, this.controller.noLegend);
             if (isLegend && this.controlOptions.sublayers === true) {
                 this._expandClick();
-                this._createSublayers(this.layer);
-                aspect.after(this, '_createSublayers', lang.hitch(this, legendUtil.dynamicSublayerLegend(this.layer, this.expandNode)));
+                this._createControls(this.layer);
+                aspect.after(this, '_createControls', lang.hitch(this, legendUtil.dynamicSublayerLegend(this.layer, this.expandNode)));
             } else if (this.controlOptions.sublayers === false && isLegend) {
                 this._expandClick();
                 legendUtil.layerLegend(this.layer, this.expandNode);
             } else if (this.controlOptions.sublayers === true && !isLegend) {
                 this._expandClick();
-                aspect.after(this, '_createSublayers', lang.hitch(this, '_removeSublayerLegends'));
-                this._createSublayers(this.layer);
+                aspect.after(this, '_createControls', lang.hitch(this, '_removeSublayerLegends'));
+                this._createControls(this.layer);
             } else {
                 this._expandRemove();
             }
@@ -105,67 +107,98 @@ define([
             this._setVisibleLayers();
         },
         // add folder/sublayer controls per layer.layerInfos
-        _createSublayers: function (layer) {
+        _createControls: function (layer) {
             // check for single sublayer - if so no sublayer/folder controls
             if (layer.layerInfos.length > 1) {
                 var allLayers = array.map(layer.layerInfos, function (l) {
                     return l.id;
                 });
-                array.forEach(layer.layerInfos, lang.hitch(this, function (info) {
-                    // see if there was any override needed from the subLayerInfos array in the controlOptions
-                    var sublayerInfo = array.filter(this.controlOptions.subLayerInfos, function (sli) {
-                        return sli.id === info.id;
-                    }).shift();
-                    lang.mixin(info, sublayerInfo);
-                    var pid = info.parentLayerId,
-                        slids = info.subLayerIds,
-                        controlId = layer.id + '-' + info.id + '-sublayer-control',
-                        control;
-                    // it's a top level
-                    if (pid === -1 || allLayers.indexOf(pid) === -1) {
-                        if (slids === null) {
-                            // it's a top level sublayer
-                            control = new DynamicSublayer({
-                                id: controlId,
-                                control: this,
-                                sublayerInfo: info,
-                                icons: this.icons
-                            });
-                            domConst.place(control.domNode, this.expandNode, 'last');
-                        } else if (slids !== null) {
-                            // it's a top level folder
-                            control = new DynamicFolder({
-                                id: controlId,
-                                control: this,
-                                sublayerInfo: info,
-                                icons: this.icons
-                            });
-                            domConst.place(control.domNode, this.expandNode, 'last');
-                        }
-                    } else if (pid !== -1 && slids !== null) {
-                        // it's a nested folder
-                        control = new DynamicFolder({
-                            id: controlId,
-                            control: this,
-                            sublayerInfo: info,
-                            icons: this.icons
-                        });
-                        domConst.place(control.domNode, registry.byId(layer.id + '-' + info.parentLayerId + '-sublayer-control').expandNode, 'last');
-                    } else if (pid !== -1 && slids === null) {
-                        // it's a nested sublayer
-                        control = new DynamicSublayer({
-                            id: controlId,
-                            control: this,
-                            sublayerInfo: info,
-                            icons: this.icons
-                        });
-                        domConst.place(control.domNode, registry.byId(layer.id + '-' + info.parentLayerId + '-sublayer-control').expandNode, 'last');
-                    }
-                    control.startup();
-                    this._sublayerControls.push(control);
-                }));
+                array.forEach(layer.layerInfos, lang.hitch(this, '_createControl', layer, allLayers));
+                if (this.controlOptions.ignoreDynamicGroupVisibility) {
+                    array.forEach(this._folderControls, function (control) {
+                        control._checkFolderVisibility();
+                    });
+                }
             }
         },
+
+        _createControl: function (layer, allLayers, info) {
+            // see if there was any override needed from the subLayerInfos array in the controlOptions
+            var sublayerInfo = array.filter(this.controlOptions.subLayerInfos, function (sli) {
+                return sli.id === info.id;
+            }).shift();
+            lang.mixin(info, sublayerInfo);
+            var pid = info.parentLayerId,
+                slids = info.subLayerIds;
+
+            // it is top level
+            if (pid === -1 || allLayers.indexOf(pid) === -1) {
+                if (slids === null) {
+                    // it's a top level sublayer
+                    this._createDynamicSubLayer(info, layer);
+                } else if (slids !== null) {
+                    // it's a top level folder
+                    this._createDynamicFolder(info, layer);
+                }
+            // it is nested within a folder
+            } else if (pid !== -1 && slids !== null) {
+                // it's a nested folder
+                this._createDynamicFolder(info, layer);
+            } else if (pid !== -1 && slids === null) {
+                // it's a nested sublayer
+                this._createDynamicSubLayer(info, layer);
+            }
+        },
+
+        _createDynamicSubLayer: function (info, layer) {
+            var controlId = layer.id + '-' + info.id + '-sublayer-control',
+                pid = info.parentLayerId,
+                parent = null,
+                control = new DynamicSublayer({
+                    id: controlId,
+                    control: this,
+                    sublayerInfo: info,
+                    icons: this.icons
+                });
+
+            if (pid === -1) {
+                parent = this.expandNode;
+            } else {
+                parent = registry.byId(layer.id + '-' + pid + '-sublayer-control').expandNode;
+            }
+
+            if (parent) {
+                domConst.place(control.domNode, parent, 'last');
+                control.startup();
+                this._sublayerControls.push(control);
+            }
+
+        },
+
+        _createDynamicFolder: function (info, layer) {
+            var controlId = layer.id + '-' + info.id + '-sublayer-control',
+                pid = info.parentLayerId,
+                parent = null,
+                control = new DynamicFolder({
+                    id: controlId,
+                    control: this,
+                    sublayerInfo: info,
+                    icons: this.icons
+                });
+
+            if (pid === -1) {
+                parent = this.expandNode;
+            } else {
+                parent = registry.byId(layer.id + '-' + pid + '-sublayer-control').expandNode;
+            }
+
+            if (parent) {
+                domConst.place(control.domNode, parent, 'last');
+                control.startup();
+                this._folderControls.push(control);
+            }
+        },
+
         // simply remove expandClickNode
         _removeSublayerLegends: function () {
             array.forEach(this._sublayerControls, function (control) {
@@ -178,56 +211,100 @@ define([
         _setVisibleLayers: function () {
             // remove aspect handler
             this._visLayersHandler.remove();
-            // because ags doesn't respect a layer group's visibility
-            //   i.e. layer 3 (the group) is not in array but it's sublayers are; sublayers will show
-            //   so check and if group is off also remove the sublayers
             var layer = this.layer,
-                setLayers = [];
-            array.forEach(query('.' + layer.id + '-layerControlSublayerCheck'), function (i) {
-                if (domAttr.get(i, 'data-checked') === 'checked') {
-                    setLayers.push(parseInt(domAttr.get(i, 'data-sublayer-id'), 10));
+                visibleLayers = [],
+                allVisibleLayers = [],
+                ignoreDynamicGroupVisibility = this.controlOptions.ignoreDynamicGroupVisibility;
+
+            // get visibility of sub layers not in folders
+            array.forEach(this._sublayerControls, function (subLayer) {
+                if (subLayer._isVisible() && subLayer.parentLayerId === -1) {
+                    visibleLayers.push(subLayer.sublayerInfo.id);
+                    allVisibleLayers.push(subLayer.sublayerInfo.id);
                 }
             });
-            array.forEach(layer.layerInfos, function (info) {
-                if (info.subLayerIds !== null && array.indexOf(setLayers, info.id) === -1) {
-                    array.forEach(info.subLayerIds, function (sub) {
-                        if (array.indexOf(setLayers, sub) !== -1) {
-                            setLayers.splice(array.indexOf(setLayers, sub), 1);
+
+            // get visibility of folders
+            array.forEach(this._folderControls, lang.hitch(this, function (folder) {
+                if (folder._isVisible() || (ignoreDynamicGroupVisibility && folder._hasAnyVisibleLayer())) {
+                    allVisibleLayers.push(folder.sublayerInfo.id);
+                }
+            }));
+
+            // get visibility of sub layers that are contained within a folder
+            array.forEach(this._folderControls, lang.hitch(this, function (folder) {
+                var subLayers = folder._getSubLayerControls();
+                array.forEach(subLayers, lang.hitch(this, function (subLayer) {
+                    if (subLayer._isVisible()) {
+                        allVisibleLayers.push(subLayer.sublayerInfo.id);
+                        if (ignoreDynamicGroupVisibility) {
+                            visibleLayers.push(subLayer.sublayerInfo.id);
+                            return;
                         }
-                    });
-                } else if (info.subLayerIds !== null && array.indexOf(setLayers, info.id) !== -1) {
-                    setLayers.splice(array.indexOf(setLayers, info.id), 1);
-                }
-            });
-            if (!setLayers.length) {
-                setLayers.push(-1);
+                    }
+                    var currentLayer = subLayer;
+                    var oldLayer = null;
+                    function checkParent (f) {
+                        if (f.sublayerInfo.id === currentLayer.sublayerInfo.parentLayerId) {
+                            currentLayer = f;
+                        }
+                    }
+                    while (currentLayer._isVisible() && currentLayer.sublayerInfo.parentLayerId !== -1 && oldLayer !== currentLayer) {
+                        oldLayer = currentLayer;
+                        array.forEach(this._folderControls, checkParent);
+                    }
+                    if (currentLayer._isVisible()) {
+                        visibleLayers.push(subLayer.sublayerInfo.id);
+                    }
+                }));
+            }));
+
+            if (!visibleLayers.length) {
+                visibleLayers.push(-1);
             }
-            layer.setVisibleLayers(setLayers);
+            if (ignoreDynamicGroupVisibility) {
+                array.forEach(this._folderControls, function (control) {
+                    control._checkFolderVisibility();
+                });
+            }
+
+            layer.setVisibleLayers(visibleLayers);
             layer.refresh();
+
             topic.publish('layerControl/setVisibleLayers', {
                 id: layer.id,
-                visibleLayers: setLayers
+                visibleLayers: visibleLayers
             });
+
+            topic.publish('layerControl/setAllVisibleLayers', {
+                id: layer.id,
+                allVisibleLayers: allVisibleLayers
+            });
+
             // set aspect handler
             this._visLayersHandler = aspect.after(this.layer, 'setVisibleLayers', lang.hitch(this, '_onSetVisibleLayers'), true);
         },
-        _onSetVisibleLayers: function (visLayers) {
-            var visibleIds = [];
-            array.forEach(this.layer.layerInfos, function (info) {
-                if (array.indexOf(visLayers, info.id) !== -1) {
-                    visibleIds.push(info.id);
-                }
-                if (info.parentLayerId !== -1 && array.indexOf(visibleIds, info.parentLayerId) === -1) {
-                    visibleIds.push(info.parentLayerId);
-                }
-            });
+        _onSetVisibleLayers: function (visLayers, noPublish) {
+            // set the sub layer visibility first
             array.forEach(this._sublayerControls, function (control) {
-                if (array.indexOf(visibleIds, control.sublayerInfo.id) !== -1) {
-                    control._setSublayerCheckbox(true);
-                } else {
-                    control._setSublayerCheckbox(false);
-                }
+                var viz = (array.indexOf(visLayers, control.sublayerInfo.id) !== -1);
+                control._setSublayerCheckbox(viz, null, noPublish);
             });
+
+            // setting the folder (group layer) visibility will change
+            // visibility for all children sub layer and folders
+            array.forEach(this._folderControls, function (control) {
+                var viz = (array.indexOf(visLayers, control.sublayerInfo.id) !== -1);
+                control._setFolderCheckbox(viz, null, noPublish);
+            });
+
+            if (this.controlOptions.ignoreDynamicGroupVisibility) {
+                // finally, set the folder UI (state of checkbox) based on
+                // the sub layers and folders within the parent folder
+                array.forEach(this._folderControls, function (control) {
+                    control._checkFolderVisibility();
+                });
+            }
         }
     });
     return DynamicControl;
