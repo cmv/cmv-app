@@ -55,8 +55,23 @@ body {
 .flat .dijitIcon.fa,
 .flat .dijitButton .dijitButtonNode .dijitIcon.fa,
 .flat .dijitDropDownButton .dijitButtonNode .dijitIcon.fa,
-.flat .dijitComboButton .dijitButtonNode .dijitIcon.fa {
-    font-family: FontAwesome;
+.flat .dijitComboButton .dijitButtonNode .dijitIcon.fa,
+.flat .dijitEditorIcon.fas,
+.flat .dijitIcon.fas,
+.flat .dijitButton .dijitButtonNode .dijitIcon.fas,
+.flat .dijitDropDownButton .dijitButtonNode .dijitIcon.fas,
+.flat .dijitComboButton .dijitButtonNode .dijitIcon.fas {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.flat .dijitEditorIcon.far,
+.flat .dijitIcon.far,
+.flat .dijitButton .dijitButtonNode .dijitIcon.far,
+.flat .dijitDropDownButton .dijitButtonNode .dijitIcon.far,
+.flat .dijitComboButton .dijitButtonNode .dijitIcon.far {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 400;
 }
 
 .flat .dijitButton .dijitButtonNode,
@@ -314,7 +329,8 @@ body {
     background-color: white;
     color: #666666;
     cursor: pointer;
-    font-family: FontAwesome;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
     font-size: 1.3em;
     position: absolute;
     z-index: 40;
@@ -370,7 +386,8 @@ body {
 
 .cmv .sidebarCollapseButton .open:before,
 .cmv .sidebarCollapseButton .close:before {
-    font-family: FontAwesome;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
 }
 
 .cmv .sidebarCollapseButtonHorz .button {
@@ -609,11 +626,12 @@ body {
     border: 1px solid #666;
     border-radius: 4px;
     color: #666;
-    font-family: FontAwesome;
-    font-size: 20px;
-    height: 27px;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 400;
+    font-size: 18px;
+    height: 26px;
     overflow: hidden;
-    padding: 6px 0 0 0;
+    padding: 7px 0 0 0;
     text-align: center;
     width: 30px;
 }
@@ -628,6 +646,7 @@ body {
 
 .cmv .cmv-ui .HomeButton .home:before {
     content: '\f015';
+    font-weight: 900;
 }
 
 .cmv .cmv-ui .LocateButton .zoomLocateButton:before {
@@ -814,7 +833,8 @@ body {
 
 .cmv .simpleDirections .esriStopsGetDirections:before {
     content: '\f277';
-    font-family: 'FontAwesome';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
     margin-right: 8px;
 }
 
@@ -824,8 +844,8 @@ body {
 
 .cmv .simpleDirections .esriResultsPrint:before {
     content: '\f02f';
-    font-family: 'FontAwesome';
-    font-size: 14px;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
 }
 
 .cmv .simpleDirections .esriActivateButton {
@@ -834,7 +854,8 @@ body {
 
 .cmv .simpleDirections .esriActivateButton:before {
     content: '\f041';
-    font-family: 'FontAwesome';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
     font-size: 14px;
 }
 

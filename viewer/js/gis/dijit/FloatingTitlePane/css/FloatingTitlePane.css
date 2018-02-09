@@ -2,15 +2,18 @@
     margin: 0 0 0 8px;
     padding-top: 2px;
 }
-
-.dijitTitlePane .dijitTitlePaneTitle .floatingWidgetDock:before {
-    content: "\f112";
-    float: right;
-    font-family: FontAwesome;
-}
-
+.dijitTitlePane .dijitTitlePaneTitle .floatingWidgetDock:before,
 .dijitTitlePane .dijitTitlePaneTitle .floatingWidgetPopout:before {
     content: "\f064";
     float: right;
-    font-family: FontAwesome;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.dijitTitlePane .dijitTitlePaneTitle .floatingWidgetDock:before {
+    -moz-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
 }
