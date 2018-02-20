@@ -152,12 +152,19 @@ define([
 
         _initLayer: function (layer, Layer) {
             var l = null;
-            if (layer.url) {
-                l = new Layer(layer.url, layer.options);
-            } else {
-                l = new Layer(layer.options);
+            try {
+                if (layer.url) {
+                    l = new Layer(layer.url, layer.options);
+                } else {
+                    l = new Layer(layer.options);
+                }
+                this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
+            } catch (e) {                
+                this.handleError({
+                    source: '_MapMixin._initLayer',
+                    error: e
+                });
             }
-            this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
 
             //Legend LayerInfos array
             var excludeLayerFromLegend = false;
@@ -276,9 +283,9 @@ define([
         getMapHeight: function () {
             if (this.map) {
                 return this.map.height;
-            } else {
-                return 0;
-            }
+            } 
+            return 0;
+            
         }
     });
 });
