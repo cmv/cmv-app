@@ -159,8 +159,11 @@ define([
                     l = new Layer(layer.options);
                 }
                 this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
-            } catch (e) {
-                console.warn('_MapMixin::error creating layer ', layer, e.stack);
+            } catch (e) {                
+                this.handleError({
+                    source: '_MapMixin._initLayer',
+                    error: e
+                });
             }
 
             //Legend LayerInfos array
