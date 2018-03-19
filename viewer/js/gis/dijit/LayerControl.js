@@ -38,7 +38,7 @@ define([
             checked: 'fas fa-check fa-fw fa-border layerControlIcon-Checked',
             unchecked: 'fas fa-square fa-fw fa-border layerControlIcon-Unchecked',
             indeterminate: 'fas fa-minus fa-fw fa-border layerControlIcon-Indeterminate',
-            update: 'fas fa-refresh layerControlIcon-Update',
+            update: 'fas fa-spin fa-sync layerControlIcon-Update',
             menu: 'fas fa-bars layerControlIcon-Menu',
             folder: 'fas fa-folder fa-fw layerControlIcon-Folder',
             folderOpen: 'fas fa-folder-open fa-fw layerControlIcon-Folder layerControlIcon-FolderOpen'
@@ -222,12 +222,12 @@ define([
             var layerControlList = this._overlayContainer.getChildren().filter(function (c) {
                 return _filterList(c);
             }).concat(
-            this._vectorContainer.getChildren().filter(function (c) {
-                return _filterList(c);
-            })).concat(
-            this.getChildren().filter(function (c) {
-                return _filterList(c);
-            }));
+                this._vectorContainer.getChildren().filter(function (c) {
+                    return _filterList(c);
+                })).concat(
+                this.getChildren().filter(function (c) {
+                    return _filterList(c);
+                }));
             // follow the same logic as when the layers were added
             array.forEach(layerControlList, lang.hitch(this, function (layerControl) {
                 if (this.separated) {
@@ -325,7 +325,7 @@ define([
                         esriLayerInfos.push(li);
                     }
                 });
-			// Case 3: just override the values found in the subLayerInfos
+                // Case 3: just override the values found in the subLayerInfos
             } else if (controlOptions.subLayerInfos) {
                 // show ALL layers that are in the map service's layerInfos, but take care to override the properties of each subLayerInfo as configured
                 this._mixinLayerInfos(layer.layerInfos, controlOptions.subLayerInfos);
@@ -350,7 +350,7 @@ define([
         _mixinLayerInfos: function (esriLayerInfos, subLayerInfos) {
             // for each of the sublayers, go through the subLayerInfos from the controlOptions and see if defaultVisiblity is set to true or false
             // then set each of the layer.layerInfos defaultVisibility appropriately
-			// assume defaultVisibility is true if it's not defined
+            // assume defaultVisibility is true if it's not defined
             if (subLayerInfos && subLayerInfos.length !== 0) {
                 array.forEach(subLayerInfos, function (sli) {
                     if (typeof sli.defaultVisibility === 'undefined') {

@@ -110,18 +110,18 @@
     color: #666;
 }
 
-.layerControlDijit .layerControlUpdateIcon {
+.layerControlDijit .layerControlIcon-Update {
     color: #666;
     font-size: 12px;
 }
 
-.layerControlDijit .layerControlMenuIcon {
+.layerControlDijit .layerControlIcon-Menu {
     color: #666;
     font-size: 15px;
     margin-left: 4px;
 }
 
-.layerControlDijit .layerControlMenuIcon:hover {
+.layerControlDijit .layerControlIcon-Menu:hover {
     color: #111;
 }
 
