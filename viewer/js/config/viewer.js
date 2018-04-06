@@ -363,6 +363,15 @@ define([
                     expanded: has('phone') ? true : false
                 }
             },
+            reverseGeocoder: {
+                include: true,
+                type: 'invisible',
+                path: 'gis/dijit/ReverseGeocoder',
+                options: {
+                    map: true,
+                    mapRightClickMenu: true
+                }
+            },
             basemaps: {
                 include: true,
                 id: 'basemaps',
