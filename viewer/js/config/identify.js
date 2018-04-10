@@ -19,6 +19,8 @@ define([
         identifyLayerInfos: true,
         identifyTolerance: 5,
         draggable: false,
+        returnFieldName: false,
+        returnUnformattedValues: false,
 
         // config object definition:
         //  {<layer id>:{
@@ -52,46 +54,69 @@ define([
                     }]
                 }
             },
+            damageAssessment: {
+                0: {
+                    fieldInfos: [
+                        {
+                            fieldName: 'primcause',
+                            visible: true,
+                            label: 'Cause',
+                            formatter: function (value) {
+                                return (value.toLowerCase() !== 'null') ? value : 'Unknown';
+                            }
+                        },
+                        {
+                            fieldName: 'typdamage',
+                            visible: true,
+                            label: 'Extent'
+                        }
+                    ]
+                }
+            },
             louisvillePubSafety: {
                 2: {
                     title: i18n.identify.louisvillePubSafety.policeStation,
-                    fieldInfos: [{
-                      // example of adding a 'calculated' or formatted field
-                      // click on a louisville kentucky police station to see
-                      // the result
-                        fieldName: 'Directions',
-                        visible: true,
-                        formatter: directionsFormatter,
-                        useExpression: false
-                    }, {
-                        fieldName: 'Name',
-                        visible: true
-                    }, {
-                        fieldName: 'Address',
-                        visible: true
-                    }, {
-                        fieldName: 'Type',
-                        visible: true
-                    }, {
-                        fieldName: 'Police Function',
-                        visible: true
-                    }, {
-                        fieldName: 'Last Update Date',
-                        visible: true
-                    }]
+                    fieldInfos: [
+                        {
+                            // example of adding a 'calculated' or formatted field
+                            // click on a louisville kentucky police station to see
+                            // the result
+                            fieldName: 'Directions',
+                            visible: true,
+                            formatter: directionsFormatter,
+                            useExpression: false
+                        }, {
+                            fieldName: 'Name',
+                            visible: true
+                        }, {
+                            fieldName: 'Address',
+                            visible: true
+                        }, {
+                            fieldName: 'Type',
+                            visible: true
+                        }, {
+                            fieldName: 'Police Function',
+                            visible: true
+                        }, {
+                            fieldName: 'Last Update Date',
+                            visible: true
+                        }
+                    ]
                 },
                 8: {
                     title: i18n.identify.louisvillePubSafety.trafficCamera,
                     description: '{Description} lasted updated: {Last Update Date}',
-                    mediaInfos: [{
-                        title: '',
-                        caption: '',
-                        type: 'image',
-                        value: {
-                            sourceURL: '{Location URL}',
-                            linkURL: '{Location URL}'
+                    mediaInfos: [
+                        {
+                            title: '',
+                            caption: '',
+                            type: 'image',
+                            value: {
+                                sourceURL: '{Location URL}',
+                                linkURL: '{Location URL}'
+                            }
                         }
-                    }]
+                    ]
                 }
             }
         }
