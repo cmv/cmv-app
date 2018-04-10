@@ -42,6 +42,8 @@ define([
         createDefaultInfoTemplates: true,
         showPopup: true,
         draggable: false,
+        returnFieldName: false,
+        returnUnformattedValues: false,
         layerSeparator: '||',
         allLayersId: '***',
         excludedFields: [
@@ -285,6 +287,8 @@ define([
                     var params = lang.clone(identifyParams);
                     params.layerDefinitions = lyr.ref.layerDefinitions;
                     params.layerIds = layerIds;
+                    params.returnFieldName = (typeof lyr.layerInfo.returnFieldName !== 'undefined') ? lyr.layerInfo.returnFieldName : this.returnFieldName;
+                    params.returnUnformattedValues = (typeof lyr.layerInfo.returnUnformattedValues !== 'undefined') ? lyr.layerInfo.returnUnformattedValues : this.returnUnformattedValues;
                     if (lyr.ref.timeInfo && lyr.ref.timeInfo.timeExtent && this.map.timeExtent) {
                         params.timeExtent = new TimeExtent(this.map.timeExtent.startTime, this.map.timeExtent.endTime);
                     }

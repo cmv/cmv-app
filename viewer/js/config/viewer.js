@@ -254,6 +254,9 @@ define([
                 visible: true,
                 imageParameters: buildImageParameters()
             },
+            identifyLayerInfos: {
+                returnFieldName: true
+            },
             legendLayerInfos: {
                 exclude: true
             },
@@ -361,6 +364,15 @@ define([
                     enableInfoWindow: false,
                     enableButtonMode: has('phone') ? false : true,
                     expanded: has('phone') ? true : false
+                }
+            },
+            reverseGeocoder: {
+                include: true,
+                type: 'invisible',
+                path: 'gis/dijit/ReverseGeocoder',
+                options: {
+                    map: true,
+                    mapRightClickMenu: true
                 }
             },
             basemaps: {

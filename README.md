@@ -21,7 +21,6 @@ This JavaScript web app can be easily configured or used as a boilerplate/starti
 - Draw
 - Editor
 - Find
-- Geocoder
 - Growler
 - Help
 - Home
@@ -34,6 +33,7 @@ This JavaScript web app can be easily configured or used as a boilerplate/starti
 - Measure
 - Overview Map
 - Print
+- Reverse Geocoder
 - Scalebar
 - StreetView
 - Map Right click menu with various widget functions.

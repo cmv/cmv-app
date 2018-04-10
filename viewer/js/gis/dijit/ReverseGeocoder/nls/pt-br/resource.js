@@ -1,5 +1,4 @@
 define ({
-    title: 'Alternar barra de Pesquisa',
     labels: {
         address: 'Endereço',
         neighborhood: 'Bairro',
