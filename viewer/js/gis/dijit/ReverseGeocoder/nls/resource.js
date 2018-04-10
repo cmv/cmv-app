@@ -1,6 +1,5 @@
 define ({
     root: {
-        title: 'Toggle search bar',
         labels: {
             address: 'Address',
             neighborhood: 'Neighborhood',
