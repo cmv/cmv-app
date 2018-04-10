@@ -254,6 +254,9 @@ define([
                 visible: true,
                 imageParameters: buildImageParameters()
             },
+            identifyLayerInfos: {
+                returnFieldName: true
+            },
             legendLayerInfos: {
                 exclude: true
             },
