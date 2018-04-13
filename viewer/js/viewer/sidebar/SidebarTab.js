@@ -37,14 +37,14 @@ define([
             this.inherited(arguments);
 
             //create and place dom element for the tab button
-            this.buttonNode = put(this.tabsButtonNode, 'li a[role=tab] i.fa.' + this.iconClass + '<<');
+            this.buttonNode = put(this.tabsButtonNode, 'li a[role=tab] i.' + this.iconClass.replace(/ /g, '.') + '<<');
 
             //create and place dom elements for the tab pane
             this.contentNode = put(this.tabsContainerNode, 'div.' + this.baseClass + '-pane');
             this.titleNode = put(this.contentNode, 'div.' + this.baseClass + '-pane-title $', this.title);
             this.containerNode = put(this.contentNode, 'div.sidebar-widget div.sidebar-widget-content');
             if (this.showCloseIcon) {
-                this.closeBtnNode = put(this.titleNode, 'i.fa.fa-chevron-left.' + this.baseClass + '-closeIcon');
+                this.closeBtnNode = put(this.titleNode, 'i.fas.fa-chevron-left.' + this.baseClass + '-closeIcon');
                 // listen for the tab close button click
                 on(this.closeBtnNode, 'click', lang.hitch(this, 'tabClickHandler'));
             }
