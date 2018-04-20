@@ -176,6 +176,9 @@
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
         left: calc(70% + 15px);
     }
+    .cmv .map .cmv-ui-inset .cmv-ui-top-center {
+        left: calc(70% + 60px);
+    }
     .cmv .map .scalebar_bottom-left {
         left: calc(70% + 25px) !important;
     }
@@ -195,6 +198,9 @@
     .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
         left: calc(40% + 15px);
+    }
+    .cmv .map .cmv-ui-inset .cmv-ui-top-center {
+        left: calc(40% + 60px);
     }
     .cmv .map .scalebar_bottom-left {
         left: calc(40% + 25px) !important;
@@ -218,6 +224,9 @@
     .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
         left: calc(30% + 15px);
+    }
+    .cmv .map .cmv-ui-inset .cmv-ui-top-center {
+        left: calc(30% + 60px);
     }
     .cmv .map .scalebar_bottom-left {
         left: calc(30% + 25px) !important;
