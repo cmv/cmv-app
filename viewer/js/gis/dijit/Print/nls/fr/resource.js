@@ -32,7 +32,7 @@ define ({
     },
     printResults: {
         progressBar: {
-            label: 'Création de l\\'impression'
+            label: 'Création de l\\\'impression'
         },
         errorMessage: 'Erreur, réessayez'
     }
