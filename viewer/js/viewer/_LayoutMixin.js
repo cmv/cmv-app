@@ -143,7 +143,7 @@ define([
         },
         // setup all the sidebar panes
         initPanes: function () {
-            var key,
+            var key = null,
                 panes = this.config.panes || {};
             this.defaultPanes = lang.clone(this.panes);
             for (key in this.panes) {
@@ -159,7 +159,7 @@ define([
                 gutters: false
             }).placeAt(container);
 
-            var options, placeAt, type;
+            var options = null, placeAt = null, type = null;
             for (key in panes) {
                 if (panes.hasOwnProperty(key)) {
                     options = lang.clone(panes[key]);
@@ -182,7 +182,7 @@ define([
         },
 
         createPanes: function () {
-            var key,
+            var key = null,
                 panes = this.config.panes || {};
             for (key in this.panes) {
                 if (this.defaultPanes.hasOwnProperty(key)) {
@@ -207,7 +207,7 @@ define([
                             }
                         }
                     }
-                    if (panes[key].open !== undefined) {
+                    if (typeof panes[key].open !== 'undefined') {
                         this.togglePane(key, panes[key].open, true);
                     }
                     if (key !== 'center' && this.panes[key]._splitterWidget) {
@@ -238,21 +238,21 @@ define([
             var domNode = this.panes[id].domNode;
             if (domNode) {
                 var oldDisp = domStyle.get(domNode, 'display');
-                var newDisp;
+                var newDisp = null;
 
-                if (typeof(show) === 'string' && (show === 'none' || show === 'block')) {
+                if (typeof show === 'string' && (show === 'none' || show === 'block')) {
                     // Set (CSS Display Property)
                     newDisp = show;
-                } else if (typeof(show) === 'boolean') {
+                } else if (typeof show === 'boolean') {
                     // Set (boolean)
                     newDisp = (show) ? 'block' : 'none';
-                } else if (show === undefined || show === null) {
+                } else if (typeof show === 'undefined' || show === null) {
                     // Toggle
                     newDisp = (oldDisp === 'none') ? 'block' : 'none';
                 } else {
                     this.handleError({
                         source: '_LayoutMixin',
-                        error: 'Invalid type passed as "show" property of "togglePane" function : ' + typeof(show)
+                        error: 'Invalid type passed as "show" property of "togglePane" function : ' + typeof show
                     });
                     return;
                 }

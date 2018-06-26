@@ -371,7 +371,7 @@ define([
         _moveUp: function (control) {
             var id = control.layer.id,
                 node = control.domNode,
-                index;
+                index = null;
             if (control._layerType === 'overlay') {
                 if (control.getPreviousSibling()) {
                     index = array.indexOf(this.map.layerIds, id);
@@ -392,7 +392,7 @@ define([
         _moveDown: function (control) {
             var id = control.layer.id,
                 node = control.domNode,
-                index;
+                index = null;
             if (control._layerType === 'overlay') {
                 if (control.getNextSibling()) {
                     index = array.indexOf(this.map.layerIds, id);

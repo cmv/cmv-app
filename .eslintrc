@@ -53,7 +53,6 @@
             "getWithoutSet": true
         }],
         "block-scoped-var": "error",
-        "complexity": "error",
         "consistent-return": "error",
         "curly": "error",
         "default-case": "error",
@@ -65,6 +64,7 @@
         "no-caller": "error",
         "no-compare-neg-zero": "error",
         "no-div-regex": "error",
+        "no-else-return": "error",
         "no-empty-pattern": "error",
         "no-eq-null": "error",
         "no-eval": "error",
@@ -97,6 +97,7 @@
         "no-unused-expressions": "error",
         "no-useless-call": "error",
         "no-useless-concat": "error",
+        "no-useless-escape": "error",
         "no-void": "error",
         "no-with": "error",
         "radix": "error",
@@ -105,8 +106,7 @@
 
         // best practices rules to keep an eye on and consider fixing
         "max-statements": ["warn", 15],
-        "no-else-return": "warn",
-        "no-useless-escape": "warn",
+        "complexity": ["warn", 20],
 
         // ignored best practices rules
         "no-invalid-this": "off",
