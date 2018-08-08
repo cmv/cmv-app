@@ -386,7 +386,7 @@ define([
                 this.zoomOptions.select = zoomOnSelect;
             },
             createGraphicsSymbols: function () {
-                var graphicSymbols = {}, resultSymbolDefinitions, selectionSymbolDefinitions;
+                var graphicSymbols = {}, resultSymbolDefinitions = null, selectionSymbolDefinitions = null;
                 resultSymbolDefinitions = lang.mixin(this.defaultResultsSymbols, this.resultsSymbols || {});
                 graphicSymbols.resultsSymbols = {};
                 graphicSymbols.resultsSymbols.point = symbolUtils.fromJson(resultSymbolDefinitions.point);
