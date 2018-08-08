@@ -16,22 +16,22 @@ define([
     'dojo/text!./templates/Sublayer.html',
     'dojo/i18n!./../nls/resource'
 ], function (
-        declare,
-        lang,
-        array,
-        on,
-        domClass,
-        domStyle,
-        domAttr,
-        fx,
-        html,
-        Menu,
-        MenuItem,
-        topic,
-        WidgetBase,
-        TemplatedMixin,
-        sublayerTemplate,
-        i18n
+    declare,
+    lang,
+    array,
+    on,
+    domClass,
+    domStyle,
+    domAttr,
+    fx,
+    html,
+    Menu,
+    MenuItem,
+    topic,
+    WidgetBase,
+    TemplatedMixin,
+    sublayerTemplate,
+    i18n
 ) {
     var _DynamicSublayer = declare([WidgetBase, TemplatedMixin], {
         control: null,

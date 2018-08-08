@@ -44,14 +44,11 @@ define([
             if (controller === null || controller === false) {
                 if (controlOptions === true) {
                     return false;
-                } else {
-                    return true;
                 }
+                return true;
             } else if (controller === true) {
                 if (controlOptions === false) {
                     return true;
-                } else {
-                    return false;
                 }
             }
             return false;
@@ -321,8 +318,8 @@ define([
                     param = [];
                 dlis.forEach(function (dli) {
                     if (!dli.subLayerIds) {
-                        var e, i = dli.id;
-                        e = {
+                        var i = dli.id;
+                        var e = {
                             id: i,
                             name: dli.name
                         };
