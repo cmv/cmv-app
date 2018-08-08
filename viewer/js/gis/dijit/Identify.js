@@ -414,7 +414,7 @@ define([
                     if (typeof feature.infoTemplate === 'undefined') {
                         var infoTemplate = this.getInfoTemplate(ref, null, result);
                         if (infoTemplate) {
-                            if (result.layerId && ref.layerInfos && infoTemplate.info.showAttachments) {
+                            if ((typeof result.layerId === 'number') && ref.layerInfos && infoTemplate.info.showAttachments) {
                                 result.feature._layer = this.getFeatureLayerForDynamicSublayer(ref, result.layerId);
                             }
                             var featureInfoTemplate = this.buildExpressionInfos(lang.clone(infoTemplate), feature);
