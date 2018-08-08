@@ -8,13 +8,13 @@ define ({
     mapScale: 'échelle de la carte',
     mapExtent: 'étendue de la carte',
     fullLayoutOptions: 'Options complètes de mise en page',
-    scaleBarUnits: 'Unités de la barre d\'échelle',
+    scaleBarUnits: 'Unités de la barre d\\\'échelle',
     miles: 'Miles',
     kilometers: 'Kilomètres',
     meters: 'Mètres',
     feet: 'Pieds',
     includeLegend: 'Inclure la légende',
-    printQualityOptions: 'Qualité d`impression',
+    printQualityOptions: 'Qualité d\\\'impression',
     dpiInput: {
         label: 'DPI',
         invalidMessage: 'S\\\'il vous plaît entrer une valeur numérique.',
@@ -28,7 +28,7 @@ define ({
         label: 'Imprimer'
     },
     clearHistoryButton: {
-        label: 'Effacer l\'historique d\'impression'
+        label: 'Effacer l\\\'historique d\\\'impression'
     },
     printResults: {
         progressBar: {
