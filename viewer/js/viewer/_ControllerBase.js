@@ -89,7 +89,7 @@ define([
         //centralized error handler
         handleError: function (options) {
             if (this.config.isDebug) {
-                if (typeof(console) === 'object') {
+                if (typeof console === 'object') {
                     for (var option in options) {
                         if (options.hasOwnProperty(option)) {
                             console.log(option, options[option]);

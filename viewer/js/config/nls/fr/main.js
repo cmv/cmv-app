@@ -1,6 +1,8 @@
 // http://dojotoolkit.org/reference-guide/1.10/dojo/i18n.html
 define({
     basemaps: {
+        clarity: 'Clarté',
+        firefly: 'Luciole',
         davidRumseyMap1812: 'David Rumsey 1812',
         earthAtNight: 'Terre la nuit',
         landsatShaded: 'Landsat et relief ombragé'

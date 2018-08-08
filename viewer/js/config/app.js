@@ -1,4 +1,5 @@
 (function () {
+    /* eslint no-useless-escape: off */
     var path = location.pathname.replace(/[^\/]+$/, '');
     window.dojoConfig = {
         async: true,

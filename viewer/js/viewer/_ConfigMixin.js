@@ -16,7 +16,7 @@ define([
         loadConfig: function (wait) {
 
             // this will be used to make any inherited methods 'wait'
-            var waitDeferred;
+            var waitDeferred = null;
 
             if (wait) {
                 waitDeferred = new Deferred();
@@ -33,8 +33,7 @@ define([
 
                         // resolve
                         waitDeferred.resolve();
-                    }),
-                        lang.hitch(this, 'initConfigError')
+                    }), lang.hitch(this, 'initConfigError')
                     );
 
                 }));
