@@ -22,7 +22,7 @@ define([
     return declare([_WidgetBase], {
         id: null,
         title: 'Title',
-        iconClass: 'fa-bars',
+        iconClass: 'fas fa-bars',
         open: false,
         baseClass: null,
         tabsButtonNode: null,
