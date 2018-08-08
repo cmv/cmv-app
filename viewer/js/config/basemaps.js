@@ -28,6 +28,26 @@ define([
             'streets-relief-vector': {}, // requires v3.16 or higher
             satellite: {},
             hybrid: {},
+            clarity: {
+                title: i18n.basemaps.clarity,
+                basemap: {
+                    baseMapLayers: [
+                        {
+                            url: 'https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer'
+                        }
+                    ]
+                }
+            },
+            firefly: {
+                title: i18n.basemaps.firefly,
+                basemap: {
+                    baseMapLayers: [
+                        {
+                            url: 'https://fly.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Firefly/MapServer'
+                        }
+                    ]
+                }
+            },
             topo: {},
             terrain: {},
             'gray-vector': {}, // requires v3.16 or higher
