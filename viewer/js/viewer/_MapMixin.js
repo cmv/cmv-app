@@ -159,7 +159,7 @@ define([
                     l = new Layer(layer.options);
                 }
                 this.layers.unshift(l); //unshift instead of push to keep layer ordering on map intact
-            } catch (e) {                
+            } catch (e) {
                 this.handleError({
                     source: '_MapMixin._initLayer',
                     error: e
@@ -283,9 +283,9 @@ define([
         getMapHeight: function () {
             if (this.map) {
                 return this.map.height;
-            } 
+            }
             return 0;
-            
+
         }
     });
 });

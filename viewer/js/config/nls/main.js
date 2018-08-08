@@ -2,6 +2,8 @@
 define({
     root: {
         basemaps: {
+            clarity: 'Clarity',
+            firefly: 'Firefly',
             davidRumseyMap1812: 'David Rumsey 1812',
             earthAtNight: 'Earth at Night',
             landsatShaded: 'Landsat Shaded'

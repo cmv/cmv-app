@@ -21,7 +21,7 @@ define([
             this.loadCredentials();
         },
         loadCredentials: function () {
-            var idJson, idObject;
+            var idJson = null, idObject = null;
             if (this._supportsLocalStorage()) {
                 idJson = window.localStorage.getItem(this.idStateName);
             } else {
