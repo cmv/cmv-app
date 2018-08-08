@@ -159,7 +159,7 @@ define([
         onDrawToolbarDrawEnd: function (evt) {
             this.drawToolbar.deactivate();
             this.drawModeTextNode.innerText = this.i18n.labels.currentDrawModeNone;
-            var graphic;
+            var graphic = null;
             switch (evt.geometry.type) {
             case 'point':
                 graphic = new Graphic(evt.geometry);
@@ -212,10 +212,8 @@ define([
                 return true;
             } else if (this.polygonGraphics.graphics.length > 0) {
                 return true;
-            } else {
-                return false;
             }
-
+            return false;
         },
         onLayoutChange: function (open) {
             // end drawing on close of title pane
