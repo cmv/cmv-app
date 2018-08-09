@@ -14,7 +14,7 @@ define ({
     meters: 'Mètres',
     feet: 'Pieds',
     includeLegend: 'Inclure la légende',
-    printQualityOptions: 'Qualité d`impression',
+    printQualityOptions: 'Qualité d\'impression',
     dpiInput: {
         label: 'DPI',
         invalidMessage: 'S\\\'il vous plaît entrer une valeur numérique.',
