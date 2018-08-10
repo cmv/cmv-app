@@ -14,11 +14,11 @@ define ({
     meters: 'Mètres',
     feet: 'Pieds',
     includeLegend: 'Inclure la légende',
-    printQualityOptions: 'Qualité d`impression',
+    printQualityOptions: 'Qualité d\'impression',
     dpiInput: {
         label: 'DPI',
-        invalidMessage: 'S\'il vous plaît entrer une valeur numérique.',
-        rangeMessage: 'S\'il vous plaît entrer une valeur entre 100 et 300.'
+        invalidMessage: 'S\\\'il vous plaît entrer une valeur numérique.',
+        rangeMessage: 'S\\\'il vous plaît entrer une valeur entre 100 et 300.'
     },
     mapOnlyOptions: 'Options MAP_ONLY',
     width: 'Largeur',
@@ -32,7 +32,7 @@ define ({
     },
     printResults: {
         progressBar: {
-            label: 'Création de l\'impression'
+            label: 'Création de l\\\'impression'
         },
         errorMessage: 'Erreur, réessayez'
     }
