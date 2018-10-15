@@ -1,8 +1,5 @@
-.layerControlDijit .vectorLayerContainer {}
-
-.layerControlDijit .overlayLayerContainer {}
-
-.layerControlDijit .vectorLabelContainer, .layerControlDijit .overlayLabelContainer {
+.layerControlDijit .vectorLabelContainer,
+.layerControlDijit .overlayLabelContainer {
     font-size: 15px;
     font-weight: 600;
     padding-bottom: 4px;
@@ -32,11 +29,17 @@
     padding: 0;
 }
 
-.layerControlDijit .layerControlTableExpand, .layerControlDijit .layerControlTableCheck, .layerControlDijit .layerControlTableMenu, .layerControlDijit .layerControlTableLabel {
+.layerControlDijit .layerControlTableExpand,
+.layerControlDijit .layerControlTableCheck,
+.layerControlDijit .layerControlTableMenu,
+.layerControlDijit .layerControlTableLabel {
     cursor: pointer;
 }
 
-.layerControlDijit .layerControlTableExpand, .layerControlDijit .layerControlTableCheck, .layerControlDijit .layerControlTableMenu, .layerControlDijit .layerControlTableUpdate {
+.layerControlDijit .layerControlTableExpand,
+.layerControlDijit .layerControlTableCheck,
+.layerControlDijit .layerControlTableMenu,
+.layerControlDijit .layerControlTableUpdate {
     text-align: center;
 }
 
@@ -64,6 +67,12 @@
     margin-right: 4px;
 }
 
+.layerControlDijit .layerControlTableCheck .layerControlIcon {
+    font-size: 12px;
+    height: 13px;
+    width: 13px;
+}
+
 .layerControlDijit .layerControlTableExpand .layerControlIcon {
     margin-right: 0;
     width: 1em;
@@ -73,15 +82,10 @@
     margin-right: 4px;
 }
 
-.layerControlDijit .layerControlIndent .layerControlIndent .layerControlTableExpand .layerControlIcon, .layerControlDijit .layerControlSublayer .layerControlTableExpand .layerControlIcon {
+.layerControlDijit .layerControlIndent .layerControlIndent .layerControlTableExpand .layerControlIcon,
+.layerControlDijit .layerControlIndent .layerControlSublayer .layerControlTableExpand .layerControlIcon {
     margin-left: 4px;
     margin-right: 4px;
-}
-
-.layerControlDijit .layerControlTableCheck .layerControlIcon {
-    font-size: 12px;
-    height: 13px;
-    width: 13px;
 }
 
 .layerControlDijit .layer-folder {
@@ -130,9 +134,7 @@
     color: #BBB;
 }
 
-
 /* not in use - retain for links */
-
 .layerControlDijit .layerControlClick {
     color: #1f78af;
     cursor: pointer;
@@ -155,7 +157,7 @@
     vertical-align: middle;
 }
 
-.layerControlDijit .layerControlLegendImage>img {
+.layerControlDijit .layerControlLegendImage > img {
     border: none;
     padding: 0;
 }
@@ -164,14 +166,13 @@
     padding: 0 0 0 4px;
 }
 
-
 /* temp esri/Legend overrides */
-
 .layerControlDijit .esriLegendService td {
     padding: 0;
 }
 
-.layerControlDijit .esriLegendGroupLayer, .layerControlDijit .esriLegendLayerLabel {
+.layerControlDijit .esriLegendGroupLayer,
+.layerControlDijit .esriLegendLayerLabel {
     padding: 0;
 }
 
@@ -179,9 +180,7 @@
     display: none;
 }
 
-
 /* sublayer menu */
-
 .layerControlDijit .layerControlSublayer .layerControlTable td.layerControlTableMenu {
     padding-right: 16px;
 }

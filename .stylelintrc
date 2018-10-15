@@ -1,0 +1,12 @@
+{
+    "extends": "stylelint-config-standard",
+    "rules": {
+        "color-hex-case": null,
+        "color-hex-length": null,
+        "font-family-no-missing-generic-family-keyword": null,
+        "indentation": 4,
+        "max-empty-lines": 2,
+        "no-missing-end-of-source-newline": null,
+        "selector-pseudo-element-colon-notation": null
+    }
+}

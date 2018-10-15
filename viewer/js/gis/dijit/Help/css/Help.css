@@ -3,19 +3,19 @@
 }
 
 .helpDijit .helpContainer {
-	padding: 0;
+    padding: 0;
 }
 
 .floatingWidget .helpDijit .helpContainer {
-	padding: 5px;
+    padding: 5px;
 }
 
 .helpDijit .helpNode {
-    height:280px;
+    height: 280px;
     width: 100%;
 }
 
 .helpDijit .helpTabContainer {
-	height: 100%;
+    height: 100%;
     width: 100%;
 }

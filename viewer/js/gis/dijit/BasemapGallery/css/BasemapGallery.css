@@ -1,5 +1,5 @@
 .cmvBasemapGalleryWidget .dijitTitlePane {
-   border-radius: 4px;
+    border-radius: 4px;
 }
 
 .cmvBasemapGalleryWidget .dijitTitlePaneTitle {
@@ -28,9 +28,10 @@
 
 .cmvBasemapGalleryWidget .basemapGalleryContent {
     height: 280px;
-    overflow:auto;
+    overflow: auto;
     width: 410px;
 }
+
 .cmvBasemapGalleryWidget .esriBasemapGalleryNode {
     margin: 5px 15px;
 }
