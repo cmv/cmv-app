@@ -9,10 +9,13 @@
     margin-bottom: 10px;
     max-width: calc(100% - 30px);
     padding: 8px 14px 8px 14px;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-.gis-dijit-Growl .growl h1,.gis-dijit-Growl .growl h2,.gis-dijit-Growl .growl h3,.gis-dijit-Growl .growl h4 {
+.gis-dijit-Growl .growl h1,
+.gis-dijit-Growl .growl h2,
+.gis-dijit-Growl .growl h3,
+.gis-dijit-Growl .growl h4 {
     margin: 0;
 }
 
