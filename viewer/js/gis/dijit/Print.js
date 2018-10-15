@@ -1,4 +1,3 @@
-/*eslint no-eval: 0 */
 define([
     'dojo/_base/declare',
     'dijit/_WidgetBase',
@@ -251,7 +250,7 @@ define([
             var template = new PrintTemplate();
             template.format = form.format;
             template.layout = form.layout;
-            template.preserveScale = eval(form.preserveScale); //turns a string 'true' into true
+            template.preserveScale = (form.preserveScale.toLowerCase() === 'true');
             template.outScale = form.outScale;
             template.label = form.title;
             template.exportOptions = mapOnlyForm;
