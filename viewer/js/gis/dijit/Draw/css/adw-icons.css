@@ -1,59 +1,68 @@
 @charset "UTF-8";
 
 @font-face {
-  font-family: "adw-icons";
-  font-style: normal;
-  font-weight: normal;
-  src:url("../fonts/adw-icons.eot");
-  src:url("../fonts/adw-icons.eot?#iefix") format("embedded-opentype"),
-  url("../fonts/adw-icons.woff") format("woff"),
-  url("../fonts/adw-icons.ttf") format("truetype"),
-  url("../fonts/adw-icons.svg#adw-icons") format("svg");
+    font-family: "adw-icons";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/adw-icons.eot");
+    src:
+        url("../fonts/adw-icons.eot?#iefix") format("embedded-opentype"),
+        url("../fonts/adw-icons.woff") format("woff"),
+        url("../fonts/adw-icons.ttf") format("truetype"),
+        url("../fonts/adw-icons.svg#adw-icons") format("svg");
 }
 
 [data-icon]:before {
-  content: attr(data-icon);
+    content: attr(data-icon);
 }
 
 /* csslint order-alphabetical: 0 */
 [data-icon]:before,
 [class^="adw-icon-"]:before,
 [class*=" adw-icon-"]:before {
-  font-family: "adw-icons" !important;
-  font-style: normal !important;
-  font-variant: normal !important;
-  font-weight: normal !important;
-  line-height: 1;
-  speak: none;
-  text-transform: none !important;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-family: "adw-icons" !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    font-weight: normal !important;
+    line-height: 1;
+    speak: none;
+    text-transform: none !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .adw-icon-cancel:before {
-  content: "\e000";
+    content: "\e000";
 }
+
 .adw-icon-circle:before {
-  content: "\e001";
+    content: "\e001";
 }
+
 .adw-icon-freehand-polygon:before {
-  content: "\e002";
+    content: "\e002";
 }
+
 .adw-icon-point:before {
-  content: "\e003";
+    content: "\e003";
 }
+
 .adw-icon-polyline:before {
-  content: "\e004";
+    content: "\e004";
 }
+
 .adw-icon-rectangle:before {
-  content: "\e005";
+    content: "\e005";
 }
+
 .adw-icon-text:before {
-  content: "\e006";
+    content: "\e006";
 }
+
 .adw-icon-freehand-polyline:before {
-  content: "\e007";
+    content: "\e007";
 }
+
 .adw-icon-polygon:before {
-  content: "\e008";
+    content: "\e008";
 }

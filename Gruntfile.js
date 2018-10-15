@@ -69,7 +69,7 @@ module.exports = function (grunt) {
             }
         },
 
-        csslint: {
+        stylelint: {
             strict: {
                 src: ['viewer/**/*.css', '!viewer/css/theme/**/*.css']
             },
@@ -116,7 +116,7 @@ module.exports = function (grunt) {
             },
             build: {
                 files: ['dist/viewer/**'],
-                tasks: ['eshint', 'csslint']
+                tasks: ['eshint', 'stylelint']
             }
         },
         connect: {
@@ -168,7 +168,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-csslint');
+    grunt.loadNpmTasks('grunt-stylelint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -178,10 +178,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-compress');
 
     // define the tasks
-    grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a web server and opens default browser to preview.', ['eslint', 'csslint:strict', 'connect:dev', 'open:dev_browser', 'watch:dev']);
+    grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a web server and opens default browser to preview.', ['eslint', 'stylelint:strict', 'connect:dev', 'open:dev_browser', 'watch:dev']);
     grunt.registerTask('build', 'Compiles all of the assets and copies the files to the build directory.', ['clean', 'copy', 'scripts', 'stylesheets', 'compress:build']);
     grunt.registerTask('build-view', 'Compiles all of the assets and copies the files to the build directory starts a web server and opens browser to preview app.', ['clean', 'copy', 'scripts', 'stylesheets', 'compress:build', 'connect:build', 'open:build_browser', 'watch:build']);
     grunt.registerTask('scripts', 'Compiles the JavaScript files.', ['eslint', 'uglify']);
-    grunt.registerTask('stylesheets', 'Auto prefixes css and compiles the stylesheets.', ['csslint:lax', 'postcss', 'cssmin']);
-    grunt.registerTask('lint', 'Run eslint and csslint.', ['eslint', 'csslint:strict']);
+    grunt.registerTask('stylesheets', 'Auto prefixes css and compiles the stylesheets.', ['stylelint:lax', 'postcss', 'cssmin']);
+    grunt.registerTask('lint', 'Run eslint and csslint.', ['eslint', 'stylelint:strict']);
 };

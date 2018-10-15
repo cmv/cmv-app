@@ -306,7 +306,7 @@ define([
             if (identifies.length > 0) {
                 if (this.showPopup) {
                     this.map.infoWindow.setTitle(this.i18n.mapInfoWindow.identifyingTitle);
-                    this.map.infoWindow.setContent('<div class="loading"></div>');
+                    this.map.infoWindow.setContent('<div class="loading fas fa-spinner fa-pulse"></div>');
                     this.map.infoWindow.show(mapPoint);
                 }
                 all(identifies).then(lang.hitch(this, 'identifyCallback', identifiedlayers), lang.hitch(this, 'identifyError'));
