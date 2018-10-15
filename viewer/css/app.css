@@ -73,7 +73,6 @@
     height: 50px;
 }
 
-
 /*
     media queries bootstrap style
     https://getbootstrap.com/css/#grid-media-queries
@@ -83,13 +82,16 @@
     .appHeader .search {
         display: none;
     }
+
     /* no logo in app header */
     .appHeader .headerLogo {
         display: none;
     }
+
     /* move the title when no logo */
     .appHeader .headerTitle {
         left: 10px;
     }
 }
+
 /* end media queries bootstrap style */

@@ -174,7 +174,7 @@ define([
                 opacity: 1.0,
                 visible: true,
                 outFields: ['*'],
-                featureReduction: {
+                featureReduction: has('phone') ? null : {
                     type: 'cluster',
                     clusterRadius: 60
                 },

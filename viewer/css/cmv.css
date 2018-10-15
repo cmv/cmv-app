@@ -1,4 +1,5 @@
-body, html {
+body,
+html {
     font-size: 14px;
     height: 100%;
     margin: 0;
@@ -87,10 +88,10 @@ body {
     background-image: -moz-linear-gradient(top, #fff 0%, #e6e6e6 100%);
     background-image: -o-linear-gradient(top, #fff 0%, #e6e6e6 100%);
     background-image: -ms-linear-gradient(top, #fff 0%, #e6e6e6 100%);
-    background-image: linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: linear-gradient(to bottom, #fff 0%, #e6e6e6 100%);
     background-repeat: repeat-x;
-    border-bottom-color: #A8A8A8;
     border-color: #BBB;
+    border-bottom-color: #A8A8A8;
     padding: 4px 12px;
 }
 
@@ -100,7 +101,7 @@ body {
 }
 
 .flat .dijitSpinner .dijitSpinnerButtonContainer {
-  padding: 0;
+    padding: 0;
 }
 
 .flat .dijitButtonHover .dijitButtonNode,
@@ -109,13 +110,13 @@ body {
 .flat .dijitComboButton .dijitDownArrowButtonHover,
 .flat .dijitToggleButtonHover .dijitButtonNode,
 .flat .dijitDropDownButtonActive .dijitButtonNode {
-  background-position: 0 -15px;
-  text-decoration: none;
-  transition: background-position 0.1s linear;
-  -moz-transition: background-position 0.1s linear;
-  -ms-transition: background-position 0.1s linear;
-  -o-transition: background-position 0.1s linear;
-  -webkit-transition: background-position 0.1s linear;
+    background-position: 0 -15px;
+    text-decoration: none;
+    transition: background-position 0.1s linear;
+    -moz-transition: background-position 0.1s linear;
+    -ms-transition: background-position 0.1s linear;
+    -o-transition: background-position 0.1s linear;
+    -webkit-transition: background-position 0.1s linear;
 }
 
 .flat .dijitButtonActive .dijitButtonNode,
@@ -128,12 +129,12 @@ body {
     background-image: -moz-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
     background-image: -o-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
     background-image: -ms-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
-    background-image: linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-image: linear-gradient(to top, #fff 0%, #e6e6e6 100%);
     background-repeat: repeat-x;
     border-color: #666;
     border-top-color: #444;
-    -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .flat .dijitButtonDisabled .dijitButtonNode,
@@ -143,13 +144,13 @@ body {
 .flat .dijitComboBoxDisabled .dijitButtonNode,
 .flat .dijitSpinnerDisabled .dijitButtonNode,
 .flat .dijitSelectDisabled .dijitButtonNode {
-  background-image: none;
-  -webkit-box-shadow:none;
-  box-shadow: none;
-  cursor: not-allowed;
-  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=65);
-  filter: alpha(opacity=65);
-  opacity: 0.65;
+    background-image: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    cursor: not-allowed;
+    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=65);
+    filter: alpha(opacity=65);
+    opacity: 0.65;
 }
 
 .flat .success .dijitButtonNode {
@@ -174,11 +175,13 @@ body {
 .flat .dijitRadioHover {
     border-color: #666;
 }
+
 .flat .dijitCheckBoxChecked,
 .flat .dijitRadio:after,
 .flat .dijitRadioIcon:after {
     background-color: #999;
 }
+
 /* end flat theme overrides */
 
 .cmv .dijitToolbar .dijitButtonContents {
@@ -217,7 +220,7 @@ body {
 }
 
 .cmv .floatingWidget_underlay {
-    display: none
+    display: none;
 }
 
 #help_parent_underlay {
@@ -243,7 +246,6 @@ body {
     flex: 1;
     left: 0;
     padding: 0;
-    bottom: 0;
 }
 
 .cmv #sidebarLeft,
@@ -299,7 +301,7 @@ body {
 }
 
 .cmv #mapCenter {
-    background: url("../images/noisy_grid.png") #fff;
+    background: url("../images/noisy_grid.png") #ddd;
     overflow: hidden;
     padding: 0;
 }
@@ -320,11 +322,6 @@ body {
     border-right-width: 1px;
 }
 
-.cmv #mapCenter {
-    background-color: #ddd;
-    overflow: hidden;
-    padding: 0;
-}
 .cmv .sidebarCollapseButton {
     background-color: white;
     color: #666666;
@@ -489,6 +486,7 @@ body {
     top: 50%;
     transform: translate(0, 50%);
 }
+
 /* end map positioning */
 
 /* inset positioning */
@@ -532,32 +530,32 @@ body {
 
 /* map widget flow */
 
-.cmv .cmv-ui-top-left,
-.cmv .cmv-ui-top-center,
-.cmv .cmv-ui-top-right,
-.cmv .cmv-ui-center-left,
-.cmv .cmv-ui-center-center,
-.cmv .cmv-ui-center-right {
+.cmv .cmv-ui .cmv-ui-top-left,
+.cmv .cmv-ui .cmv-ui-top-center,
+.cmv .cmv-ui .cmv-ui-top-right,
+.cmv .cmv-ui .cmv-ui-center-left,
+.cmv .cmv-ui .cmv-ui-center-center,
+.cmv .cmv-ui .cmv-ui-center-right {
     flex-flow: column;
 }
 
-.cmv .cmv-ui-top-left,
-.cmv .cmv-ui-top-center {
+.cmv .cmv-ui .cmv-ui-top-left,
+.cmv .cmv-ui .cmv-ui-top-center {
     align-items: flex-start;
 }
 
-.cmv .cmv-ui-top-right {
+.cmv .cmv-ui .cmv-ui-top-right {
     align-items: flex-end;
 }
 
-.cmv .cmv-ui-bottom-left,
-.cmv .cmv-ui-bottom-center,
-.cmv .cmv-ui-bottom-right {
+.cmv .cmv-ui .cmv-ui-bottom-left,
+.cmv .cmv-ui .cmv-ui-bottom-center,
+.cmv .cmv-ui .cmv-ui-bottom-right {
     align-items: flex-end;
     flex-flow: row;
 }
 
-.cmv .cmv-ui-bottom-right {
+.cmv .cmv-ui .cmv-ui-bottom-right {
     flex-flow: row-reverse;
 }
 
@@ -608,6 +606,7 @@ body {
 .cmv .cmv-ui-inset .cmv-ui-bottom-right > * {
     max-width: calc(100vw - 40px);
 }
+
 /* end map widget sizing */
 
 /* map ui widgets */
@@ -717,6 +716,7 @@ body {
 .cmv .esriSimpleSliderBR {
     right: 15px;
 }
+
 .cmv .esriSimpleSliderVertical .esriSimpleSliderIncrementButton {
     border-color: #666;
 }
@@ -774,9 +774,11 @@ body {
     border-bottom: 1px solid rgb(221, 221, 221);
     vertical-align: top;
 }
+
 .cmv .esriPopup .contentPane table.attrTable tr:nth-child(odd) {
     background-color: transparent;
 }
+
 .cmv .esriPopup .contentPane table.attrTable tr:nth-child(even) {
     background-color: rgb(238, 238, 238);
 }
@@ -796,7 +798,7 @@ body {
     color: #FFFFFF;
 }
 
-.cmv .esriPopupMobile .pointer.bottom{
+.cmv .esriPopupMobile .pointer.bottom {
     -webkit-transform: rotate(180deg);
     -moz-transform: rotate(180deg);
     -o-transform: rotate(180deg);
@@ -806,7 +808,7 @@ body {
 
 .cmv .esriPopupMobile .pointer.bottom,
 .cmv .esriPopupMobile .pointer.top {
-    background:url("../images/pointertop.png");
+    background: url ("../images/pointertop.png");
 }
 
 /* end esri mobile popup overrides */
@@ -821,7 +823,7 @@ body {
     background-image: -moz-linear-gradient(top, #fff 0%, #e6e6e6 100%);
     background-image: -o-linear-gradient(top, #fff 0%, #e6e6e6 100%);
     background-image: -ms-linear-gradient(top, #fff 0%, #e6e6e6 100%);
-    background-image: linear-gradient(top, #fff 0%, #e6e6e6 100%);
+    background-image: linear-gradient(to bottom, #fff 0%, #e6e6e6 100%);
     background-repeat: repeat-x;
     border: 1px solid #BBB;
     border-bottom: 1px solid #A8A8A8;
@@ -865,12 +867,12 @@ body {
     background-image: -moz-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
     background-image: -o-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
     background-image: -ms-linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
-    background-image: linear-gradient(bottom, #fff 0%, #e6e6e6 100%);
+    background-image: linear-gradient(to top, #fff 0%, #e6e6e6 100%);
     background-repeat: repeat-x;
     border-color: #666;
     border-top-color: #444;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
-    -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.2);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .cmv .simpleDirections .esriLinkButton {
@@ -878,6 +880,7 @@ body {
     letter-spacing: 0;
     text-transform: none;
 }
+
 /* end esri directions widget overrides */
 
 /*
@@ -889,6 +892,7 @@ body {
     #sidebarLeft {
         width: 225px;
     }
+
     #sidebarRight {
         display: none;
     }
@@ -932,7 +936,7 @@ body {
     .cmv .cmv-ui-inset .cmv-ui-center-right > *,
     .cmv .cmv-ui-inset .cmv-ui-bottom-left > *,
     .cmv .cmv-ui-inset .cmv-ui-bottom-right > * {
-        max-width: 30vw
+        max-width: 30vw;
     }
 }
 
