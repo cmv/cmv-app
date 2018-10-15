@@ -43,7 +43,7 @@ module.exports = function (grunt) {
             build: {
                 cwd: 'viewer',
                 src: ['**'],
-                dest: 'dist/viewer',
+                dest: 'dist',
                 expand: true
             }
         },
@@ -55,17 +55,17 @@ module.exports = function (grunt) {
         postcss: {
             build: {
                 expand: true,
-                cwd: 'dist/viewer',
+                cwd: 'dist',
                 src: ['**/*.css'],
-                dest: 'dist/viewer'
+                dest: 'dist'
             }
         },
         cssmin: {
             build: {
                 expand: true,
-                cwd: 'dist/viewer',
+                cwd: 'dist',
                 src: ['**/*.css'],
-                dest: 'dist/viewer'
+                dest: 'dist'
             }
         },
 
@@ -94,9 +94,9 @@ module.exports = function (grunt) {
             build: {
                 files: [{
                     expand: true,
-                    cwd: 'dist/viewer',
+                    cwd: 'dist',
                     src: ['**/*.js', '!**/config/**'],
-                    dest: 'dist/viewer',
+                    dest: 'dist',
                     ext: '.js'
                 }],
                 options: {
@@ -115,7 +115,7 @@ module.exports = function (grunt) {
                 tasks: ['eslint', 'csslint']
             },
             build: {
-                files: ['dist/viewer/**'],
+                files: ['dist/**'],
                 tasks: ['eshint', 'stylelint']
             }
         },
@@ -133,7 +133,7 @@ module.exports = function (grunt) {
             build: {
                 options: {
                     port: 3001,
-                    base: 'dist/viewer',
+                    base: 'dist',
                     hostname: '*',
                     protocol: 'https',
                     keepalive: true,
@@ -152,11 +152,11 @@ module.exports = function (grunt) {
         compress: {
             build: {
                 options: {
-                    archive: 'dist/viewer.zip'
+                    archive: 'dist/cmv-app.zip'
                 },
                 files: [{
                     expand: true,
-                    cwd: 'dist/viewer',
+                    cwd: 'dist',
                     src: ['**', '!**/dijit.css']
                 }]
             }
