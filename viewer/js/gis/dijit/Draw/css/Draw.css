@@ -1,6 +1,7 @@
-.gis_DrawDijit .outerList>li {
+.gis_DrawDijit .outerList > li {
     margin-bottom: 1em;
 }
+
 .gis_DrawDijit .list-unstyled {
     list-style-image: none;
     list-style-position: outside;
