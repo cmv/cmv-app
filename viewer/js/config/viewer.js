@@ -595,11 +595,19 @@ define([
                 options: {
                     map: true,
                     printTaskURL: 'https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task',
-                    copyrightText: 'Copyright 2014',
+                    copyrightText: 'Copyright ' + new Date().getFullYear(),
                     authorText: 'Me',
                     defaultTitle: 'Viewer Map',
                     defaultFormat: 'PDF',
-                    defaultLayout: 'Letter ANSI A Landscape'
+                    defaultLayout: 'Letter ANSI A Landscape',
+                    customTextElements: [
+                        //property name should match the custom element in the mxd.  Value should be what you want the label to be.
+                        /*
+                        {
+                            subTitle: 'Subtitle'
+                        }
+                        */
+                    ]
                 }
             },
             directions: {
