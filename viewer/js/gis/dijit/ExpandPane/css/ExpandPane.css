@@ -2,7 +2,7 @@
     background-color: transparent;
     border-radius: 6px;
     max-width: 100%;
- }
+}
 
 .cmvExpandPane .dijitClosed .dijitTitlePaneTextNode,
 .cmvExpandPane .dijitTitleClosed .floatingWidgetDock,
@@ -11,7 +11,7 @@
     display: none !important;
 }
 
-.cmvExpandPane .dijitArrowNode {
+.cmvExpandPane .dijitClosed .dijitArrowNode {
     float: right;
 }
 
@@ -26,6 +26,7 @@
     margin: 0 !important;
     padding: 0 !important;
 }
+
 .cmvExpandPane .dijitTitlePaneTitle.dijitClosed .titlePaneIcon {
     font-size: 18px;
 }

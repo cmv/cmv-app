@@ -10,7 +10,7 @@ define([
     'esri/graphic',
     'esri/renderers/SimpleRenderer',
     'dojo/text!./StreetView/templates/StreetView.html',
-    'esri/symbols/PictureMarkerSymbol',
+    'esri/symbols/TextSymbol',
     'dojo/dom-style',
     'dojo/dom-geometry',
     'esri/geometry/Point',
@@ -21,7 +21,7 @@ define([
     'gis/plugins/Google',
     'dijit/form/ToggleButton',
     'xstyle/css!./StreetView/css/StreetView.css'
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, PictureMarkerSymbol, domStyle, domGeom, Point, SpatialReference, MenuItem, proj4, i18n, Google) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, lang, aspect, topic, GraphicsLayer, Graphic, SimpleRenderer, template, TextSymbol, domStyle, domGeom, Point, SpatialReference, MenuItem, proj4, i18n, Google) {
     //cache google so
     var google = null;
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -31,6 +31,19 @@ define([
         mapClickMode: null,
 
         panoOptions: null,
+
+        textSymbolOptions: {
+            angle: 322.5,
+            color: [0, 128, 200],
+            text: '\uf124',
+            xoffset: 8,
+            yoffset: 8,
+            font: {
+                size: 16,
+                family: 'Font Awesome\\ 5 Free',
+                weight: 900
+            }
+        },
 
         // in case this changes some day
         proj4BaseURL: 'https://epsg.io/',
@@ -92,7 +105,8 @@ define([
             }));
         },
         createGraphicsLayer: function () {
-            this.pointSymbol = new PictureMarkerSymbol(require.toUrl('gis/dijit/StreetView/images/blueArrow.png'), 30, 30);
+            this.pointSymbol = new TextSymbol(this.textSymbolOptions);
+            this.originalAngle = this.pointSymbol.angle;
             this.pointGraphics = new GraphicsLayer({
                 id: 'streetview_graphics',
                 title: 'Street View'
@@ -298,7 +312,9 @@ define([
         setPlaceMarkerRotation: function () {
             if (this.placeMarker) {
                 var pov = this.panorama.getPov();
-                this.pointSymbol.setAngle(pov.heading);
+                var newHeading = pov.heading - this.originalAngle;
+                newHeading = (newHeading < 0) ? (newHeading = 360 + newHeading) : newHeading;
+                this.pointSymbol.setAngle(newHeading);
                 this.pointGraphics.refresh();
             }
         },

@@ -119,7 +119,7 @@
 
 .cmv .sidebar-widget .sidebar-widget-content {
     padding: 5px;
-    position:  relative;
+    position: relative;
 }
 
 
@@ -165,20 +165,24 @@
     .cmv .sidebar {
         width: 70%;
     }
+
     .cmv .map .sidebar-map,
     .cmv .map .cmv-ui-top-left,
     .cmv .map .cmv-ui-center-left,
     .cmv .map .cmv-ui-bottom-left {
         left: 70%;
     }
+
     .cmv .map .cmv-ui-inset .cmv-ui-top-left,
     .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
         left: calc(70% + 15px);
     }
+
     .cmv .map .cmv-ui-inset .cmv-ui-top-center {
         left: calc(70% + 60px);
     }
+
     .cmv .map .scalebar_bottom-left {
         left: calc(70% + 25px) !important;
     }
@@ -188,23 +192,28 @@
     .cmv .sidebar {
         width: 40%;
     }
+
     .cmv .map .sidebar-map,
     .cmv .map .cmv-ui-top-left,
     .cmv .map .cmv-ui-center-left,
     .cmv .map .cmv-ui-bottom-left {
         left: 40%;
     }
+
     .cmv .map .cmv-ui-inset .cmv-ui-top-left,
     .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
         left: calc(40% + 15px);
     }
+
     .cmv .map .cmv-ui-inset .cmv-ui-top-center {
         left: calc(40% + 60px);
     }
+
     .cmv .map .scalebar_bottom-left {
         left: calc(40% + 25px) !important;
     }
+
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
         width: 90px;
     }
@@ -214,23 +223,28 @@
     .cmv .sidebar {
         width: 30%;
     }
+
     .cmv .map .sidebar-map,
     .cmv .map .cmv-ui-top-left,
     .cmv .map .cmv-ui-center-left,
     .cmv .map .cmv-ui-bottom-left {
         left: 30%;
     }
+
     .cmv .map .cmv-ui-inset .cmv-ui-top-left,
     .cmv .map .cmv-ui-inset .cmv-ui-center-left,
     .cmv .map .cmv-ui-inset .cmv-ui-bottom-left {
         left: calc(30% + 15px);
     }
+
     .cmv .map .cmv-ui-inset .cmv-ui-top-center {
         left: calc(30% + 60px);
     }
+
     .cmv .map .scalebar_bottom-left {
         left: calc(30% + 25px) !important;
     }
+
     .cmv .sidebar .arcgisSearch .searchGroup .searchInput {
         width: 190px;
     }
