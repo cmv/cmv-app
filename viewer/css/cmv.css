@@ -336,7 +336,7 @@ body {
 .cmv .sidebarCollapseButtonHorz {
     border-bottom-width: 1px;
     border-top-width: 1px;
-    height: 25px;
+    height: 24px;
     top: 48%;
     top: -webkit-calc(50% - 12px);
     top: -moz-calc(50% - 12px);
@@ -354,7 +354,7 @@ body {
     left: -moz-calc(50% - 12px);
     left: -o-calc(50% - 12px);
     left: calc(50% - 12px);
-    width: 25px;
+    width: 24px;
 }
 
 .cmv .sidebarleftCollapseButton {
