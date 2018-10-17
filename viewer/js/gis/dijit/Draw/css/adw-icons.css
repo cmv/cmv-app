@@ -16,7 +16,6 @@
     content: attr(data-icon);
 }
 
-/* csslint order-alphabetical: 0 */
 [data-icon]:before,
 [class^="adw-icon-"]:before,
 [class*=" adw-icon-"]:before {

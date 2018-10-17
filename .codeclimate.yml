@@ -2,7 +2,7 @@ engines:
     eslint:
         enabled: true
         channel: "eslint-3"
-    csslint:
+    stylelint:
         enabled: true
     fixme:
         enabled: true
