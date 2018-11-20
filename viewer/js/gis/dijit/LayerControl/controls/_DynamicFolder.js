@@ -69,6 +69,10 @@ define([
                 this._checkboxScaleRange();
                 this._handlers.push(this.control.layer.getMap().on('zoom-end', lang.hitch(this, '_checkboxScaleRange')));
             }
+            if (!this.control.controlOptions.ignoreDynamicGroupVisibility) {
+                var layerViz = (array.indexOf(this.control.layer.visibleLayers, this.sublayerInfo.id) !== -1);
+                this._setFolderCheckbox(layerViz, checkNode, true);
+            }
         },
 
         // add on event to expandClickNode
