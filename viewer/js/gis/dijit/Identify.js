@@ -155,10 +155,7 @@ define([
                     array.forEach(layer.layerInfos, lang.hitch(this, function (subLayerInfo) {
                         var subLayerId = subLayerInfo.id;
                         if ((typeof layerInfo.layerIds === 'undefined') || (array.indexOf(layerInfo.layerIds, subLayerId) >= 0)) {
-                            infoTemplate = this.getInfoTemplate(layer, subLayerId);
-                            if (infoTemplate && infoTemplate.info.showAttachments) {
-                                this.getFeatureLayerForDynamicSublayer(layer, subLayerId);
-                            }
+                            this.getFeatureLayerForDynamicSublayer(layer, subLayerId);
                         }
                     }));
                 }
