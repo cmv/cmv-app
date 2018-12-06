@@ -154,7 +154,7 @@ define([
                 } else if (layer.layerInfos) {
                     array.forEach(layer.layerInfos, lang.hitch(this, function (subLayerInfo) {
                         var subLayerId = subLayerInfo.id;
-                        if ((layerInfo.layerIds === null) || (array.indexOf(layerInfo.layerIds, subLayerId) >= 0)) {
+                        if ((typeof layerInfo.layerIds === 'undefined') || (array.indexOf(layerInfo.layerIds, subLayerId) >= 0)) {
                             this.getFeatureLayerForDynamicSublayer(layer, subLayerId);
                         }
                     }));
