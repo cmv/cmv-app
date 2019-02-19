@@ -390,7 +390,7 @@ define([
                 type: 'titlePane',
                 path: 'gis/dijit/Identify',
                 title: i18n.viewer.widgets.identify,
-                iconClass: 'fas fa-info-circle',
+                iconClass: 'fas fa-fw fa-info-circle',
                 open: false,
                 preload: true,
                 position: 3,
