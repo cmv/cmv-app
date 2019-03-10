@@ -20,14 +20,14 @@
     width: 100%;
 }
 
-.helpDijit .dijitTabStripSlideLeftIcon:before{
-    content:"\f104" !important;
+.helpDijit .dijitTabStripSlideLeftIcon:before {
+    content: "\f104" !important;
 }
 
-.helpDijit .dijitTabStripSlideRightIcon:before{
-    content:"\f105" !important;
+.helpDijit .dijitTabStripSlideRightIcon:before {
+    content: "\f105" !important;
 }
 
-.helpDijit .dijitTabStripMenuIcon:before{
-    content:"\f0c9" !important;
+.helpDijit .dijitTabStripMenuIcon:before {
+    content: "\f0c9" !important;
 }
