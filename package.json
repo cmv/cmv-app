@@ -23,7 +23,7 @@
         "grunt-stylelint": "~0.10.1",
         "body-parser": "~1.18.0",
         "stylelint": "~9.10.0",
-        "stylelint-config-standard": "~18.2.0",
+        "stylelint-config-standard": "~18.3.0",
         "proxypage": "*"
     },
     "engine": "node >= 6",
