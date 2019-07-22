@@ -187,7 +187,9 @@ define([
             var layerControlOptions = lang.mixin({
                 ignoreDynamicGroupVisibility: this.ignoreDynamicGroupVisibility
             }, layer.layerControlLayerInfos);
-            this.layerControlLayerInfos.unshift({ //unshift instead of push to keep layer ordering in LayerControl intact
+            
+            //unshift instead of push to keep layer ordering in LayerControl intact
+            this.layerControlLayerInfos.unshift({
                 layer: l,
                 type: layer.type,
                 title: layer.title,
