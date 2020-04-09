@@ -148,7 +148,7 @@ body {
     -webkit-box-shadow: none;
     box-shadow: none;
     cursor: not-allowed;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=65);
+    -ms-filter: progid:dximagetransform.microsoft.alpha(opacity=65);
     filter: alpha(opacity=65);
     opacity: 0.65;
 }
