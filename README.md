@@ -1,6 +1,6 @@
 # CMV <img src="viewer/images/rocket-logo.png" width="45" /> The Configurable Map Viewer
 
-[![Read The Docs](https://img.shields.io/badge/docs-2.0.0--beta.2-brightgreen.svg?style=flat)](https://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/cmv/cmv-app.svg?branch=master)](https://travis-ci.org/cmv/cmv-app) [![Greenkeeper badge](https://badges.greenkeeper.io/cmv/cmv-app.svg)](https://greenkeeper.io/)
+[![Read The Docs](https://img.shields.io/badge/docs-2.0.0--beta.2-brightgreen.svg?style=flat)](https://docs.cmv.io/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/cmv/cmv-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/cmv/cmv-app.svg?branch=master)](https://travis-ci.org/cmv/cmv-app) 
 
 ## Introduction
 [CMV](https://cmv.io/) is a community-supported open source mapping framework. CMV works with the [Esri JavaScript API](https://developers.arcgis.com/javascript/jsapi/3/), [ArcGIS Server](https://www.esri.com/software/arcgis/arcgisserver), [ArcGIS Online](https://arcgis.com/) and more.
