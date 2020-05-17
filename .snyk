@@ -1,0 +1,136 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - eslint > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-compress > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-watch > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - eslint > inquirer > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - eslint > table > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > table > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-eslint > eslint > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt > grunt-legacy-log > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt > grunt-legacy-util > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-clean > async > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-connect > async > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-watch > async > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-compress > archiver > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > postcss-reporter > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-eslint > eslint > inquirer > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-eslint > eslint > table > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt > grunt-legacy-log > grunt-legacy-log-utils > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-compress > archiver > async > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-connect > portscanner > async > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-compress > archiver > archiver-utils > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-compress > archiver > zip-stream > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-watch > gaze > globule > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - grunt-contrib-compress > archiver > zip-stream > archiver-utils > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/generator > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/traverse > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/generator > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/template > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/traverse > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helpers > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helpers > @babel/traverse > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/traverse > @babel/generator > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-module-imports > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/template > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helpers > @babel/template > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/traverse > @babel/helper-function-name > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helpers > @babel/traverse > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-simple-access > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helpers > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helpers > @babel/traverse > @babel/generator > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/helper-member-expression-to-functions > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/helper-optimise-call-expression > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-simple-access > @babel/template > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helpers > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > @babel/generator > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > @babel/helper-function-name > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
+    - stylelint > @stylelint/postcss-css-in-js > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2020-05-17T19:16:45.261Z'
