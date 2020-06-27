@@ -6,32 +6,36 @@
   "year": "2018",
   "homepage": "https://cmv.io/",
   "repository": "https://github.com/cmv/cmv-app/",
-  "dependencies": {
-    "eslint": "~6.8.0",
+  "devDependencies": {
+    "eslint": "~7.3.1",
     "grunt": "~1.1.0",
+    "grunt-browser-sync": "~2.2.0",
     "grunt-contrib-clean": "~2.0.0",
     "grunt-contrib-compress": "~1.6.0",
-    "grunt-contrib-connect": "~2.1.0",
     "grunt-contrib-copy": "1.0.x",
     "grunt-contrib-cssmin": "~3.0.0",
-    "grunt-contrib-uglify": "~4.0.0",
+    "grunt-contrib-uglify": "~4.0.1",
     "grunt-contrib-watch": "~1.1.0",
-    "grunt-eslint": "~22.0.0",
-    "grunt-newer": "~1.3.0",
-    "grunt-open": "0.2.x",
+    "grunt-eslint": "~23.0.0",
     "grunt-postcss": "~0.9.0",
     "grunt-stylelint": "~0.15.0",
     "body-parser": "~1.19.0",
-    "stylelint": "~13.5.0",
+    "stylelint": "~13.6.1",
     "stylelint-config-standard": "~20.0.0",
     "proxypage": "*",
-    "snyk": "^1.321.0"
+    "snyk": "^1.348.1"
   },
-  "engine": "node >= 6",
+  "engine": "node >= 10",
   "dojoBuild": "package.js",
   "scripts": {
+    "start": "grunt default",
+    "build": "grunt build",
+    "build-view": "grunt build-view",
+    "lint": "grunt lint",
+    "scripts": "grunt scripts",
+    "stylesheets": "grunt stylesheets",
     "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "prepare": "npm run snyk-protect"
   },
   "snyk": true
 }

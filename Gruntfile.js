@@ -1,34 +1,20 @@
 /* global module */
 module.exports = function (grunt) {
 
-    // middleware for grunt.connect
-    var middleware = function (connect, options, middlewares) {
-        // inject a custom middleware into the array of default middlewares for proxy page
-        var bodyParser = require('body-parser');
-        var proxypage = require('proxypage');
-        var proxyRe = /\/proxy\/proxy.ashx/i;
-
-        var enableCORS = function (req, res, next) {
-            res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
-            res.setHeader('Access-Control-Allow-Credentials', true);
-            res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-            res.setHeader('Access-Control-Allow-Headers', req.headers['access-control-request-headers'] || 'Origin, X-Requested-With, Content-Type, Accept');
-            return next();
-        };
-
-        var proxyMiddleware = function (req, res, next) {
+    // middleware for browserSync
+    var bodyParser = require('body-parser');
+    var middleware = [
+        function (req, res, next) {
+            var proxypage = require('proxypage');
+            var proxyRe = /\/proxy\/proxy.ashx/i;
             if (!proxyRe.test(req.url)) {
                 return next();
             }
             proxypage.proxy(req, res);
-        };
-
-        middlewares.unshift(proxyMiddleware);
-        middlewares.unshift(enableCORS);
-        middlewares.unshift(bodyParser.json()); //body parser, see https://github.com/senchalabs/connect/wiki/Connect-3.0
-        middlewares.unshift(bodyParser.urlencoded({extended: true})); //body parser
-        return middlewares;
-    };
+        },
+        bodyParser.json(),
+        bodyParser.urlencoded({extended: true})
+    ];
 
     // grunt task config
     grunt.initConfig({
@@ -113,34 +99,37 @@ module.exports = function (grunt) {
                 tasks: ['eshint', 'stylelint']
             }
         },
-        connect: {
+        browserSync: {
             dev: {
+                bsFiles: {
+                    src : ['viewer/**']
+                },
                 options: {
+                    cors: true,
+                    https: true,
+                    middleware: middleware,
                     port: 3000,
-                    base: 'viewer',
-                    hostname: '*',
-                    protocol: 'https',
-                    keepalive: true,
-                    middleware: middleware
+                    server: 'viewer',
+                    ui: {
+                        port: 3002
+                    },
+                    watchTask: true
                 }
             },
             build: {
+                bsFiles: {
+                    src : ['dist/**']
+                },
                 options: {
+                    cors: true,
+                    https: true,
                     port: 3001,
-                    base: 'dist',
-                    hostname: '*',
-                    protocol: 'https',
-                    keepalive: true,
-                    middleware: middleware
+                    server: 'dist',
+                    ui: {
+                        port: 3003
+                    },
+                    watchTask: true
                 }
-            }
-        },
-        open: {
-            'dev_browser': {
-                path: 'https://localhost:3000/index.html'
-            },
-            'build_browser': {
-                path: 'https://localhost:3001/index.html'
             }
         },
         compress: {
@@ -166,15 +155,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-newer');
-    grunt.loadNpmTasks('grunt-open');
+    grunt.loadNpmTasks('grunt-browser-sync');
     grunt.loadNpmTasks('grunt-contrib-compress');
 
     // define the tasks
-    grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a web server and opens default browser to preview.', ['eslint', 'stylelint', 'connect:dev', 'open:dev_browser', 'watch:dev']);
+    grunt.registerTask('default', 'Watches the project for changes, automatically builds them and runs a web server and opens default browser to preview.', ['eslint', 'stylelint', 'browserSync:dev', 'watch:dev']);
     grunt.registerTask('build', 'Compiles all of the assets and copies the files to the build directory.', ['clean', 'copy', 'scripts', 'stylesheets', 'compress']);
-    grunt.registerTask('build-view', 'Compiles all of the assets and copies the files to the build directory starts a web server and opens browser to preview app.', ['clean', 'copy', 'scripts', 'stylesheets', 'compress', 'connect:build', 'open:build_browser', 'watch:build']);
+    grunt.registerTask('build-view', 'Compiles all of the assets and copies the files to the build directory starts a web server and opens browser to preview app.', ['clean', 'copy', 'scripts', 'stylesheets', 'compress', 'browserSync:build', 'watch:build']);
     grunt.registerTask('scripts', 'Compiles the JavaScript files.', ['eslint', 'uglify']);
     grunt.registerTask('stylesheets', 'Auto prefixes css and compiles the stylesheets.', ['stylelint', 'postcss', 'cssmin']);
     grunt.registerTask('lint', 'Run eslint and stylelint.', ['eslint', 'stylelint']);
