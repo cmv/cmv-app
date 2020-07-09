@@ -27,7 +27,7 @@ define([
 
     // Use your own Google Maps API Key.
     // https://developers.google.com/maps/documentation/javascript/get-api-key
-    GoogleMapsLoader.KEY = 'NOT-A-REAL-API-KEY';
+    GoogleMapsLoader.KEY = GoogleMapsLoader.KEY || 'NOT-A-REAL-API-KEY';
 
     // helper function returning ImageParameters for dynamic layers
     // example:
