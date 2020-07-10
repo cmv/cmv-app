@@ -6,7 +6,9 @@ define({
             firefly: 'Firefly',
             davidRumseyMap1812: 'David Rumsey 1812',
             earthAtNight: 'Earth at Night',
-            landsatShaded: 'Landsat Shaded'
+            landsatShaded: 'Landsat Shaded',
+            allWhite: 'All White',
+            allBlack: 'All Black'
         },
         bookmarks: {
             nullIsland: 'Null Island',
