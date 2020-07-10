@@ -5,7 +5,9 @@ define({
         firefly: 'Luciérnaga',
         davidRumseyMap1812: 'David Rumsey 1812',
         earthAtNight: 'Tierra en la noche',
-        landsatShaded: 'Landsat sombreada'
+        landsatShaded: 'Landsat sombreada',
+        allWhite: 'Todo Blanco',
+        allBlack: 'Todo Negro'
     },
     bookmarks: {
         nullIsland: 'Isla nula',
