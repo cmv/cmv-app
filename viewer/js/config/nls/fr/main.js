@@ -5,7 +5,9 @@ define({
         firefly: 'Luciole',
         davidRumseyMap1812: 'David Rumsey 1812',
         earthAtNight: 'Terre la nuit',
-        landsatShaded: 'Landsat et relief ombragé'
+        landsatShaded: 'Landsat et relief ombragé',
+        allWhite: 'Tout Blanc',
+        allBlack: 'Tout Noir'
     },
     bookmarks: {
         nullIsland: 'Île Null',

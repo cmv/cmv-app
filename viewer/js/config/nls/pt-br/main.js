@@ -5,7 +5,9 @@ define({
         firefly: 'Vaga-lume',
         davidRumseyMap1812: 'David Rumsey 1812',
         earthAtNight: 'Terra à noite',
-        landsatShaded: 'Landsat sombreado'
+        landsatShaded: 'Landsat sombreado',
+        allWhite: 'Tudo Branco',
+        allBlack: 'Todo Preto'
     },
     bookmarks: {
         nullIsland: 'Ilha Nula',
