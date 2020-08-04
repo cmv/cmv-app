@@ -33,11 +33,13 @@ define([
         panoOptions: null,
 
         textSymbolOptions: {
-            angle: 322.5,
-            color: [0, 128, 200],
+            horizontalAlignment: 'center',
+            verticalAlignment: 'middle', 
+            angle: 315,
+            color: [0, 150, 220],
             text: '\uf124',
-            xoffset: 8,
-            yoffset: 8,
+            xoffset: 0,
+            yoffset: 0,
             font: {
                 size: 16,
                 family: 'Font Awesome\\ 5 Free',
@@ -128,10 +130,6 @@ define([
         },
         onOpen: function () {
             this.pointGraphics.show();
-            if (!this.panorama || !this.panoramaService) {
-                this.panorama = new google.maps.StreetViewPanorama(this.panoNode, this.panoOptions);
-                this.panoramaService = new google.maps.StreetViewService();
-            }
         },
         onClose: function () {
             // end streetview on close of title pane
@@ -182,7 +180,7 @@ define([
                     return;
                 }
 
-                if (this.parentWidget && !this.parentWidget.open) {
+                if (this.parentWidget && !this.parentWidget.open && this.parentWidget.toggleable) {
                     this.parentWidget.toggle();
                 }
 
@@ -222,6 +220,10 @@ define([
         },
         getPanoramaLocation: function (geoPoint) {
             var place = new google.maps.LatLng(geoPoint.y, geoPoint.x);
+            if (!this.panorama || !this.panoramaService) {
+                this.panorama = new google.maps.StreetViewPanorama(this.panoNode, this.panoOptions);
+                this.panoramaService = new google.maps.StreetViewService();
+            }
             this.panoramaService.getPanoramaByLocation(place, 50, lang.hitch(this, 'getPanoramaByLocationComplete', geoPoint));
             // Panorama Events -- Changed location
             google.maps.event.addListener(this.panorama, 'position_changed', lang.hitch(this, 'setPlaceMarkerPosition'));
