@@ -7,7 +7,7 @@
   "homepage": "https://cmv.io/",
   "repository": "https://github.com/cmv/cmv-app/",
   "devDependencies": {
-    "eslint": "~7.4.0",
+    "eslint": "~7.5.0",
     "grunt": "~1.2.0",
     "grunt-browser-sync": "~2.2.0",
     "grunt-contrib-clean": "~2.0.0",
