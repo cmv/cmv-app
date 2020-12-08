@@ -20,7 +20,7 @@
     "grunt-postcss": "~0.9.0",
     "grunt-stylelint": "~0.15.0",
     "body-parser": "~1.19.0",
-    "stylelint": "~13.7.0",
+    "stylelint": "~13.8.0",
     "stylelint-config-standard": "~20.0.0",
     "proxypage": "*",
     "snyk": "^1.348.1"
