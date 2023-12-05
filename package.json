@@ -9,10 +9,10 @@
   "devDependencies": {
     "body-parser": "~1.19.0",
     "eslint": "~7.32.0",
-    "grunt": "~1.4.0",
+    "grunt": "~1.6.0",
     "grunt-browser-sync": "~2.2.0",
     "grunt-contrib-clean": "~2.0.0",
-    "grunt-contrib-compress": "~1.6.0",
+    "grunt-contrib-compress": "~2.0.0",
     "grunt-contrib-copy": "1.0.x",
     "grunt-contrib-cssmin": "~4.0.0",
     "grunt-contrib-uglify": "~5.0.0",
